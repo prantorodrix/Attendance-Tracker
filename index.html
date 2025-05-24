@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Attendance Tracker</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-image: linear-gradient(to top, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);
+    color: #12343b;
+    padding: 20px;
+  }
+  header{
+    width: 60%;
+  }
+  header h1{
+   background: #d6d6d6;
+background: linear-gradient(90deg, rgba(214, 214, 214, 1) 0%, rgba(232, 232, 232, 0.71) 24%, rgba(255, 255, 255, 0) 58%);
+color: black;
+  padding: 3px;
+  border-radius: 7px;
+  }
+  button {
+    padding: 12px 20px;
+    background-image: linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #e1b382;
+    transition: 0.3s ease;
+    color: #1effec;
+  }
+  input {
+    width: 80%;
+    padding: 10px;
+    margin: 8px 0 15px 0;
+    border: 1px solid #2d545e;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #fff;
+    color: #12343b;
+  }
+  input:focus {
+    outline: none;
+    border-color: #e1b382;
+    box-shadow: 0 0 5px rgba(225, 179, 130, 0.6);
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+  }
+  /* Modal */
+  .modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content {
+    background: #12343b;
+    padding: 30px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    width: 350px;
+    color: white;
+    text-align: center;
+  }
+  .modal-content h2 {
+    margin-bottom: 15px;
+  }
+  .modal-content small {
+    color: #cfcfcf;
+    cursor: pointer;
+    display: block;
+    margin-top: 15px;
+  }
+  .modal-content small:hover {
+    color: #1effec;
+  }
+  /* Attendance tracker page */
+  #tracker-container {
+    max-width: 1200px;
+    background: white;
+    color: #12343b;
+    padding: 20px 30px;
+    margin: 50px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(45, 84, 94, 0.2);
+    display: none;
+    position: relative;
+  }
+  nav {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  nav label {
+    color: #12343b;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  select {
+    width: 180px;
+    padding: 7px 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #2d545e;
+    font-family: inherit;
+    color: #12343b;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    margin-top: 15px;
+  }
+  th, td {
+    border: 1px solid #2d545e;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+  }
+  th {
+    background-color: #2d545e;
+    color: white;
+  }
+  .sunday-row {
+    background-image: linear-gradient(-225deg, #D4FFEC 0%, #57F2CC 48%, #4596FB 100%);
+  }
+  #summary-container {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  /* Removed #logoutBtn styling as button removed */
+  /* Form inside tracker */
+  #form-container form {
+    max-width: 600px;
+    margin: auto;
+  }
+  #form-container label {
+    text-align: left;
+  }
+  #form-container input, #form-container select {
+    width: 80%;
+  }
+  #form-container button {
+    margin-top: 10px;
+    width: 100%;
+  }
+  /* User menu on top right */
+  #userMenuContainer {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-family: inherit;
+    color: #12343b;
+  }
+  #userMenuBtn {
+    background: none;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #12343b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #userMenuBtn:hover {
+    color: white;
+     background-image: linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%);
+ transition:.3s;
+ }
+  #userMenuDropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    margin-top: 6px;
+    background: white;
+    border: 1px solid #2d545e;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10;
+    min-width: 160px;
+  }
+  #userMenuDropdown a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #12343b;
+    font-weight: normal;
+    font-size: 0.9rem;
+  }
+  #userMenuDropdown a:hover {
+    background: #2A7B9B;
+background-image: linear-gradient(to right, #3ab5b0 0%, #3d99be 31%, #56317a 100%);
+ transition:.3s;
+    color: white;
+  }
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #666;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" required placeholder="Enter your email" />
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" required placeholder="Enter password" minlength="6" />
+      <button type="submit">Login</button>
+    </form>
+    <small id="showCreateAccount" tabindex="0">Don't have an account? Create one</small>
+  </div>
+</div>
+
+<!-- CREATE ACCOUNT MODAL -->
+<div id="createAccountModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Create Account</h2>
+    <form id="createAccountForm">
+      <label for="createEmail">Email</label>
+      <input type="email" id="createEmail" required placeholder="Enter your email" />
+      <label for="createPassword">Password</label>
+      <input type="password" id="createPassword" required placeholder="Enter password" minlength="6" />
+      <button type="submit">Create Account</button>
+    </form>
+    <small id="showLogin" tabindex="0">Already have an account? Login here</small>
+  </div>
+</div>
+
+<!-- ATTENDANCE TRACKER PAGE -->
+<div id="tracker-container">
+  <header>
+    <h1>Daily Attendance Tracker</h1>
+  </header>
+
+  <!-- User menu top right -->
+  <div id="userMenuContainer" style="display:none;">
+    <button id="userMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="userMenuDropdown">
+      <span id="userNameDisplay"></span> ▼
+    </button>
+    <div id="userMenuDropdown" role="menu" aria-label="User menu">
+      <a href="#" id="profileLink" role="menuitem">Profile</a>
+      <a href="#" id="historyLink" role="menuitem">Attendance History</a>
+      <a href="#" id="logoutLink" role="menuitem">Logout</a>
+    </div>
+  </div>
+
+  <nav>
+    <label for="monthSelector">Select Month:</label>
+    <select id="monthSelector">
+      <option value="2025-01">January 2025</option>
+      <option value="2025-02">February 2025</option>
+      <option value="2025-03">March 2025</option>
+      <option value="2025-04">April 2025</option>
+      <option value="2025-05" selected>May 2025</option>
+    </select>
+  </nav>
+
+  <div id="form-container">
+    <form id="attendance-form">
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 150px;">
+          <label for="date">Date</label>
+          <input type="date" id="date" required />
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label for="workedHours">Worked Hours (0-9)</label>
+          <input type="number" id="workedHours" min="0" max="9" required />
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 150px;">
+          <label for="lateHours">Late Hours</label>
+          <input type="number" id="lateHours" min="0" max="9" required />
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label for="nightShift">Night Shift</label>
+          <select id="nightShift">
+            <option value="-">-</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <label for="graceTime">Grace Time</label>
+          <select id="graceTime">
+            <option value="-">-</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit">Add Entry</button>
+    </form>
+  </div>
+
+  <div id="summary-container">
+    <h3>Summary (Current Month)</h3>
+    <p id="summaryText"></p>
+  </div>
+
+  <div id="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Day</th>
+          <th>Worked Hours</th>
+          <th>Late Hours</th>
+          <th>Night Shift</th>
+          <th>Grace Time</th>
+        </tr>
+      </thead>
+      <tbody id="attendance-table"></tbody>
+    </table>
+  </div>
+
+  <!-- Removed logoutBtn here -->
+
+</div>
+
+<footer>Made by PrantoAnthony</footer>
+
+<script>
+  // Elements
+  const loginModal = document.getElementById('loginModal');
+  const createAccountModal = document.getElementById('createAccountModal');
+
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginForm = document.getElementById('loginForm');
+
+  const createEmail = document.getElementById('createEmail');
+  const createPassword = document.getElementById('createPassword');
+  const createAccountForm = document.getElementById('createAccountForm');
+
+  const showCreateAccount = document.getElementById('showCreateAccount');
+  const showLogin = document.getElementById('showLogin');
+
+  const trackerContainer = document.getElementById('tracker-container');
+  // Removed logoutBtn const since button removed
+
+  const monthSelector = document.getElementById('monthSelector');
+  const attendanceForm = document.getElementById('attendance-form');
+  const attendanceTable = document.getElementById('attendance-table');
+  const summaryText = document.getElementById('summaryText');
+
+  // User menu elements
+  const userMenuContainer = document.getElementById('userMenuContainer');
+  const userMenuBtn = document.getElementById('userMenuBtn');
+  const userMenuDropdown = document.getElementById('userMenuDropdown');
+  const userNameDisplay = document.getElementById('userNameDisplay');
+  const profileLink = document.getElementById('profileLink');
+  const historyLink = document.getElementById('historyLink');
+  const logoutLink = document.getElementById('logoutLink');
+
+  // State
+  let loggedInUser = null;
+  let attendanceData = {};
+
+  // Helper to toggle modals
+  function showModal(modal) {
+    loginModal.style.display = 'none';
+    createAccountModal.style.display = 'none';
+    modal.style.display = 'flex';
+  }
+
+  // Show login modal initially
+  showModal(loginModal);
+
+  // Switch modals links
+  showCreateAccount.addEventListener('click', () => {
+    showModal(createAccountModal);
+  });
+  showLogin.addEventListener('click', () => {
+    showModal(loginModal);
+  });
+
+  // Simple mock backend: users stored in localStorage
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '{}');
+  }
+  function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  // Create account
+  createAccountForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = createEmail.value.trim();
+    const pass = createPassword.value.trim();
+
+    if (email === '' || pass.length < 6) {
+      alert('Please provide valid email and password (6+ chars)');
+      return;
+    }
+    const users = getUsers();
+    if (users[email]) {
+      alert('User already exists. Please login.');
+      showModal(loginModal);
+      return;
+    }
+    users[email] = { password: pass, attendance: {} };
+    saveUsers(users);
+    alert('Account created. Please login.');
+    createEmail.value = '';
+    createPassword.value = '';
+    showModal(loginModal);
+  });
+
+  // Login
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = loginEmail.value.trim();
+    const pass = loginPassword.value.trim();
+    const users = getUsers();
+
+    if (!users[email] || users[email].password !== pass) {
+      alert('Invalid email or password');
+      return;
+    }
+
+    loggedInUser = email;
+    attendanceData = users[email].attendance || {};
+    loginEmail.value = '';
+    loginPassword.value = '';
+    showTrackerPage();
+  });
+
+  // Show tracker page after login
+  function showTrackerPage() {
+    loginModal.style.display = 'none';
+    createAccountModal.style.display = 'none';
+    trackerContainer.style.display = 'block';
+
+    // Show user menu & username
+    userMenuContainer.style.display = 'block';
+    userNameDisplay.textContent = loggedInUser;
+
+    // Hide logoutBtn - no longer in DOM
+
+    // Render attendance for selected month
+    renderAttendanceForMonth(monthSelector.value);
+  }
+
+  // Month selection
+  monthSelector.addEventListener('change', () => {
+    renderAttendanceForMonth(monthSelector.value);
+  });
+
+  // Format date to readable
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  // Get day name
+  function getDayName(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, { weekday: 'short' });
+  }
+
+  // Render attendance table for month
+  function renderAttendanceForMonth(ym) {
+    // Clear table body
+    attendanceTable.innerHTML = '';
+
+    // Build dates from 26 of previous month to 25 of this month
+    const [year, month] = ym.split('-').map(Number);
+    const prevMonth = month === 1 ? 12 : month - 1;
+    const prevYear = month === 1 ? year - 1 : year;
+
+    // Start date: prevYear-prevMonth-26
+    // End date: year-month-25
+    const startDate = new Date(prevYear, prevMonth - 1, 26);
+    const endDate = new Date(year, month - 1, 25);
+
+    let totalWorked = 0;
+    let totalLate = 0;
+
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().slice(0, 10);
+      const dayName = getDayName(dateStr);
+      const isSunday = dayName.toLowerCase() === 'sun';
+
+      const data = attendanceData[dateStr] || {
+        workedHours: '',
+        lateHours: '',
+        nightShift: '-',
+        graceTime: '-',
+      };
+
+      // Accumulate summary if data valid
+      const worked = parseInt(data.workedHours);
+      const late = parseInt(data.lateHours);
+      if (!isNaN(worked)) totalWorked += worked;
+      if (!isNaN(late)) totalLate += late;
+
+      const tr = document.createElement('tr');
+      if (isSunday) {
+        tr.classList.add('sunday-row');
+      }
+      tr.innerHTML = `
+        <td>${formatDate(dateStr)}</td>
+        <td>${dayName}</td>
+        <td>${data.workedHours || ''}</td>
+        <td>${data.lateHours || ''}</td>
+        <td>${data.nightShift || '-'}</td>
+        <td>${data.graceTime || '-'}</td>
+      `;
+      attendanceTable.appendChild(tr);
+    }
+
+    summaryText.textContent = `Total Worked Hours: ${totalWorked}, Total Late Hours: ${totalLate}`;
+  }
+
+  // Add attendance entry
+  attendanceForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const date = document.getElementById('date').value;
+    const workedHours = document.getElementById('workedHours').value;
+    const lateHours = document.getElementById('lateHours').value;
+    const nightShift = document.getElementById('nightShift').value;
+    const graceTime = document.getElementById('graceTime').value;
+
+    if (!date) {
+      alert('Please select a date');
+      return;
+    }
+    if (workedHours === '' || lateHours === '') {
+      alert('Please enter worked and late hours');
+      return;
+    }
+    if (workedHours < 0 || workedHours > 9 || lateHours < 0 || lateHours > 9) {
+      alert('Worked and Late hours must be between 0 and 9');
+      return;
+    }
+
+    attendanceData[date] = {
+      workedHours,
+      lateHours,
+      nightShift,
+      graceTime,
+    };
+
+    // Save back to localStorage users data
+    const users = getUsers();
+    users[loggedInUser].attendance = attendanceData;
+    saveUsers(users);
+
+    renderAttendanceForMonth(monthSelector.value);
+    attendanceForm.reset();
+  });
+
+  // User menu toggle
+  userMenuBtn.addEventListener('click', () => {
+    const expanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+    if (expanded) {
+      userMenuDropdown.style.display = 'none';
+      userMenuBtn.setAttribute('aria-expanded', 'false');
+    } else {
+      userMenuDropdown.style.display = 'block';
+      userMenuBtn.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  // Close user menu if clicked outside
+  document.addEventListener('click', e => {
+    if (!userMenuContainer.contains(e.target)) {
+      userMenuDropdown.style.display = 'none';
+      userMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // User menu link handlers
+  profileLink.addEventListener('click', e => {
+    e.preventDefault();
+    alert('Profile page coming soon!');
+    userMenuDropdown.style.display = 'none';
+    userMenuBtn.setAttribute('aria-expanded', 'false');
+  });
+
+  historyLink.addEventListener('click', e => {
+    e.preventDefault();
+    alert('Attendance History coming soon!');
+    userMenuDropdown.style.display = 'none';
+    userMenuBtn.setAttribute('aria-expanded', 'false');
+  });
+
+  logoutLink.addEventListener('click', e => {
+    e.preventDefault();
+    loggedInUser = null;
+    attendanceData = {};
+    trackerContainer.style.display = 'none';
+    userMenuContainer.style.display = 'none';
+    showModal(loginModal);
+  });
+</script>
+
+</body>
+</html>
