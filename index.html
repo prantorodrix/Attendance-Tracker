@@ -4,33 +4,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Attendance Tracker Pro</title>
+  <title>Attendance Tracker Pro - Colorful</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Global Styles - Ant Design Inspired */
+    /* Global Styles - Deep Colorful UI */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-deep-indigo: #1A1A2E; /* Deep indigo for main background */
+      --bg-content-indigo: #24243E; /* Slightly lighter for content areas */
+      --bg-modal-indigo: #2A2A4A; /* Modal background */
+      --text-primary-light: #E0E0E0; /* Light gray for primary text */
+      --text-secondary-light: #B0B0C0; /* Softer light gray */
+      --accent-teal: #00F5A0;
+      --accent-magenta: #FF00FF;
+      --accent-orange: #FFA500;
+      --accent-yellow: #FFFF00;
+      --border-dark: #3A3A5A; /* Darker border for separation */
+      --shadow-color: rgba(0, 245, 160, 0.1); /* Tealish shadow */
+      --success-color: #28a745;
+      --error-color: #dc3545;
+      --info-color: #17a2b8;
+      --present-bg: rgba(0, 245, 160, 0.15); /* Tealish green for present */
+      --present-text: #00F5A0;
+      --absent-bg: rgba(255, 0, 0, 0.15); /* Reddish for absent */
+      --absent-text: #FF4D4F;
+      --holiday-bg: rgba(0, 123, 255, 0.15); /* Bluish for holiday */
+      --holiday-text: #007BFF;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       margin: 0;
-      background: #f0f2f5;
-      /* Light gray background, typical for Antd */
+      background: var(--bg-deep-indigo);
       overflow-x: hidden;
-      color: #333;
-      /* Default text color */
+      color: var(--text-primary-light);
       display: flex;
       flex-direction: column;
     }
 
-    /* Modals (Clean & Modern - Antd adaptation) */
+    /* Modals - Colorful & Modern */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      /* Darker, more opaque backdrop */
-      backdrop-filter: blur(4px);
-      /* Subtle blur */
+      background: rgba(10, 10, 20, 0.6); /* Darker, slightly colored backdrop */
+      backdrop-filter: blur(5px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -46,37 +65,38 @@
     }
 
     .modal-content {
-      background: #fff;
-      /* White background for content */
-      border-radius: 8px;
+      background: var(--bg-modal-indigo);
+      border-radius: 10px;
       padding: 2.5rem 3rem;
-      box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-      /* Antd-like shadow */
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--shadow-color);
       width: 420px;
-      /* Slightly wider for Antd feel */
-      color: #333;
+      color: var(--text-primary-light);
       text-align: center;
       position: relative;
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
+      transform: translateY(-20px) scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      border: 1px solid var(--border-dark);
     }
 
     .modal-backdrop.show .modal-content {
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
 
     .modal-content h2 {
       margin-bottom: 1.5rem;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.75rem;
-      color: #262626;
-      /* Darker title */
+      color: var(--accent-teal); /* Teal for modal titles */
+      text-shadow: 0 0 5px rgba(0, 245, 160, 0.5);
     }
 
     .modal-content label {
-      color: #595959;
-      /* Medium gray for labels */
+      color: var(--text-secondary-light);
       font-weight: 500;
+      font-size: 0.9rem;
+      display: block;
+      text-align: left;
+      margin-bottom: 0.3rem;
     }
 
     .modal-content input,
@@ -84,89 +104,85 @@
       width: 100%;
       padding: 0.75rem 1rem;
       border-radius: 6px;
-      border: 1px solid #d9d9d9;
-      /* Light gray border */
-      margin-bottom: 1rem;
-      background: #fff;
-      /* White input background */
-      color: #333;
+      border: 1px solid var(--border-dark);
+      margin-bottom: 1.25rem;
+      background: rgba(255, 255, 255, 0.05); /* Very subtle light background for inputs */
+      color: var(--text-primary-light);
       font-size: 1rem;
       font-weight: 400;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     }
 
     .modal-content input::placeholder,
     .modal-content select option {
-      color: #bfbfbf;
-      /* Lighter placeholder */
+      color: var(--text-secondary-light);
     }
+     .modal-content select option {
+      background-color: var(--bg-modal-indigo); /* Ensure dropdown options are themed */
+      color: var(--text-primary-light);
+    }
+
 
     .modal-content input:focus,
     .modal-content select:focus {
       outline: none;
-      border-color: #1890ff;
-      /* Antd primary blue */
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-      /* Blue glow */
+      border-color: var(--accent-teal);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 2px rgba(0, 245, 160, 0.3);
     }
 
     .modal-content button {
-      background: #1890ff;
-      /* Antd primary blue button */
-      color: white;
-      font-weight: 500;
-      padding: 0.75rem 1.25rem;
+      background-image: linear-gradient(to right, var(--accent-teal), var(--accent-magenta));
+      color: #11111E; /* Dark text on bright buttons */
+      font-weight: 600; /* Bolder text */
+      padding: 0.8rem 1.3rem;
       border-radius: 6px;
       border: none;
       cursor: pointer;
       width: 100%;
       font-size: 1.05rem;
-      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .modal-content button:hover {
-      background: #40a9ff;
-      /* Lighter blue on hover */
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(24, 144, 255, 0.2);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), 0 0 10px var(--accent-teal);
     }
 
-    .modal-content button.bg-gray-500 {
-      background-color: #f0f0f0;
-      /* Light gray for secondary buttons */
-      color: #595959;
-      border: 1px solid #d9d9d9;
-      box-shadow: none;
+    .modal-content button.bg-gray-500 { /* For cancel/secondary buttons */
+      background-image: none;
+      background-color: rgba(255,255,255,0.1);
+      color: var(--text-secondary-light);
+      border: 1px solid var(--border-dark);
     }
 
     .modal-content button.bg-gray-500:hover {
-      background-color: #e6e6e6;
-      color: #262626;
-      transform: translateY(-1px);
-      box-shadow: none;
+      background-color: rgba(255,255,255,0.15);
+      color: var(--text-primary-light);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .modal-footer {
       margin-top: 1.25rem;
       font-size: 0.9rem;
       font-weight: 400;
-      color: #8c8c8c;
-      /* Medium gray for footer text */
+      color: var(--text-secondary-light);
     }
 
     .modal-footer a {
-      color: #1890ff;
-      /* Antd blue links */
+      color: var(--accent-teal);
       cursor: pointer;
       text-decoration: none;
       font-weight: 500;
-      transition: color 0.3s ease;
+      transition: color 0.2s ease, text-shadow 0.2s ease;
     }
 
     .modal-footer a:hover {
-      color: #40a9ff;
-      text-decoration: underline;
+      color: var(--accent-magenta);
+      text-shadow: 0 0 5px var(--accent-magenta);
     }
 
     .message {
@@ -175,15 +191,8 @@
       font-size: 0.95rem;
     }
 
-    .message.success {
-      color: #52c41a;
-      /* Antd success green */
-    }
-
-    .message.error {
-      color: #ff4d4f;
-      /* Antd error red */
-    }
+    .message.success { color: var(--success-color); }
+    .message.error { color: var(--error-color); }
 
     /* App Container & Navbar */
     #appContainer {
@@ -193,120 +202,131 @@
     }
 
     #navbar {
-      background: #fff;
-      /* Solid white navbar */
-      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-      /* Antd-like shadow */
-      color: #333;
+      background: rgba(36, 36, 62, 0.85); /* Semi-transparent dark navbar */
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      color: var(--text-primary-light);
       padding: 1rem 1.5rem;
-      transition: all 0.3s ease;
-      /* Smooth transition for scroll effect */
+      border-bottom: 1px solid var(--border-dark);
     }
 
     #navbar.scrolled {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      background: rgba(30, 30, 50, 0.9);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-
-    #navbar .font-bold {
-      color: #262626;
-      /* Dark title in navbar */
+    #navbar .font-bold { /* App Title */
+      color: var(--accent-teal);
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-shadow: 0 0 3px var(--accent-teal);
     }
 
     #userPhoto {
       border-radius: 50%;
-      border: 2px solid #e6f7ff;
-      /* Light blue border */
-      box-shadow: 0 0 5px rgba(24, 144, 255, 0.1);
+      border: 2px solid var(--accent-teal);
+      box-shadow: 0 0 8px var(--accent-teal);
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     #userPhoto:hover {
-      transform: scale(1.05);
+      transform: scale(1.1);
+      box-shadow: 0 0 12px var(--accent-magenta);
     }
 
     /* Dropdown Menu */
     .dropdown-menu {
       position: absolute;
-      top: 100%;
+      top: calc(100% + 8px);
       right: 0;
-      background: #fff;
+      background: var(--bg-modal-indigo);
       border-radius: 8px;
-      box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-      min-width: 180px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      min-width: 190px;
       z-index: 1000;
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(10px) scale(0.95);
       pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      padding: 0.5rem;
+      border: 1px solid var(--border-dark);
     }
 
     .dropdown-menu.show {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
       pointer-events: auto;
     }
 
     .dropdown-menu a {
       display: block;
-      padding: 0.75rem 1rem;
-      color: #595959;
+      padding: 0.7rem 1rem;
+      color: var(--text-secondary-light);
       text-decoration: none;
       font-weight: 500;
+      font-size: 0.95rem;
       transition: background-color 0.2s ease, color 0.2s ease;
-      border-radius: 8px;
+      border-radius: 4px;
     }
 
     .dropdown-menu a:hover {
-      background-color: #e6f7ff;
-      /* Light blue hover */
-      color: #1890ff;
+      background-color: rgba(0, 245, 160, 0.1); /* Teal highlight */
+      color: var(--accent-teal);
     }
 
     /* Main Content Area */
     #mainContent {
       flex-grow: 1;
-      background: #fff;
-      /* White background for main content */
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-      padding: 2rem;
-      margin-top: 6rem;
-      margin-bottom: 2rem;
-      color: #333;
-      /* Dark text for light background */
+      background: var(--bg-content-indigo);
+      border-radius: 12px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 5px 20px rgba(0,0,0,0.15);
+      padding: 2.5rem 3rem;
+      margin-top: 6.5rem; /* Ensure space below fixed navbar */
+      margin-bottom: 2.5rem;
+      color: var(--text-primary-light);
+      border: 1px solid var(--border-dark);
     }
 
-    #mainContent h1 {
-      color: #262626;
-      font-weight: 600;
+    #mainContent h1 { /* Page Title */
+      color: var(--text-primary-light);
+      font-weight: 700;
       font-size: 2.25rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      letter-spacing: 0.5px;
     }
 
     #monthSelect {
-      border: 1px solid #d9d9d9;
+      border: 1px solid var(--border-dark);
       border-radius: 6px;
-      background-color: white;
-      color: #333;
+      background-color: rgba(255,255,255,0.05);
+      color: var(--text-primary-light);
       padding: 0.6rem 1rem;
-      font-weight: 400;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+      font-weight: 500;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
+    #monthSelect:focus {
+        border-color: var(--accent-teal);
+        outline: none;
+        background-color: rgba(255,255,255,0.08);
+    }
+    #monthSelect option {
+      background-color: var(--bg-modal-indigo);
+      color: var(--text-primary-light);
+    }
+
 
     /* Summary Section */
     .summary-grid {
-      background-color: #f6f6f6;
-      /* Lighter background for summary */
+      background-color: rgba(0,0,0,0.1); /* Darker, transparent summary */
       padding: 1.5rem;
       border-radius: 8px;
-      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
-      color: #595959;
+      color: var(--text-secondary-light);
       font-weight: 500;
-      border: 1px solid #e8e8e8;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-dark);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
     }
 
     .summary-grid div {
@@ -314,144 +334,99 @@
     }
 
     .summary-grid span {
-      font-weight: 600;
-      color: #262626;
+      font-weight: 700;
+      color: var(--accent-teal); /* Teal for summary numbers */
     }
 
     /* Table Styles */
     #attendanceTable {
       border-radius: 8px;
       overflow: hidden;
-      border: 1px solid #e8e8e8;
-      /* Light border for the whole table */
-      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+      border: 1px solid var(--border-dark);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
     #attendanceTable thead th {
-      background-color: #fafafa;
-      /* Very light header */
-      color: #595959;
-      font-weight: 500;
+      background-color: rgba(0,0,0, 0.25); /* Dark, semi-transparent header */
+      color: var(--accent-teal); /* Teal header text */
+      font-weight: 600;
       padding: 1rem 0.8rem;
-      border: 1px solid #f0f0f0;
-      /* Cell borders */
+      border-bottom: 1px solid var(--border-dark);
+      border-left: 1px solid rgba(58, 58, 90, 0.5);
       text-align: center;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+     #attendanceTable thead th:first-child { border-left: none; }
+
 
     #attendanceTbody tr {
-      background-color: white;
+      background-color: transparent; /* Rows transparent against content background */
       transition: background-color 0.2s ease;
+      border-bottom: 1px solid var(--border-dark);
     }
+     #attendanceTbody tr:last-child { border-bottom: none; }
 
-    /* Row coloring based on status */
-    #attendanceTbody tr.row-present {
-      background-color: #f6ffed;
-      /* Antd success background */
-    }
 
-    #attendanceTbody tr.row-absent {
-      background-color: #fff1f0;
-      /* Antd error background */
-    }
+    /* Row coloring based on status - vivid backgrounds */
+    #attendanceTbody tr.row-present { background-color: var(--present-bg); }
+    #attendanceTbody tr.row-absent { background-color: var(--absent-bg); }
+    #attendanceTbody tr.row-holiday { background-color: var(--holiday-bg); }
 
-    #attendanceTbody tr.row-holiday {
-      background-color: #e6f7ff;
-      /* Antd info background */
-    }
-
-    #attendanceTbody tr:nth-child(even) {
-      background-color: #fbfbfb;
-      /* Slightly different for even rows */
-    }
-
-    /* Override for even rows if status is set */
-    #attendanceTbody tr.row-present:nth-child(even) {
-      background-color: #f6ffed;
-    }
-
-    #attendanceTbody tr.row-absent:nth-child(even) {
-      background-color: #fff1f0;
-    }
-
-    #attendanceTbody tr.row-holiday:nth-child(even) {
-      background-color: #e6f7ff;
-    }
+    /* No striping needed with distinct status backgrounds */
+    /* #attendanceTbody tr:nth-child(even) { background-color: rgba(255,255,255,0.02); } */
+    /* #attendanceTbody tr.row-present:nth-child(even) { background-color: var(--present-bg); } */
+    /* #attendanceTbody tr.row-absent:nth-child(even) { background-color: var(--absent-bg); } */
+    /* #attendanceTbody tr.row-holiday:nth-child(even) { background-color: var(--holiday-bg); } */
 
 
     #attendanceTbody tr:hover {
-      background-color: #f0f0f0;
-      /* Lighter gray on hover */
+      background-color: rgba(0, 245, 160, 0.1) !important; /* Tealish hover */
     }
 
     #attendanceTbody td {
-      padding: 0.8rem 0.6rem;
-      /* Adjusted padding for row size */
-      border: 1px solid #f0f0f0;
-      color: #333;
+      padding: 0.8rem 0.7rem;
+      /* border-bottom handled by tr border */
+      border-left: 1px solid rgba(58, 58, 90, 0.5);
+      color: var(--text-primary-light);
       text-align: center;
+      font-size: 0.9rem;
     }
+    #attendanceTbody td:first-child { border-left: none; }
 
     /* Status Column Specific Styling */
     .status-cell {
       cursor: pointer;
-      font-weight: 600;
-      transition: background-color 0.2s ease;
-      font-size: 1rem;
-      /* Normal font size */
+      font-weight: 600; /* Bold status text */
+      transition: text-shadow 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .status-cell button { /* For the "Set" button */
+        background-image: linear-gradient(to right, var(--accent-teal), var(--accent-magenta));
+        color: #11111E;
+        font-weight: 600;
+        padding: 0.35rem 0.9rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        border: none;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .status-cell button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 8px var(--accent-teal);
     }
 
-    .status-cell:hover:not(.disabled-status) {
-      background-color: #f5f5f5;
-      /* Lighter hover effect */
-    }
+    .status-cell.present-p { color: var(--present-text); text-shadow: 0 0 3px var(--present-text); }
+    .status-cell.absent-a { color: var(--absent-text); text-shadow: 0 0 3px var(--absent-text); }
+    .status-cell.holiday-h { color: var(--holiday-text); text-shadow: 0 0 3px var(--holiday-text); }
 
-    .status-cell.present-p {
-      color: #52c41a;
-      /* Antd success green */
-    }
-
-    .status-cell.absent-a {
-      color: #ff4d4f;
-      /* Antd error red */
-    }
-
-    .status-cell.holiday-h {
-      color: #1890ff;
-      /* Antd primary blue */
-    }
 
     .status-cell.disabled-status {
       cursor: not-allowed;
-      opacity: 0.6;
-      background-color: #f5f5f5;
-      color: #bfbfbf;
-    }
-
-    /* Table Input Styles */
-    .table-input {
-      width: 100%;
-      text-align: center;
-      background-color: #fff;
-      border: 1px solid #d9d9d9;
-      border-radius: 4px;
-      padding: 6px;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-      color: #333;
-      font-weight: 400;
-    }
-
-    .table-input:focus {
-      border-color: #1890ff;
-      outline: none;
-      background-color: #fff;
-      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
-    }
-
-    .table-input:disabled {
-      background-color: #f5f5f5;
-      cursor: not-allowed;
-      opacity: 0.8;
-      color: #8c8c8c;
+      opacity: 0.4;
+      color: var(--text-secondary-light);
+      text-shadow: none;
     }
 
     /* Footer Styles */
@@ -459,45 +434,49 @@
       margin-top: auto;
       padding: 1.5rem;
       text-align: center;
-      color: #8c8c8c;
+      color: var(--text-secondary-light);
       font-size: 0.9rem;
       font-weight: 400;
-      background: #f0f2f5;
-      /* Match body background */
+      background: var(--bg-deep-indigo);
+      border-top: 1px solid var(--border-dark);
     }
+     #app-footer a { /* If any links in footer */
+        color: var(--accent-teal);
+        text-decoration: none;
+     }
+     #app-footer a:hover {
+        color: var(--accent-magenta);
+     }
+
 
     /* User List on Create Account Modal */
     #existingUsersList {
-        max-height: 150px;
+        max-height: 140px;
         overflow-y: auto;
-        border: 1px solid #e8e8e8;
+        border: 1px solid var(--border-dark);
         border-radius: 6px;
         padding: 0.5rem;
         margin-top: 1rem;
-        background-color: #f6f6f6;
+        background-color: rgba(0,0,0,0.1); /* Darker background */
         text-align: left;
     }
     #existingUsersList .user-item {
         display: flex;
         align-items: center;
         padding: 0.4rem 0.6rem;
-        border-bottom: 1px solid #f0f0f0;
-        color: #595959;
+        border-bottom: 1px solid var(--border-dark);
+        color: var(--text-secondary-light);
         font-size: 0.9rem;
     }
-    #existingUsersList .user-item:last-child {
-        border-bottom: none;
-    }
+    #existingUsersList .user-item:last-child { border-bottom: none; }
     #existingUsersList .user-item img {
         width: 24px;
         height: 24px;
         border-radius: 50%;
         margin-right: 0.5rem;
-        border: 1px solid #d9d9d9;
+        border: 1px solid var(--accent-teal); /* Teal border for user pics */
     }
-    #existingUsersList .user-item span {
-        font-weight: 500;
-    }
+    #existingUsersList .user-item span { font-weight: 500; color: var(--text-primary-light); }
 
     /* Profile Picture Selection Modal */
     #selectProfilePicModal .profile-pic-options {
@@ -509,19 +488,21 @@
         margin-bottom: 1.5rem;
     }
     #selectProfilePicModal .profile-pic-options img {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
         border-radius: 50%;
         cursor: pointer;
         border: 3px solid transparent;
-        transition: border-color 0.2s ease, transform 0.2s ease;
+        transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
     #selectProfilePicModal .profile-pic-options img.selected {
-        border-color: #1890ff;
+        border-color: var(--accent-magenta);
         transform: scale(1.1);
+        box-shadow: 0 0 10px var(--accent-magenta);
     }
     #selectProfilePicModal .profile-pic-options img:hover {
-        transform: scale(1.05);
+        transform: scale(1.08);
+        border-color: var(--accent-teal);
     }
   </style>
 </head>
@@ -529,15 +510,13 @@
 <body>
   <div id="loginModal" class="modal-backdrop show" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
     <div class="modal-content">
-      <h2 id="loginTitle">Login</h2>
+      <h2 id="loginTitle">Welcome Back</h2>
       <input type="text" id="loginUser" placeholder="Username or Email" autocomplete="username" />
       <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" />
-      <button id="loginBtn">Login</button>
+      <button id="loginBtn">Login Securely</button>
       <div class="message" id="loginMessage"></div>
-
       <div class="modal-footer">
-        <a id="showCreateAccount" tabindex="0">Create Account</a> | <a id="showForgotPass" tabindex="0">Forgot
-          Password?</a>
+        <a id="showCreateAccount" tabindex="0">Create New Account</a> | <a id="showForgotPass" tabindex="0">Forgot Password?</a>
       </div>
     </div>
   </div>
@@ -545,23 +524,21 @@
   <div id="createAccountModal" class="modal-backdrop" aria-modal="true" role="dialog"
     aria-labelledby="createAccountTitle" style="display:none;">
     <div class="modal-content">
-      <h2 id="createAccountTitle">Create Account</h2>
-      <input type="text" id="createUsername" placeholder="Username" autocomplete="username" />
-      <input type="email" id="createEmail" placeholder="Email" autocomplete="email" />
-      <input type="password" id="createPassword" placeholder="Password" autocomplete="new-password" />
-      <input type="password" id="createConfirmPassword" placeholder="Confirm Password" autocomplete="new-password" />
-      <button id="createAccountBtn">Create Account</button>
+      <h2 id="createAccountTitle">Join Us</h2>
+      <input type="text" id="createUsername" placeholder="Choose a Username" autocomplete="username" />
+      <input type="email" id="createEmail" placeholder="Your Email Address" autocomplete="email" />
+      <input type="password" id="createPassword" placeholder="Create a Secure Password" autocomplete="new-password" />
+      <input type="password" id="createConfirmPassword" placeholder="Confirm Your Password" autocomplete="new-password" />
+      <button id="createAccountBtn">Create My Account</button>
       <div class="message" id="createAccountMessage"></div>
-
       <div class="mt-4 text-left">
-          <h3 class="text-md font-semibold text-gray-700 mb-2">Existing Accounts:</h3>
-          <div id="existingUsersList" class="text-gray-600">
-              <p class="text-sm text-gray-500">No accounts created yet.</p>
+          <h3 class="text-md font-semibold text-teal-400 mb-2">Active Accounts:</h3>
+          <div id="existingUsersList">
+              <p class="text-sm text-gray-400 p-2">No accounts found.</p>
           </div>
       </div>
-
       <div class="modal-footer">
-        <a id="backToLoginFromCreate" tabindex="0">Back to Login</a>
+        <a id="backToLoginFromCreate" tabindex="0">Already have an account? Login</a>
       </div>
     </div>
   </div>
@@ -569,9 +546,9 @@
   <div id="forgotPassModal" class="modal-backdrop" aria-modal="true" role="dialog" aria-labelledby="forgotPassTitle"
     style="display:none;">
     <div class="modal-content">
-      <h2 id="forgotPassTitle">Forgot Password</h2>
-      <input type="text" id="forgotUserEmail" placeholder="Username or Email" autocomplete="username" />
-      <button id="forgotPassBtn">Reset Password</button>
+      <h2 id="forgotPassTitle">Reset Password</h2>
+      <input type="text" id="forgotUserEmail" placeholder="Enter Username or Email" autocomplete="username" />
+      <button id="forgotPassBtn">Send Reset Link</button>
       <div class="message" id="forgotPassMessage"></div>
       <div class="modal-footer">
         <a id="backToLoginFromForgot" tabindex="0">Back to Login</a>
@@ -582,15 +559,15 @@
   <div id="statusModal" class="modal-backdrop" aria-modal="true" role="dialog" aria-labelledby="statusTitle"
     style="display:none;">
     <div class="modal-content">
-      <h2 id="statusTitle">Set Attendance Status</h2>
+      <h2 id="statusTitle">Update Status</h2>
       <select id="statusSelector">
         <option value="present">Present</option>
         <option value="absent">Absent</option>
         <option value="holiday">Holiday</option>
       </select>
       <div class="flex gap-4 mt-4">
-        <button id="saveStatusBtn" class="w-1/2">Save</button>
-        <button id="cancelStatusBtn" class="w-1/2 bg-gray-500 hover:bg-gray-600">Cancel</button>
+        <button id="saveStatusBtn" class="w-1/2">Save Status</button>
+        <button id="cancelStatusBtn" class="w-1/2 bg-gray-500">Cancel</button>
       </div>
       <div class="message" id="statusMessage"></div>
     </div>
@@ -600,18 +577,18 @@
     aria-labelledby="editDetailsTitle" style="display:none;">
     <div class="modal-content">
       <h2 id="editDetailsTitle">Edit Day Details</h2>
-      <label for="editHours" class="block text-left text-sm font-medium mb-1">Hours Worked:</label>
-      <input type="number" id="editHours" placeholder="Hours Worked (e.g., 9)" min="0" step="0.5" />
+      <label for="editHours">Hours Worked:</label>
+      <input type="number" id="editHours" placeholder="e.g., 9" min="0" step="0.5" />
 
-      <label for="editExtraHours" class="block text-left text-sm font-medium mb-1">Extra Hours:</label>
-      <input type="number" id="editExtraHours" placeholder="Extra Hours (e.g., 1)" min="0" step="0.5" />
+      <label for="editExtraHours">Extra Hours:</label>
+      <input type="number" id="editExtraHours" placeholder="e.g., 1" min="0" step="0.5" />
 
-      <div class="flex items-center justify-start mb-4">
-        <input type="checkbox" id="editGrace" class="mr-2 h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
-        <label for="editGrace" class="text-sm font-medium">Use Grace Period</label>
+      <div class="flex items-center justify-start mb-4 text-left">
+        <input type="checkbox" id="editGrace" class="mr-2 h-4 w-4 rounded accent-teal-500 focus:ring-teal-400 border-gray-600 bg-gray-700">
+        <label for="editGrace" class="text-sm font-medium !mb-0">Use Grace Period</label>
       </div>
 
-      <label for="editShift" class="block text-left text-sm font-medium mb-1">Shift:</label>
+      <label for="editShift">Shift:</label>
       <select id="editShift">
         <option value="">Select Shift</option>
         <option value="day">Day</option>
@@ -619,8 +596,8 @@
       </select>
 
       <div class="flex gap-4 mt-4">
-        <button id="saveEditDetailsBtn" class="w-1/2">Save</button>
-        <button id="cancelEditDetailsBtn" class="w-1/2 bg-gray-500 hover:bg-gray-600">Cancel</button>
+        <button id="saveEditDetailsBtn" class="w-1/2">Save Details</button>
+        <button id="cancelEditDetailsBtn" class="w-1/2 bg-gray-500">Cancel</button>
       </div>
       <div class="message" id="editDetailsMessage"></div>
     </div>
@@ -629,43 +606,40 @@
   <div id="selectProfilePicModal" class="modal-backdrop" aria-modal="true" role="dialog"
     aria-labelledby="selectProfilePicTitle" style="display:none;">
     <div class="modal-content">
-      <h2 id="selectProfilePicTitle">Select Profile Picture</h2>
+      <h2 id="selectProfilePicTitle">Choose Your Avatar</h2>
       <div class="profile-pic-options">
         </div>
       <div class="flex gap-4 mt-4">
-        <button id="saveProfilePicBtn" class="w-1/2">Save</button>
-        <button id="cancelProfilePicBtn" class="w-1/2 bg-gray-500 hover:bg-gray-600">Cancel</button>
+        <button id="saveProfilePicBtn" class="w-1/2">Set Avatar</button>
+        <button id="cancelProfilePicBtn" class="w-1/2 bg-gray-500">Cancel</button>
       </div>
       <div class="message" id="profilePicMessage"></div>
     </div>
   </div>
 
-
   <div id="appContainer">
-    <nav id="navbar"
-      class="flex justify-between items-center px-6 py-3 fixed w-full top-0 left-0 right-0 z-50">
+    <nav id="navbar" class="flex justify-between items-center px-6 py-3 fixed w-full top-0 left-0 right-0 z-50">
       <div class="font-bold text-xl select-none">Attendance Tracker</div>
       <div class="relative flex items-center gap-4">
-        <span id="usernameDisplay" class="font-medium text-lg mr-2"></span>
-        <img id="userPhoto" src="https://i.pravatar.cc/40" alt="User Photo" class="user-photo" />
+        <span id="usernameDisplay" class="font-semibold text-lg mr-2 text-teal-300"></span>
+        <img id="userPhoto" src="https://placehold.co/40x40/1A1A2E/00F5A0?text=U" alt="User Photo" class="user-photo" />
         <div id="userDropdown" class="dropdown-menu">
-          <a href="#" id="profileLink">Profile</a>
-          <a href="#" id="attendanceHistoryLink">Attendance History</a>
-          <a href="#" id="changeProfilePicLink">Change Profile Picture</a> <a href="#" id="logoutBtnDropdown">Logout</a>
+          <a href="#" id="profileLink">My Profile</a>
+          <a href="#" id="attendanceHistoryLink">View History</a>
+          <a href="#" id="changeProfilePicLink">Change Avatar</a>
+          <a href="#" id="logoutBtnDropdown">Logout</a>
         </div>
       </div>
     </nav>
 
-    <main id="mainContent" class="max-w-7xl mx-auto pt-20 px-4 sm:px-6 lg:px-8 rounded-2xl mb-8">
-      <h1 class="text-center mb-4">Attendance Tracker</h1>
-
-      <div class="mb-6 flex justify-center items-center">
-        <label for="monthSelect" class="mr-3 font-semibold text-gray-700 text-lg">Select Period:</label>
+    <main id="mainContent" class="max-w-7xl mx-auto pt-24 px-4 sm:px-6 lg:px-8 rounded-xl mb-10">
+      <h1 class="text-center mb-8">Monthly Attendance Overview</h1>
+      <div class="mb-10 flex justify-center items-center">
+        <label for="monthSelect" class="mr-3 font-semibold text-lg text-teal-300">Select Period:</label>
         <select id="monthSelect"></select>
       </div>
 
-      <div
-        class="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 text-center summary-grid">
+      <div class="mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center summary-grid">
         <div>Total Present: <span id="totalPresent">0</span></div>
         <div>Total Hours: <span id="totalHours">0</span></div>
         <div>Extra Hours: <span id="totalExtraHours">0</span></div>
@@ -687,97 +661,60 @@
               <th>Status</th>
               <th>Hours</th>
               <th>Extra Hours</th>
-              <th>Late (9-Hours)</th>
+              <th>Late (9-Hrs)</th>
               <th>Grace</th>
               <th>Shift</th>
             </tr>
           </thead>
-          <tbody id="attendanceTbody"></tbody>
+          <tbody id="attendanceTbody">
+            </tbody>
         </table>
       </div>
     </main>
 
     <footer id="app-footer">
-      Made by @Pranto_Anthony_Rodrix
+      Crafted by <a href="#" target="_blank" rel="noopener noreferrer">@Pranto_Anthony_Rodrix</a>
     </footer>
   </div>
 
   <script>
-    /* =============== LOGIN SYSTEM LOGIC =============== */
+    /* =============== LOGIN SYSTEM LOGIC (UNCHANGED from previous version) =============== */
+    const USER_DB_KEY = "attendance_users_colorful";
+    const LOGGED_IN_USER_KEY = "attendance_logged_in_user_colorful";
 
-    // Simple in-memory user DB (localStorage persists accounts)
-    const USER_DB_KEY = "attendance_users";
-    const LOGGED_IN_USER_KEY = "attendance_logged_in_user";
+    function getUsers() { const users = localStorage.getItem(USER_DB_KEY); return users ? JSON.parse(users) : {}; }
+    function saveUsers(users) { localStorage.setItem(USER_DB_KEY, JSON.stringify(users)); }
+    function saveLoggedInUser(username) { localStorage.setItem(LOGGED_IN_USER_KEY, username); }
+    function removeLoggedInUser() { localStorage.removeItem(LOGGED_IN_USER_KEY); }
+    function getLoggedInUser() { return localStorage.getItem(LOGGED_IN_USER_KEY); }
+    function validateEmail(email) { const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(email.toLowerCase());}
 
-    // Get users object from localStorage or default
-    function getUsers() {
-      const users = localStorage.getItem(USER_DB_KEY);
-      return users ? JSON.parse(users) : {};
-    }
-
-    // Save users object to localStorage
-    function saveUsers(users) {
-      localStorage.setItem(USER_DB_KEY, JSON.stringify(users));
-    }
-
-    // Save logged-in user to localStorage
-    function saveLoggedInUser(username) {
-      localStorage.setItem(LOGGED_IN_USER_KEY, username);
-    }
-
-    // Remove logged-in user
-    function removeLoggedInUser() {
-      localStorage.removeItem(LOGGED_IN_USER_KEY);
-    }
-
-    // Get logged-in user
-    function getLoggedInUser() {
-      return localStorage.getItem(LOGGED_IN_USER_KEY);
-    }
-
-    // Validate email format
-    function validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email.toLowerCase());
-    }
-
-    // Show/hide modals (renamed classes for consistency)
     const loginModal = document.getElementById("loginModal");
     const createAccountModal = document.getElementById("createAccountModal");
     const forgotPassModal = document.getElementById("forgotPassModal");
     const statusModal = document.getElementById("statusModal");
     const editDetailsModal = document.getElementById("editDetailsModal");
-    const selectProfilePicModal = document.getElementById("selectProfilePicModal"); // NEW MODAL
+    const selectProfilePicModal = document.getElementById("selectProfilePicModal");
     const appContainer = document.getElementById("appContainer");
-
-    // Login form elements
     const loginUserInput = document.getElementById("loginUser");
     const loginPassInput = document.getElementById("loginPass");
     const loginBtn = document.getElementById("loginBtn");
     const loginMessage = document.getElementById("loginMessage");
-
-    // Create account form elements
     const createUsernameInput = document.getElementById("createUsername");
     const createEmailInput = document.getElementById("createEmail");
     const createPasswordInput = document.getElementById("createPassword");
     const createConfirmPasswordInput = document.getElementById("createConfirmPassword");
     const createAccountBtn = document.getElementById("createAccountBtn");
     const createAccountMessage = document.getElementById("createAccountMessage");
-    const existingUsersList = document.getElementById("existingUsersList"); // NEW ELEMENT
-
-    // Forgot password form elements
+    const existingUsersList = document.getElementById("existingUsersList");
     const forgotUserEmailInput = document.getElementById("forgotUserEmail");
     const forgotPassBtn = document.getElementById("forgotPassBtn");
     const forgotPassMessage = document.getElementById("forgotPassMessage");
-
-    // Status modal elements
     const statusSelector = document.getElementById("statusSelector");
     const saveStatusBtn = document.getElementById("saveStatusBtn");
     const cancelStatusBtn = document.getElementById("cancelStatusBtn");
     const statusMessage = document.getElementById("statusMessage");
-    let currentEditingDate = null; // To store the date being edited
-
-    // EDIT DETAILS modal elements
+    let currentEditingDate = null;
     const editHoursInput = document.getElementById("editHours");
     const editExtraHoursInput = document.getElementById("editExtraHours");
     const editGraceCheckbox = document.getElementById("editGrace");
@@ -785,849 +722,197 @@
     const saveEditDetailsBtn = document.getElementById("saveEditDetailsBtn");
     const cancelEditDetailsBtn = document.getElementById("cancelEditDetailsBtn");
     const editDetailsMessage = document.getElementById("editDetailsMessage");
-
-    // Navbar elements
     const userPhoto = document.getElementById("userPhoto");
     const usernameDisplay = document.getElementById("usernameDisplay");
     const userDropdown = document.getElementById("userDropdown");
     const logoutBtnDropdown = document.getElementById("logoutBtnDropdown");
-    const changeProfilePicLink = document.getElementById("changeProfilePicLink"); // NEW LINK
-
-    // Select Profile Picture Modal elements
+    const changeProfilePicLink = document.getElementById("changeProfilePicLink");
     const profilePicOptionsContainer = selectProfilePicModal.querySelector('.profile-pic-options');
     const saveProfilePicBtn = document.getElementById('saveProfilePicBtn');
     const cancelProfilePicBtn = document.getElementById('cancelProfilePicBtn');
     const profilePicMessage = document.getElementById('profilePicMessage');
-    let selectedProfilePicUrl = ''; // To store the temporarily selected URL
+    let selectedProfilePicUrl = '';
 
+    document.getElementById("showCreateAccount").addEventListener("click", () => { hideModal(loginModal); showModal(createAccountModal); clearMessages(); clearCreateAccountFields(); populateExistingUsersList(); });
+    document.getElementById("showForgotPass").addEventListener("click", () => { hideModal(loginModal); showModal(forgotPassModal); clearMessages(); forgotUserEmailInput.value = ""; });
+    document.getElementById("backToLoginFromCreate").addEventListener("click", () => { hideModal(createAccountModal); showModal(loginModal); clearMessages(); clearLoginFields(); });
+    document.getElementById("backToLoginFromForgot").addEventListener("click", () => { hideModal(forgotPassModal); showModal(loginModal); clearMessages(); clearLoginFields(); });
 
-    // Links/buttons to switch modals
-    document.getElementById("showCreateAccount").addEventListener("click", () => {
-      hideModal(loginModal);
-      showModal(createAccountModal);
-      clearMessages();
-      clearCreateAccountFields();
-      populateExistingUsersList(); // Populate list when create account modal opens
-    });
+    function clearMessages() { loginMessage.textContent = ""; loginMessage.className = "message"; createAccountMessage.textContent = ""; createAccountMessage.className = "message"; forgotPassMessage.textContent = ""; forgotPassMessage.className = "message"; statusMessage.textContent = ""; statusMessage.className = "message"; editDetailsMessage.textContent = ""; editDetailsMessage.className = "message"; profilePicMessage.textContent = ""; profilePicMessage.className = "message"; }
+    function clearLoginFields() { loginUserInput.value = ""; loginPassInput.value = ""; }
+    function clearCreateAccountFields() { createUsernameInput.value = ""; createEmailInput.value = ""; createPasswordInput.value = ""; createConfirmPasswordInput.value = ""; }
 
-    document.getElementById("showForgotPass").addEventListener("click", () => {
-      hideModal(loginModal);
-      showModal(forgotPassModal);
-      clearMessages();
-      forgotUserEmailInput.value = "";
-    });
+    function showModal(modalElement) { modalElement.style.display = "flex"; requestAnimationFrame(() => { modalElement.classList.add("show"); }); }
+    function hideModal(modalElement) { modalElement.classList.remove("show"); modalElement.addEventListener('transitionend', function handler() { if (!modalElement.classList.contains('show')) { modalElement.style.display = "none"; } modalElement.removeEventListener('transitionend', handler); }); }
 
-    document.getElementById("backToLoginFromCreate").addEventListener("click", () => {
-      hideModal(createAccountModal);
-      showModal(loginModal);
-      clearMessages();
-      clearLoginFields();
-    });
-
-    document.getElementById("backToLoginFromForgot").addEventListener("click", () => {
-      hideModal(forgotPassModal);
-      showModal(loginModal);
-      clearMessages();
-      clearLoginFields();
-    });
-
-    // Utility functions to clear form messages and inputs
-    function clearMessages() {
-      loginMessage.textContent = "";
-      loginMessage.className = "message";
-      createAccountMessage.textContent = "";
-      createAccountMessage.className = "message";
-      forgotPassMessage.textContent = "";
-      forgotPassMessage.className = "message";
-      statusMessage.textContent = "";
-      statusMessage.className = "message";
-      editDetailsMessage.textContent = "";
-      editDetailsMessage.className = "message";
-      profilePicMessage.textContent = ""; // NEW
-      profilePicMessage.className = "message"; // NEW
-    }
-
-    function clearLoginFields() {
-      loginUserInput.value = "";
-      loginPassInput.value = "";
-    }
-
-    function clearCreateAccountFields() {
-      createUsernameInput.value = "";
-      createEmailInput.value = "";
-      createPasswordInput.value = "";
-      createConfirmPasswordInput.value = "";
-    }
-
-    // Function to show a modal
-    function showModal(modalElement) {
-      modalElement.style.display = "flex";
-      requestAnimationFrame(() => {
-        modalElement.classList.add("show");
-      });
-    }
-
-    // Function to hide a modal
-    function hideModal(modalElement) {
-      modalElement.classList.remove("show");
-      modalElement.addEventListener('transitionend', function handler() {
-        if (!modalElement.classList.contains('show')) {
-          modalElement.style.display = "none";
-        }
-        modalElement.removeEventListener('transitionend', handler);
-      });
-    }
-
-    // NEW: Populate Existing Users List
     function populateExistingUsersList() {
-        existingUsersList.innerHTML = ''; // Clear previous list
-        const users = getUsers();
-        const userCount = Object.keys(users).length;
-
-        if (userCount === 0) {
-            existingUsersList.innerHTML = '<p class="text-sm text-gray-500">No accounts created yet.</p>';
-            return;
-        }
-
-        for (const username in users) {
-            const userItem = document.createElement('div');
-            userItem.className = 'user-item';
-            const userPhotoUrl = users[username].profilePhotoUrl || `https://i.pravatar.cc/24?u=${encodeURIComponent(username)}`;
-            userItem.innerHTML = `<img src="${userPhotoUrl}" alt="${username} photo"><span>${username}</span>`;
-            existingUsersList.appendChild(userItem);
-        }
+        existingUsersList.innerHTML = ''; const users = getUsers(); const userCount = Object.keys(users).length;
+        if (userCount === 0) { existingUsersList.innerHTML = '<p class="text-sm text-gray-400 p-2">No accounts found.</p>'; return; }
+        for (const username in users) { const userItem = document.createElement('div'); userItem.className = 'user-item'; const userPhotoUrl = users[username].profilePhotoUrl || `https://placehold.co/24x24/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}`; userItem.innerHTML = `<img src="${userPhotoUrl}" alt="${username} photo"><span>${username}</span>`; existingUsersList.appendChild(userItem); }
     }
 
-
-    // LOGIN LOGIC
     loginBtn.addEventListener("click", () => {
-      clearMessages();
-
-      const userInput = loginUserInput.value.trim();
-      const passInput = loginPassInput.value;
-
-      if (!userInput || !passInput) {
-        loginMessage.textContent = "Please fill in all fields.";
-        loginMessage.classList.add("error");
-        return;
-      }
-
-      const users = getUsers();
-
-      // Find user by username or email
-      let foundUser = null;
-      for (const username in users) {
-        if (
-          username.toLowerCase() === userInput.toLowerCase() ||
-          users[username].email.toLowerCase() === userInput.toLowerCase()
-        ) {
-          foundUser = { username, ...users[username] };
-          break;
-        }
-      }
-
-      if (!foundUser) {
-        loginMessage.textContent = "User not found.";
-        loginMessage.classList.add("error");
-        return;
-      }
-
-      if (foundUser.password !== passInput) {
-        loginMessage.textContent = "Incorrect password.";
-        loginMessage.classList.add("error");
-        return;
-      }
-
-      // Successful login
-      saveLoggedInUser(foundUser.username);
-      loginMessage.textContent = "Login successful! Redirecting...";
-      loginMessage.classList.remove("error");
-      loginMessage.classList.add("success");
-
-      setTimeout(() => {
-        hideModal(loginModal);
-        appContainer.style.display = "flex";
-        initAppForUser(foundUser.username);
-      }, 1000);
+      clearMessages(); const userInput = loginUserInput.value.trim(); const passInput = loginPassInput.value;
+      if (!userInput || !passInput) { loginMessage.textContent = "Please fill in all fields."; loginMessage.classList.add("error"); return; }
+      const users = getUsers(); let foundUser = null;
+      for (const username in users) { if (username.toLowerCase() === userInput.toLowerCase() || users[username].email.toLowerCase() === userInput.toLowerCase()) { foundUser = { username, ...users[username] }; break; } }
+      if (!foundUser) { loginMessage.textContent = "User not found."; loginMessage.classList.add("error"); return; }
+      if (foundUser.password !== passInput) { loginMessage.textContent = "Incorrect password."; loginMessage.classList.add("error"); return; }
+      saveLoggedInUser(foundUser.username); loginMessage.textContent = "Login successful! Redirecting..."; loginMessage.classList.add("success");
+      setTimeout(() => { hideModal(loginModal); appContainer.style.display = "flex"; initAppForUser(foundUser.username); }, 1000);
     });
 
-    // CREATE ACCOUNT LOGIC
     createAccountBtn.addEventListener("click", () => {
-      clearMessages();
-
-      const username = createUsernameInput.value.trim();
-      const email = createEmailInput.value.trim();
-      const password = createPasswordInput.value;
-      const confirmPassword = createConfirmPasswordInput.value;
-
-      if (!username || !email || !password || !confirmPassword) {
-        createAccountMessage.textContent = "Please fill in all fields.";
-        createAccountMessage.classList.add("error");
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        createAccountMessage.textContent = "Invalid email format.";
-        createAccountMessage.classList.add("error");
-        return;
-      }
-
-      if (password.length < 6) {
-        createAccountMessage.textContent = "Password must be at least 6 characters long.";
-        createAccountMessage.classList.add("error");
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        createAccountMessage.textContent = "Passwords do not match.";
-        createAccountMessage.classList.add("error");
-        return;
-      }
-
-      const users = getUsers();
-
-      // Check username/email uniqueness
-      if (users[username]) {
-        createAccountMessage.textContent = "Username already exists.";
-        createAccountMessage.classList.add("error");
-        return;
-      }
-      for (const user in users) {
-        if (users[user].email.toLowerCase() === email.toLowerCase()) {
-          createAccountMessage.textContent = "Email already registered.";
-          createAccountMessage.classList.add("error");
-          return;
-        }
-      }
-
-      // Save new user with a default profile photo URL
-      users[username] = {
-        email,
-        password,
-        profilePhotoUrl: `https://i.pravatar.cc/40?u=${encodeURIComponent(username)}` // Default pravatar
-      };
-      saveUsers(users);
-
-      createAccountMessage.textContent = "Account created successfully!";
-      createAccountMessage.classList.remove("error");
-      createAccountMessage.classList.add("success");
-
-      // Update the list of existing users
-      populateExistingUsersList();
-
-      setTimeout(() => {
-        hideModal(createAccountModal);
-        showModal(loginModal);
-        clearLoginFields();
-        clearCreateAccountFields();
-        clearMessages();
-      }, 1500);
+      clearMessages(); const username = createUsernameInput.value.trim(); const email = createEmailInput.value.trim(); const password = createPasswordInput.value; const confirmPassword = createConfirmPasswordInput.value;
+      if (!username || !email || !password || !confirmPassword) { createAccountMessage.textContent = "Please fill in all fields."; createAccountMessage.classList.add("error"); return; }
+      if (!validateEmail(email)) { createAccountMessage.textContent = "Invalid email format."; createAccountMessage.classList.add("error"); return; }
+      if (password.length < 6) { createAccountMessage.textContent = "Password must be at least 6 characters."; createAccountMessage.classList.add("error"); return; }
+      if (password !== confirmPassword) { createAccountMessage.textContent = "Passwords do not match."; createAccountMessage.classList.add("error"); return; }
+      const users = getUsers(); if (users[username]) { createAccountMessage.textContent = "Username already exists."; createAccountMessage.classList.add("error"); return; }
+      for (const user in users) { if (users[user].email.toLowerCase() === email.toLowerCase()) { createAccountMessage.textContent = "Email already registered."; createAccountMessage.classList.add("error"); return; } }
+      users[username] = { email, password, profilePhotoUrl: `https://placehold.co/40x40/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}` }; saveUsers(users);
+      createAccountMessage.textContent = "Account created successfully!"; createAccountMessage.classList.add("success"); populateExistingUsersList();
+      setTimeout(() => { hideModal(createAccountModal); showModal(loginModal); clearLoginFields(); clearCreateAccountFields(); clearMessages(); }, 1500);
     });
 
-    // FORGOT PASSWORD LOGIC (No verification, just fake reset)
     forgotPassBtn.addEventListener("click", () => {
-      clearMessages();
-
-      const inputUser = forgotUserEmailInput.value.trim();
-
-      if (!inputUser) {
-        forgotPassMessage.textContent = "Please enter your username or email.";
-        forgotPassMessage.classList.add("error");
-        return;
-      }
-
-      const users = getUsers();
-
-      let foundUser = null;
-      for (const username in users) {
-        if (
-          username.toLowerCase() === inputUser.toLowerCase() ||
-          users[username].email.toLowerCase() === inputUser.toLowerCase()
-        ) {
-          foundUser = { username, ...users[username] };
-          break;
-        }
-      }
-
-      if (!foundUser) {
-        forgotPassMessage.textContent = "User not found.";
-        forgotPassMessage.classList.add("error");
-        return;
-      }
-
-      // Fake reset: just show a message (no actual reset)
-      forgotPassMessage.textContent = `Password reset link would be sent to ${foundUser.email} (simulated).`;
-      forgotPassMessage.classList.remove("error");
-      forgotPassMessage.classList.add("success");
-
-      setTimeout(() => {
-        hideModal(forgotPassModal);
-        showModal(loginModal);
-        forgotUserEmailInput.value = "";
-        clearMessages();
-      }, 2500);
+      clearMessages(); const inputUser = forgotUserEmailInput.value.trim();
+      if (!inputUser) { forgotPassMessage.textContent = "Please enter your username or email."; forgotPassMessage.classList.add("error"); return; }
+      const users = getUsers(); let foundUser = null;
+      for (const username in users) { if (username.toLowerCase() === inputUser.toLowerCase() || users[username].email.toLowerCase() === inputUser.toLowerCase()) { foundUser = { username, ...users[username] }; break; } }
+      if (!foundUser) { forgotPassMessage.textContent = "User not found."; forgotPassMessage.classList.add("error"); return; }
+      forgotPassMessage.textContent = `Password reset link would be sent to ${foundUser.email} (simulated).`; forgotPassMessage.classList.add("success");
+      setTimeout(() => { hideModal(forgotPassModal); showModal(loginModal); forgotUserEmailInput.value = ""; clearMessages(); }, 2500);
     });
 
-    // Logout button (from dropdown)
-    logoutBtnDropdown.addEventListener("click", () => {
-      removeLoggedInUser();
-      appContainer.style.display = "none";
-      hideModal(userDropdown); // Hide dropdown
-      showModal(loginModal);
-      clearLoginFields();
-      clearMessages();
-    });
+    logoutBtnDropdown.addEventListener("click", () => { removeLoggedInUser(); appContainer.style.display = "none"; userDropdown.classList.remove("show"); showModal(loginModal); clearLoginFields(); clearMessages(); });
+    userPhoto.addEventListener("click", (event) => { event.stopPropagation(); userDropdown.classList.toggle("show"); });
+    window.addEventListener("click", (event) => { if (!userPhoto.contains(event.target) && !userDropdown.contains(event.target)) { userDropdown.classList.remove("show"); } });
+    changeProfilePicLink.addEventListener("click", (event) => { event.preventDefault(); userDropdown.classList.remove("show"); clearMessages(); populateProfilePicOptions(); showModal(selectProfilePicModal); });
 
-    // Toggle dropdown visibility
-    userPhoto.addEventListener("click", (event) => {
-      event.stopPropagation(); // Prevent click from immediately closing dropdown
-      userDropdown.classList.toggle("show");
-    });
-
-    // Close dropdown if clicked outside
-    window.addEventListener("click", (event) => {
-      if (!userPhoto.contains(event.target) && !userDropdown.contains(event.target)) {
-        userDropdown.classList.remove("show");
-      }
-    });
-
-    // NEW: Change Profile Picture Link Handler
-    changeProfilePicLink.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default link behavior
-        hideModal(userDropdown); // Hide the dropdown
-        clearMessages();
-        populateProfilePicOptions(); // Populate options in the new modal
-        showModal(selectProfilePicModal);
-    });
-
-    // NEW: Populate Profile Picture Options
     function populateProfilePicOptions() {
-        profilePicOptionsContainer.innerHTML = ''; // Clear previous options
-        const currentLoggedInUser = getLoggedInUser();
-        const users = getUsers();
-        const currentUserData = users[currentLoggedInUser];
-        const currentProfilePhotoUrl = currentUserData ? currentUserData.profilePhotoUrl : '';
-
-        // Example pravatar seeds (you can add more or use different sources)
-        const pravatarSeeds = [
-            'male-1', 'female-1', 'robot-1', 'cat-1', 'dog-1', 'abstract-1',
-            'person-2', 'avatar-3', 'user-4', 'face-5', 'profile-6'
-        ];
-
+        profilePicOptionsContainer.innerHTML = ''; const currentLoggedInUser = getLoggedInUser(); const users = getUsers(); const currentUserData = users[currentLoggedInUser]; const currentProfilePhotoUrl = currentUserData ? currentUserData.profilePhotoUrl : '';
+        const pravatarSeeds = [ 'orb-teal', 'orb-magenta', 'orb-yellow', 'abstract-blue', 'abstract-green', 'tech-grid', 'neon-lines', 'user-glow', 'initials-dark' ];
         pravatarSeeds.forEach(seed => {
-            const img = document.createElement('img');
-            const url = `https://i.pravatar.cc/60?u=${encodeURIComponent(seed)}`;
-            img.src = url;
-            img.alt = `Profile Picture Option ${seed}`;
-            img.dataset.url = url; // Store the full URL for easy retrieval
-
-            if (url === currentProfilePhotoUrl) {
-                img.classList.add('selected');
-                selectedProfilePicUrl = url; // Pre-select the current one
-            }
-
-            img.addEventListener('click', () => {
-                // Remove 'selected' from all others
-                profilePicOptionsContainer.querySelectorAll('img').forEach(option => {
-                    option.classList.remove('selected');
-                });
-                // Add 'selected' to the clicked one
-                img.classList.add('selected');
-                selectedProfilePicUrl = img.dataset.url;
-            });
+            const img = document.createElement('img'); let url;
+            if (seed === 'initials-dark' && currentLoggedInUser) { url = `https://placehold.co/55x55/1A1A2E/00F5A0?text=${currentLoggedInUser.charAt(0).toUpperCase()}&font=inter`; }
+            else { url = `https://i.pravatar.cc/55?u=${encodeURIComponent(seed)}`; } // Using pravatar for variety, can be replaced
+            img.src = url; img.alt = `Profile Picture Option ${seed}`; img.dataset.url = url;
+            if (url === currentProfilePhotoUrl) { img.classList.add('selected'); selectedProfilePicUrl = url; }
+            img.addEventListener('click', () => { profilePicOptionsContainer.querySelectorAll('img').forEach(option => option.classList.remove('selected')); img.classList.add('selected'); selectedProfilePicUrl = img.dataset.url; });
             profilePicOptionsContainer.appendChild(img);
         });
     }
 
-    // NEW: Save Profile Picture Button Handler
     saveProfilePicBtn.addEventListener("click", () => {
         if (selectedProfilePicUrl) {
-            const currentLoggedInUser = getLoggedInUser();
-            const users = getUsers();
-            if (users[currentLoggedInUser]) {
-                users[currentLoggedInUser].profilePhotoUrl = selectedProfilePicUrl;
-                saveUsers(users);
-                userPhoto.src = selectedProfilePicUrl; // Update navbar photo immediately
-                profilePicMessage.textContent = "Profile picture updated successfully!";
-                profilePicMessage.classList.remove("error");
-                profilePicMessage.classList.add("success");
-                setTimeout(() => {
-                    hideModal(selectProfilePicModal);
-                    clearMessages();
-                }, 1000);
-            } else {
-                profilePicMessage.textContent = "Error: User not found.";
-                profilePicMessage.classList.add("error");
-            }
-        } else {
-            profilePicMessage.textContent = "Please select a picture.";
-            profilePicMessage.classList.add("error");
-        }
+            const currentLoggedInUser = getLoggedInUser(); const users = getUsers();
+            if (users[currentLoggedInUser]) { users[currentLoggedInUser].profilePhotoUrl = selectedProfilePicUrl; saveUsers(users); userPhoto.src = selectedProfilePicUrl; profilePicMessage.textContent = "Avatar updated!"; profilePicMessage.classList.add("success"); setTimeout(() => { hideModal(selectProfilePicModal); clearMessages(); }, 1000); }
+            else { profilePicMessage.textContent = "Error: User not found."; profilePicMessage.classList.add("error"); }
+        } else { profilePicMessage.textContent = "Please select an avatar."; profilePicMessage.classList.add("error"); }
     });
 
-    // NEW: Cancel Profile Picture Button Handler
-    cancelProfilePicBtn.addEventListener("click", () => {
-        hideModal(selectProfilePicModal);
-        clearMessages();
-    });
+    cancelProfilePicBtn.addEventListener("click", () => { hideModal(selectProfilePicModal); clearMessages(); });
 
-
-    // On page load, check if logged in
     window.addEventListener("load", () => {
       const loggedInUser = getLoggedInUser();
-      if (loggedInUser) {
-        loginModal.style.display = "none";
-        appContainer.style.display = "flex";
-        initAppForUser(loggedInUser);
-      } else {
-        showModal(loginModal);
-        appContainer.style.display = "none";
-      }
+      if (loggedInUser) { loginModal.style.display = "none"; appContainer.style.display = "flex"; initAppForUser(loggedInUser); }
+      else { showModal(loginModal); appContainer.style.display = "none"; }
     });
 
-    // NEW: Navbar scroll animation
-    window.addEventListener('scroll', () => {
-        const navbar = document.getElementById('navbar');
-        if (window.scrollY > 0) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
+    window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 10) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); } });
 
-
-    /* ================== ATTENDANCE TRACKER LOGIC =================== */
-
-    // Define Grace Limit
+    /* ================== ATTENDANCE TRACKER LOGIC (UNCHANGED from previous version) =================== */
     const GRACE_LIMIT_PER_MONTH = 5;
+    function formatDate(d) { return d.toISOString().slice(0, 10); }
+    function getDateRange(yearMonth) { const [year, month] = yearMonth.split("-").map(Number); let startDate = new Date(year, month - 1 - 1, 26); let endDate = new Date(year, month - 1, 25); return { startDate, endDate }; }
 
-    // Function to format date to YYYY-MM-DD
-    function formatDate(d) {
-      return d.toISOString().slice(0, 10);
-    }
-
-    // Function to get date range based on selected month (26th previous month to 25th current month)
-    function getDateRange(yearMonth) {
-      const [year, month] = yearMonth.split("-").map(Number);
-      let startDate = new Date(year, month - 1 - 1, 26); // previous month 26th
-      let endDate = new Date(year, month - 1, 25); // current month 25th
-      return {
-        startDate,
-        endDate
-      };
-    }
-
-    // Function to check if applying grace for targetDateStr would make it the 3rd consecutive grace day.
     function wouldExceedConsecutiveGraceLimit(targetDateStr, attendanceData) {
-      const targetDate = new Date(targetDateStr);
-      let consecutiveGraceCount = 0;
-
-      const selectedMonth = monthSelect.value;
-      const {
-        startDate: periodStartDate
-      } = getDateRange(selectedMonth);
-
-      for (let i = 1; i <= 2; i++) {
-        const prevDate = new Date(targetDate);
-        prevDate.setDate(targetDate.getDate() - i);
-        const prevDateStr = formatDate(prevDate);
-        const prevDayData = attendanceData[prevDateStr];
-
-        if (prevDate >= periodStartDate && prevDayData && prevDayData.status === 'present' && prevDayData.graceUsed) {
-          consecutiveGraceCount++;
-        } else {
-          break;
-        }
-      }
+      const targetDate = new Date(targetDateStr); let consecutiveGraceCount = 0; const selectedMonth = monthSelect.value; const { startDate: periodStartDate } = getDateRange(selectedMonth);
+      for (let i = 1; i <= 2; i++) { const prevDate = new Date(targetDate); prevDate.setDate(targetDate.getDate() - i); const prevDateStr = formatDate(prevDate); const prevDayData = attendanceData[prevDateStr]; if (prevDate >= periodStartDate && prevDayData && prevDayData.status === 'present' && prevDayData.graceUsed) { consecutiveGraceCount++; } else { break; } }
       return consecutiveGraceCount === 2;
     }
 
-
-    // Initialize attendance tracker UI after login
     function initAppForUser(username) {
-      const users = getUsers();
-      const currentUserData = users[username];
-      if (currentUserData && currentUserData.profilePhotoUrl) {
-          userPhoto.src = currentUserData.profilePhotoUrl;
-      } else {
-          userPhoto.src = `https://i.pravatar.cc/40?u=${encodeURIComponent(username)}`; // Default if not set
-      }
+      const users = getUsers(); const currentUserData = users[username];
+      if (currentUserData && currentUserData.profilePhotoUrl) { userPhoto.src = currentUserData.profilePhotoUrl; } else { userPhoto.src = `https://placehold.co/40x40/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}&font=inter`; }
       usernameDisplay.textContent = username;
+      const attendanceTbody = document.getElementById("attendanceTbody"); const monthSelect = document.getElementById("monthSelect"); const totalPresent = document.getElementById("totalPresent"); const totalHours = document.getElementById("totalHours"); const totalExtraHours = document.getElementById("totalExtraHours"); const totalLate = document.getElementById("totalLate"); const totalAbsent = document.getElementById("totalAbsent"); const totalHoliday = document.getElementById("totalHoliday"); const totalWorkingDays = document.getElementById("totalWorkingDays"); const graceUsedCount = document.getElementById("graceUsedCount"); const totalDayShifts = document.getElementById("totalDayShifts"); const totalNightShifts = document.getElementById("totalNightShifts");
+      const STORAGE_KEY = "attendance_data_" + username + "_colorful";
 
-      const attendanceTbody = document.getElementById("attendanceTbody");
-      const monthSelect = document.getElementById("monthSelect");
-      const totalPresent = document.getElementById("totalPresent");
-      const totalHours = document.getElementById("totalHours");
-      const totalExtraHours = document.getElementById("totalExtraHours");
-      const totalLate = document.getElementById("totalLate");
-      const totalAbsent = document.getElementById("totalAbsent");
-      const totalHoliday = document.getElementById("totalHoliday");
-      const totalWorkingDays = document.getElementById("totalWorkingDays");
-      const graceUsedCount = document.getElementById("graceUsedCount");
-      const totalDayShifts = document.getElementById("totalDayShifts");
-      const totalNightShifts = document.getElementById("totalNightShifts");
-
-
-      const STORAGE_KEY = "attendance_data_" + username;
-
-      function loadAttendanceData() {
-        const data = localStorage.getItem(STORAGE_KEY);
-        return data ? JSON.parse(data) : {};
-      }
-
-      function saveAttendanceData(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      }
-
-      function getGraceCountForMonth(monthKey) {
-        const attendanceData = loadAttendanceData();
-        return attendanceData[monthKey + '-graceCount'] || 0;
-      }
-
-      function saveGraceCountForMonth(monthKey, count) {
-        const attendanceData = loadAttendanceData();
-        attendanceData[monthKey + '-graceCount'] = count;
-        saveAttendanceData(attendanceData);
-      }
-
-      function formatMonthYear(date) {
-        return date.toLocaleString('default', {
-          month: 'long',
-          year: 'numeric'
-        });
-      }
+      function loadAttendanceData() { const data = localStorage.getItem(STORAGE_KEY); return data ? JSON.parse(data) : {}; }
+      function saveAttendanceData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+      function getGraceCountForMonth(monthKey) { const attendanceData = loadAttendanceData(); return attendanceData[monthKey + '-graceCount'] || 0; }
+      function saveGraceCountForMonth(monthKey, count) { const attendanceData = loadAttendanceData(); attendanceData[monthKey + '-graceCount'] = count; saveAttendanceData(attendanceData); }
+      function formatMonthYear(date) { return date.toLocaleString('default', { month: 'long', year: 'numeric' }); }
 
       function populateMonthSelect() {
-        const select = document.getElementById('monthSelect');
-        select.innerHTML = '';
-
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        const currentMonth = today.getMonth();
-
-        for (let i = -11; i <= 6; i++) {
-          const targetMonthDate = new Date(currentYear, currentMonth + i, 1);
-          const endDate = new Date(targetMonthDate.getFullYear(), targetMonthDate.getMonth(), 25);
-          const label = formatMonthYear(endDate);
-          const optionText = `${label}`;
-          const value = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}`;
-
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = optionText;
-          select.appendChild(option);
-        }
+        const select = document.getElementById('monthSelect'); select.innerHTML = ''; const today = new Date(); const currentYear = today.getFullYear(); const currentMonth = today.getMonth();
+        for (let i = -11; i <= 6; i++) { const targetMonthDate = new Date(currentYear, currentMonth + i, 1); const endDate = new Date(targetMonthDate.getFullYear(), targetMonthDate.getMonth(), 25); const label = formatMonthYear(endDate); const optionText = `${label}`; const value = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}`; const option = document.createElement('option'); option.value = value; option.textContent = optionText; select.appendChild(option); }
       }
-
-      function getDayName(d) {
-        return d.toLocaleDateString(undefined, {
-          weekday: "short"
-        });
-      }
+      function getDayName(d) { return d.toLocaleDateString(undefined, { weekday: "short" }); }
 
       function renderTable() {
-        const selected = monthSelect.value;
-        if (!selected) return;
-        const {
-          startDate,
-          endDate
-        } = getDateRange(selected);
-        const currentMonthKey = selected;
-
-        attendanceTbody.innerHTML = "";
-
-        const attendanceData = loadAttendanceData();
-        let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
-
-        let sumPresent = 0;
-        let sumHours = 0;
-        let sumExtraHours = 0;
-        let sumLate = 0;
-        let sumAbsent = 0;
-        let sumHoliday = 0;
-        let sumWorkingDays = 0;
-        let sumDayShifts = 0;
-        let sumNightShifts = 0;
-
+        const selected = monthSelect.value; if (!selected) return; const { startDate, endDate } = getDateRange(selected); const currentMonthKey = selected; attendanceTbody.innerHTML = "";
+        const attendanceData = loadAttendanceData(); let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
+        let sumPresent = 0, sumHours = 0, sumExtraHours = 0, sumLate = 0, sumAbsent = 0, sumHoliday = 0, sumWorkingDays = 0, sumDayShifts = 0, sumNightShifts = 0;
 
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-          const dateStr = formatDate(d);
-          const dayName = getDayName(d);
-
-          const dayData = attendanceData[dateStr] || {
-            status: '',
-            holiday: false,
-            hoursWorked: 0,
-            extraHours: 0,
-            lateHours: 0,
-            graceUsed: false,
-            shiftType: '',
-          };
-
-          if (dayData.status === 'present' && !dayData.holiday) {
-            dayData.lateHours = Math.max(0, 9 - dayData.hoursWorked);
-          } else {
-            dayData.lateHours = 0;
-          }
-
-          if (dayData.status === 'present') sumPresent++;
-          if (dayData.status === 'absent') sumAbsent++;
-          if (dayData.holiday) sumHoliday++;
-          sumHours += dayData.hoursWorked;
-          sumExtraHours += dayData.extraHours;
-          sumLate += dayData.lateHours;
-          if (dayData.status === 'present' || dayData.status === 'absent') sumWorkingDays++;
-          if (dayData.shiftType === 'day') sumDayShifts++;
-          if (dayData.shiftType === 'night') sumNightShifts++;
-
+          const dateStr = formatDate(d); const dayName = getDayName(d);
+          const dayData = attendanceData[dateStr] || { status: '', holiday: false, hoursWorked: 0, extraHours: 0, lateHours: 0, graceUsed: false, shiftType: '' };
+          if (dayData.status === 'present' && !dayData.holiday) { dayData.lateHours = Math.max(0, 9 - dayData.hoursWorked); } else { dayData.lateHours = 0; }
+          if (dayData.status === 'present') sumPresent++; if (dayData.status === 'absent') sumAbsent++; if (dayData.holiday) sumHoliday++; sumHours += dayData.hoursWorked; sumExtraHours += dayData.extraHours; sumLate += dayData.lateHours; if (dayData.status === 'present' || dayData.status === 'absent') sumWorkingDays++; if (dayData.shiftType === 'day') sumDayShifts++; if (dayData.shiftType === 'night') sumNightShifts++;
 
           const tr = document.createElement("tr");
-          if (dayData.holiday) {
-            tr.classList.add("row-holiday");
-          } else if (dayData.status === 'present') {
-            tr.classList.add("row-present");
-          } else if (dayData.status === 'absent') {
-            tr.classList.add("row-absent");
-          }
-          tr.className += " hover:bg-gray-100";
-
-
-          const tdDate = document.createElement("td");
-          tdDate.className = "text-center select-none";
-          tdDate.textContent = dateStr;
-          tr.appendChild(tdDate);
-
-          const tdDay = document.createElement("td");
-          tdDay.className = "text-center select-none";
-          tdDay.textContent = dayName;
-          tr.appendChild(tdDay);
-
-          const tdStatus = document.createElement("td");
-          tdStatus.className = "text-center status-cell";
-          tdStatus.dataset.date = dateStr;
-
-          if (dayData.holiday) {
-            tdStatus.textContent = "H";
-            tdStatus.classList.add("holiday-h");
-          } else if (dayData.status === 'present') {
-            tdStatus.textContent = "P";
-            tdStatus.classList.add("present-p");
-          } else if (dayData.status === 'absent') {
-            tdStatus.textContent = "A";
-            tdStatus.classList.add("absent-a");
-          } else {
-            const addButton = document.createElement("button");
-            addButton.textContent = "Add";
-            addButton.className = "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded-md text-sm transition-colors duration-200";
-            tdStatus.appendChild(addButton);
-          }
-          tdStatus.addEventListener("click", (e) => {
-            currentEditingDate = dateStr;
-            const currentDayData = attendanceData[dateStr] || {};
-            if (currentDayData.holiday) {
-              statusSelector.value = "holiday";
-            } else if (currentDayData.status) {
-              statusSelector.value = currentDayData.status;
-            } else {
-              statusSelector.value = "present";
-            }
-            clearMessages();
-            showModal(statusModal);
-          });
-          tr.appendChild(tdStatus);
-
-          const tdHours = document.createElement("td");
-          tdHours.className = "text-center";
-          tdHours.textContent = dayData.status === 'present' ? dayData.hoursWorked.toFixed(1) : '-';
-          tr.appendChild(tdHours);
-
-          const tdExtraHours = document.createElement("td");
-          tdExtraHours.className = "text-center";
-          tdExtraHours.textContent = dayData.status === 'present' ? dayData.extraHours.toFixed(1) : '-';
-          tr.appendChild(tdExtraHours);
-
-          const tdLate = document.createElement("td");
-          tdLate.className = "text-center select-none";
-          tdLate.textContent = dayData.lateHours > 0 ? dayData.lateHours.toFixed(2) : '-';
-          if (dayData.lateHours > 0) {
-            tdLate.classList.add('text-red-500', 'font-bold');
-          }
-          tr.appendChild(tdLate);
-
-          const tdGrace = document.createElement("td");
-          tdGrace.className = "text-center";
-          tdGrace.textContent = dayData.graceUsed ? 'Yes' : '-';
-          tr.appendChild(tdGrace);
-
-          const tdShift = document.createElement("td");
-          tdShift.className = "text-center";
-          tdShift.textContent = dayData.shiftType ? dayData.shiftType.charAt(0).toUpperCase() + dayData.shiftType.slice(1) : '-';
-          tr.appendChild(tdShift);
-
+          if (dayData.holiday) tr.classList.add("row-holiday"); else if (dayData.status === 'present') tr.classList.add("row-present"); else if (dayData.status === 'absent') tr.classList.add("row-absent");
+          tr.innerHTML = `<td class="select-none">${dateStr}</td><td class="select-none">${dayName}</td><td class="status-cell" data-date="${dateStr}"></td><td>${dayData.status === 'present' ? dayData.hoursWorked.toFixed(1) : '-'}</td><td>${dayData.status === 'present' ? dayData.extraHours.toFixed(1) : '-'}</td><td class="select-none ${dayData.lateHours > 0 ? 'font-semibold' : ''}" style="color: ${dayData.lateHours > 0 ? 'var(--absent-text)' : 'inherit'}; text-shadow: ${dayData.lateHours > 0 ? '0 0 3px var(--absent-text)' : 'none'};">${dayData.lateHours > 0 ? dayData.lateHours.toFixed(1) : '-'}</td><td>${dayData.graceUsed ? 'Yes' : '-'}</td><td>${dayData.shiftType ? dayData.shiftType.charAt(0).toUpperCase() + dayData.shiftType.slice(1) : '-'}</td>`;
+          const tdStatus = tr.querySelector(".status-cell");
+          if (dayData.holiday) { tdStatus.textContent = "H"; tdStatus.classList.add("holiday-h"); } else if (dayData.status === 'present') { tdStatus.textContent = "P"; tdStatus.classList.add("present-p"); } else if (dayData.status === 'absent') { tdStatus.textContent = "A"; tdStatus.classList.add("absent-a"); } else { const addButton = document.createElement("button"); addButton.textContent = "Set"; tdStatus.appendChild(addButton); }
+          tdStatus.addEventListener("click", (e) => { currentEditingDate = dateStr; const currentDayData = attendanceData[dateStr] || {}; statusSelector.value = currentDayData.holiday ? "holiday" : (currentDayData.status || "present"); clearMessages(); showModal(statusModal); });
           attendanceTbody.appendChild(tr);
         }
-
-        totalPresent.textContent = sumPresent;
-        totalHours.textContent = sumHours.toFixed(2);
-        totalExtraHours.textContent = sumExtraHours.toFixed(2);
-        totalLate.textContent = sumLate.toFixed(2);
-        totalAbsent.textContent = sumAbsent;
-        totalHoliday.textContent = sumHoliday;
-        totalWorkingDays.textContent = sumWorkingDays;
-        graceUsedCount.textContent = currentMonthGraceCount;
-        totalDayShifts.textContent = sumDayShifts;
-        totalNightShifts.textContent = sumNightShifts;
-      }
-
-      function saveDayData(dateStr, dayData) {
-        const attendanceData = loadAttendanceData();
-        attendanceData[dateStr] = dayData;
-        saveAttendanceData(attendanceData);
+        totalPresent.textContent = sumPresent; totalHours.textContent = sumHours.toFixed(1); totalExtraHours.textContent = sumExtraHours.toFixed(1); totalLate.textContent = sumLate.toFixed(1); totalAbsent.textContent = sumAbsent; totalHoliday.textContent = sumHoliday; totalWorkingDays.textContent = sumWorkingDays; graceUsedCount.textContent = currentMonthGraceCount; totalDayShifts.textContent = sumDayShifts; totalNightShifts.textContent = sumNightShifts;
       }
 
       saveStatusBtn.addEventListener("click", () => {
-        if (!currentEditingDate) {
-          statusMessage.textContent = "Error: No date selected.";
-          statusMessage.classList.add("error");
-          return;
-        }
-
-        const selectedStatus = statusSelector.value;
-        const attendanceData = loadAttendanceData();
-        const oldDayData = attendanceData[currentEditingDate] || {};
-        let dayData = { ...oldDayData };
-
-        const currentMonthKey = currentEditingDate.substring(0, 7);
-        let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
-
-        if (oldDayData.graceUsed && oldDayData.status === 'present' && selectedStatus !== 'present') {
-          currentMonthGraceCount--;
-        }
-
-        dayData.hoursWorked = 0;
-        dayData.extraHours = 0;
-        dayData.lateHours = 0;
-        dayData.graceUsed = false;
-        dayData.shiftType = '';
-
+        if (!currentEditingDate) { statusMessage.textContent = "Error: No date selected."; statusMessage.classList.add("error"); return; }
+        const selectedStatus = statusSelector.value; const attendanceData = loadAttendanceData(); const oldDayData = attendanceData[currentEditingDate] || {}; let dayData = { ...oldDayData }; const currentMonthKey = currentEditingDate.substring(0, 7); let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
+        if (oldDayData.graceUsed && oldDayData.status === 'present' && selectedStatus !== 'present') { currentMonthGraceCount--; }
+        dayData.hoursWorked = 0; dayData.extraHours = 0; dayData.lateHours = 0; dayData.graceUsed = false; dayData.shiftType = '';
         if (selectedStatus === "present") {
-          dayData.status = 'present';
-          dayData.holiday = false;
-
-          attendanceData[currentEditingDate] = dayData;
-          saveAttendanceData(attendanceData);
-          saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount);
-
-          renderTable();
-
-          hideModal(statusModal);
-
-          editHoursInput.value = oldDayData.hoursWorked || '';
-          editExtraHoursInput.value = oldDayData.extraHours || '';
-          editGraceCheckbox.checked = oldDayData.graceUsed || false;
-          editShiftSelect.value = oldDayData.shiftType || 'day';
-
-          const monthlyGraceLimitReached = currentMonthGraceCount >= GRACE_LIMIT_PER_MONTH;
-          const wouldBe3rdConsecutive = wouldExceedConsecutiveGraceLimit(currentEditingDate, attendanceData);
-
-          editGraceCheckbox.disabled = monthlyGraceLimitReached || wouldBe3rdConsecutive;
-
-          if (editGraceCheckbox.disabled) {
-              editGraceCheckbox.checked = false;
-          }
-
+          dayData.status = 'present'; dayData.holiday = false; attendanceData[currentEditingDate] = dayData; saveAttendanceData(attendanceData); saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount); renderTable(); hideModal(statusModal);
+          editHoursInput.value = oldDayData.hoursWorked || ''; editExtraHoursInput.value = oldDayData.extraHours || ''; editGraceCheckbox.checked = oldDayData.graceUsed || false; editShiftSelect.value = oldDayData.shiftType || 'day';
+          const monthlyGraceLimitReached = currentMonthGraceCount >= GRACE_LIMIT_PER_MONTH; const wouldBe3rdConsecutive = wouldExceedConsecutiveGraceLimit(currentEditingDate, attendanceData); editGraceCheckbox.disabled = monthlyGraceLimitReached || wouldBe3rdConsecutive; if (editGraceCheckbox.disabled) { editGraceCheckbox.checked = false; }
           showModal(editDetailsModal);
         } else {
-          if (selectedStatus === "absent") {
-            dayData.status = 'absent';
-            dayData.holiday = false;
-          } else if (selectedStatus === "holiday") {
-            dayData.status = '';
-            dayData.holiday = true;
-          }
-          attendanceData[currentEditingDate] = dayData;
-          saveAttendanceData(attendanceData);
-          saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount);
-          renderTable();
-          hideModal(statusModal);
-          currentEditingDate = null;
-          clearMessages();
+          if (selectedStatus === "absent") { dayData.status = 'absent'; dayData.holiday = false; } else if (selectedStatus === "holiday") { dayData.status = ''; dayData.holiday = true; }
+          attendanceData[currentEditingDate] = dayData; saveAttendanceData(attendanceData); saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount); renderTable(); hideModal(statusModal); currentEditingDate = null; clearMessages();
         }
       });
-
-      cancelStatusBtn.addEventListener("click", () => {
-        hideModal(statusModal);
-        currentEditingDate = null;
-        clearMessages();
-      });
+      cancelStatusBtn.addEventListener("click", () => { hideModal(statusModal); currentEditingDate = null; clearMessages(); });
 
       saveEditDetailsBtn.addEventListener("click", () => {
-        if (!currentEditingDate) {
-          editDetailsMessage.textContent = "Error: No date selected for details.";
-          editDetailsMessage.classList.add("error");
-          return;
-        }
-
-        const attendanceData = loadAttendanceData();
-        let dayData = attendanceData[currentEditingDate] || {};
-        const oldGraceUsed = dayData.graceUsed;
-
-        dayData.hoursWorked = parseFloat(editHoursInput.value) || 0;
-        dayData.extraHours = parseFloat(editExtraHoursInput.value) || 0;
-        dayData.graceUsed = editGraceCheckbox.checked;
-        dayData.shiftType = editShiftSelect.value || '';
-
-        dayData.lateHours = Math.max(0, 9 - dayData.hoursWorked);
-
-        const currentMonthKey = currentEditingDate.substring(0, 7);
-        let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
-
+        if (!currentEditingDate) { editDetailsMessage.textContent = "Error: No date selected."; editDetailsMessage.classList.add("error"); return; }
+        const attendanceData = loadAttendanceData(); let dayData = attendanceData[currentEditingDate] || {}; const oldGraceUsed = dayData.graceUsed;
+        dayData.hoursWorked = parseFloat(editHoursInput.value) || 0; dayData.extraHours = parseFloat(editExtraHoursInput.value) || 0; dayData.graceUsed = editGraceCheckbox.checked; dayData.shiftType = editShiftSelect.value || ''; dayData.lateHours = Math.max(0, 9 - dayData.hoursWorked);
+        const currentMonthKey = currentEditingDate.substring(0, 7); let currentMonthGraceCount = getGraceCountForMonth(currentMonthKey);
         if (dayData.graceUsed && !oldGraceUsed) {
-          if (currentMonthGraceCount >= GRACE_LIMIT_PER_MONTH) {
-            editDetailsMessage.textContent = `Grace limit (${GRACE_LIMIT_PER_MONTH}) reached for this month. Cannot apply grace.`;
-            editDetailsMessage.classList.add("error");
-            dayData.graceUsed = false;
-            editGraceCheckbox.checked = false;
-            return;
-          }
-
-          if (wouldExceedConsecutiveGraceLimit(currentEditingDate, attendanceData)) {
-            editDetailsMessage.textContent = "Cannot apply grace: 3 consecutive grace periods are not allowed.";
-            editDetailsMessage.classList.add("error");
-            dayData.graceUsed = false;
-            editGraceCheckbox.checked = false;
-            return;
-          }
-
+          if (currentMonthGraceCount >= GRACE_LIMIT_PER_MONTH) { editDetailsMessage.textContent = `Grace limit (${GRACE_LIMIT_PER_MONTH}) reached.`; editDetailsMessage.classList.add("error"); dayData.graceUsed = false; editGraceCheckbox.checked = false; return; }
+          if (wouldExceedConsecutiveGraceLimit(currentEditingDate, attendanceData)) { editDetailsMessage.textContent = "Cannot apply: 3 consecutive grace not allowed."; editDetailsMessage.classList.add("error"); dayData.graceUsed = false; editGraceCheckbox.checked = false; return; }
           currentMonthGraceCount++;
-        } else if (!dayData.graceUsed && oldGraceUsed) {
-          currentMonthGraceCount--;
-        }
-
-        attendanceData[currentEditingDate] = dayData;
-        saveAttendanceData(attendanceData);
-        saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount);
-
-        renderTable();
-        hideModal(editDetailsModal);
-        currentEditingDate = null;
-        clearMessages();
+        } else if (!dayData.graceUsed && oldGraceUsed) { currentMonthGraceCount--; }
+        attendanceData[currentEditingDate] = dayData; saveAttendanceData(attendanceData); saveGraceCountForMonth(currentMonthKey, currentMonthGraceCount); renderTable(); hideModal(editDetailsModal); currentEditingDate = null; clearMessages();
       });
-
-      cancelEditDetailsBtn.addEventListener("click", () => {
-        hideModal(editDetailsModal);
-        currentEditingDate = null;
-        clearMessages();
-      });
-
+      cancelEditDetailsBtn.addEventListener("click", () => { hideModal(editDetailsModal); currentEditingDate = null; clearMessages(); });
 
       populateMonthSelect();
-      monthSelect.value = new Date().toISOString().slice(0, 7);
+      const today = new Date();
+      const currentPeriodYear = today.getDate() >= 26 ? (today.getMonth() === 11 ? today.getFullYear() + 1 : today.getFullYear()) : today.getFullYear();
+      const currentPeriodMonth = today.getDate() >= 26 ? (today.getMonth() === 11 ? 1 : today.getMonth() + 2) : today.getMonth() + 1;
+      monthSelect.value = `${currentPeriodYear}-${String(currentPeriodMonth).padStart(2, '0')}`;
       renderTable();
-
       monthSelect.addEventListener("change", renderTable);
     }
   </script>
 </body>
-
 </html>
