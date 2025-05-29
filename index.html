@@ -4,59 +4,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Attendance Tracker Pro - Colorful</title>
+  <title>Attendance Tracker Pro - Aurora Dreams</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Global Styles - Deep Colorful UI */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    /* Global Styles - Aurora Dreams UI */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
     :root {
-      --bg-deep-indigo: #1A1A2E; /* Deep indigo for main background */
-      --bg-content-indigo: #24243E; /* Slightly lighter for content areas */
-      --bg-modal-indigo: #2A2A4A; /* Modal background */
-      --text-primary-light: #E0E0E0; /* Light gray for primary text */
-      --text-secondary-light: #B0B0C0; /* Softer light gray */
-      --accent-teal: #00F5A0;
-      --accent-magenta: #FF00FF;
-      --accent-orange: #FFA500;
-      --accent-yellow: #FFFF00;
-      --border-dark: #3A3A5A; /* Darker border for separation */
-      --shadow-color: rgba(0, 245, 160, 0.1); /* Tealish shadow */
-      --success-color: #28a745;
-      --error-color: #dc3545;
-      --info-color: #17a2b8;
-      --present-bg: rgba(0, 245, 160, 0.15); /* Tealish green for present */
-      --present-text: #00F5A0;
-      --absent-bg: rgba(255, 0, 0, 0.15); /* Reddish for absent */
-      --absent-text: #FF4D4F;
-      --holiday-bg: rgba(0, 123, 255, 0.15); /* Bluish for holiday */
-      --holiday-text: #007BFF;
+      --bg-aurora-start: #0F0C29;
+      --bg-aurora-mid: #302B63;
+      --bg-aurora-end: #24243E;
+      --glass-bg: rgba(36, 36, 62, 0.65); /* Frosted glass background */
+      --glass-border: rgba(176, 176, 192, 0.2); /* Light border for glass */
+      --text-primary-glow: #F0F0FF;
+      --text-secondary-muted: #A0A0C0;
+      --accent-aurora-green: #00FFAA;
+      --accent-aurora-pink: #FF00CC;
+      --accent-aurora-blue: #00CCFF;
+      --accent-gold: #FFD700;
+      --border-interactive: var(--accent-aurora-blue);
+      --shadow-glow: var(--accent-aurora-green);
+      --success-glow: #28a745;
+      --error-glow: #e53e3e; /* Brighter red for dark theme */
+
+      --present-bg-aurora: rgba(0, 255, 170, 0.1);
+      --present-text-aurora: var(--accent-aurora-green);
+      --absent-bg-aurora: rgba(255, 0, 204, 0.1);
+      --absent-text-aurora: var(--accent-aurora-pink);
+      --holiday-bg-aurora: rgba(0, 204, 255, 0.1);
+      --holiday-text-aurora: var(--accent-aurora-blue);
     }
+
+    @keyframes auroraBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes subtleShine {
+        0% { box-shadow: 0 0 5px rgba(255,255,255,0); }
+        50% { box-shadow: 0 0 15px rgba(224, 224, 255, 0.1), 0 0 25px rgba(224,224,255,0.05); }
+        100% { box-shadow: 0 0 5px rgba(255,255,255,0); }
+    }
+
 
     body {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       margin: 0;
-      background: var(--bg-deep-indigo);
+      background: linear-gradient(270deg, var(--bg-aurora-start), var(--bg-aurora-mid), var(--bg-aurora-end), var(--bg-aurora-mid), var(--bg-aurora-start));
+      background-size: 600% 600%;
+      animation: auroraBackground 25s ease infinite;
       overflow-x: hidden;
-      color: var(--text-primary-light);
+      color: var(--text-primary-glow);
       display: flex;
       flex-direction: column;
     }
 
-    /* Modals - Colorful & Modern */
+    /* Modals - Aurora Glassmorphism */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(10, 10, 20, 0.6); /* Darker, slightly colored backdrop */
-      backdrop-filter: blur(5px);
+      background: rgba(15, 12, 41, 0.5); /* Darker backdrop */
+      backdrop-filter: blur(8px); /* Stronger blur for glass effect */
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.35s ease;
     }
 
     .modal-backdrop.show {
@@ -65,17 +82,18 @@
     }
 
     .modal-content {
-      background: var(--bg-modal-indigo);
-      border-radius: 10px;
-      padding: 2.5rem 3rem;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--shadow-color);
-      width: 420px;
-      color: var(--text-primary-light);
+      background: var(--glass-bg);
+      border-radius: 16px; /* More rounded for softer look */
+      padding: 2.8rem 3.2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--glass-border);
+      width: 440px;
+      color: var(--text-primary-glow);
       text-align: center;
       position: relative;
-      transform: translateY(-20px) scale(0.95);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-      border: 1px solid var(--border-dark);
+      transform: translateY(-25px) scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px); /* Blur for modal content itself */
     }
 
     .modal-backdrop.show .modal-content {
@@ -83,174 +101,185 @@
     }
 
     .modal-content h2 {
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      font-size: 1.75rem;
-      color: var(--accent-teal); /* Teal for modal titles */
-      text-shadow: 0 0 5px rgba(0, 245, 160, 0.5);
+      margin-bottom: 1.8rem;
+      font-weight: 800;
+      font-size: 2rem;
+      background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-aurora-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px var(--accent-aurora-green), 0 0 20px var(--accent-aurora-pink);
     }
 
     .modal-content label {
-      color: var(--text-secondary-light);
+      color: var(--text-secondary-muted);
       font-weight: 500;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       display: block;
       text-align: left;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
     }
 
     .modal-content input,
     .modal-content select {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      border: 1px solid var(--border-dark);
-      margin-bottom: 1.25rem;
-      background: rgba(255, 255, 255, 0.05); /* Very subtle light background for inputs */
-      color: var(--text-primary-light);
+      padding: 0.85rem 1.1rem;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 1.4rem;
+      background: White; /* Even more subtle */
+      color: #020244;;
       font-size: 1rem;
       font-weight: 400;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
 
     .modal-content input::placeholder,
     .modal-content select option {
-      color: var(--text-secondary-light);
+      color: #9898c9;
     }
      .modal-content select option {
-      background-color: var(--bg-modal-indigo); /* Ensure dropdown options are themed */
-      color: var(--text-primary-light);
+      background-color: black;
+      color: white;
     }
-
 
     .modal-content input:focus,
     .modal-content select:focus {
       outline: none;
-      border-color: var(--accent-teal);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 0 2px rgba(0, 245, 160, 0.3);
+      border-color: var(--border-interactive);
+      background: white;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), 0 0 0 3px rgba(0, 204, 255, 0.25), 0 0 10px var(--border-interactive);
     }
 
     .modal-content button {
-      background-image: linear-gradient(to right, var(--accent-teal), var(--accent-magenta));
-      color: #11111E; /* Dark text on bright buttons */
-      font-weight: 600; /* Bolder text */
-      padding: 0.8rem 1.3rem;
-      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-aurora-pink), var(--accent-aurora-blue), var(--accent-aurora-green));
+      background-size: 200% 200%;
+      color: #0F0C29;
+      font-weight: 700;
+      padding: 0.9rem 1.5rem;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       width: 100%;
-      font-size: 1.05rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2), 0 0 10px var(--accent-aurora-pink);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
 
     .modal-content button:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3), 0 0 10px var(--accent-teal);
+      background-position: right center; /* change gradient direction */
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 15px var(--accent-aurora-green), 0 0 25px var(--accent-aurora-blue);
     }
+     .modal-content button:active {
+        transform: translateY(-1px) scale(1.01);
+     }
 
-    .modal-content button.bg-gray-500 { /* For cancel/secondary buttons */
-      background-image: none;
-      background-color: rgba(255,255,255,0.1);
-      color: var(--text-secondary-light);
-      border: 1px solid var(--border-dark);
+
+    .modal-content button.bg-gray-500 { /* Secondary buttons */
+      background: rgba(255,255,255,0.08);
+      color: var(--text-secondary-muted);
+      border: 1px solid var(--glass-border);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
 
     .modal-content button.bg-gray-500:hover {
-      background-color: rgba(255,255,255,0.15);
-      color: var(--text-primary-light);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.12);
+      color: var(--text-primary-glow);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), 0 0 8px var(--accent-aurora-blue);
     }
 
     .modal-footer {
-      margin-top: 1.25rem;
+      margin-top: 1.5rem;
       font-size: 0.9rem;
-      font-weight: 400;
-      color: var(--text-secondary-light);
+      font-weight: 500;
+      color: var(--text-secondary-muted);
     }
 
     .modal-footer a {
-      color: var(--accent-teal);
+      background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-aurora-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       cursor: pointer;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s ease, text-shadow 0.2s ease;
+      font-weight: 600;
+      transition: filter 0.25s ease;
     }
 
     .modal-footer a:hover {
-      color: var(--accent-magenta);
-      text-shadow: 0 0 5px var(--accent-magenta);
+      filter: brightness(1.3);
+      text-shadow: 0 0 5px var(--accent-aurora-blue);
     }
 
     .message {
-      margin-top: 0.85rem;
-      font-weight: 500;
-      font-size: 0.95rem;
+      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.5rem;
+      border-radius: 6px;
     }
 
-    .message.success { color: var(--success-color); }
-    .message.error { color: var(--error-color); }
+    .message.success { color: var(--success-glow); background-color: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.3); text-shadow: 0 0 5px var(--success-glow);}
+    .message.error { color: var(--error-glow); background-color: rgba(229, 62, 62, 0.1); border: 1px solid rgba(229, 62, 62, 0.3); text-shadow: 0 0 5px var(--error-glow);}
 
     /* App Container & Navbar */
-    #appContainer {
-      display: none;
-      min-height: 100vh;
-      flex-direction: column;
-    }
+    #appContainer { display: none; min-height: 100vh; flex-direction: column; }
 
     #navbar {
-      background: rgba(36, 36, 62, 0.85); /* Semi-transparent dark navbar */
-      backdrop-filter: blur(10px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-      color: var(--text-primary-light);
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border-dark);
+      background: rgba(15, 12, 41, 0.75); /* Darker, more solid navbar */
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      color: var(--text-primary-glow);
+      padding: 1.1rem 2rem;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     #navbar.scrolled {
-      background: rgba(30, 30, 50, 0.9);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background: rgba(15, 12, 41, 0.85);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     }
 
     #navbar .font-bold { /* App Title */
-      color: var(--accent-teal);
-      font-size: 1.4rem;
-      font-weight: 700;
-      text-shadow: 0 0 3px var(--accent-teal);
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-aurora-pink), var(--accent-aurora-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
     }
 
     #userPhoto {
       border-radius: 50%;
-      border: 2px solid var(--accent-teal);
-      box-shadow: 0 0 8px var(--accent-teal);
+      border: 3px solid var(--accent-aurora-blue);
+      box-shadow: 0 0 10px var(--accent-aurora-blue), 0 0 20px var(--accent-aurora-blue);
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.3s ease;
     }
 
     #userPhoto:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 12px var(--accent-magenta);
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 0 15px var(--accent-aurora-pink), 0 0 30px var(--accent-aurora-pink);
+      border-color: var(--accent-aurora-pink);
     }
 
     /* Dropdown Menu */
     .dropdown-menu {
       position: absolute;
-      top: calc(100% + 8px);
+      top: calc(100% + 10px);
       right: 0;
-      background: var(--bg-modal-indigo);
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      min-width: 190px;
+      background: var(--glass-bg);
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      min-width: 200px;
       z-index: 1000;
       opacity: 0;
-      transform: translateY(10px) scale(0.95);
+      transform: translateY(15px) scale(0.9);
       pointer-events: none;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      padding: 0.5rem;
-      border: 1px solid var(--border-dark);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      padding: 0.75rem;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
     }
 
     .dropdown-menu.show {
@@ -261,248 +290,276 @@
 
     .dropdown-menu a {
       display: block;
-      padding: 0.7rem 1rem;
-      color: var(--text-secondary-light);
+      padding: 0.8rem 1.1rem;
+      color: var(--text-secondary-muted);
       text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: background-color 0.2s ease, color 0.2s ease;
-      border-radius: 4px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-radius: 6px;
     }
 
     .dropdown-menu a:hover {
-      background-color: rgba(0, 245, 160, 0.1); /* Teal highlight */
-      color: var(--accent-teal);
+      background: rgba(0, 255, 170, 0.15);
+      color: var(--accent-aurora-green);
+      transform: translateX(5px);
+      text-shadow: 0 0 5px var(--accent-aurora-green);
     }
 
     /* Main Content Area */
     #mainContent {
       flex-grow: 1;
-      background: var(--bg-content-indigo);
-      border-radius: 12px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 5px 20px rgba(0,0,0,0.15);
-      padding: 2.5rem 3rem;
-      margin-top: 6.5rem; /* Ensure space below fixed navbar */
-      margin-bottom: 2.5rem;
-      color: var(--text-primary-light);
-      border: 1px solid var(--border-dark);
+      background: var(--glass-bg);
+      border-radius: 20px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.25), 0 8px 30px rgba(0,0,0,0.2);
+      padding: 3rem 3.5rem;
+      margin-top: 7rem;
+      margin-bottom: 3rem;
+      color: var(--text-primary-glow);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      animation: subtleShine 5s infinite ease-in-out;
     }
 
     #mainContent h1 { /* Page Title */
-      color: var(--text-primary-light);
-      font-weight: 700;
-      font-size: 2.25rem;
-      margin-bottom: 2.5rem;
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
       text-align: center;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     #monthSelect {
-      border: 1px solid var(--border-dark);
-      border-radius: 6px;
-      background-color: rgba(255,255,255,0.05);
-      color: var(--text-primary-light);
-      padding: 0.6rem 1rem;
-      font-weight: 500;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.03);
+      color: var(--text-primary-glow);
+      padding: 0.7rem 1.2rem;
+      font-weight: 600;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+      transition: all 0.25s ease;
     }
     #monthSelect:focus {
-        border-color: var(--accent-teal);
+        border-color: var(--border-interactive);
         outline: none;
-        background-color: rgba(255,255,255,0.08);
+        background-color: rgba(255,255,255,0.06);
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.15), 0 0 0 3px rgba(0, 204, 255, 0.25);
     }
     #monthSelect option {
       background-color: var(--bg-modal-indigo);
-      color: var(--text-primary-light);
+      color: black;
     }
 
 
     /* Summary Section */
     .summary-grid {
-      background-color: rgba(0,0,0,0.1); /* Darker, transparent summary */
-      padding: 1.5rem;
-      border-radius: 8px;
-      color: var(--text-secondary-light);
+      background-color: rgba(0,0,0,0.15);
+      padding: 1.8rem;
+      border-radius: 12px;
+      color: var(--text-secondary-muted);
       font-weight: 500;
-      font-size: 0.95rem;
-      border: 1px solid var(--border-dark);
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+      font-size: 1rem;
+      border: 1px solid var(--glass-border);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.25);
     }
 
     .summary-grid div {
-      padding: 0.5rem 0;
+      padding: 0.6rem 0;
+      transition: transform 0.2s ease, color 0.2s ease;
     }
+     .summary-grid div:hover {
+        transform: scale(1.05);
+        color: var(--text-primary-glow);
+     }
 
     .summary-grid span {
       font-weight: 700;
-      color: var(--accent-teal); /* Teal for summary numbers */
+      background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-aurora-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* Table Styles */
     #attendanceTable {
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid var(--border-dark);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+      background-color: rgba(15, 12, 41, 0.2); /* Slight background for table itself */
     }
 
     #attendanceTable thead th {
-      background-color: rgba(0,0,0, 0.25); /* Dark, semi-transparent header */
-      color: var(--accent-teal); /* Teal header text */
-      font-weight: 600;
-      padding: 1rem 0.8rem;
-      border-bottom: 1px solid var(--border-dark);
-      border-left: 1px solid rgba(58, 58, 90, 0.5);
+      background-color: rgba(0,0,0, 0.35);
+      color: var(--accent-aurora-green);
+      font-weight: 700;
+      padding: 1.2rem 0.9rem;
+      border-bottom: 2px solid var(--glass-border);
+      border-left: 1px solid var(--glass-border);
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 1rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
      #attendanceTable thead th:first-child { border-left: none; }
 
 
     #attendanceTbody tr {
-      background-color: transparent; /* Rows transparent against content background */
-      transition: background-color 0.2s ease;
-      border-bottom: 1px solid var(--border-dark);
+      transition: background-color 0.25s ease, transform 0.2s ease;
+      border-bottom: 1px solid var(--glass-border);
     }
      #attendanceTbody tr:last-child { border-bottom: none; }
 
-
-    /* Row coloring based on status - vivid backgrounds */
-    #attendanceTbody tr.row-present { background-color: var(--present-bg); }
-    #attendanceTbody tr.row-absent { background-color: var(--absent-bg); }
-    #attendanceTbody tr.row-holiday { background-color: var(--holiday-bg); }
-
-    /* No striping needed with distinct status backgrounds */
-    /* #attendanceTbody tr:nth-child(even) { background-color: rgba(255,255,255,0.02); } */
-    /* #attendanceTbody tr.row-present:nth-child(even) { background-color: var(--present-bg); } */
-    /* #attendanceTbody tr.row-absent:nth-child(even) { background-color: var(--absent-bg); } */
-    /* #attendanceTbody tr.row-holiday:nth-child(even) { background-color: var(--holiday-bg); } */
-
+    #attendanceTbody tr.row-present { background-color: var(--present-bg-aurora); }
+    #attendanceTbody tr.row-absent { background-color: var(--absent-bg-aurora); }
+    #attendanceTbody tr.row-holiday { background-color: var(--holiday-bg-aurora); }
 
     #attendanceTbody tr:hover {
-      background-color: rgba(0, 245, 160, 0.1) !important; /* Tealish hover */
+      background-color: rgba(0, 255, 170, 0.2) !important;
+      transform: scale(1.01);
+      box-shadow: 0 0 10px rgba(0,255,170,0.3);
     }
 
     #attendanceTbody td {
-      padding: 0.8rem 0.7rem;
-      /* border-bottom handled by tr border */
-      border-left: 1px solid rgba(58, 58, 90, 0.5);
-      color: var(--text-primary-light);
+      padding: 0.9rem 0.8rem;
+      border-left: 1px solid var(--glass-border);
+      color: var(--text-primary-glow);
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
     #attendanceTbody td:first-child { border-left: none; }
 
     /* Status Column Specific Styling */
     .status-cell {
       cursor: pointer;
-      font-weight: 600; /* Bold status text */
-      transition: text-shadow 0.2s ease;
-      font-size: 0.95rem;
+      font-weight: 700;
+      transition: text-shadow 0.25s ease, transform 0.2s ease;
+      font-size: 1rem;
     }
-    .status-cell button { /* For the "Set" button */
-        background-image: linear-gradient(to right, var(--accent-teal), var(--accent-magenta));
-        color: #11111E;
-        font-weight: 600;
-        padding: 0.35rem 0.9rem;
-        border-radius: 4px;
-        font-size: 0.85rem;
+     .status-cell:hover {
+        transform: scale(1.1);
+     }
+
+    .status-cell button {
+        background: linear-gradient(135deg, var(--accent-aurora-green), var(--accent-aurora-blue));
+        background-size: 200% 200%;
+        color: #0F0C29;
+        font-weight: 700;
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
         border: none;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .status-cell button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 8px var(--accent-teal);
+        background-position: right center;
+        transform: scale(1.1);
+        box-shadow: 0 3px 8px rgba(0,0,0,0.3), 0 0 8px var(--accent-aurora-green);
     }
 
-    .status-cell.present-p { color: var(--present-text); text-shadow: 0 0 3px var(--present-text); }
-    .status-cell.absent-a { color: var(--absent-text); text-shadow: 0 0 3px var(--absent-text); }
-    .status-cell.holiday-h { color: var(--holiday-text); text-shadow: 0 0 3px var(--holiday-text); }
-
+    .status-cell.present-p { color: var(--present-text-aurora); text-shadow: 0 0 8px var(--present-text-aurora); }
+    .status-cell.absent-a { color: var(--absent-text-aurora); text-shadow: 0 0 8px var(--absent-text-aurora); }
+    .status-cell.holiday-h { color: var(--holiday-text-aurora); text-shadow: 0 0 8px var(--holiday-text-aurora); }
 
     .status-cell.disabled-status {
       cursor: not-allowed;
-      opacity: 0.4;
-      color: var(--text-secondary-light);
+      opacity: 0.3;
+      color: var(--text-secondary-muted);
       text-shadow: none;
     }
+     .status-cell.disabled-status:hover { transform: none; }
+
 
     /* Footer Styles */
     #app-footer {
       margin-top: auto;
-      padding: 1.5rem;
+      padding: 1.8rem;
       text-align: center;
-      color: var(--text-secondary-light);
-      font-size: 0.9rem;
-      font-weight: 400;
-      background: var(--bg-deep-indigo);
-      border-top: 1px solid var(--border-dark);
+      color: var(--text-secondary-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      background: rgba(15, 12, 41, 0.75);
+      border-top: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
     }
-     #app-footer a { /* If any links in footer */
-        color: var(--accent-teal);
+     #app-footer a {
+        background: linear-gradient(to right, var(--accent-aurora-green), var(--accent-aurora-pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-decoration: none;
+        font-weight: 600;
      }
      #app-footer a:hover {
-        color: var(--accent-magenta);
+        filter: brightness(1.4);
      }
-
 
     /* User List on Create Account Modal */
     #existingUsersList {
-        max-height: 140px;
+        max-height: 150px;
         overflow-y: auto;
-        border: 1px solid var(--border-dark);
-        border-radius: 6px;
-        padding: 0.5rem;
-        margin-top: 1rem;
-        background-color: rgba(0,0,0,0.1); /* Darker background */
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        padding: 0.6rem;
+        margin-top: 1.2rem;
+        background-color: rgba(0,0,0,0.15);
         text-align: left;
     }
     #existingUsersList .user-item {
         display: flex;
         align-items: center;
-        padding: 0.4rem 0.6rem;
-        border-bottom: 1px solid var(--border-dark);
-        color: var(--text-secondary-light);
-        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+        border-bottom: 1px solid var(--glass-border);
+        color: var(--text-secondary-muted);
+        font-size: 0.95rem;
+        transition: background-color 0.2s ease, color 0.2s ease;
     }
     #existingUsersList .user-item:last-child { border-bottom: none; }
-    #existingUsersList .user-item img {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        margin-right: 0.5rem;
-        border: 1px solid var(--accent-teal); /* Teal border for user pics */
+    #existingUsersList .user-item:hover {
+        background-color: rgba(0, 255, 170, 0.1);
+        color: var(--accent-aurora-green);
     }
-    #existingUsersList .user-item span { font-weight: 500; color: var(--text-primary-light); }
+    #existingUsersList .user-item img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        margin-right: 0.6rem;
+        border: 2px solid var(--accent-aurora-blue);
+        box-shadow: 0 0 5px var(--accent-aurora-blue);
+    }
+    #existingUsersList .user-item span { font-weight: 600; }
 
     /* Profile Picture Selection Modal */
     #selectProfilePicModal .profile-pic-options {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 1rem;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
+        gap: 1.2rem;
+        margin-top: 1.8rem;
+        margin-bottom: 1.8rem;
     }
     #selectProfilePicModal .profile-pic-options img {
-        width: 55px;
-        height: 55px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         cursor: pointer;
         border: 3px solid transparent;
-        transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        transition: all 0.25s ease;
+        filter: grayscale(0.3);
     }
     #selectProfilePicModal .profile-pic-options img.selected {
-        border-color: var(--accent-magenta);
-        transform: scale(1.1);
-        box-shadow: 0 0 10px var(--accent-magenta);
+        border-color: var(--accent-aurora-pink);
+        transform: scale(1.15);
+        box-shadow: 0 0 15px var(--accent-aurora-pink), 0 0 25px var(--accent-aurora-pink);
+        filter: grayscale(0);
     }
     #selectProfilePicModal .profile-pic-options img:hover {
-        transform: scale(1.08);
-        border-color: var(--accent-teal);
+        transform: scale(1.1);
+        border-color: var(--accent-aurora-green);
+        filter: grayscale(0);
+        box-shadow: 0 0 10px var(--accent-aurora-green);
     }
   </style>
 </head>
@@ -510,13 +567,13 @@
 <body>
   <div id="loginModal" class="modal-backdrop show" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
     <div class="modal-content">
-      <h2 id="loginTitle">Welcome Back</h2>
+      <h2 id="loginTitle">Log_in</h2>
       <input type="text" id="loginUser" placeholder="Username or Email" autocomplete="username" />
-      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" />
-      <button id="loginBtn">Login Securely</button>
+      <input type="password" id="loginPass" placeholder="Your Secure Password" autocomplete="current-password" />
+      <button id="loginBtn">Enter the Galaxy</button>
       <div class="message" id="loginMessage"></div>
       <div class="modal-footer">
-        <a id="showCreateAccount" tabindex="0">Create New Account</a> | <a id="showForgotPass" tabindex="0">Forgot Password?</a>
+        <a id="showCreateAccount" tabindex="0">Create_Account? Join_Us</a> | <a id="showForgotPass" tabindex="0">Lost Password?</a>
       </div>
     </div>
   </div>
@@ -524,21 +581,21 @@
   <div id="createAccountModal" class="modal-backdrop" aria-modal="true" role="dialog"
     aria-labelledby="createAccountTitle" style="display:none;">
     <div class="modal-content">
-      <h2 id="createAccountTitle">Join Us</h2>
-      <input type="text" id="createUsername" placeholder="Choose a Username" autocomplete="username" />
-      <input type="email" id="createEmail" placeholder="Your Email Address" autocomplete="email" />
-      <input type="password" id="createPassword" placeholder="Create a Secure Password" autocomplete="new-password" />
+      <h2 id="createAccountTitle">Begin Your Journey</h2>
+      <input type="text" id="createUsername" placeholder="Enter A Username" autocomplete="username" />
+      <input type="email" id="createEmail" placeholder="Your Email Beacon" autocomplete="email" />
+      <input type="password" id="createPassword" placeholder="Enter a Password" autocomplete="new-password" />
       <input type="password" id="createConfirmPassword" placeholder="Confirm Your Password" autocomplete="new-password" />
-      <button id="createAccountBtn">Create My Account</button>
+      <button id="createAccountBtn">Create Account</button>
       <div class="message" id="createAccountMessage"></div>
       <div class="mt-4 text-left">
-          <h3 class="text-md font-semibold text-teal-400 mb-2">Active Accounts:</h3>
+          <h3 class="text-md font-semibold text-aurora-blue mb-2" style="color: var(--accent-aurora-blue); text-shadow: 0 0 5px var(--accent-aurora-blue);">Users_Display:</h3>
           <div id="existingUsersList">
-              <p class="text-sm text-gray-400 p-2">No accounts found.</p>
+              <p class="text-sm p-2" style="color: var(--text-secondary-muted);">No voyagers registered yet.</p>
           </div>
       </div>
       <div class="modal-footer">
-        <a id="backToLoginFromCreate" tabindex="0">Already have an account? Login</a>
+        <a id="backToLoginFromCreate" tabindex="0">Already Exploring? Login</a>
       </div>
     </div>
   </div>
@@ -546,12 +603,12 @@
   <div id="forgotPassModal" class="modal-backdrop" aria-modal="true" role="dialog" aria-labelledby="forgotPassTitle"
     style="display:none;">
     <div class="modal-content">
-      <h2 id="forgotPassTitle">Reset Password</h2>
-      <input type="text" id="forgotUserEmail" placeholder="Enter Username or Email" autocomplete="username" />
-      <button id="forgotPassBtn">Send Reset Link</button>
+      <h2 id="forgotPassTitle">Password Recovery</h2>
+      <input type="text" id="forgotUserEmail" placeholder="Username or Email for Recovery" autocomplete="username" />
+      <button id="forgotPassBtn">Send Recovery Signal</button>
       <div class="message" id="forgotPassMessage"></div>
       <div class="modal-footer">
-        <a id="backToLoginFromForgot" tabindex="0">Back to Login</a>
+        <a id="backToLoginFromForgot" tabindex="0">Return to Login</a>
       </div>
     </div>
   </div>
@@ -559,15 +616,15 @@
   <div id="statusModal" class="modal-backdrop" aria-modal="true" role="dialog" aria-labelledby="statusTitle"
     style="display:none;">
     <div class="modal-content">
-      <h2 id="statusTitle">Update Status</h2>
+      <h2 id="statusTitle">Update Daily Status</h2>
       <select id="statusSelector">
-        <option value="present">Present</option>
-        <option value="absent">Absent</option>
-        <option value="holiday">Holiday</option>
+        <option value="present">Present & Active</option>
+        <option value="absent">Absent / Away</option>
+        <option value="holiday">Holiday / Break</option>
       </select>
-      <div class="flex gap-4 mt-4">
-        <button id="saveStatusBtn" class="w-1/2">Save Status</button>
-        <button id="cancelStatusBtn" class="w-1/2 bg-gray-500">Cancel</button>
+      <div class="flex gap-4 mt-5">
+        <button id="saveStatusBtn" class="w-1/2">Confirm Status</button>
+        <button id="cancelStatusBtn" class="w-1/2 bg-gray-500">Cancel Update</button>
       </div>
       <div class="message" id="statusMessage"></div>
     </div>
@@ -576,28 +633,28 @@
   <div id="editDetailsModal" class="modal-backdrop" aria-modal="true" role="dialog"
     aria-labelledby="editDetailsTitle" style="display:none;">
     <div class="modal-content">
-      <h2 id="editDetailsTitle">Edit Day Details</h2>
-      <label for="editHours">Hours Worked:</label>
+      <h2 id="editDetailsTitle">Refine Day Details</h2>
+      <label for="editHours">Hours Logged:</label>
       <input type="number" id="editHours" placeholder="e.g., 9" min="0" step="0.5" />
 
-      <label for="editExtraHours">Extra Hours:</label>
+      <label for="editExtraHours">Extra Hours Contributed:</label>
       <input type="number" id="editExtraHours" placeholder="e.g., 1" min="0" step="0.5" />
 
-      <div class="flex items-center justify-start mb-4 text-left">
-        <input type="checkbox" id="editGrace" class="mr-2 h-4 w-4 rounded accent-teal-500 focus:ring-teal-400 border-gray-600 bg-gray-700">
-        <label for="editGrace" class="text-sm font-medium !mb-0">Use Grace Period</label>
+      <div class="flex items-center justify-start mb-5 text-left">
+        <input type="checkbox" id="editGrace" class="mr-2 h-5 w-5 rounded accent-aurora-green focus:ring-aurora-green border-glass-border bg-transparent" style="accent-color: var(--accent-aurora-green);">
+        <label for="editGrace" class="text-md font-medium !mb-0" style="color: var(--text-primary-glow);">Grace Period</label>
       </div>
 
-      <label for="editShift">Shift:</label>
+      <label for="editShift">Shift Type:</label>
       <select id="editShift">
         <option value="">Select Shift</option>
-        <option value="day">Day</option>
-        <option value="night">Night</option>
+        <option value="day">Day Shift</option>
+        <option value="night">Night Shift</option>
       </select>
 
-      <div class="flex gap-4 mt-4">
-        <button id="saveEditDetailsBtn" class="w-1/2">Save Details</button>
-        <button id="cancelEditDetailsBtn" class="w-1/2 bg-gray-500">Cancel</button>
+      <div class="flex gap-4 mt-5">
+        <button id="saveEditDetailsBtn" class="w-1/2">Save Changes</button>
+        <button id="cancelEditDetailsBtn" class="w-1/2 bg-gray-500">Discard Changes</button>
       </div>
       <div class="message" id="editDetailsMessage"></div>
     </div>
@@ -606,40 +663,40 @@
   <div id="selectProfilePicModal" class="modal-backdrop" aria-modal="true" role="dialog"
     aria-labelledby="selectProfilePicTitle" style="display:none;">
     <div class="modal-content">
-      <h2 id="selectProfilePicTitle">Choose Your Avatar</h2>
+      <h2 id="selectProfilePicTitle">Choose Your Cosmic Avatar</h2>
       <div class="profile-pic-options">
         </div>
-      <div class="flex gap-4 mt-4">
-        <button id="saveProfilePicBtn" class="w-1/2">Set Avatar</button>
-        <button id="cancelProfilePicBtn" class="w-1/2 bg-gray-500">Cancel</button>
+      <div class="flex gap-4 mt-5">
+        <button id="saveProfilePicBtn" class="w-1/2">Set This Avatar</button>
+        <button id="cancelProfilePicBtn" class="w-1/2 bg-gray-500">Cancel Selection</button>
       </div>
       <div class="message" id="profilePicMessage"></div>
     </div>
   </div>
 
   <div id="appContainer">
-    <nav id="navbar" class="flex justify-between items-center px-6 py-3 fixed w-full top-0 left-0 right-0 z-50">
-      <div class="font-bold text-xl select-none">Attendance Tracker</div>
-      <div class="relative flex items-center gap-4">
-        <span id="usernameDisplay" class="font-semibold text-lg mr-2 text-teal-300"></span>
-        <img id="userPhoto" src="https://placehold.co/40x40/1A1A2E/00F5A0?text=U" alt="User Photo" class="user-photo" />
+    <nav id="navbar" class="flex justify-between items-center px-8 py-4 fixed w-full top-0 left-0 right-0 z-50">
+      <div class="font-bold text-xl select-none">Attendance_Tracker</div>
+      <div class="relative flex items-center gap-5">
+        <span id="usernameDisplay" class="font-semibold text-xl mr-2" style="color: var(--accent-aurora-blue); text-shadow: 0 0 5px var(--accent-aurora-blue);"></span>
+        <img id="userPhoto" src="https://placehold.co/44x44/0F0C29/00FFAA?text=U&font=inter" alt="User Photo" class="user-photo w-11 h-11" />
         <div id="userDropdown" class="dropdown-menu">
           <a href="#" id="profileLink">My Profile</a>
-          <a href="#" id="attendanceHistoryLink">View History</a>
+          <a href="#" id="attendanceHistoryLink">Attendance Logs</a>
           <a href="#" id="changeProfilePicLink">Change Avatar</a>
-          <a href="#" id="logoutBtnDropdown">Logout</a>
+          <a href="#" id="logoutBtnDropdown">Logout Portal</a>
         </div>
       </div>
     </nav>
 
-    <main id="mainContent" class="max-w-7xl mx-auto pt-24 px-4 sm:px-6 lg:px-8 rounded-xl mb-10">
-      <h1 class="text-center mb-8">Monthly Attendance Overview</h1>
-      <div class="mb-10 flex justify-center items-center">
-        <label for="monthSelect" class="mr-3 font-semibold text-lg text-teal-300">Select Period:</label>
+    <main id="mainContent" class="max-w-7xl mx-auto pt-28 px-6 sm:px-8 lg:px-10 rounded-2xl mb-12">
+      <h1 class="text-center mb-10">Monthly Attendance</h1>
+      <div class="mb-12 flex justify-center items-center gap-3">
+        <label for="monthSelect" class="mr-1 font-semibold text-xl" style="color: var(--accent-aurora-green); text-shadow: 0 0 5px var(--accent-aurora-green);">Select Months:</label>
         <select id="monthSelect"></select>
       </div>
 
-      <div class="mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center summary-grid">
+      <div class="mb-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 text-center summary-grid">
         <div>Total Present: <span id="totalPresent">0</span></div>
         <div>Total Hours: <span id="totalHours">0</span></div>
         <div>Extra Hours: <span id="totalExtraHours">0</span></div>
@@ -673,20 +730,23 @@
     </main>
 
     <footer id="app-footer">
-      Crafted by <a href="#" target="_blank" rel="noopener noreferrer">@Pranto_Anthony_Rodrix</a>
+      Forged in Cosmic Dust by <a href="#" target="_blank" rel="noopener noreferrer">@Pranto_Anthony_Rodrix</a>
     </footer>
   </div>
 
   <script>
-    /* =============== LOGIN SYSTEM LOGIC (UNCHANGED from previous version) =============== */
-    const USER_DB_KEY = "attendance_users_colorful";
-    const LOGGED_IN_USER_KEY = "attendance_logged_in_user_colorful";
+    /* =============== LOGIN SYSTEM LOGIC (auto-save username implemented) =============== */
+    const USER_DB_KEY = "attendance_users_aurora"; // New key for new theme
+    const LOGGED_IN_USER_KEY = "attendance_logged_in_user_aurora"; // New key
+    const LAST_LOGIN_USERNAME_KEY = "attendance_last_login_username_aurora"; // New key
 
     function getUsers() { const users = localStorage.getItem(USER_DB_KEY); return users ? JSON.parse(users) : {}; }
     function saveUsers(users) { localStorage.setItem(USER_DB_KEY, JSON.stringify(users)); }
     function saveLoggedInUser(username) { localStorage.setItem(LOGGED_IN_USER_KEY, username); }
     function removeLoggedInUser() { localStorage.removeItem(LOGGED_IN_USER_KEY); }
     function getLoggedInUser() { return localStorage.getItem(LOGGED_IN_USER_KEY); }
+    function saveLastLoginUsername(username) { localStorage.setItem(LAST_LOGIN_USERNAME_KEY, username); }
+    function getLastLoginUsername() { return localStorage.getItem(LAST_LOGIN_USERNAME_KEY); }
     function validateEmail(email) { const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(email.toLowerCase());}
 
     const loginModal = document.getElementById("loginModal");
@@ -735,8 +795,8 @@
 
     document.getElementById("showCreateAccount").addEventListener("click", () => { hideModal(loginModal); showModal(createAccountModal); clearMessages(); clearCreateAccountFields(); populateExistingUsersList(); });
     document.getElementById("showForgotPass").addEventListener("click", () => { hideModal(loginModal); showModal(forgotPassModal); clearMessages(); forgotUserEmailInput.value = ""; });
-    document.getElementById("backToLoginFromCreate").addEventListener("click", () => { hideModal(createAccountModal); showModal(loginModal); clearMessages(); clearLoginFields(); });
-    document.getElementById("backToLoginFromForgot").addEventListener("click", () => { hideModal(forgotPassModal); showModal(loginModal); clearMessages(); clearLoginFields(); });
+    document.getElementById("backToLoginFromCreate").addEventListener("click", () => { hideModal(createAccountModal); showModal(loginModal); prefillLoginUsername(); loginPassInput.value = ''; clearMessages(); });
+    document.getElementById("backToLoginFromForgot").addEventListener("click", () => { hideModal(forgotPassModal); showModal(loginModal); prefillLoginUsername(); loginPassInput.value = ''; clearMessages(); });
 
     function clearMessages() { loginMessage.textContent = ""; loginMessage.className = "message"; createAccountMessage.textContent = ""; createAccountMessage.className = "message"; forgotPassMessage.textContent = ""; forgotPassMessage.className = "message"; statusMessage.textContent = ""; statusMessage.className = "message"; editDetailsMessage.textContent = ""; editDetailsMessage.className = "message"; profilePicMessage.textContent = ""; profilePicMessage.className = "message"; }
     function clearLoginFields() { loginUserInput.value = ""; loginPassInput.value = ""; }
@@ -747,18 +807,20 @@
 
     function populateExistingUsersList() {
         existingUsersList.innerHTML = ''; const users = getUsers(); const userCount = Object.keys(users).length;
-        if (userCount === 0) { existingUsersList.innerHTML = '<p class="text-sm text-gray-400 p-2">No accounts found.</p>'; return; }
-        for (const username in users) { const userItem = document.createElement('div'); userItem.className = 'user-item'; const userPhotoUrl = users[username].profilePhotoUrl || `https://placehold.co/24x24/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}`; userItem.innerHTML = `<img src="${userPhotoUrl}" alt="${username} photo"><span>${username}</span>`; existingUsersList.appendChild(userItem); }
+        if (userCount === 0) { existingUsersList.innerHTML = `<p class="text-sm p-2" style="color: var(--text-secondary-muted);">No voyagers registered yet.</p>`; return; }
+        for (const username in users) { const userItem = document.createElement('div'); userItem.className = 'user-item'; const userPhotoUrl = users[username].profilePhotoUrl || `https://placehold.co/28x28/0F0C29/00FFAA?text=${username.charAt(0).toUpperCase()}&font=inter`; userItem.innerHTML = `<img src="${userPhotoUrl}" alt="${username} photo"><span>${username}</span>`; existingUsersList.appendChild(userItem); }
     }
+    function prefillLoginUsername() { const lastUsername = getLastLoginUsername(); if (lastUsername) { loginUserInput.value = lastUsername; loginPassInput.focus(); } else { loginUserInput.focus(); }}
 
     loginBtn.addEventListener("click", () => {
       clearMessages(); const userInput = loginUserInput.value.trim(); const passInput = loginPassInput.value;
       if (!userInput || !passInput) { loginMessage.textContent = "Please fill in all fields."; loginMessage.classList.add("error"); return; }
       const users = getUsers(); let foundUser = null;
-      for (const username in users) { if (username.toLowerCase() === userInput.toLowerCase() || users[username].email.toLowerCase() === userInput.toLowerCase()) { foundUser = { username, ...users[username] }; break; } }
+      for (const usernameKey in users) { if (usernameKey.toLowerCase() === userInput.toLowerCase() || users[usernameKey].email.toLowerCase() === userInput.toLowerCase()) { foundUser = { username: usernameKey, ...users[usernameKey] }; break; } }
       if (!foundUser) { loginMessage.textContent = "User not found."; loginMessage.classList.add("error"); return; }
       if (foundUser.password !== passInput) { loginMessage.textContent = "Incorrect password."; loginMessage.classList.add("error"); return; }
-      saveLoggedInUser(foundUser.username); loginMessage.textContent = "Login successful! Redirecting..."; loginMessage.classList.add("success");
+      saveLastLoginUsername(foundUser.username); saveLoggedInUser(foundUser.username);
+      loginMessage.textContent = "Login successful! Entering Aurora..."; loginMessage.classList.add("success");
       setTimeout(() => { hideModal(loginModal); appContainer.style.display = "flex"; initAppForUser(foundUser.username); }, 1000);
     });
 
@@ -769,35 +831,36 @@
       if (password.length < 6) { createAccountMessage.textContent = "Password must be at least 6 characters."; createAccountMessage.classList.add("error"); return; }
       if (password !== confirmPassword) { createAccountMessage.textContent = "Passwords do not match."; createAccountMessage.classList.add("error"); return; }
       const users = getUsers(); if (users[username]) { createAccountMessage.textContent = "Username already exists."; createAccountMessage.classList.add("error"); return; }
-      for (const user in users) { if (users[user].email.toLowerCase() === email.toLowerCase()) { createAccountMessage.textContent = "Email already registered."; createAccountMessage.classList.add("error"); return; } }
-      users[username] = { email, password, profilePhotoUrl: `https://placehold.co/40x40/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}` }; saveUsers(users);
-      createAccountMessage.textContent = "Account created successfully!"; createAccountMessage.classList.add("success"); populateExistingUsersList();
-      setTimeout(() => { hideModal(createAccountModal); showModal(loginModal); clearLoginFields(); clearCreateAccountFields(); clearMessages(); }, 1500);
+      for (const userKey in users) { if (users[userKey].email.toLowerCase() === email.toLowerCase()) { createAccountMessage.textContent = "Email already registered."; createAccountMessage.classList.add("error"); return; } }
+      users[username] = { email, password, profilePhotoUrl: `https://placehold.co/44x44/0F0C29/00FFAA?text=${username.charAt(0).toUpperCase()}&font=inter` }; saveUsers(users);
+      saveLastLoginUsername(username);
+      createAccountMessage.textContent = "Account created successfully! Welcome, Voyager!"; createAccountMessage.classList.add("success"); populateExistingUsersList();
+      setTimeout(() => { hideModal(createAccountModal); showModal(loginModal); prefillLoginUsername(); loginPassInput.value = ''; clearCreateAccountFields(); clearMessages(); }, 1500);
     });
 
     forgotPassBtn.addEventListener("click", () => {
       clearMessages(); const inputUser = forgotUserEmailInput.value.trim();
       if (!inputUser) { forgotPassMessage.textContent = "Please enter your username or email."; forgotPassMessage.classList.add("error"); return; }
       const users = getUsers(); let foundUser = null;
-      for (const username in users) { if (username.toLowerCase() === inputUser.toLowerCase() || users[username].email.toLowerCase() === inputUser.toLowerCase()) { foundUser = { username, ...users[username] }; break; } }
-      if (!foundUser) { forgotPassMessage.textContent = "User not found."; forgotPassMessage.classList.add("error"); return; }
-      forgotPassMessage.textContent = `Password reset link would be sent to ${foundUser.email} (simulated).`; forgotPassMessage.classList.add("success");
-      setTimeout(() => { hideModal(forgotPassModal); showModal(loginModal); forgotUserEmailInput.value = ""; clearMessages(); }, 2500);
+      for (const usernameKey in users) { if (usernameKey.toLowerCase() === inputUser.toLowerCase() || users[usernameKey].email.toLowerCase() === inputUser.toLowerCase()) { foundUser = { username: usernameKey, ...users[usernameKey] }; break; } }
+      if (!foundUser) { forgotPassMessage.textContent = "User not found in our stars."; forgotPassMessage.classList.add("error"); return; }
+      forgotPassMessage.textContent = `Recovery signal sent to ${foundUser.email} (simulated).`; forgotPassMessage.classList.add("success");
+      setTimeout(() => { hideModal(forgotPassModal); showModal(loginModal); prefillLoginUsername(); forgotUserEmailInput.value = ""; clearMessages(); }, 2500);
     });
 
-    logoutBtnDropdown.addEventListener("click", () => { removeLoggedInUser(); appContainer.style.display = "none"; userDropdown.classList.remove("show"); showModal(loginModal); clearLoginFields(); clearMessages(); });
+    logoutBtnDropdown.addEventListener("click", () => { removeLoggedInUser(); appContainer.style.display = "none"; userDropdown.classList.remove("show"); showModal(loginModal); prefillLoginUsername(); loginPassInput.value = ""; clearMessages(); });
     userPhoto.addEventListener("click", (event) => { event.stopPropagation(); userDropdown.classList.toggle("show"); });
     window.addEventListener("click", (event) => { if (!userPhoto.contains(event.target) && !userDropdown.contains(event.target)) { userDropdown.classList.remove("show"); } });
     changeProfilePicLink.addEventListener("click", (event) => { event.preventDefault(); userDropdown.classList.remove("show"); clearMessages(); populateProfilePicOptions(); showModal(selectProfilePicModal); });
 
     function populateProfilePicOptions() {
         profilePicOptionsContainer.innerHTML = ''; const currentLoggedInUser = getLoggedInUser(); const users = getUsers(); const currentUserData = users[currentLoggedInUser]; const currentProfilePhotoUrl = currentUserData ? currentUserData.profilePhotoUrl : '';
-        const pravatarSeeds = [ 'orb-teal', 'orb-magenta', 'orb-yellow', 'abstract-blue', 'abstract-green', 'tech-grid', 'neon-lines', 'user-glow', 'initials-dark' ];
-        pravatarSeeds.forEach(seed => {
+        const avatarSeeds = [ 'aurora-green-orb', 'aurora-pink-swirl', 'cosmic-blue-nebula', 'gold-starburst', 'teal-geometric', 'magenta-crystal', 'glowing-particle', 'user-silhouette-glow', 'initials-cosmic' ];
+        avatarSeeds.forEach(seed => {
             const img = document.createElement('img'); let url;
-            if (seed === 'initials-dark' && currentLoggedInUser) { url = `https://placehold.co/55x55/1A1A2E/00F5A0?text=${currentLoggedInUser.charAt(0).toUpperCase()}&font=inter`; }
-            else { url = `https://i.pravatar.cc/55?u=${encodeURIComponent(seed)}`; } // Using pravatar for variety, can be replaced
-            img.src = url; img.alt = `Profile Picture Option ${seed}`; img.dataset.url = url;
+            if (seed === 'initials-cosmic' && currentLoggedInUser) { url = `https://placehold.co/60x60/0F0C29/00FFAA/FFFFFF?text=${currentLoggedInUser.charAt(0).toUpperCase()}&font=inter`; }
+            else { url = `https://i.pravatar.cc/60?u=${encodeURIComponent(seed)}`; } // Placeholder, ideally replace with themed images
+            img.src = url; img.alt = `Avatar Option ${seed}`; img.dataset.url = url;
             if (url === currentProfilePhotoUrl) { img.classList.add('selected'); selectedProfilePicUrl = url; }
             img.addEventListener('click', () => { profilePicOptionsContainer.querySelectorAll('img').forEach(option => option.classList.remove('selected')); img.classList.add('selected'); selectedProfilePicUrl = img.dataset.url; });
             profilePicOptionsContainer.appendChild(img);
@@ -807,9 +870,9 @@
     saveProfilePicBtn.addEventListener("click", () => {
         if (selectedProfilePicUrl) {
             const currentLoggedInUser = getLoggedInUser(); const users = getUsers();
-            if (users[currentLoggedInUser]) { users[currentLoggedInUser].profilePhotoUrl = selectedProfilePicUrl; saveUsers(users); userPhoto.src = selectedProfilePicUrl; profilePicMessage.textContent = "Avatar updated!"; profilePicMessage.classList.add("success"); setTimeout(() => { hideModal(selectProfilePicModal); clearMessages(); }, 1000); }
+            if (users[currentLoggedInUser]) { users[currentLoggedInUser].profilePhotoUrl = selectedProfilePicUrl; saveUsers(users); userPhoto.src = selectedProfilePicUrl; profilePicMessage.textContent = "Cosmic Avatar Updated!"; profilePicMessage.classList.add("success"); setTimeout(() => { hideModal(selectProfilePicModal); clearMessages(); }, 1000); }
             else { profilePicMessage.textContent = "Error: User not found."; profilePicMessage.classList.add("error"); }
-        } else { profilePicMessage.textContent = "Please select an avatar."; profilePicMessage.classList.add("error"); }
+        } else { profilePicMessage.textContent = "Please select a cosmic avatar."; profilePicMessage.classList.add("error"); }
     });
 
     cancelProfilePicBtn.addEventListener("click", () => { hideModal(selectProfilePicModal); clearMessages(); });
@@ -817,12 +880,12 @@
     window.addEventListener("load", () => {
       const loggedInUser = getLoggedInUser();
       if (loggedInUser) { loginModal.style.display = "none"; appContainer.style.display = "flex"; initAppForUser(loggedInUser); }
-      else { showModal(loginModal); appContainer.style.display = "none"; }
+      else { showModal(loginModal); prefillLoginUsername(); appContainer.style.display = "none"; }
     });
 
     window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 10) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); } });
 
-    /* ================== ATTENDANCE TRACKER LOGIC (UNCHANGED from previous version) =================== */
+    /* ================== ATTENDANCE TRACKER LOGIC (Largely Unchanged) =================== */
     const GRACE_LIMIT_PER_MONTH = 5;
     function formatDate(d) { return d.toISOString().slice(0, 10); }
     function getDateRange(yearMonth) { const [year, month] = yearMonth.split("-").map(Number); let startDate = new Date(year, month - 1 - 1, 26); let endDate = new Date(year, month - 1, 25); return { startDate, endDate }; }
@@ -835,10 +898,10 @@
 
     function initAppForUser(username) {
       const users = getUsers(); const currentUserData = users[username];
-      if (currentUserData && currentUserData.profilePhotoUrl) { userPhoto.src = currentUserData.profilePhotoUrl; } else { userPhoto.src = `https://placehold.co/40x40/1A1A2E/00F5A0?text=${username.charAt(0).toUpperCase()}&font=inter`; }
+      if (currentUserData && currentUserData.profilePhotoUrl) { userPhoto.src = currentUserData.profilePhotoUrl; } else { userPhoto.src = `https://placehold.co/44x44/0F0C29/00FFAA?text=${username.charAt(0).toUpperCase()}&font=inter`; }
       usernameDisplay.textContent = username;
       const attendanceTbody = document.getElementById("attendanceTbody"); const monthSelect = document.getElementById("monthSelect"); const totalPresent = document.getElementById("totalPresent"); const totalHours = document.getElementById("totalHours"); const totalExtraHours = document.getElementById("totalExtraHours"); const totalLate = document.getElementById("totalLate"); const totalAbsent = document.getElementById("totalAbsent"); const totalHoliday = document.getElementById("totalHoliday"); const totalWorkingDays = document.getElementById("totalWorkingDays"); const graceUsedCount = document.getElementById("graceUsedCount"); const totalDayShifts = document.getElementById("totalDayShifts"); const totalNightShifts = document.getElementById("totalNightShifts");
-      const STORAGE_KEY = "attendance_data_" + username + "_colorful";
+      const STORAGE_KEY = "attendance_data_" + username + "_aurora"; // New key
 
       function loadAttendanceData() { const data = localStorage.getItem(STORAGE_KEY); return data ? JSON.parse(data) : {}; }
       function saveAttendanceData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
@@ -865,7 +928,7 @@
 
           const tr = document.createElement("tr");
           if (dayData.holiday) tr.classList.add("row-holiday"); else if (dayData.status === 'present') tr.classList.add("row-present"); else if (dayData.status === 'absent') tr.classList.add("row-absent");
-          tr.innerHTML = `<td class="select-none">${dateStr}</td><td class="select-none">${dayName}</td><td class="status-cell" data-date="${dateStr}"></td><td>${dayData.status === 'present' ? dayData.hoursWorked.toFixed(1) : '-'}</td><td>${dayData.status === 'present' ? dayData.extraHours.toFixed(1) : '-'}</td><td class="select-none ${dayData.lateHours > 0 ? 'font-semibold' : ''}" style="color: ${dayData.lateHours > 0 ? 'var(--absent-text)' : 'inherit'}; text-shadow: ${dayData.lateHours > 0 ? '0 0 3px var(--absent-text)' : 'none'};">${dayData.lateHours > 0 ? dayData.lateHours.toFixed(1) : '-'}</td><td>${dayData.graceUsed ? 'Yes' : '-'}</td><td>${dayData.shiftType ? dayData.shiftType.charAt(0).toUpperCase() + dayData.shiftType.slice(1) : '-'}</td>`;
+          tr.innerHTML = `<td class="select-none">${dateStr}</td><td class="select-none">${dayName}</td><td class="status-cell" data-date="${dateStr}"></td><td>${dayData.status === 'present' ? dayData.hoursWorked.toFixed(1) : '-'}</td><td>${dayData.status === 'present' ? dayData.extraHours.toFixed(1) : '-'}</td><td class="select-none ${dayData.lateHours > 0 ? 'font-semibold' : ''}" style="color: ${dayData.lateHours > 0 ? 'var(--absent-text-aurora)' : 'inherit'}; text-shadow: ${dayData.lateHours > 0 ? '0 0 5px var(--absent-text-aurora)' : 'none'};">${dayData.lateHours > 0 ? dayData.lateHours.toFixed(1) : '-'}</td><td>${dayData.graceUsed ? 'Yes' : '-'}</td><td>${dayData.shiftType ? dayData.shiftType.charAt(0).toUpperCase() + dayData.shiftType.slice(1) : '-'}</td>`;
           const tdStatus = tr.querySelector(".status-cell");
           if (dayData.holiday) { tdStatus.textContent = "H"; tdStatus.classList.add("holiday-h"); } else if (dayData.status === 'present') { tdStatus.textContent = "P"; tdStatus.classList.add("present-p"); } else if (dayData.status === 'absent') { tdStatus.textContent = "A"; tdStatus.classList.add("absent-a"); } else { const addButton = document.createElement("button"); addButton.textContent = "Set"; tdStatus.appendChild(addButton); }
           tdStatus.addEventListener("click", (e) => { currentEditingDate = dateStr; const currentDayData = attendanceData[dateStr] || {}; statusSelector.value = currentDayData.holiday ? "holiday" : (currentDayData.status || "present"); clearMessages(); showModal(statusModal); });
