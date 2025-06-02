@@ -220,6 +220,9 @@
       font-size: 1.4rem;
       font-weight: 700;
       text-shadow: 0 0 3px var(--accent-teal);
+      display: flex;
+     justify-content: center;
+     align-items: center;
     }
 
     #userPhoto {
@@ -322,7 +325,7 @@
       background-color: rgba(0,0,0,0.1); /* Darker, transparent summary */
       padding: 1.5rem;
       border-radius: 8px;
-      color: var(--text-secondary-light);
+      color: white;
       font-weight: 500;
       font-size: 0.95rem;
       border: 1px solid var(--border-dark);
@@ -330,7 +333,10 @@
     }
 
     .summary-grid div {
-      padding: 0.5rem 0;
+      padding: 0.2rem 0;
+     background-image: linear-gradient(to right, #111878, #100710);    border: 1px solid #06099185;
+      border-radius: 8px;
+      box-shadow: 1px 1px 10px black;
     }
 
     .summary-grid span {
@@ -619,7 +625,7 @@
 
   <div id="appContainer">
     <nav id="navbar" class="flex justify-between items-center px-6 py-3 fixed w-full top-0 left-0 right-0 z-50">
-      <div class="font-bold text-xl select-none">Attendance Tracker</div>
+      <div class="font-bold text-xl select-none"><img width="38" height="38" src="https://img.icons8.com/fluency/48/animated.png" alt="animated"/>Attendance Tracker</div>
       <div class="relative flex items-center gap-4">
         <span id="usernameDisplay" class="font-semibold text-lg mr-2 text-teal-300"></span>
         <img id="userPhoto" src="https://placehold.co/40x40/1A1A2E/00F5A0?text=U" alt="User Photo" class="user-photo" />
@@ -633,9 +639,8 @@
     </nav>
 
     <main id="mainContent" class="max-w-7xl mx-auto pt-24 px-4 sm:px-6 lg:px-8 rounded-xl mb-10">
-      <h1 class="text-center mb-8">Monthly Attendance Overview</h1>
       <div class="mb-10 flex justify-center items-center">
-        <label for="monthSelect" class="mr-3 font-semibold text-lg text-teal-300">Select Period:</label>
+        <label for="monthSelect" class="mr-3 font-semibold text-lg text-teal-300">Month Period:</label>
         <select id="monthSelect"></select>
       </div>
 
