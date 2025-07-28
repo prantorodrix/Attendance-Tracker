@@ -95,10 +95,11 @@
 
         /* Neon Theme */
         html[data-theme='neon'] {
-           --bg-primary:linear-gradient(45deg, #000000, #61f305, #23093f, #000e10, #00fff3);    --bg-secondary: rgba(25, 25, 25, 0.8); /* Dark, slightly transparent for contrast */
+            --bg-primary: linear-gradient(45deg, #00FFFF, #FF00FF, #FFFF00, #00FF00); /* Cyan, Magenta, Yellow, Green */
+            --bg-secondary: rgba(25, 25, 25, 0.8); /* Dark, slightly transparent for contrast */
             --text-primary: #00FFFF; /* Bright Cyan */
             --text-secondary: #FF00FF; /* Bright Magenta */
-            --accent-color: #0a650a; /* Neon Green */
+            --accent-color: #00FF00; /* Neon Green */
             --border-color: #FFFF00; /* Neon Yellow */
             --shadow-color: rgba(0, 255, 255, 0.5); /* Cyan glow */
             --input-bg: rgba(0, 0, 0, 0.6); /* Darker transparent for inputs */
@@ -113,7 +114,7 @@
             --nav-text: #00FFFF;
             --footer-bg: rgba(0, 0, 0, 0.9);
             --footer-text: #FF00FF;
-            --table-header-bg: #010837;
+            --table-header-bg: #00FF00;
             --table-row-even: rgba(50, 50, 50, 0.7);
             --table-row-hover: rgba(75, 75, 75, 0.8);
             --status-present: #00FFFF;
@@ -2704,7 +2705,7 @@
                 historySummaryLate = document.getElementById('historySummaryLate');
                 historySummaryAbsent = document.getElementById('historySummaryAbsent');
                 historySummaryWeekend = document.getElementById('historySummaryWeekend');
-                historySummaryWorkingDays = document.getElementById('historyWorkingDays');
+                historySummaryWorkingDays = document.getElementById('historySummaryWorkingDays');
                 historySummaryDayShifts = document.getElementById('historySummaryDayShifts');
                 historySummaryNightShifts = document.getElementById('historySummaryNightShifts');
                 historySummaryGrace = document.getElementById('historySummaryGrace');
@@ -2928,7 +2929,7 @@
                 if (editGraceInput) {
                     editGraceInput.addEventListener('change', () => {
                         if (editGraceInput.value === 'Yes') {
-                            const currentMonthKey = `${currentMonthView.getFullYear()}-${String(new Date(editDateInput.value).getMonth() + 1).padStart(2, '0')}`; // Use date from editDateInput
+                            const currentMonthKey = `${new Date(editDateInput.value).getFullYear()}-${String(new Date(editDateInput.value).getMonth() + 1).padStart(2, '0')}`; // Use date from editDateInput
                             const graceUsed = currentLoggedInUser.graceCounts[currentMonthKey] || 0;
                             const originalEntry = currentLoggedInUser.attendance[editDateInput.value]; // Use editDateInput.value for the current editing date
                             const wasGrace = originalEntry && originalEntry.status === 'Present' && originalEntry.grace === 'Yes';
@@ -3426,7 +3427,7 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
-                let totalWorkingDays = 0;
+                let totalWorkingDays = 0; // This will now count Present and Absent days
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
@@ -3466,7 +3467,7 @@
 
                             if (entry.shift === 'Day') totalDayShifts++;
                             else if (entry.shift === 'Night') totalNightShifts++;
-                            totalWorkingDays++;
+                            totalWorkingDays++; // Count Present as working day
                             if (entry.grace === 'Yes') totalGraceDays++;
                         } else {
                             cellHour.textContent = '-';
@@ -3476,11 +3477,15 @@
                             cellGrace.textContent = '-';
                             if (entry.status === 'Absent') {
                                 totalAbsentDays++;
+                                totalWorkingDays++; // Count Absent as working day
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
+                                // Weekend is not a working day, so no increment to totalWorkingDays
                             }
                         }
                     } else {
+                        // If no entry, assume it's a regular day that hasn't been marked.
+                        // For this calculation, we only count explicitly marked Present/Absent days as working days.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
@@ -3692,7 +3697,7 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
-                let totalWorkingDays = 0;
+                let totalWorkingDays = 0; // This will now count Present and Absent days
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
@@ -3733,7 +3738,7 @@
 
                             if (entry.shift === 'Day') totalDayShifts++;
                             else if (entry.shift === 'Night') totalNightShifts++;
-                            totalWorkingDays++;
+                            totalWorkingDays++; // Count Present as working day
                             if (entry.grace === 'Yes') totalGraceDays++;
                         } else {
                             cellHour.textContent = '-';
@@ -3743,11 +3748,15 @@
                             cellGrace.textContent = '-';
                             if (entry.status === 'Absent') {
                                 totalAbsentDays++;
+                                totalWorkingDays++; // Count Absent as working day
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
+                                // Weekend is not a working day, so no increment to totalWorkingDays
                             }
                         }
                     } else {
+                        // If no entry, assume it's a regular day that hasn't been marked.
+                        // For this calculation, we only count explicitly marked Present/Absent days as working days.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
