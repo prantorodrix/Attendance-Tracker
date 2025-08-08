@@ -37,6 +37,7 @@
             --status-present: #2C3E50;
             --status-absent: #E74C3C;
             --status-weekend: #808080;
+            --status-holiday: #4CAF50; /* Green for Holiday */
         }
 
         /* Dark Theme Overrides (Midnight Blue) */
@@ -64,6 +65,7 @@
             --status-present: #E0E6EB;
             --status-absent: #FF6B6B; /* Brighter red for dark theme */
             --status-weekend: #AAB8C2; /* Lighter grey for dark theme */
+            --status-holiday: #00FF00; /* Neon Green for Holiday in dark mode */
         }
 
         /* Sunset Glow Theme */
@@ -91,6 +93,7 @@
             --status-present: #5C3A3A;
             --status-absent: #DC143C; /* Crimson */
             --status-weekend: #A9A9A9; /* Dark Gray */
+            --status-holiday: #32CD32; /* Lime Green for Holiday */
         }
 
         /* Neon Theme */
@@ -120,6 +123,7 @@
             --status-present: #00FFFF;
             --status-absent: #FF00FF;
             --status-weekend: #FFFF00;
+            --status-holiday: #00FF7F; /* Spring Green for Holiday */
 
             /* Override specific element styles for neon glow */
             .premium-button {
@@ -1061,6 +1065,7 @@
         .status-present { color: var(--status-present); font-weight: 600; transition: color var(--transition-speed); }
         .status-absent { color: var(--status-absent); font-weight: 600; transition: color var(--transition-speed); }
         .status-weekend { color: var(--status-weekend); font-weight: 600; transition: color var(--transition-speed); }
+        .status-holiday { color: var(--status-holiday); font-weight: 600; transition: color var(--transition-speed); }
         
         /* Modal for Status Selection */
         #statusSelectionModal .modal-options button {
@@ -1840,6 +1845,7 @@
                         <div><strong>Late:</strong> <span id="summaryLate">0</span></div>
                         <div><strong>Absent:</strong> <span id="summaryAbsent">0</span></div>
                         <div><strong>Weekends:</strong> <span id="summaryWeekend">0</span></div>
+                        <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div> <!-- New Holiday summary -->
                         <div><strong>Working Days:</strong> <span id="summaryWorkingDays">0</span></div>
                         <!-- Combined Shift & Grace into a single div -->
                         <div>
@@ -1899,6 +1905,7 @@
                         <div><strong>Late:</b> <span id="historySummaryLate">0</span></div>
                         <div><strong>Absent:</strong> <span id="historySummaryAbsent">0</span></div>
                         <div><strong>Weekends:</strong> <span id="historySummaryWeekend">0</span></div>
+                        <div><strong>Holidays:</strong> <span id="historySummaryHoliday">0</span></div> <!-- New Holiday summary for history -->
                         <div><strong>Working Days:</strong> <span id="historySummaryWorkingDays">0</span></div>
                         <div><strong>Day Shifts:</strong> <span id="historySummaryDayShifts">0</span></div>
                         <div><strong>Night Shifts:</strong> <span id="historySummaryNightShifts">0</span></div>
@@ -2044,6 +2051,7 @@
                     <button class="premium-button" id="selectPresent">Present</button>
                     <button class="premium-button" id="selectWeekend">Weekend</button>
                     <button class="premium-button" id="selectAbsent">Absent</button>
+                    <button class="premium-button" id="selectHoliday">Holiday</button> <!-- New Holiday button -->
                 </div>
             </div>
         </div>
@@ -2107,6 +2115,7 @@
                         <option value="Present">Present</option>
                         <option value="Weekend">Weekend</option>
                         <option value="Absent">Absent</option>
+                        <option value="Holiday">Holiday</option> <!-- New Holiday option -->
                     </select>
                 </div>
                 <div class="input-group" id="editPresentDetailsGroup">
@@ -2318,13 +2327,13 @@
                 profileNameInput, usernameInput, emailInput, profilePictureInput, profilePicturePreview, saveProfileBtn,
                 profileJoiningDateInput, profileLngIdInput, dashboardUserPhoto, dashboardUsername, workedForDisplay, lngIdDisplay,
                 monthSelectDropdown, dateFromDisplay, dateToDisplay, summaryTotalHours,
-                summaryLate, summaryAbsent, summaryWeekend, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace,
+                summaryLate, summaryAbsent, summaryWeekend, summaryHoliday, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace,
                 attendanceTableBody, editDeleteModal, editDeleteModalCloseBtn, editDateInput, editHourInput,
                 editExtraHourInput, editLateHourInput, editShiftTypeInput, updateEntryBtn, deleteEntryBtn, currentYearSpan,
                 editStatusInput, editPresentDetailsGroup, editExtraHourGroup, editLateHourGroup, editShiftTypeGroup, editGraceGroup, editGraceInput, editGraceLimitMessage;
 
             // Status selection modal elements
-            let statusSelectionModal, closeStatusSelectionModal, selectPresentBtn, selectWeekendBtn, selectAbsentBtn;
+            let statusSelectionModal, closeStatusSelectionModal, selectPresentBtn, selectWeekendBtn, selectAbsentBtn, selectHolidayBtn;
             let currentSelectedDateForStatus = null; // To store the date for which status is being set
 
             // Present entry modal elements
@@ -2337,7 +2346,7 @@
 
             // History page elements
             let historyDateFromInput, historyDateToInput, findHistoryResultBtn;
-            let historySummaryTotalHours, historySummaryLate, historySummaryAbsent, historySummaryWeekend,
+            let historySummaryTotalHours, historySummaryLate, historySummaryAbsent, historySummaryWeekend, historySummaryHoliday,
                 historySummaryWorkingDays, historySummaryDayShifts, historySummaryNightShifts, historySummaryGrace;
             let historyAttendanceTableBody;
 
@@ -2641,6 +2650,7 @@
                 summaryLate = document.getElementById('summaryLate');
                 summaryAbsent = document.getElementById('summaryAbsent');
                 summaryWeekend = document.getElementById('summaryWeekend');
+                summaryHoliday = document.getElementById('summaryHoliday'); // New Holiday summary element
                 summaryWorkingDays = document.getElementById('summaryWorkingDays');
                 summaryDayShifts = document.getElementById('summaryDayShifts');
                 summaryNightShifts = document.getElementById('summaryNightShifts');
@@ -2673,6 +2683,7 @@
                 selectPresentBtn = document.getElementById('selectPresent');
                 selectWeekendBtn = document.getElementById('selectWeekend');
                 selectAbsentBtn = document.getElementById('selectAbsent');
+                selectHolidayBtn = document.getElementById('selectHoliday'); // New Holiday button element
 
                 presentEntryModal = document.getElementById('presentEntryModal');
                 closePresentEntryModal = presentEntryModal.querySelector('.close-button');
@@ -2705,6 +2716,7 @@
                 historySummaryLate = document.getElementById('historySummaryLate');
                 historySummaryAbsent = document.getElementById('historySummaryAbsent');
                 historySummaryWeekend = document.getElementById('historySummaryWeekend');
+                historySummaryHoliday = document.getElementById('historySummaryHoliday'); // New Holiday summary element for history
                 historySummaryWorkingDays = document.getElementById('historySummaryWorkingDays');
                 historySummaryDayShifts = document.getElementById('historySummaryDayShifts');
                 historySummaryNightShifts = document.getElementById('historySummaryNightShifts');
@@ -2868,6 +2880,7 @@
                 if (selectPresentBtn) selectPresentBtn.addEventListener('click', () => openPresentEntryModal('Present'));
                 if (selectWeekendBtn) selectWeekendBtn.addEventListener('click', () => setAttendanceStatus('Weekend'));
                 if (selectAbsentBtn) selectAbsentBtn.addEventListener('click', () => setAttendanceStatus('Absent'));
+                if (selectHolidayBtn) selectHolidayBtn.addEventListener('click', () => setAttendanceStatus('Holiday')); // Event listener for new Holiday button
 
                 if (closePresentEntryModal) closePresentEntryModal.addEventListener('click', closePresentEntryModalFunc);
                 if (presentEntryModal) {
@@ -3093,6 +3106,7 @@
                     if (historySummaryLate) historySummaryLate.textContent = '0';
                     if (historySummaryAbsent) historySummaryAbsent.textContent = '0';
                     if (historySummaryWeekend) historySummaryWeekend.textContent = '0';
+                    if (historySummaryHoliday) historySummaryHoliday.textContent = '0'; // Reset Holiday summary
                     if (historySummaryWorkingDays) historySummaryWorkingDays.textContent = '0';
                     if (historySummaryDayShifts) historySummaryDayShifts.textContent = '0';
                     if (historySummaryNightShifts) historySummaryNightShifts.textContent = '0';
@@ -3427,6 +3441,7 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
+                let totalHolidayDays = 0; // New variable for holidays
                 let totalWorkingDays = 0; // This will now count Present and Absent days
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
@@ -3481,6 +3496,9 @@
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
                                 // Weekend is not a working day, so no increment to totalWorkingDays
+                            } else if (entry.status === 'Holiday') { // Handle new Holiday status
+                                totalHolidayDays++;
+                                // Holiday is not a working day
                             }
                         }
                     } else {
@@ -3511,6 +3529,7 @@
                 if (summaryLate) summaryLate.textContent = formattedLateTime;
                 if (summaryAbsent) summaryAbsent.textContent = totalAbsentDays;
                 if (summaryWeekend) summaryWeekend.textContent = totalWeekendDays;
+                if (summaryHoliday) summaryHoliday.textContent = totalHolidayDays; // Display total holidays
                 if (summaryWorkingDays) summaryWorkingDays.textContent = totalWorkingDays;
                 if (summaryDayShifts) summaryDayShifts.textContent = totalDayShifts;
                 // Update combined Night Shifts and Grace
@@ -3697,6 +3716,7 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
+                let totalHolidayDays = 0; // New variable for holidays
                 let totalWorkingDays = 0; // This will now count Present and Absent days
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
@@ -3752,6 +3772,9 @@
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
                                 // Weekend is not a working day, so no increment to totalWorkingDays
+                            } else if (entry.status === 'Holiday') { // Handle new Holiday status
+                                totalHolidayDays++;
+                                // Holiday is not a working day
                             }
                         }
                     } else {
@@ -3772,6 +3795,7 @@
                 if (historySummaryLate) historySummaryLate.textContent = formattedLateTime;
                 if (historySummaryAbsent) historySummaryAbsent.textContent = totalAbsentDays;
                 if (historySummaryWeekend) historySummaryWeekend.textContent = totalWeekendDays;
+                if (historySummaryHoliday) historySummaryHoliday.textContent = totalHolidayDays; // Display total holidays in history
                 if (historySummaryWorkingDays) historySummaryWorkingDays.textContent = totalWorkingDays;
                 if (historySummaryDayShifts) historySummaryDayShifts.textContent = totalDayShifts;
                 if (historySummaryNightShifts) historySummaryNightShifts.textContent = totalNightShifts;
