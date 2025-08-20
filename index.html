@@ -221,6 +221,35 @@
             }
         }
 
+        /* Forest Green Theme */
+        html[data-theme='forest-green'] {
+            --bg-primary: linear-gradient(135deg, #E0FFE0 0%, #C0FFC0 100%); /* Light green to lighter green */
+            --bg-secondary: #FFFFFF; /* Pure white for cards/elements */
+            --text-primary: #225732; /* Deep forest green */
+            --text-secondary: #4CAF50; /* Medium green */
+            --accent-color: #388E3C; /* Darker green for accents */
+            --border-color: #A5D6A7; /* Light sage green */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-bg: #F0FFF0; /* Very light green */
+            --gradient-start: #4CAF50; /* Green */
+            --gradient-mid1: #388E3C; /* Darker Green */
+            --gradient-mid2: #1B5E20; /* Even Darker Green */
+            --gradient-mid3: #2E7D32; /* Medium Dark Green */
+            --gradient-end: #66BB6A; /* Light Green */
+            --nav-bg: #1B5E20; /* Deepest green */
+            --nav-text: #ffffff;
+            --footer-bg: #1B5E20;
+            --footer-text: #ffffff;
+            --table-header-bg: #388E3C;
+            --table-row-even: #F0FFF0;
+            --table-row-hover: #E8F5E9;
+            --status-present: #225732;
+            --status-absent: #D32F2F; /* Reddish for contrast */
+            --status-weekend: #757575; /* Grey */
+            --status-holiday: #FFD700; /* Gold for holiday */
+        }
+
+
         /* Alert/Warning Colors (remain consistent but adapt to theme text) */
         --alert-info: #2196F3;
         --alert-success: #4CAF50;
@@ -240,7 +269,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5; /* Compressed */
             overflow-x: hidden; /* Prevent horizontal scroll */
             background: var(--bg-primary); /* Default background now uses gradient variable */
             transition: background var(--transition-speed), color var(--transition-speed);
@@ -250,7 +279,7 @@
             background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid1) 25%, var(--gradient-mid2) 50%, var(--gradient-mid3) 75%, var(--gradient-end) 100%);
             background-size: 400% 400%; /* Increased size for smoother animation */
             animation: gradientAnimation 20s ease infinite; /* Slower animation */
-            padding-top: 80px; /* Space for fixed navbar */
+            padding-top: 60px; /* Compressed: Space for fixed navbar */
         }
 
         /* Animation for Neon Theme */
@@ -277,56 +306,55 @@
         .premium-button {
             background-color: var(--accent-color); /* Vibrant accent color */
             color: var(--nav-text); /* White text for buttons */
-            padding: 16px 30px;
+            padding: 12px 24px; /* Compressed */
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px; /* Compressed */
+            font-size: 0.95rem; /* Compressed */
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for pop */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Compressed */
             letter-spacing: 0.5px;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px; /* Compressed */
         }
 
         .premium-button:hover {
             background-color: var(--accent-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-3px) scale(1.02); /* More pronounced lift and slight scale */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Compressed */
+            transform: translateY(-2px) scale(1.01); /* Compressed */
         }
 
         .premium-button:active {
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Compressed */
         }
 
         /* Secondary Button Style */
         .premium-button.secondary {
             background-color: var(--border-color);
             color: var(--text-primary);
-            box-shadow: 0 3px 8px var(--shadow-color);
+            box-shadow: 0 2px 5px var(--shadow-color); /* Compressed */
         }
 
         .premium-button.secondary:hover {
             background-color: var(--border-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Compressed */
+            transform: translateY(-1px) scale(1.005); /* Compressed */
         }
 
         /* Delete Button Style */
         .premium-button.delete-button {
             background-color: var(--status-absent); /* Red for delete */
-            box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3); /* Compressed */
         }
 
         .premium-button.delete-button:hover {
             background-color: var(--status-absent);
-            box-shadow: 0 5px 12px rgba(192, 57, 43, 0.4);
-            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3); /* Compressed */
         }
 
         /* --- Login Page Specific Styles --- */
@@ -351,12 +379,12 @@
         .auth-container {
             background-color: var(--bg-secondary); /* Use secondary background for auth container */
             backdrop-filter: blur(8px); /* More pronounced blur effect */
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 25px 70px var(--shadow-color); /* More pronounced shadow */
+            padding: 30px; /* Compressed */
+            border-radius: 8px; /* Compressed */
+            box-shadow: 0 15px 40px var(--shadow-color); /* Compressed */
             text-align: center;
             width: 90%;
-            max-width: 300px;
+            max-width: 280px; /* Compressed */
             animation: fadeInScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); /* Bouncier animation */
             color: var(--text-primary);
             overflow: hidden;
@@ -370,15 +398,15 @@
         }
 
         .auth-container h1.premium-heading {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.6rem; /* Compressed */
+            margin-bottom: 8px; /* Compressed */
             color: var(--text-primary);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
 
         .auth-container .sub-heading {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
+            font-size: 0.95rem; /* Compressed */
+            margin-bottom: 25px; /* Compressed */
             color: var(--accent-color); /* Accent color for sub-heading */
             font-weight: 500;
         }
@@ -386,7 +414,7 @@
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 22px;
+            gap: 15px; /* Compressed */
             animation: slideIn 0.5s ease-out forwards;
         }
 
@@ -397,10 +425,10 @@
 
         .input-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px; /* Compressed */
             font-weight: 600;
             color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: 0.9rem; /* Compressed */
             letter-spacing: 0.2px;
         }
 
@@ -409,15 +437,15 @@
         .input-group input[type="text"],
         .input-group input[type="date"],
         .input-group select {
-            width: 80%;
-            padding: 14px 18px;
+            width: 90%; /* Adjusted for better appearance */
+            padding: 10px 14px; /* Compressed */
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 8px; /* Compressed */
+            font-size: 0.95rem; /* Compressed */
             transition: all var(--transition-speed);
             background-color: var(--input-bg);
             color: var(--text-primary);
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.08); /* Slightly deeper inner shadow */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); /* Compressed */
         }
 
         .input-group input::placeholder {
@@ -430,20 +458,20 @@
         .input-group input[type="date"]:focus,
         .input-group select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.35); /* More prominent glow */
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25); /* Compressed */
             outline: none;
         }
 
         /* Styles for input error states */
         .input-group input.error {
             border-color: var(--alert-error); /* Red border for error */
-            box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.35); /* Red glow for error */
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.25); /* Compressed */
         }
 
         .input-group .error-message {
             color: var(--alert-error);
-            font-size: 0.85rem;
-            margin-top: 5px;
+            font-size: 0.8rem; /* Compressed */
+            margin-top: 3px; /* Compressed */
             display: none; /* Hidden by default */
         }
 
@@ -454,8 +482,8 @@
         .login-links {
             display: flex;
             justify-content: space-between; /* Space between links */
-            margin-top: 18px;
-            font-size: 0.9rem;
+            margin-top: 12px; /* Compressed */
+            font-size: 0.85rem; /* Compressed */
         }
 
         .login-links a {
@@ -473,29 +501,29 @@
         /* --- Main Page General Styles --- */
         body.main-page-body {
             background: var(--bg-primary); /* Use theme primary background for main page */
-            padding-top: 80px; /* Space for fixed navbar */
+            padding-top: 60px; /* Compressed: Space for fixed navbar */
         }
 
         .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1100px; /* Compressed */
+            margin: 20px auto; /* Compressed */
+            padding: 0 15px; /* Compressed */
         }
 
         .section-card {
             background-color: var(--bg-secondary);
-            padding: 35px;
-            margin-bottom: 30px;
-            border-radius: 10px; /* Apply large border-radius */
-            box-shadow: 0 12px 35px var(--shadow-color); /* Slightly larger shadow */
+            padding: 25px; /* Compressed */
+            margin-bottom: 20px; /* Compressed */
+            border-radius: 8px; /* Compressed */
+            box-shadow: 0 8px 25px var(--shadow-color); /* Compressed */
             animation: slideUp 0.6s ease-out forwards;
             border: 1px solid var(--border-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed), border-color var(--transition-speed); /* Add transition for hover */
         }
 
         .section-card:hover {
-            transform: translateY(-5px); /* Subtle lift on hover */
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12); /* More pronounced shadow on hover */
+            transform: translateY(-3px); /* Compressed */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); /* Compressed */
         }
 
         @keyframes slideUp {
@@ -504,12 +532,12 @@
         }
 
         h2 {
-            font-size: 2rem;
+            font-size: 1.8rem; /* Compressed */
             color: var(--text-primary);
-            margin-bottom: 25px;
+            margin-bottom: 18px; /* Compressed */
             text-align: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
+            padding-bottom: 12px; /* Compressed */
         }
 
         /* --- Navigation Bar --- */
@@ -521,57 +549,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
+            padding: 10px 20px; /* Compressed */
             background-color: var(--nav-bg);
             color: var(--nav-text);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Compressed */
             z-index: 1000;
             transition: background-color 0.3s ease, padding 0.3s ease, backdrop-filter 0.3s ease, color var(--transition-speed);
         }
 
         #main-navbar.scrolled {
             background-color: rgba(44, 62, 80, 0.9); /* More transparency when scrolled */
-            padding: 10px 30px;
-            backdrop-filter: blur(8px); /* Blur effect when scrolled */
+            padding: 8px 20px; /* Compressed */
+            backdrop-filter: blur(6px); /* Compressed */
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px; /* Compressed */
         }
 
         .logo-text {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem; /* Compressed */
             font-weight: 700;
             color: var(--nav-text);
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px; /* Compressed */
         }
 
         .logo-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px; /* Compressed */
+            height: 20px; /* Compressed */
             fill: var(--accent-color); /* Accent color for logo icon */
             transition: fill var(--transition-speed);
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 15px; /* Compressed */
             list-style: none;
             margin-right: auto;
-            margin-left: 25px;
+            margin-left: 15px; /* Compressed */
         }
 
         .nav-links a {
             color: var(--nav-text);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem; /* Compressed */
             transition: color var(--transition-speed);
             position: relative;
-            padding-bottom: 5px;
+            padding-bottom: 3px; /* Compressed */
         }
 
         .nav-links a::after {
@@ -601,7 +629,7 @@
             cursor: pointer;
             font-weight: 500;
             color: var(--nav-text);
-            padding: 5px 10px;
+            padding: 3px 8px; /* Compressed */
             border-radius: var(--border-radius-base);
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
@@ -611,10 +639,10 @@
         }
 
         .user-photo {
-            width: 36px;
-            height: 36px;
+            width: 30px; /* Compressed */
+            height: 30px; /* Compressed */
             border-radius: 50%;
-            margin-left: 12px;
+            margin-left: 8px; /* Compressed */
             border: 2px solid var(--accent-color);
             object-fit: cover;
             transition: transform var(--transition-speed), border-color var(--transition-speed);
@@ -626,7 +654,7 @@
         }
 
         .user-profile-menu i {
-            margin-left: 6px;
+            margin-left: 4px; /* Compressed */
             transition: transform var(--transition-speed);
         }
 
@@ -638,12 +666,12 @@
             display: none;
             position: absolute;
             background-color: var(--bg-secondary);
-            min-width: 160px;
-            box-shadow: 0 8px 16px var(--shadow-color);
+            min-width: 140px; /* Compressed */
+            box-shadow: 0 6px 12px var(--shadow-color); /* Compressed */
             z-index: 1;
             top: 100%;
             right: 0;
-            border-radius: var(--border-radius-base);
+            border-radius: 8px; /* Compressed */
             overflow: hidden;
             transform-origin: top right;
             animation: scaleIn 0.2s ease-out forwards;
@@ -663,12 +691,12 @@
 
         .dropdown-content a {
             color: var(--text-primary);
-            padding: 12px 16px;
+            padding: 10px 14px; /* Compressed */
             text-decoration: none;
             display: block;
             transition: background-color var(--transition-speed), color var(--transition-speed);
             font-weight: 400;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* Compressed */
         }
 
         .dropdown-content a:hover {
@@ -681,9 +709,9 @@
             background: none;
             border: none;
             color: var(--nav-text);
-            font-size: 1.4rem;
+            font-size: 1.2rem; /* Compressed */
             cursor: pointer;
-            margin-left: 20px;
+            margin-left: 15px; /* Compressed */
             transition: color 0.3s ease, transform 0.2s ease;
         }
 
@@ -716,11 +744,11 @@
         .modal-content {
             background-color: var(--bg-secondary);
             margin: auto;
-            padding: 40px;
-            border-radius: var(--border-radius-large);
-            box-shadow: 0 15px 40px var(--shadow-color);
+            padding: 30px; /* Compressed */
+            border-radius: 15px; /* Compressed */
+            box-shadow: 0 10px 30px var(--shadow-color); /* Compressed */
             width: 90%;
-            max-width: 500px;
+            max-width: 450px; /* Compressed */
             position: relative;
             animation: slideDownFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             border: 1px solid var(--border-color);
@@ -744,19 +772,19 @@
 
         .modal-content h2 {
             margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+            margin-bottom: 15px; /* Compressed */
+            font-size: 1.6rem; /* Compressed */
             color: var(--text-primary);
             text-align: center;
         }
 
         .modal-content .close-button {
             color: var(--border-color);
-            font-size: 28px;
+            font-size: 24px; /* Compressed */
             font-weight: bold;
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 10px; /* Compressed */
+            right: 15px; /* Compressed */
             cursor: pointer;
             transition: all var(--transition-speed);
         }
@@ -768,16 +796,16 @@
         }
 
         .user-photo-preview {
-            width: 100px;
-            height: 100px;
+            width: 80px; /* Compressed */
+            height: 80px; /* Compressed */
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color);
-            margin-top: 15px;
+            border: 2px solid var(--accent-color); /* Compressed */
+            margin-top: 10px; /* Compressed */
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 3px 10px var(--shadow-color);
+            box-shadow: 0 2px 8px var(--shadow-color); /* Compressed */
             transition: border-color var(--transition-speed);
         }
 
@@ -787,42 +815,42 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 30px;
-            padding: 35px;
+            gap: 20px; /* Compressed */
+            padding: 25px; /* Compressed */
             background-color: var(--bg-secondary);
-            border-radius: 10px; /* Apply large border-radius */
-            box-shadow: 0 10px 30px var(--shadow-color);
-            margin-bottom: 30px;
+            border-radius: 8px; /* Compressed */
+            box-shadow: 0 8px 25px var(--shadow-color); /* Compressed */
+            margin-bottom: 20px; /* Compressed */
             animation: slideUp 0.6s ease-out forwards;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .user-dashboard-photo {
-            width: 140px;
-            height: 140px;
+            width: 120px; /* Compressed */
+            height: 120px; /* Compressed */
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--accent-color); /* Compressed */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Compressed */
             transition: border-color var(--transition-speed);
         }
 
         .user-dashboard-info {
             text-align: left;
             flex-grow: 1;
-            min-width: 280px;
+            min-width: 250px; /* Compressed */
         }
 
         .user-dashboard-info h3 {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 2rem; /* Compressed */
+            margin-bottom: 5px; /* Compressed */
             color: var(--text-primary);
         }
 
         .user-dashboard-info p {
-            font-size: 1rem;
-            margin-bottom: 6px;
+            font-size: 0.95rem; /* Compressed */
+            margin-bottom: 4px; /* Compressed */
             color: var(--text-secondary);
         }
 
@@ -836,42 +864,42 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 10px; /* Compressed */
+            margin-bottom: 18px; /* Compressed */
         }
 
         .month-selector .premium-button {
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            border-radius: 25px; /* Pill shape */
-            box-shadow: 0 3px 8px var(--shadow-color);
+            padding: 8px 16px; /* Compressed */
+            font-size: 0.85rem; /* Compressed */
+            border-radius: 20px; /* Compressed */
+            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
         }
 
         .month-selector .premium-button:hover {
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2); /* Compressed */
         }
 
         /* Styling for the new month dropdown */
         #monthSelectDropdown {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 10px;
+            padding: 8px 16px; /* Compressed */
+            font-size: 0.95rem; /* Compressed */
+            border-radius: 8px; /* Compressed */
             border: 1px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-primary);
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 3px 8px var(--shadow-color);
+            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
         }
 
         #monthSelectDropdown:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.35);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25); /* Compressed */
             outline: none;
         }
 
         .current-month {
-            font-size: 1.4rem;
+            font-size: 1.2rem; /* Compressed */
             font-weight: 600;
             color: var(--text-primary);
             transition: color var(--transition-speed);
@@ -879,18 +907,18 @@
 
         .date-range-display {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Compressed */
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 0.9rem; /* Compressed */
             transition: color var(--transition-speed);
         }
 
         .history-summary {
             background-color: var(--bg-primary);
             border-radius: var(--border-radius-base);
-            padding: 20px;
-            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05);
-            margin-top: 20px;
+            padding: 15px; /* Compressed */
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05); /* Compressed */
+            margin-top: 15px; /* Compressed */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
@@ -898,41 +926,41 @@
         .history-summary h3 {
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 18px;
-            font-size: 1.3rem;
+            margin-bottom: 12px; /* Compressed */
+            font-size: 1.2rem; /* Compressed */
         }
 
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Compressed */
+            gap: 10px; /* Compressed */
             text-align: center;
         }
 
         .summary-grid div {
             background-color: var(--bg-secondary);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px var(--shadow-color);
+            padding: 12px; /* Compressed */
+            border-radius: 6px; /* Compressed */
+            box-shadow: 0 1px 6px var(--shadow-color); /* Compressed */
             font-weight: 500;
             transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--transition-speed);
             border: 1px solid var(--border-color);
         }
 
         .summary-grid div:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px); /* Compressed */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Compressed */
         }
 
         .summary-grid strong {
             color: var(--text-primary);
             display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            margin-bottom: 3px; /* Compressed */
+            font-size: 0.85rem; /* Compressed */
         }
 
         .summary-grid span {
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* Compressed */
             color: var(--accent-color);
             font-weight: 700;
         }
@@ -940,9 +968,9 @@
         /* --- Data Entry Form (if visible) --- */
         .data-entry-form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Compressed */
+            gap: 15px; /* Compressed */
+            margin-bottom: 20px; /* Compressed */
         }
 
         .data-entry-form .input-group {
@@ -954,10 +982,10 @@
         .data-entry-form input[type="text"],
         .data-entry-form select {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px; /* Compressed */
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-base);
-            font-size: 0.95rem;
+            font-size: 0.9rem; /* Compressed */
             background-color: var(--input-bg);
             color: var(--text-primary);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
@@ -966,7 +994,7 @@
         .data-entry-form input:focus,
         .data-entry-form select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
             outline: none;
         }
 
@@ -986,10 +1014,10 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-top: 20px;
+            margin-top: 15px; /* Compressed */
             background-color: var(--bg-secondary);
-            box-shadow: 0 5px 20px var(--shadow-color);
-            border-radius: var(--border-radius-large); /* Apply large border-radius */
+            box-shadow: 0 4px 15px var(--shadow-color); /* Compressed */
+            border-radius: 15px; /* Compressed */
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
@@ -1007,7 +1035,7 @@
         #historyAttendanceTable td,
         #usersTable th,
         #usersTable td {
-            padding: 15px 18px;
+            padding: 10px 12px; /* Compressed */
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
@@ -1017,8 +1045,8 @@
         #attendanceTable th, #historyAttendanceTable th, #usersTable th {
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.3px;
+            font-size: 0.8rem; /* Compressed */
+            letter-spacing: 0.2px; /* Compressed */
         }
 
         #attendanceTable tbody tr:nth-child(even), #historyAttendanceTable tbody tr:nth-child(even), #usersTable tbody tr:nth-child(even) {
@@ -1036,29 +1064,29 @@
             background-color: var(--accent-color);
             color: var(--nav-text);
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 6px 10px; /* Compressed */
+            border-radius: 4px; /* Compressed */
             cursor: pointer;
-            font-size: 0.8rem;
-            margin-right: 6px;
+            font-size: 0.75rem; /* Compressed */
+            margin-right: 4px; /* Compressed */
             transition: all var(--transition-speed);
-            box-shadow: 0 2px 5px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 1px 4px rgba(108, 99, 255, 0.2); /* Compressed */
         }
 
         .table-actions button:hover {
             background-color: var(--accent-color);
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(108, 99, 255, 0.3);
+            box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3); /* Compressed */
         }
 
         .table-actions .delete-button {
             background-color: var(--status-absent);
-            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.2);
+            box-shadow: 0 1px 4px rgba(231, 76, 60, 0.2); /* Compressed */
         }
 
         .table-actions .delete-button:hover {
             background-color: var(--status-absent);
-            box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3);
+            box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3); /* Compressed */
         }
 
         /* Specific Status Colors (Text Only) */
@@ -1071,21 +1099,21 @@
         #statusSelectionModal .modal-options button {
             display: block;
             width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 12px; /* Compressed */
+            margin-bottom: 8px; /* Compressed */
             border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-base);
+            border-radius: 8px; /* Compressed */
             background-color: var(--input-bg);
             color: var(--text-primary);
-            font-size: 1rem;
+            font-size: 0.95rem; /* Compressed */
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 3px 8px var(--shadow-color);
+            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
         }
         #statusSelectionModal .modal-options button:hover {
             background-color: var(--border-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px); /* Compressed */
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2); /* Compressed */
         }
         #statusSelectionModal .modal-options button:last-child {
             margin-bottom: 0;
@@ -1093,38 +1121,38 @@
 
         /* Modal for Present Entry */
         #presentEntryModal .input-group {
-            margin-bottom: 18px;
+            margin-bottom: 12px; /* Compressed */
         }
         #presentEntryModal .input-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px; /* Compressed */
             font-weight: 600;
             color: var(--text-primary);
         }
         #presentEntryModal .input-group input,
         #presentEntryModal .input-group select {
-            padding: 12px 15px;
-            border-radius: var(--border-radius-base);
+            padding: 10px 12px; /* Compressed */
+            border-radius: 8px; /* Compressed */
             border: 1px solid var(--border-color);
             width: 100%;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Compressed */
             background-color: var(--input-bg);
             color: var(--text-primary);
         }
         #presentEntryModal .input-group input:focus,
         #presentEntryModal .input-group select:focus {
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
             outline: none;
         }
         #presentEntryModal .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 8px; /* Compressed */
+            margin-top: 15px; /* Compressed */
         }
         #presentEntryModal .modal-buttons .premium-button {
-            padding: 10px 20px;
-            font-size: 0.9rem;
+            padding: 8px 16px; /* Compressed */
+            font-size: 0.9rem; /* Compressed */
         }
         #presentEntryModal .modal-buttons .premium-button.save {
             background-color: var(--accent-color);
@@ -1144,34 +1172,34 @@
         /* Edit/Delete Modal specific styles */
         #editDeleteModal .modal-content .input-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px; /* Compressed */
             font-weight: 600;
             color: var(--text-primary);
         }
         #editDeleteModal .modal-content .input-group input,
         #editDeleteModal .modal-content .input-group select {
-            padding: 12px 15px;
-            border-radius: var(--border-radius-base);
+            padding: 10px 12px; /* Compressed */
+            border-radius: 8px; /* Compressed */
             border: 1px solid var(--border-color);
             width: 100%;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Compressed */
             background-color: var(--input-bg);
             color: var(--text-primary);
         }
         #editDeleteModal .modal-content .input-group input:focus,
         #editDeleteModal .modal-content .input-group select:focus {
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
             outline: none;
         }
         #editDeleteModal .modal-content .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 8px; /* Compressed */
+            margin-top: 15px; /* Compressed */
         }
         #editDeleteModal .modal-content .modal-buttons .premium-button {
-            padding: 10px 20px;
-            font-size: 0.9rem;
+            padding: 8px 16px; /* Compressed */
+            font-size: 0.9rem; /* Compressed */
         }
         #editDeleteModal .modal-content .modal-buttons .premium-button.save {
             background-color: var(--accent-color);
@@ -1195,29 +1223,28 @@
         #historySection .date-range-inputs {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px; /* Compressed */
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* Compressed */
         }
 
         #historySection .date-range-inputs .input-group {
             flex: 1;
-            min-width: 250px;
+            min-width: 220px; /* Compressed */
         }
 
         #historySection .date-range-inputs button {
             flex-grow: 1;
-            max-width: 180px;
-            margin-top: 28px;
+            max-width: 160px; /* Compressed */
+            margin-top: 24px; /* Compressed */
         }
 
         #historySummaryResult {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 20px; /* Compressed */
+            padding: 15px; /* Compressed */
             background-color: var(--bg-primary);
             border-radius: var(--border-radius-base);
-            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05);
-            margin-top: 20px;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05); /* Compressed */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
@@ -1225,38 +1252,38 @@
         #historySummaryResult h3 {
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 18px;
-            font-size: 1.3rem;
+            margin-bottom: 12px; /* Compressed */
+            font-size: 1.2rem; /* Compressed */
         }
 
         /* --- Footer --- */
         footer {
             text-align: center;
-            padding: 30px 20px;
+            padding: 20px 15px; /* Compressed */
             background-color: var(--footer-bg);
             color: var(--footer-text);
-            font-size: 0.85rem;
-            margin-top: 40px;
-            border-top: 5px solid var(--accent-color); /* Accent border for premium look */
+            font-size: 0.8rem; /* Compressed */
+            margin-top: 30px; /* Compressed */
+            border-top: 3px solid var(--accent-color); /* Compressed */
             animation: fadeIn 0.8s ease-out;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             align-items: flex-start;
-            gap: 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3); /* Shadow for depth */
+            gap: 15px; /* Compressed */
+            box-shadow: 0 -3px 15px rgba(0,0,0,0.3); /* Compressed */
             transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
         }
 
         footer .footer-section {
             flex: 1;
-            min-width: 220px;
+            min-width: 200px; /* Compressed */
             text-align: center;
         }
 
         footer .footer-section h4 {
-            font-size: 1.1rem; /* Slightly larger */
-            margin-bottom: 15px;
+            font-size: 1rem; /* Compressed */
+            margin-bottom: 10px; /* Compressed */
             color: var(--accent-color); /* Accent color for footer headings */
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
@@ -1266,15 +1293,15 @@
         footer .footer-section p {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 5px; /* Compressed */
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem; /* Slightly larger */
+            font-size: 0.85rem; /* Compressed */
         }
 
         footer .footer-section p i {
-            margin-right: 10px;
+            margin-right: 8px; /* Compressed */
             color: rgba(255, 255, 255, 0.6); /* Softer icon color */
-            font-size: 1.1rem; /* Slightly larger icon */
+            font-size: 1rem; /* Compressed */
         }
 
         footer .footer-section a {
@@ -1291,10 +1318,10 @@
         /* Custom Alert/Confirm Modal Styles */
         #customAlertModal .modal-content,
         #customConfirmModal .modal-content {
-            padding: 30px;
-            max-width: 400px;
+            padding: 25px; /* Compressed */
+            max-width: 380px; /* Compressed */
             text-align: center;
-            border-left: 8px solid; /* Dynamic color based on type */
+            border-left: 6px solid; /* Compressed */
             animation: slideDownFadeIn 0.3s ease-out;
             transition: border-color var(--transition-speed);
         }
@@ -1310,50 +1337,50 @@
 
         #customAlertModal h2,
         #customConfirmModal h2 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
+            font-size: 1.4rem; /* Compressed */
+            margin-bottom: 10px; /* Compressed */
             color: var(--text-primary);
         }
 
         #customAlertModal p,
         #customConfirmModal p {
-            font-size: 1rem;
+            font-size: 0.9rem; /* Compressed */
             color: var(--text-secondary);
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* Compressed */
         }
 
         #customAlertModal .modal-buttons,
         #customConfirmModal .modal-buttons {
             justify-content: center;
-            gap: 15px;
+            gap: 10px; /* Compressed */
         }
 
         #customAlertModal .modal-buttons .premium-button,
         #customConfirmModal .modal-buttons .premium-button {
-            padding: 10px 25px;
-            font-size: 0.95rem;
+            padding: 8px 20px; /* Compressed */
+            font-size: 0.9rem; /* Compressed */
         }
 
         /* Help Modal Specific Styles */
         .help-modal-content {
             background-color: var(--bg-secondary); /* Use theme background */
             text-align: center;
-            padding: 50px;
+            padding: 40px; /* Compressed */
             animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy animation */
             border: 1px solid var(--border-color);
-            box-shadow: 0 15px 40px var(--shadow-color);
+            box-shadow: 0 10px 30px var(--shadow-color); /* Compressed */
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .help-modal-content h2 {
-            font-size: 2.5rem;
+            font-size: 2.2rem; /* Compressed */
             color: var(--accent-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Compressed */
             text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
         }
 
         .help-modal-content p {
-            font-size: 1.5rem;
+            font-size: 1.3rem; /* Compressed */
             color: var(--text-primary);
             font-weight: 600;
         }
@@ -1367,17 +1394,17 @@
 
         /* Tic-Tac-Toe Modal Specific Styles */
         #ticTacToeModal .modal-content {
-            max-width: 450px; /* Adjust for Tic-Tac-Toe board */
-            padding: 30px;
+            max-width: 400px; /* Compressed */
+            padding: 25px; /* Compressed */
         }
 
         .tic-tac-toe-board {
             display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 5px;
-            width: 315px; /* 3*100 + 2*5 */
-            margin: 20px auto;
+            grid-template-columns: repeat(3, 90px); /* Compressed */
+            grid-template-rows: repeat(3, 90px); /* Compressed */
+            gap: 4px; /* Compressed */
+            width: 282px; /* 3*90 + 2*4 */ /* Compressed */
+            margin: 15px auto; /* Compressed */
             border: 2px solid var(--border-color);
             border-radius: var(--border-radius-base);
             overflow: hidden;
@@ -1386,13 +1413,13 @@
         }
 
         .cell {
-            width: 100px;
-            height: 100px;
+            width: 90px; /* Compressed */
+            height: 90px; /* Compressed */
             border: 1px solid var(--border-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 3.5em; /* Larger X/O */
+            font-size: 3em; /* Compressed */
             font-weight: 700;
             cursor: pointer;
             user-select: none; /* Prevent text selection on click */
@@ -1408,35 +1435,35 @@
         .cell.o { color: var(--status-absent); } /* Use alert-error color for O */
 
         #ticTacToeGameOptions { /* Renamed from #gameOptions to be specific */
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Compressed */
         }
 
         #ticTacToeGameOptions button { /* Renamed from #gameOptions button */
-            margin: 5px;
+            margin: 4px; /* Compressed */
         }
 
         #ticTacToeGameStatus { /* Renamed from #gameStatus to be specific */
-            font-size: 1.3rem;
+            font-size: 1.1rem; /* Compressed */
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 15px; /* Compressed */
             color: var(--text-primary);
         }
 
         .tic-tac-toe-stats {
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
-            gap: 10px;
-            font-size: 1rem;
+            margin-top: 15px; /* Compressed */
+            gap: 8px; /* Compressed */
+            font-size: 0.95rem; /* Compressed */
             font-weight: 500;
             color: var(--text-secondary);
         }
         .tic-tac-toe-stats div {
-            padding: 8px 15px;
-            border-radius: 8px;
+            padding: 6px 10px; /* Compressed */
+            border-radius: 6px; /* Compressed */
             background-color: var(--bg-primary);
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 5px var(--shadow-color);
+            box-shadow: 0 1px 4px var(--shadow-color); /* Compressed */
             transition: background-color 0.2s ease;
         }
         .tic-tac-toe-stats div span {
@@ -1451,20 +1478,20 @@
         /* Typing Test Section Styling */
         #typingTestSection {
             display: none; /* Hidden by default */
-            padding-top: 30px;
+            padding-top: 20px; /* Compressed */
         }
 
         #paragraphDisplay {
-            font-size: 1.2em;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-size: 1.1em; /* Compressed */
+            line-height: 1.5; /* Compressed */
+            margin-bottom: 15px; /* Compressed */
             white-space: pre-wrap; /* Preserves formatting */
             word-wrap: break-word; /* Breaks long words */
             background-color: var(--input-bg);
-            padding: 20px;
+            padding: 15px; /* Compressed */
             border-radius: var(--border-radius-base);
             border: 1px solid var(--border-color);
-            min-height: 150px;
+            min-height: 120px; /* Compressed */
             display: flex; /* Use flex to wrap spans */
             flex-wrap: wrap;
             align-content: flex-start;
@@ -1473,13 +1500,13 @@
 
         #paragraphDisplay span {
             transition: background-color 0.1s ease, color 0.1s ease;
-            padding: 1px 0; /* Small padding for highlighting visibility */
+            padding: 0px; /* Compressed */
         }
 
         #typingInput {
             font-family: monospace; /* For better character alignment */
-            font-size: 1.1em;
-            padding: 15px;
+            font-size: 1em; /* Compressed */
+            padding: 12px; /* Compressed */
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-base);
             width: 100%;
@@ -1488,12 +1515,12 @@
             color: var(--text-primary);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
             resize: vertical; /* Allow vertical resizing */
-            min-height: 100px;
+            min-height: 80px; /* Compressed */
         }
 
         #typingInput:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
             outline: none;
         }
 
@@ -1515,46 +1542,46 @@
         .typing-stats {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Compressed */
             flex-wrap: wrap;
         }
 
         .typing-stats div {
             flex: 1;
-            min-width: 150px;
+            min-width: 130px; /* Compressed */
             text-align: center;
-            margin: 10px;
-            padding: 15px;
+            margin: 8px; /* Compressed */
+            padding: 12px; /* Compressed */
             background-color: var(--bg-primary);
             border-radius: var(--border-radius-base);
-            box-shadow: 0 2px 8px var(--shadow-color);
+            box-shadow: 0 1px 6px var(--shadow-color); /* Compressed */
             transition: background-color var(--transition-speed);
         }
 
         .typing-stats h5 {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1rem; /* Compressed */
+            margin-bottom: 3px; /* Compressed */
         }
 
         .typing-stats span {
-            font-size: 1.8rem;
+            font-size: 1.6rem; /* Compressed */
             font-weight: 700;
             color: var(--accent-color);
         }
 
         .level-selection .premium-button {
-            margin: 5px;
-            padding: 8px 18px;
-            font-size: 0.9rem;
-            border-radius: 8px;
+            margin: 4px; /* Compressed */
+            padding: 6px 14px; /* Compressed */
+            font-size: 0.85rem; /* Compressed */
+            border-radius: 6px; /* Compressed */
         }
         .level-selection .premium-button.active {
             background-color: var(--accent-color);
             color: var(--nav-text);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Compressed */
         }
         .level-selection .premium-button.active:hover {
-            transform: translateY(-2px);
+            transform: translateY(-1px); /* Compressed */
         }
 
         #testResultsList {
@@ -1564,11 +1591,11 @@
 
         #testResultsList .list-item {
             background-color: var(--bg-primary);
-            margin-bottom: 10px;
-            padding: 15px;
+            margin-bottom: 8px; /* Compressed */
+            padding: 12px; /* Compressed */
             border-radius: var(--border-radius-base);
-            box-shadow: 0 1px 5px var(--shadow-color);
-            font-size: 0.95rem;
+            box-shadow: 0 1px 4px var(--shadow-color); /* Compressed */
+            font-size: 0.9rem; /* Compressed */
             color: var(--text-primary);
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
@@ -1594,30 +1621,30 @@
         @media (max-width: 768px) {
             #main-navbar {
                 flex-direction: column;
-                padding: 15px 20px;
-                gap: 10px;
+                padding: 10px 15px; /* Compressed */
+                gap: 8px; /* Compressed */
             }
             .nav-links {
                 margin-left: 0;
                 justify-content: center;
                 width: 100%;
-                gap: 15px;
+                gap: 10px; /* Compressed */
             }
             .user-profile-menu {
-                margin-top: 10px;
+                margin-top: 8px; /* Compressed */
             }
             .auth-container {
-                padding: 30px;
+                padding: 25px; /* Compressed */
             }
             .auth-container h1.premium-heading {
-                font-size: 2.2rem;
+                font-size: 2rem; /* Compressed */
             }
             .auth-container .sub-heading {
-                font-size: 1rem;
+                font-size: 0.9rem; /* Compressed */
             }
             .premium-button {
-                padding: 12px 25px;
-                font-size: 0.9rem;
+                padding: 10px 20px; /* Compressed */
+                font-size: 0.85rem; /* Compressed */
             }
             .data-entry-form {
                 grid-template-columns: 1fr;
@@ -1646,7 +1673,7 @@
             }
 
             #historySection .date-range-inputs button {
-                margin-top: 10px;
+                margin-top: 8px; /* Compressed */
             }
 
             /* Adjust game canvas size for smaller screens */
@@ -1662,15 +1689,15 @@
             }
 
             .tic-tac-toe-board {
-                grid-template-columns: repeat(3, 80px);
-                grid-template-rows: repeat(3, 80px);
-                width: 255px; /* 3*80 + 2*5 */
+                grid-template-columns: repeat(3, 70px); /* Compressed */
+                grid-template-rows: repeat(3, 70px); /* Compressed */
+                width: 222px; /* 3*70 + 2*4 */ /* Compressed */
             }
 
             .cell {
-                width: 80px;
-                height: 80px;
-                font-size: 3em;
+                width: 70px; /* Compressed */
+                height: 70px; /* Compressed */
+                font-size: 2.5em; /* Compressed */
             }
 
             .game-list-grid {
@@ -1847,6 +1874,7 @@
                         <div><strong>Weekends:</strong> <span id="summaryWeekend">0</span></div>
                         <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div> <!-- New Holiday summary -->
                         <div><strong>Working Days:</strong> <span id="summaryWorkingDays">0</span></div>
+                        <div><strong>Total Present:</strong> <span id="summaryTotalPresent">0</span></div> <!-- New Total Present -->
                         <!-- Combined Shift & Grace into a single div -->
                         <div>
                             <strong>Night Shifts:</strong> <span id="summaryNightShifts">0</span><br>
@@ -1865,6 +1893,7 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Day</th> <!-- New Day column -->
                                 <th>Status</th>
                                 <th>Hour</th>
                                 <th>Extra Hour</th>
@@ -1907,6 +1936,7 @@
                         <div><strong>Weekends:</strong> <span id="historySummaryWeekend">0</span></div>
                         <div><strong>Holidays:</strong> <span id="historySummaryHoliday">0</span></div> <!-- New Holiday summary for history -->
                         <div><strong>Working Days:</strong> <span id="historySummaryWorkingDays">0</span></div>
+                        <div><strong>Total Present:</strong> <span id="historySummaryTotalPresent">0</span></div> <!-- New Total Present for history -->
                         <div><strong>Day Shifts:</strong> <span id="historySummaryDayShifts">0</span></div>
                         <div><strong>Night Shifts:</strong> <span id="historySummaryNightShifts">0</span></div>
                         <div><strong>Grace:</strong> <span id="historySummaryGrace">0</span></div>
@@ -1919,6 +1949,7 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Day</th> <!-- New Day column -->
                                 <th>Status</th>
                                 <th>Hour</th>
                                 <th>Extra Hour</th>
@@ -2312,7 +2343,7 @@
 
             // Theme toggle button (always present in HTML)
             const themeToggle = document.getElementById('themeToggle');
-            const themeList = ['light', 'dark', 'sunset-glow', 'neon']; // Added 'neon' theme
+            const themeList = ['light', 'dark', 'sunset-glow', 'neon', 'forest-green']; // Added 'forest-green' theme
             let currentThemeIndex = 0;
 
             // Help Modal elements (always present in HTML)
@@ -2327,7 +2358,7 @@
                 profileNameInput, usernameInput, emailInput, profilePictureInput, profilePicturePreview, saveProfileBtn,
                 profileJoiningDateInput, profileLngIdInput, dashboardUserPhoto, dashboardUsername, workedForDisplay, lngIdDisplay,
                 monthSelectDropdown, dateFromDisplay, dateToDisplay, summaryTotalHours,
-                summaryLate, summaryAbsent, summaryWeekend, summaryHoliday, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace,
+                summaryLate, summaryAbsent, summaryWeekend, summaryHoliday, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace, summaryTotalPresent,
                 attendanceTableBody, editDeleteModal, editDeleteModalCloseBtn, editDateInput, editHourInput,
                 editExtraHourInput, editLateHourInput, editShiftTypeInput, updateEntryBtn, deleteEntryBtn, currentYearSpan,
                 editStatusInput, editPresentDetailsGroup, editExtraHourGroup, editLateHourGroup, editShiftTypeGroup, editGraceGroup, editGraceInput, editGraceLimitMessage;
@@ -2347,7 +2378,7 @@
             // History page elements
             let historyDateFromInput, historyDateToInput, findHistoryResultBtn;
             let historySummaryTotalHours, historySummaryLate, historySummaryAbsent, historySummaryWeekend, historySummaryHoliday,
-                historySummaryWorkingDays, historySummaryDayShifts, historySummaryNightShifts, historySummaryGrace;
+                historySummaryWorkingDays, historySummaryDayShifts, historySummaryNightShifts, historySummaryGrace, historySummaryTotalPresent;
             let historyAttendanceTableBody;
 
             // Tic-Tac-Toe Game Elements
@@ -2655,6 +2686,7 @@
                 summaryDayShifts = document.getElementById('summaryDayShifts');
                 summaryNightShifts = document.getElementById('summaryNightShifts');
                 summaryGrace = document.getElementById('summaryGrace');
+                summaryTotalPresent = document.getElementById('summaryTotalPresent'); // New Total Present element
 
                 attendanceTableBody = document.querySelector('#attendanceTable tbody');
                 editDeleteModal = document.getElementById('editDeleteModal');
@@ -2721,6 +2753,7 @@
                 historySummaryDayShifts = document.getElementById('historySummaryDayShifts');
                 historySummaryNightShifts = document.getElementById('historySummaryNightShifts');
                 historySummaryGrace = document.getElementById('historySummaryGrace');
+                historySummaryTotalPresent = document.getElementById('historySummaryTotalPresent'); // New Total Present for history
                 historyAttendanceTableBody = document.querySelector('#historyAttendanceTable tbody');
 
                 ticTacToeModal = document.getElementById('ticTacToeModal');
@@ -2768,6 +2801,8 @@
                         themeToggle.className = 'fas fa-cloud-sun'; // A different icon for the new theme
                     } else if (theme === 'neon') {
                         themeToggle.className = 'fas fa-atom'; // A different icon for neon theme
+                    } else if (theme === 'forest-green') { // New theme icon
+                        themeToggle.className = 'fas fa-tree'; 
                     }
                     currentThemeIndex = themeList.indexOf(theme);
                 }
@@ -3111,6 +3146,7 @@
                     if (historySummaryDayShifts) historySummaryDayShifts.textContent = '0';
                     if (historySummaryNightShifts) historySummaryNightShifts.textContent = '0';
                     if (historySummaryGrace) historySummaryGrace.textContent = '0';
+                    if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = '0'; // Reset Total Present
                     if (historyAttendanceTableBody) historyAttendanceTableBody.innerHTML = '';
                 } else if (sectionName === 'games') {
                     if (gamesSection) gamesSection.style.display = 'block';
@@ -3238,6 +3274,11 @@
                     month: 'long',
                     day: 'numeric'
                 });
+            }
+
+            function getDayOfWeek(date) {
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                return days[new Date(date).getDay()];
             }
 
             function populateMonthDropdown() {
@@ -3450,10 +3491,12 @@
                 let currentDate = new Date(start);
                 while (currentDate <= end) {
                     const dateKey = formatDate(currentDate);
+                    const dayOfWeek = getDayOfWeek(currentDate); // Get day of week
                     const entry = currentUserAttendance[dateKey];
 
                     const row = attendanceTableBody.insertRow();
                     const cellDate = row.insertCell();
+                    const cellDay = row.insertCell(); // New cell for Day
                     const cellStatus = row.insertCell();
                     const cellHour = row.insertCell();
                     const cellExtraHour = row.insertCell();
@@ -3463,6 +3506,7 @@
                     const cellActions = row.insertCell();
 
                     cellDate.textContent = formatDisplayDate(currentDate);
+                    cellDay.textContent = dayOfWeek; // Populate Day cell
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
@@ -3535,6 +3579,7 @@
                 // Update combined Night Shifts and Grace
                 if (summaryNightShifts) summaryNightShifts.textContent = totalNightShifts;
                 if (summaryGrace) summaryGrace.textContent = totalGraceDays;
+                if (summaryTotalPresent) summaryTotalPresent.textContent = totalDayShifts + totalNightShifts; // Calculate Total Present
             }
 
 
@@ -3727,10 +3772,12 @@
                 let currentDate = new Date(startDate);
                 while (currentDate.getTime() <= endDate.getTime()) { 
                     const dateKey = formatDate(currentDate);
+                    const dayOfWeek = getDayOfWeek(currentDate); // Get day of week
                     const entry = currentUserAttendance[dateKey];
 
                     const row = historyAttendanceTableBody.insertRow();
                     const cellDate = row.insertCell();
+                    const cellDay = row.insertCell(); // New cell for Day
                     const cellStatus = row.insertCell();
                     const cellHour = row.insertCell();
                     const cellExtraHour = row.insertCell();
@@ -3739,6 +3786,7 @@
                     const cellGrace = row.insertCell();
 
                     cellDate.textContent = formatDisplayDate(currentDate);
+                    cellDay.textContent = dayOfWeek; // Populate Day cell
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
@@ -3800,6 +3848,7 @@
                 if (historySummaryDayShifts) historySummaryDayShifts.textContent = totalDayShifts;
                 if (historySummaryNightShifts) historySummaryNightShifts.textContent = totalNightShifts;
                 if (historySummaryGrace) historySummaryGrace.textContent = totalGraceDays;
+                if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = totalDayShifts + totalNightShifts; // Calculate Total Present
             }
 
             // --- Help Modal Functions ---
