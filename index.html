@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="neptune-vibe">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>&#x2666; Activity - Attendance Tracker</title> <!-- Added diamond emoji to title -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- For icons, e.g., for user profile or arrows -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        /* Basic Reset & Global Styles (PixelBloom UI Design) */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap');
+        /* Basic Reset & Global Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Poppins:wght@400;500;600&display=swap');
 
         :root {
-            /* Default Light Theme Colors (Refined) */
-            --bg-primary: linear-gradient(135deg, #F0F4F8 0%, #E6EEF5 100%); /* Subtle light blue-grey gradient */
-            --bg-secondary: #FFFFFF; /* Pure white for cards/elements */
-            --text-primary: #2C3E50; /* Dark blue-grey for main text */
-            --text-secondary: #607D8B; /* Medium grey for secondary text */
-            --accent-color: #007BFF; /* Vibrant blue, slightly softer */
-            --border-color: #DDE6ED; /* Light grey-blue */
-            --shadow-color: rgba(0, 0, 0, 0.08); /* Softer shadow */
+            /* Default Light Theme Colors (Fallback) */
+            --bg-primary: linear-gradient(135deg, #F0F4F8 0%, #E6EEF5 100%);
+            --bg-secondary: #FFFFFF;
+            --text-primary: #2C3E50;
+            --text-secondary: #607D8B;
+            --accent-color: #007BFF;
+            --border-color: #DDE6ED;
+            --shadow-color: rgba(0, 0, 0, 0.08);
             --input-bg: #F8FAFC;
-            --gradient-start: #6DD5FA; /* Main page gradient start (Light blue) */
-            --gradient-mid1: #2980B9; /* Main page gradient mid (Medium blue) */
-            --gradient-mid2: #1ABC9C; /* Main page gradient mid (Teal) */
-            --gradient-mid3: #3498DB; /* Main page gradient mid (Sky blue) */
-            --gradient-end: #8E44AD; /* Main page gradient end (Purple) */
-            --nav-bg: #2C3E50; /* Deep blue-grey */
+            --gradient-start: #6DD5FA;
+            --gradient-mid1: #2980B9;
+            --gradient-mid2: #1ABC9C;
+            --gradient-mid3: #3498DB;
+            --gradient-end: #8E44AD;
+            --nav-bg: #2C3E50;
             --nav-text: #ffffff;
             --footer-bg: #2C3E50;
             --footer-text: #ffffff;
@@ -37,18 +39,33 @@
             --status-present: #2C3E50;
             --status-absent: #E74C3C;
             --status-weekend: #808080;
-            --status-holiday: #4CAF50; /* Green for Holiday */
+            --status-holiday: #4CAF50;
+            --status-govt-holiday: #FFD700;
+            --status-sick-leave: #FF8C00;
+
+            --status-present-bg: #E3F2FD;
+            --status-absent-bg: #FFEBEE;
+            --status-weekend-bg: #EEEEEE;
+            --status-holiday-bg: #E8F5E9;
+            --status-govt-holiday-bg: #FFFDE7;
+            --status-sick-leave-bg: #FFF3E0;
+
+            --chart-color-present: #007BFF;
+            --chart-color-absent: #E74C3C;
+            --chart-color-late: #FFC107;
+            --chart-color-weekend: #808080;
+            --chart-color-holiday: #4CAF50;
         }
 
-        /* Dark Theme Overrides (Midnight Blue) */
+        /* Dark Theme Overrides */
         html[data-theme='dark'] {
-            --bg-primary: linear-gradient(135deg, #1A2A3A 0%, #0A1620 100%); /* Deep blue-black gradient */
-            --bg-secondary: #2A3B4D; /* Dark desaturated blue for cards */
-            --text-primary: #E0E6EB; /* Off-white */
-            --text-secondary: #AAB8C2; /* Light grey-blue */
-            --accent-color: #00C896; /* Vibrant teal-green */
-            --border-color: #4A5C6F; /* Medium desaturated blue */
-            --shadow-color: rgba(0, 0, 0, 0.4); /* Stronger shadow */
+            --bg-primary: linear-gradient(135deg, #1A2A3A 0%, #0A1620 100%);
+            --bg-secondary: #2A3B4D;
+            --text-primary: #E0E6EB;
+            --text-secondary: #AAB8C2;
+            --accent-color: #00C896;
+            --border-color: #4A5C6F;
+            --shadow-color: rgba(0, 0, 0, 0.4);
             --input-bg: #3A4C5E;
             --gradient-start: #0A1620;
             --gradient-mid1: #1A2A3A;
@@ -63,190 +80,146 @@
             --table-row-even: #203040;
             --table-row-hover: #30455A;
             --status-present: #E0E6EB;
-            --status-absent: #FF6B6B; /* Brighter red for dark theme */
-            --status-weekend: #AAB8C2; /* Lighter grey for dark theme */
-            --status-holiday: #00FF00; /* Neon Green for Holiday in dark mode */
+            --status-absent: #FF6B6B;
+            --status-weekend: #AAB8C2;
+            --status-holiday: #00FF00;
+            --status-govt-holiday: #FFD700;
+            --status-sick-leave: #FFA500;
+
+            --status-present-bg: #2B4C6D;
+            --status-absent-bg: #4D2626;
+            --status-weekend-bg: #3A4C5E;
+            --status-holiday-bg: #2E4E2E;
+            --status-govt-holiday-bg: #4D4A26;
+            --status-sick-leave-bg: #4D3A26;
+
+            --chart-color-present: #00C896;
+            --chart-color-absent: #FF6B6B;
+            --chart-color-late: #FFD700;
+            --chart-color-weekend: #AAB8C2;
+            --chart-color-holiday: #00FF00;
         }
+        
+        /* NeptuneVibe Theme (New & Default) */
+        html[data-theme='neptune-vibe'] {
+            --bg-primary: linear-gradient(135deg, #0A192F 0%, #172A45 100%); /* Deep ocean blue */
+            --bg-secondary: #0F2038; /* Slightly lighter deep blue */
+            --text-primary: #8892B0; /* Light grayish blue */
+            --text-secondary: #CCD6F6; /* Lighter blue-gray for accents */
+            --accent-color: #4A90E2; /* Deeper blue for main accent */
+            --button-gradient-start: #4A90E2; /* New start for button gradient */
+            --button-gradient-end: #00BFFF; /* New end for button gradient */
+            --border-color: #2A3B4D; /* Medium desaturated blue */
+            --shadow-color: rgba(2, 12, 27, 0.7); /* Darker, more intense shadow */
+            --input-bg: #112240; /* Dark blue for inputs */
+            --gradient-start: #0F2038;
+            --gradient-mid1: #0A192F;
+            --gradient-mid2: #172A45;
+            --gradient-mid3: #0F2038;
+            --gradient-end: #112240;
+            --nav-bg: #0A192F;
+            --nav-text: #CCD6F6; /* Lighter blue-gray for nav text */
+            --footer-bg: #0A192F;
+            --footer-text: #8892B0;
 
-        /* Sunset Glow Theme */
-        html[data-theme='sunset-glow'] {
-            --bg-primary: linear-gradient(135deg, #FFDAB9 0%, #FFC0CB 100%); /* Peach to Pink gradient */
-            --bg-secondary: #FFFFFF;
-            --text-primary: #5C3A3A; /* Dark brown */
-            --text-secondary: #8B7355; /* Medium brown */
-            --accent-color: #FF6347; /* Tomato red */
-            --border-color: #F5DEB3; /* Wheat */
-            --shadow-color: rgba(0, 0, 0, 0.15);
-            --input-bg: #FFF8DC;
-            --gradient-start: #FF7F50; /* Coral */
-            --gradient-mid1: #FFD700; /* Gold */
-            --gradient-mid2: #FFA07A; /* Light Salmon */
-            --gradient-mid3: #FF6347; /* Tomato */
-            --gradient-end: #CD5C5C; /* Indian Red */
-            --nav-bg: #8B4513; /* Saddle Brown */
-            --nav-text: #FFFFFF;
-            --footer-bg: #8B4513;
-            --footer-text: #FFFFFF;
-            --table-header-bg: #FF6347;
-            --table-row-even: #FFF0F5; /* Lavender Blush */
-            --table-row-hover: #FFE4E1; /* Misty Rose */
-            --status-present: #5C3A3A;
-            --status-absent: #DC143C; /* Crimson */
-            --status-weekend: #A9A9A9; /* Dark Gray */
-            --status-holiday: #32CD32; /* Lime Green for Holiday */
-        }
+            --table-header-bg: linear-gradient(90deg, #112240, #2A3B4D); /* Gradient for table header */
+            --table-row-even: #112240;
+            --table-row-hover: #172A45;
+            --status-present: #64FFDA; /* Keep a bright accent for present status text */
+            --status-absent: #E74C3C; /* Red */
+            --status-weekend: #8892B0; /* Light grayish blue */
+            --status-holiday: #FFD700; /* Gold */
+            --status-govt-holiday: #7FFF00; /* Chartreuse */
+            --status-sick-leave: #FFA500; /* Orange */
 
-        /* Neon Theme */
-        html[data-theme='neon'] {
-            --bg-primary: linear-gradient(45deg, #00FFFF, #FF00FF, #FFFF00, #00FF00); /* Cyan, Magenta, Yellow, Green */
-            --bg-secondary: rgba(25, 25, 25, 0.8); /* Dark, slightly transparent for contrast */
-            --text-primary: #00FFFF; /* Bright Cyan */
-            --text-secondary: #FF00FF; /* Bright Magenta */
-            --accent-color: #00FF00; /* Neon Green */
-            --border-color: #FFFF00; /* Neon Yellow */
-            --shadow-color: rgba(0, 255, 255, 0.5); /* Cyan glow */
-            --input-bg: rgba(0, 0, 0, 0.6); /* Darker transparent for inputs */
-            
-            --gradient-start: #00FFFF;
-            --gradient-mid1: #FF00FF;
-            --gradient-mid2: #FFFF00;
-            --gradient-mid3: #00FF00;
-            --gradient-end: #FF00FF; /* Repeating */
+            --status-present-bg: rgba(100, 255, 218, 0.1); /* Light aqua transparent */
+            --status-absent-bg: rgba(231, 76, 60, 0.1); /* Light red transparent */
+            --status-weekend-bg: rgba(136, 146, 176, 0.1); /* Light gray transparent */
+            --status-holiday-bg: rgba(255, 215, 0, 0.1); /* Light gold transparent */
+            --status-govt-holiday-bg: rgba(127, 255, 0, 0.1); /* Light chartreuse transparent */
+            --status-sick-leave-bg: rgba(255, 165, 0, 0.1); /* Light orange transparent */
 
-            --nav-bg: rgba(0, 0, 0, 0.9);
-            --nav-text: #00FFFF;
-            --footer-bg: rgba(0, 0, 0, 0.9);
-            --footer-text: #FF00FF;
-            --table-header-bg: #00FF00;
-            --table-row-even: rgba(50, 50, 50, 0.7);
-            --table-row-hover: rgba(75, 75, 75, 0.8);
-            --status-present: #00FFFF;
-            --status-absent: #FF00FF;
-            --status-weekend: #FFFF00;
-            --status-holiday: #00FF7F; /* Spring Green for Holiday */
+            --chart-color-present: #4A90E2; /* New chart color for present */
+            --chart-color-absent: #E74C3C; /* Red */
+            --chart-color-late: #FFC107; /* Amber */
+            --chart-color-weekend: #8892B0; /* Light grayish blue (if used) */
+            --chart-color-holiday: #7FFF00; /* Chartreuse (if used) */
 
-            /* Override specific element styles for neon glow */
+            /* Specific styling for neptune-vibe elements */
             .premium-button {
-                box-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color);
-                border: 2px solid var(--accent-color);
+                background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+                color: var(--text-secondary); /* Lighter text for buttons */
+                box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4); /* Shadow based on blue gradient */
             }
             .premium-button:hover {
-                box-shadow: 0 0 20px var(--accent-color), 0 0 35px var(--accent-color);
+                box-shadow: 0 6px 20px rgba(0, 191, 255, 0.6);
             }
             .auth-container {
-                box-shadow: 0 0 30px var(--shadow-color), 0 0 50px var(--shadow-color);
-                border: 2px solid var(--border-color);
-            }
-            .input-group input:focus,
-            .input-group select:focus {
-                box-shadow: 0 0 0 4px var(--accent-color);
-            }
-            .input-group input.error {
-                border-color: var(--text-secondary); /* Magenta for error */
-                box-shadow: 0 0 0 4px var(--text-secondary);
-            }
-            .input-group .error-message {
-                color: var(--text-secondary);
+                box-shadow: 0 15px 40px var(--shadow-color);
             }
             .section-card {
-                box-shadow: 0 0 20px var(--shadow-color);
-                border: 2px solid var(--border-color);
+                box-shadow: 0 8px 30px var(--shadow-color);
             }
             #main-navbar {
-                box-shadow: 0 0 20px var(--shadow-color);
-            }
-            #main-navbar.scrolled {
-                background-color: rgba(0, 0, 0, 0.9); /* More opaque */
-                backdrop-filter: blur(12px); /* Stronger blur */
+                box-shadow: 0 2px 15px var(--shadow-color);
             }
             .logo-icon {
                 filter: drop-shadow(0 0 5px var(--accent-color));
-            }
-            .nav-links a::after {
-                background-color: var(--accent-color);
             }
             .user-photo {
                 border: 2px solid var(--accent-color);
             }
             .user-dashboard-photo {
-                border: 4px solid var(--accent-color);
+                border: 3px solid var(--accent-color);
+            }
+            .summary-grid div {
+                background-color: var(--input-bg);
+                box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
             }
             .summary-grid span {
                 color: var(--accent-color);
             }
-            #attendanceTable thead, #historyAttendanceTable thead, #usersTable thead {
-                background-color: var(--table-header-bg);
+            #attendanceTable thead, #historyAttendanceTable thead {
+                background: var(--table-header-bg); /* Use gradient for table header */
+                color: var(--nav-text); /* Ensure good contrast */
             }
             .table-actions button {
-                box-shadow: 0 0 10px var(--accent-color);
+                background: linear-gradient(90deg, var(--button-gradient-start), var(--button-gradient-end)); /* Small buttons also gradient */
+                color: var(--text-secondary); /* Lighter text for small buttons */
+                box-shadow: 0 1px 6px rgba(0, 191, 255, 0.3);
+            }
+            .table-actions button:hover {
+                background: linear-gradient(90deg, var(--button-gradient-end), var(--button-gradient-start));
+                box-shadow: 0 2px 8px rgba(0, 191, 255, 0.5);
             }
             .table-actions .delete-button {
-                box-shadow: 0 0 10px var(--status-absent);
+                background-color: var(--status-absent);
+                color: var(--bg-secondary);
             }
             .modal-content {
-                box-shadow: 0 0 20px var(--shadow-color);
-                border: 2px solid var(--border-color);
+                box-shadow: 0 10px 40px var(--shadow-color);
             }
             #customAlertModal .modal-content,
             #customConfirmModal .modal-content {
-                border-left: 8px solid var(--accent-color); /* Use accent color for alerts */
+                border-left: 6px solid var(--accent-color);
             }
             .help-modal-content h2 {
                 text-shadow: 0 0 10px var(--accent-color);
             }
-            .tic-tac-toe-board {
-                border: 2px solid var(--border-color);
-                box-shadow: 0 0 15px var(--shadow-color);
-            }
-            .cell {
-                border: 1px solid var(--border-color);
-            }
-            .cell.x { color: var(--accent-color); }
-            .cell.o { color: var(--text-secondary); } /* Magenta for O */
-            .typing-stats span {
-                color: var(--accent-color);
-            }
-            .level-selection .premium-button.active {
-                box-shadow: 0 0 10px var(--accent-color);
-            }
             footer {
-                border-top: 5px solid var(--accent-color);
-                box-shadow: 0 -5px 20px var(--shadow-color);
+                border-top: 3px solid var(--accent-color);
+                box-shadow: 0 -3px 20px var(--shadow-color);
             }
             footer .footer-section h4 {
                 color: var(--accent-color);
             }
-            footer .footer-section a:hover {
-                color: var(--accent-color);
+            /* Headlines with subtle text shadow for NeptuneVibe */
+            html[data-theme='neptune-vibe'] h1, 
+            html[data-theme='neptune-vibe'] h2, 
+            html[data-theme='neptune-vibe'] h3, 
+            html[data-theme='neptune-vibe'] h4 {
+                text-shadow: 0px 0px 8px rgba(0, 191, 255, 0.3); /* Subtle blue glow */
             }
-        }
-
-        /* Forest Green Theme */
-        html[data-theme='forest-green'] {
-            --bg-primary: linear-gradient(135deg, #E0FFE0 0%, #C0FFC0 100%); /* Light green to lighter green */
-            --bg-secondary: #FFFFFF; /* Pure white for cards/elements */
-            --text-primary: #225732; /* Deep forest green */
-            --text-secondary: #4CAF50; /* Medium green */
-            --accent-color: #388E3C; /* Darker green for accents */
-            --border-color: #A5D6A7; /* Light sage green */
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --input-bg: #F0FFF0; /* Very light green */
-            --gradient-start: #4CAF50; /* Green */
-            --gradient-mid1: #388E3C; /* Darker Green */
-            --gradient-mid2: #1B5E20; /* Even Darker Green */
-            --gradient-mid3: #2E7D32; /* Medium Dark Green */
-            --gradient-end: #66BB6A; /* Light Green */
-            --nav-bg: #1B5E20; /* Deepest green */
-            --nav-text: #ffffff;
-            --footer-bg: #1B5E20;
-            --footer-text: #ffffff;
-            --table-header-bg: #388E3C;
-            --table-row-even: #F0FFF0;
-            --table-row-hover: #E8F5E9;
-            --status-present: #225732;
-            --status-absent: #D32F2F; /* Reddish for contrast */
-            --status-weekend: #757575; /* Grey */
-            --status-holiday: #FFD700; /* Gold for holiday */
         }
 
 
@@ -257,8 +230,8 @@
         --alert-error: #F44336;
 
         --transition-speed: 0.3s ease-in-out;
-        --border-radius-base: 12px;
-        --border-radius-large: 20px;
+        --border-radius-base: 8px; /* Slightly more rounded */
+        --border-radius-large: 12px;
 
         * {
             margin: 0;
@@ -269,36 +242,27 @@
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--text-primary);
-            line-height: 1.5; /* Compressed */
+            line-height: 1.6; /* Slightly increased for readability */
             overflow-x: hidden; /* Prevent horizontal scroll */
             background: var(--bg-primary); /* Default background now uses gradient variable */
             transition: background var(--transition-speed), color var(--transition-speed);
         }
 
         body.main-page-body {
-            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid1) 25%, var(--gradient-mid2) 50%, var(--gradient-mid3) 75%, var(--gradient-end) 100%);
-            background-size: 400% 400%; /* Increased size for smoother animation */
-            animation: gradientAnimation 20s ease infinite; /* Slower animation */
-            padding-top: 60px; /* Compressed: Space for fixed navbar */
+            background: var(--bg-primary); /* Use theme primary background for main page */
+            padding-top: 60px; /* Space for fixed navbar */
         }
 
-        /* Animation for Neon Theme */
-        html[data-theme='neon'] body.main-page-body {
-            animation: neonGradientAnimation 10s ease infinite alternate; /* Faster, alternating animation */
-            background-size: 600% 600%; /* Even larger for more movement */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-
-        @keyframes neonGradientAnimation {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-
 
         h1, h2, h3, h4 {
             font-family: 'Poppins', sans-serif;
             color: var(--text-primary);
-            font-weight: 700;
+            font-weight: 500; /* Standard font weight */
             transition: color var(--transition-speed);
         }
 
@@ -306,55 +270,55 @@
         .premium-button {
             background-color: var(--accent-color); /* Vibrant accent color */
             color: var(--nav-text); /* White text for buttons */
-            padding: 12px 24px; /* Compressed */
+            padding: 10px 20px; /* Standard padding */
             border: none;
-            border-radius: 8px; /* Compressed */
-            font-size: 0.95rem; /* Compressed */
-            font-weight: 600;
+            border-radius: 6px; /* Slightly less rounded */
+            font-size: 0.9rem; /* Standard font size */
+            font-weight: 500; /* Standard font weight */
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Compressed */
-            letter-spacing: 0.5px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Standard shadow */
+            letter-spacing: 0.3px;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px; /* Compressed */
+            gap: 6px;
         }
 
         .premium-button:hover {
             background-color: var(--accent-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Compressed */
-            transform: translateY(-2px) scale(1.01); /* Compressed */
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
+            transform: translateY(-1px) scale(1.005);
         }
 
         .premium-button:active {
             transform: translateY(0);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); /* Compressed */
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
 
         /* Secondary Button Style */
         .premium-button.secondary {
             background-color: var(--border-color);
             color: var(--text-primary);
-            box-shadow: 0 2px 5px var(--shadow-color); /* Compressed */
+            box-shadow: 0 2px 5px var(--shadow-color);
         }
 
         .premium-button.secondary:hover {
             background-color: var(--border-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Compressed */
-            transform: translateY(-1px) scale(1.005); /* Compressed */
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px) scale(1.005);
         }
 
         /* Delete Button Style */
         .premium-button.delete-button {
             background-color: var(--status-absent); /* Red for delete */
-            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3); /* Compressed */
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
         }
 
         .premium-button.delete-button:hover {
             background-color: var(--status-absent);
-            box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3); /* Compressed */
+            box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3);
         }
 
         /* --- Login Page Specific Styles --- */
@@ -370,25 +334,19 @@
             transition: background var(--transition-speed);
         }
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         .auth-container {
             background-color: var(--bg-secondary); /* Use secondary background for auth container */
             backdrop-filter: blur(8px); /* More pronounced blur effect */
-            padding: 30px; /* Compressed */
-            border-radius: 8px; /* Compressed */
-            box-shadow: 0 15px 40px var(--shadow-color); /* Compressed */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px var(--shadow-color);
             text-align: center;
             width: 90%;
-            max-width: 280px; /* Compressed */
-            animation: fadeInScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); /* Bouncier animation */
+            max-width: 320px; /* Slightly wider */
+            animation: fadeInScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             color: var(--text-primary);
             overflow: hidden;
-            border: 1px solid var(--border-color); /* Light border for transparency */
+            border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
         }
 
@@ -398,23 +356,23 @@
         }
 
         .auth-container h1.premium-heading {
-            font-size: 1.6rem; /* Compressed */
-            margin-bottom: 8px; /* Compressed */
+            font-size: 1.8rem; /* Adjusted font size */
+            margin-bottom: 10px;
             color: var(--text-primary);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
 
         .auth-container .sub-heading {
-            font-size: 0.95rem; /* Compressed */
-            margin-bottom: 25px; /* Compressed */
-            color: var(--accent-color); /* Accent color for sub-heading */
-            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            font-weight: 400; /* Standard font weight */
         }
 
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Compressed */
+            gap: 15px;
             animation: slideIn 0.5s ease-out forwards;
         }
 
@@ -425,10 +383,10 @@
 
         .input-group label {
             display: block;
-            margin-bottom: 5px; /* Compressed */
-            font-weight: 600;
+            margin-bottom: 5px;
+            font-weight: 500; /* Standard font weight */
             color: var(--text-primary);
-            font-size: 0.9rem; /* Compressed */
+            font-size: 0.85rem;
             letter-spacing: 0.2px;
         }
 
@@ -437,15 +395,15 @@
         .input-group input[type="text"],
         .input-group input[type="date"],
         .input-group select {
-            width: 90%; /* Adjusted for better appearance */
-            padding: 10px 14px; /* Compressed */
+            width: 100%;
+            padding: 10px 14px;
             border: 1px solid var(--border-color);
-            border-radius: 8px; /* Compressed */
-            font-size: 0.95rem; /* Compressed */
+            border-radius: 6px; /* Less rounded */
+            font-size: 0.9rem;
             transition: all var(--transition-speed);
             background-color: var(--input-bg);
             color: var(--text-primary);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.08); /* Compressed */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .input-group input::placeholder {
@@ -458,39 +416,39 @@
         .input-group input[type="date"]:focus,
         .input-group select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25); /* Compressed */
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
             outline: none;
         }
 
         /* Styles for input error states */
         .input-group input.error {
-            border-color: var(--alert-error); /* Red border for error */
-            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.25); /* Compressed */
+            border-color: var(--alert-error);
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.25);
         }
 
         .input-group .error-message {
             color: var(--alert-error);
-            font-size: 0.8rem; /* Compressed */
-            margin-top: 3px; /* Compressed */
-            display: none; /* Hidden by default */
+            font-size: 0.75rem;
+            margin-top: 3px;
+            display: none;
         }
 
         .input-group input.error + .error-message {
-            display: block; /* Show message when input has error class */
+            display: block;
         }
 
         .login-links {
             display: flex;
-            justify-content: space-between; /* Space between links */
-            margin-top: 12px; /* Compressed */
-            font-size: 0.85rem; /* Compressed */
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 0.85rem;
         }
 
         .login-links a {
             color: var(--accent-color);
             text-decoration: none;
             transition: color var(--transition-speed);
-            font-weight: 500;
+            font-weight: 400; /* Standard font weight */
         }
 
         .login-links a:hover {
@@ -499,31 +457,26 @@
         }
 
         /* --- Main Page General Styles --- */
-        body.main-page-body {
-            background: var(--bg-primary); /* Use theme primary background for main page */
-            padding-top: 60px; /* Compressed: Space for fixed navbar */
-        }
-
         .container {
-            max-width: 1100px; /* Compressed */
-            margin: 20px auto; /* Compressed */
-            padding: 0 15px; /* Compressed */
+            max-width: 1000px; /* Slightly smaller max width */
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
         .section-card {
             background-color: var(--bg-secondary);
-            padding: 25px; /* Compressed */
-            margin-bottom: 20px; /* Compressed */
-            border-radius: 8px; /* Compressed */
-            box-shadow: 0 8px 25px var(--shadow-color); /* Compressed */
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px var(--shadow-color); /* Slightly smaller shadow */
             animation: slideUp 0.6s ease-out forwards;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed), border-color var(--transition-speed); /* Add transition for hover */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
         .section-card:hover {
-            transform: translateY(-3px); /* Compressed */
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); /* Compressed */
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
 
         @keyframes slideUp {
@@ -532,12 +485,12 @@
         }
 
         h2 {
-            font-size: 1.8rem; /* Compressed */
+            font-size: 1.6rem; /* Adjusted font size */
             color: var(--text-primary);
-            margin-bottom: 18px; /* Compressed */
+            margin-bottom: 15px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px; /* Compressed */
+            padding-bottom: 10px;
         }
 
         /* --- Navigation Bar --- */
@@ -549,57 +502,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px; /* Compressed */
+            padding: 10px 20px;
             background-color: var(--nav-bg);
             color: var(--nav-text);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Compressed */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             transition: background-color 0.3s ease, padding 0.3s ease, backdrop-filter 0.3s ease, color var(--transition-speed);
         }
 
         #main-navbar.scrolled {
-            background-color: rgba(44, 62, 80, 0.9); /* More transparency when scrolled */
-            padding: 8px 20px; /* Compressed */
-            backdrop-filter: blur(6px); /* Compressed */
+            background-color: rgba(44, 62, 80, 0.9);
+            padding: 8px 20px;
+            backdrop-filter: blur(6px);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 6px; /* Compressed */
+            gap: 6px;
         }
 
         .logo-text {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem; /* Compressed */
-            font-weight: 700;
+            font-size: 1.3rem; /* Adjusted font size */
+            font-weight: 600; /* Standard font weight */
             color: var(--nav-text);
-            letter-spacing: 0.5px; /* Compressed */
+            letter-spacing: 0.5px;
         }
 
         .logo-icon {
-            width: 20px; /* Compressed */
-            height: 20px; /* Compressed */
-            fill: var(--accent-color); /* Accent color for logo icon */
+            width: 20px;
+            height: 20px;
+            fill: var(--accent-color);
             transition: fill var(--transition-speed);
         }
 
         .nav-links {
             display: flex;
-            gap: 15px; /* Compressed */
+            gap: 20px; /* Slightly more space */
             list-style: none;
             margin-right: auto;
-            margin-left: 15px; /* Compressed */
+            margin-left: 20px;
         }
 
         .nav-links a {
             color: var(--nav-text);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem; /* Compressed */
+            font-weight: 400; /* Standard font weight */
+            font-size: 0.9rem;
             transition: color var(--transition-speed);
             position: relative;
-            padding-bottom: 3px; /* Compressed */
+            padding-bottom: 3px;
         }
 
         .nav-links a::after {
@@ -627,9 +580,9 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 400; /* Standard font weight */
             color: var(--nav-text);
-            padding: 3px 8px; /* Compressed */
+            padding: 3px 8px;
             border-radius: var(--border-radius-base);
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
@@ -639,10 +592,10 @@
         }
 
         .user-photo {
-            width: 30px; /* Compressed */
-            height: 30px; /* Compressed */
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            margin-left: 8px; /* Compressed */
+            margin-left: 8px;
             border: 2px solid var(--accent-color);
             object-fit: cover;
             transition: transform var(--transition-speed), border-color var(--transition-speed);
@@ -654,7 +607,7 @@
         }
 
         .user-profile-menu i {
-            margin-left: 4px; /* Compressed */
+            margin-left: 4px;
             transition: transform var(--transition-speed);
         }
 
@@ -666,12 +619,12 @@
             display: none;
             position: absolute;
             background-color: var(--bg-secondary);
-            min-width: 140px; /* Compressed */
-            box-shadow: 0 6px 12px var(--shadow-color); /* Compressed */
+            min-width: 140px;
+            box-shadow: 0 6px 12px var(--shadow-color);
             z-index: 1;
             top: 100%;
             right: 0;
-            border-radius: 8px; /* Compressed */
+            border-radius: 8px;
             overflow: hidden;
             transform-origin: top right;
             animation: scaleIn 0.2s ease-out forwards;
@@ -691,12 +644,12 @@
 
         .dropdown-content a {
             color: var(--text-primary);
-            padding: 10px 14px; /* Compressed */
+            padding: 10px 14px;
             text-decoration: none;
             display: block;
             transition: background-color var(--transition-speed), color var(--transition-speed);
             font-weight: 400;
-            font-size: 0.85rem; /* Compressed */
+            font-size: 0.85rem;
         }
 
         .dropdown-content a:hover {
@@ -709,9 +662,9 @@
             background: none;
             border: none;
             color: var(--nav-text);
-            font-size: 1.2rem; /* Compressed */
+            font-size: 1.2rem;
             cursor: pointer;
-            margin-left: 15px; /* Compressed */
+            margin-left: 15px;
             transition: color 0.3s ease, transform 0.2s ease;
         }
 
@@ -730,7 +683,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.7); /* Slightly lighter overlay */
+            background-color: rgba(0,0,0,0.7);
             justify-content: center;
             align-items: center;
             animation: fadeInOverlay 0.2s ease-out;
@@ -744,25 +697,15 @@
         .modal-content {
             background-color: var(--bg-secondary);
             margin: auto;
-            padding: 30px; /* Compressed */
-            border-radius: 15px; /* Compressed */
-            box-shadow: 0 10px 30px var(--shadow-color); /* Compressed */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px var(--shadow-color);
             width: 90%;
-            max-width: 450px; /* Compressed */
+            max-width: 450px;
             position: relative;
             animation: slideDownFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
-        }
-
-        /* Specific modal content animation for zoom in/out */
-        .modal.zoom-anim .modal-content {
-            animation: zoomInFadeIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes zoomInFadeIn {
-            from { opacity: 0; transform: scale(0.7); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         @keyframes slideDownFadeIn {
@@ -772,19 +715,19 @@
 
         .modal-content h2 {
             margin-top: 0;
-            margin-bottom: 15px; /* Compressed */
-            font-size: 1.6rem; /* Compressed */
+            margin-bottom: 15px;
+            font-size: 1.6rem;
             color: var(--text-primary);
             text-align: center;
         }
 
         .modal-content .close-button {
             color: var(--border-color);
-            font-size: 24px; /* Compressed */
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 600; /* Standard font weight */
             position: absolute;
-            top: 10px; /* Compressed */
-            right: 15px; /* Compressed */
+            top: 10px;
+            right: 15px;
             cursor: pointer;
             transition: all var(--transition-speed);
         }
@@ -796,16 +739,16 @@
         }
 
         .user-photo-preview {
-            width: 80px; /* Compressed */
-            height: 80px; /* Compressed */
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--accent-color); /* Compressed */
-            margin-top: 10px; /* Compressed */
+            border: 2px solid var(--accent-color);
+            margin-top: 10px;
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 2px 8px var(--shadow-color); /* Compressed */
+            box-shadow: 0 2px 8px var(--shadow-color);
             transition: border-color var(--transition-speed);
         }
 
@@ -815,47 +758,47 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 20px; /* Compressed */
-            padding: 25px; /* Compressed */
+            gap: 20px;
+            padding: 25px;
             background-color: var(--bg-secondary);
-            border-radius: 8px; /* Compressed */
-            box-shadow: 0 8px 25px var(--shadow-color); /* Compressed */
-            margin-bottom: 20px; /* Compressed */
+            border-radius: 8px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            margin-bottom: 20px;
             animation: slideUp 0.6s ease-out forwards;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .user-dashboard-photo {
-            width: 120px; /* Compressed */
-            height: 120px; /* Compressed */
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color); /* Compressed */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Compressed */
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             transition: border-color var(--transition-speed);
         }
 
         .user-dashboard-info {
             text-align: left;
             flex-grow: 1;
-            min-width: 250px; /* Compressed */
+            min-width: 250px;
         }
 
         .user-dashboard-info h3 {
-            font-size: 2rem; /* Compressed */
-            margin-bottom: 5px; /* Compressed */
+            font-size: 2rem;
+            margin-bottom: 5px;
             color: var(--text-primary);
         }
 
         .user-dashboard-info p {
-            font-size: 0.95rem; /* Compressed */
-            margin-bottom: 4px; /* Compressed */
+            font-size: 0.95rem;
+            margin-bottom: 4px;
             color: var(--text-secondary);
         }
 
         .user-dashboard-info strong {
-            font-weight: 600;
+            font-weight: 500; /* Standard font weight */
             color: var(--text-primary);
         }
 
@@ -864,113 +807,125 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px; /* Compressed */
-            margin-bottom: 18px; /* Compressed */
-        }
-
-        .month-selector .premium-button {
-            padding: 8px 16px; /* Compressed */
-            font-size: 0.85rem; /* Compressed */
-            border-radius: 20px; /* Compressed */
-            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
-        }
-
-        .month-selector .premium-button:hover {
-            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2); /* Compressed */
+            gap: 10px;
+            margin-bottom: 18px;
         }
 
         /* Styling for the new month dropdown */
         #monthSelectDropdown {
-            padding: 8px 16px; /* Compressed */
-            font-size: 0.95rem; /* Compressed */
-            border-radius: 8px; /* Compressed */
+            padding: 8px 16px;
+            font-size: 0.9rem; /* Standard font size */
+            border-radius: 6px;
             border: 1px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-primary);
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
+            box-shadow: 0 2px 6px var(--shadow-color);
+            font-weight: 400; /* Standard font weight */
         }
 
         #monthSelectDropdown:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25); /* Compressed */
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
             outline: none;
         }
 
         .current-month {
-            font-size: 1.2rem; /* Compressed */
-            font-weight: 600;
+            font-size: 1.1rem; /* Standard font size */
+            font-weight: 500; /* Standard font weight */
             color: var(--text-primary);
             transition: color var(--transition-speed);
         }
 
         .date-range-display {
             text-align: center;
-            margin-bottom: 15px; /* Compressed */
+            margin-bottom: 15px;
             color: var(--text-secondary);
-            font-size: 0.9rem; /* Compressed */
+            font-size: 0.85rem;
             transition: color var(--transition-speed);
         }
 
         .history-summary {
             background-color: var(--bg-primary);
             border-radius: var(--border-radius-base);
-            padding: 15px; /* Compressed */
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05); /* Compressed */
-            margin-top: 15px; /* Compressed */
+            padding: 15px;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
+            margin-top: 15px;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
+            display: grid; /* Use grid for layout */
+            grid-template-columns: 1fr; /* Default to single column */
+            gap: 20px; /* Space between summary and chart */
+        }
+
+        @media (min-width: 768px) {
+            .history-summary {
+                grid-template-columns: 1fr 250px; /* Two columns: summary grid and chart */
+            }
         }
 
         .history-summary h3 {
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 12px; /* Compressed */
-            font-size: 1.2rem; /* Compressed */
+            margin-bottom: 12px;
+            font-size: 1.2rem;
         }
 
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Compressed */
-            gap: 10px; /* Compressed */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
             text-align: center;
         }
 
         .summary-grid div {
             background-color: var(--bg-secondary);
-            padding: 12px; /* Compressed */
-            border-radius: 6px; /* Compressed */
-            box-shadow: 0 1px 6px var(--shadow-color); /* Compressed */
-            font-weight: 500;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 6px var(--shadow-color);
+            font-weight: 400; /* Standard font weight */
             transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--transition-speed);
             border: 1px solid var(--border-color);
         }
 
         .summary-grid div:hover {
-            transform: translateY(-2px); /* Compressed */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Compressed */
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .summary-grid strong {
             color: var(--text-primary);
             display: block;
-            margin-bottom: 3px; /* Compressed */
-            font-size: 0.85rem; /* Compressed */
+            margin-bottom: 3px;
+            font-size: 0.8rem; /* Adjusted font size */
         }
 
         .summary-grid span {
-            font-size: 1.1rem; /* Compressed */
+            font-size: 1rem; /* Adjusted font size */
             color: var(--accent-color);
-            font-weight: 700;
+            font-weight: 600; /* Standard font weight */
+        }
+
+        /* Chart container styling */
+        .chart-container {
+            position: relative;
+            width: 100%; /* Take full width of its grid column */
+            max-width: 250px; /* Max width for circular chart */
+            margin: 0 auto;
+            padding: 10px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: 0 1px 6px var(--shadow-color);
+            align-self: center; /* Vertically align in grid */
         }
 
         /* --- Data Entry Form (if visible) --- */
         .data-entry-form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Compressed */
-            gap: 15px; /* Compressed */
-            margin-bottom: 20px; /* Compressed */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .data-entry-form .input-group {
@@ -982,10 +937,10 @@
         .data-entry-form input[type="text"],
         .data-entry-form select {
             width: 100%;
-            padding: 10px 12px; /* Compressed */
+            padding: 10px 12px;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius-base);
-            font-size: 0.9rem; /* Compressed */
+            font-size: 0.9rem;
             background-color: var(--input-bg);
             color: var(--text-primary);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
@@ -994,7 +949,7 @@
         .data-entry-form input:focus,
         .data-entry-form select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
             outline: none;
         }
 
@@ -1010,20 +965,20 @@
             overflow-x: auto;
         }
 
-        #attendanceTable, #historyAttendanceTable, #usersTable {
+        #attendanceTable, #historyAttendanceTable {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-top: 15px; /* Compressed */
+            margin-top: 15px;
             background-color: var(--bg-secondary);
-            box-shadow: 0 4px 15px var(--shadow-color); /* Compressed */
-            border-radius: 15px; /* Compressed */
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
-        #attendanceTable thead, #historyAttendanceTable thead, #usersTable thead {
+        #attendanceTable thead, #historyAttendanceTable thead {
             background-color: var(--table-header-bg);
             color: var(--nav-text);
             transition: background-color var(--transition-speed), color var(--transition-speed);
@@ -1032,88 +987,98 @@
         #attendanceTable th,
         #attendanceTable td,
         #historyAttendanceTable th,
-        #historyAttendanceTable td,
-        #usersTable th,
-        #usersTable td {
-            padding: 10px 12px; /* Compressed */
+        #historyAttendanceTable td {
+            padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
             transition: color var(--transition-speed), border-color var(--transition-speed);
         }
 
-        #attendanceTable th, #historyAttendanceTable th, #usersTable th {
-            font-weight: 600;
+        #attendanceTable th, #historyAttendanceTable th {
+            font-weight: 500; /* Standard font weight */
             text-transform: uppercase;
-            font-size: 0.8rem; /* Compressed */
-            letter-spacing: 0.2px; /* Compressed */
+            font-size: 0.75rem;
+            letter-spacing: 0.2px;
         }
 
-        #attendanceTable tbody tr:nth-child(even), #historyAttendanceTable tbody tr:nth-child(even), #usersTable tbody tr:nth-child(even) {
+        #attendanceTable tbody tr:nth-child(even), #historyAttendanceTable tbody tr:nth-child(even) {
             background-color: var(--table-row-even);
             transition: background-color var(--transition-speed);
         }
 
-        #attendanceTable tbody tr:hover, #historyAttendanceTable tbody tr:hover, #usersTable tbody tr:hover {
+        #attendanceTable tbody tr:hover, #historyAttendanceTable tbody tr:hover {
             background-color: var(--table-row-hover);
             cursor: pointer;
             transition: background-color var(--transition-speed);
         }
 
+        /* Status Background Colors for Table Rows */
+        .status-present-row { background-color: var(--status-present-bg) !important; }
+        .status-absent-row { background-color: var(--status-absent-bg) !important; }
+        .status-weekend-row { background-color: var(--status-weekend-bg) !important; }
+        .status-holiday-row { background-color: var(--status-holiday-bg) !important; }
+        .status-government_holiday-row { background-color: var(--status-govt-holiday-bg) !important; }
+        .status-sick_leave-row { background-color: var(--status-sick-leave-bg) !important; }
+
+
         .table-actions button {
             background-color: var(--accent-color);
             color: var(--nav-text);
             border: none;
-            padding: 6px 10px; /* Compressed */
-            border-radius: 4px; /* Compressed */
+            padding: 6px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.75rem; /* Compressed */
-            margin-right: 4px; /* Compressed */
+            font-size: 0.7rem; /* Adjusted font size */
+            margin-right: 4px;
             transition: all var(--transition-speed);
-            box-shadow: 0 1px 4px rgba(108, 99, 255, 0.2); /* Compressed */
+            box-shadow: 0 1px 4px rgba(108, 99, 255, 0.2);
         }
 
         .table-actions button:hover {
             background-color: var(--accent-color);
             transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3); /* Compressed */
+            box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3);
         }
 
         .table-actions .delete-button {
             background-color: var(--status-absent);
-            box-shadow: 0 1px 4px rgba(231, 76, 60, 0.2); /* Compressed */
+            box-shadow: 0 1px 4px rgba(231, 76, 60, 0.2);
         }
 
         .table-actions .delete-button:hover {
             background-color: var(--status-absent);
-            box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3); /* Compressed */
+            box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3);
         }
 
         /* Specific Status Colors (Text Only) */
-        .status-present { color: var(--status-present); font-weight: 600; transition: color var(--transition-speed); }
-        .status-absent { color: var(--status-absent); font-weight: 600; transition: color var(--transition-speed); }
-        .status-weekend { color: var(--status-weekend); font-weight: 600; transition: color var(--transition-speed); }
-        .status-holiday { color: var(--status-holiday); font-weight: 600; transition: color var(--transition-speed); }
+        .status-present { color: var(--status-present); font-weight: 500; transition: color var(--transition-speed); }
+        .status-absent { color: var(--status-absent); font-weight: 500; transition: color var(--transition-speed); }
+        .status-weekend { color: var(--status-weekend); font-weight: 500; transition: color var(--transition-speed); }
+        .status-holiday { color: var(--status-holiday); font-weight: 500; transition: color var(--transition-speed); }
+        .status-government_holiday { color: var(--status-govt-holiday); font-weight: 500; transition: color var(--transition-speed); }
+        .status-sick_leave { color: var(--status-sick-leave); font-weight: 500; transition: color var(--transition-speed); }
         
         /* Modal for Status Selection */
         #statusSelectionModal .modal-options button {
             display: block;
             width: 100%;
-            padding: 12px; /* Compressed */
-            margin-bottom: 8px; /* Compressed */
+            padding: 10px;
+            margin-bottom: 8px;
             border: 1px solid var(--border-color);
-            border-radius: 8px; /* Compressed */
+            border-radius: 6px;
             background-color: var(--input-bg);
             color: var(--text-primary);
-            font-size: 0.95rem; /* Compressed */
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 2px 6px var(--shadow-color); /* Compressed */
+            box-shadow: 0 2px 6px var(--shadow-color);
+            font-weight: 400; /* Standard font weight */
         }
         #statusSelectionModal .modal-options button:hover {
             background-color: var(--border-color);
-            transform: translateY(-1px); /* Compressed */
-            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2); /* Compressed */
+            transform: translateY(-1px);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
         }
         #statusSelectionModal .modal-options button:last-child {
             margin-bottom: 0;
@@ -1121,38 +1086,39 @@
 
         /* Modal for Present Entry */
         #presentEntryModal .input-group {
-            margin-bottom: 12px; /* Compressed */
+            margin-bottom: 12px;
         }
         #presentEntryModal .input-group label {
             display: block;
-            margin-bottom: 4px; /* Compressed */
-            font-weight: 600;
+            margin-bottom: 4px;
+            font-weight: 500; /* Standard font weight */
             color: var(--text-primary);
         }
         #presentEntryModal .input-group input,
         #presentEntryModal .input-group select {
-            padding: 10px 12px; /* Compressed */
-            border-radius: 8px; /* Compressed */
+            padding: 10px 12px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
             width: 100%;
-            font-size: 0.95rem; /* Compressed */
+            font-size: 0.9rem;
             background-color: var(--input-bg);
             color: var(--text-primary);
+            font-weight: 400; /* Standard font weight */
         }
         #presentEntryModal .input-group input:focus,
         #presentEntryModal .input-group select:focus {
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
             outline: none;
         }
         #presentEntryModal .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 8px; /* Compressed */
-            margin-top: 15px; /* Compressed */
+            gap: 8px;
+            margin-top: 15px;
         }
         #presentEntryModal .modal-buttons .premium-button {
-            padding: 8px 16px; /* Compressed */
-            font-size: 0.9rem; /* Compressed */
+            padding: 8px 16px;
+            font-size: 0.85rem; /* Adjusted font size */
         }
         #presentEntryModal .modal-buttons .premium-button.save {
             background-color: var(--accent-color);
@@ -1172,34 +1138,35 @@
         /* Edit/Delete Modal specific styles */
         #editDeleteModal .modal-content .input-group label {
             display: block;
-            margin-bottom: 4px; /* Compressed */
-            font-weight: 600;
+            margin-bottom: 4px;
+            font-weight: 500; /* Standard font weight */
             color: var(--text-primary);
         }
         #editDeleteModal .modal-content .input-group input,
         #editDeleteModal .modal-content .input-group select {
-            padding: 10px 12px; /* Compressed */
-            border-radius: 8px; /* Compressed */
+            padding: 10px 12px;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
             width: 100%;
-            font-size: 0.95rem; /* Compressed */
+            font-size: 0.9rem;
             background-color: var(--input-bg);
             color: var(--text-primary);
+            font-weight: 400; /* Standard font weight */
         }
         #editDeleteModal .modal-content .input-group input:focus,
         #editDeleteModal .modal-content .input-group select:focus {
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
             outline: none;
         }
         #editDeleteModal .modal-content .modal-buttons {
             display: flex;
             justify-content: flex-end;
-            gap: 8px; /* Compressed */
-            margin-top: 15px; /* Compressed */
+            gap: 8px;
+            margin-top: 15px;
         }
         #editDeleteModal .modal-content .modal-buttons .premium-button {
-            padding: 8px 16px; /* Compressed */
-            font-size: 0.9rem; /* Compressed */
+            padding: 8px 16px;
+            font-size: 0.85rem; /* Adjusted font size */
         }
         #editDeleteModal .modal-content .modal-buttons .premium-button.save {
             background-color: var(--accent-color);
@@ -1223,28 +1190,28 @@
         #historySection .date-range-inputs {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px; /* Compressed */
+            gap: 15px;
             justify-content: center;
-            margin-bottom: 20px; /* Compressed */
+            margin-bottom: 20px;
         }
 
         #historySection .date-range-inputs .input-group {
             flex: 1;
-            min-width: 220px; /* Compressed */
+            min-width: 220px;
         }
 
         #historySection .date-range-inputs button {
             flex-grow: 1;
-            max-width: 160px; /* Compressed */
-            margin-top: 24px; /* Compressed */
+            max-width: 160px;
+            margin-top: 24px;
         }
 
         #historySummaryResult {
-            margin-top: 20px; /* Compressed */
-            padding: 15px; /* Compressed */
+            margin-top: 20px;
+            padding: 15px;
             background-color: var(--bg-primary);
             border-radius: var(--border-radius-base);
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05); /* Compressed */
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
@@ -1252,56 +1219,56 @@
         #historySummaryResult h3 {
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 12px; /* Compressed */
-            font-size: 1.2rem; /* Compressed */
+            margin-bottom: 12px;
+            font-size: 1.2rem;
         }
 
         /* --- Footer --- */
         footer {
             text-align: center;
-            padding: 20px 15px; /* Compressed */
+            padding: 20px 15px;
             background-color: var(--footer-bg);
             color: var(--footer-text);
-            font-size: 0.8rem; /* Compressed */
-            margin-top: 30px; /* Compressed */
-            border-top: 3px solid var(--accent-color); /* Compressed */
+            font-size: 0.8rem;
+            margin-top: 30px;
+            border-top: 3px solid var(--accent-color);
             animation: fadeIn 0.8s ease-out;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             align-items: flex-start;
-            gap: 15px; /* Compressed */
-            box-shadow: 0 -3px 15px rgba(0,0,0,0.3); /* Compressed */
+            gap: 15px;
+            box-shadow: 0 -3px 15px rgba(0,0,0,0.3);
             transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
         }
 
         footer .footer-section {
             flex: 1;
-            min-width: 200px; /* Compressed */
+            min-width: 200px;
             text-align: center;
         }
 
         footer .footer-section h4 {
-            font-size: 1rem; /* Compressed */
-            margin-bottom: 10px; /* Compressed */
-            color: var(--accent-color); /* Accent color for footer headings */
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
             font-family: 'Poppins', sans-serif;
-            font-weight: 700;
+            font-weight: 600; /* Standard font weight */
             transition: color var(--transition-speed);
         }
 
         footer .footer-section p {
             display: flex;
             align-items: center;
-            margin-bottom: 5px; /* Compressed */
+            margin-bottom: 5px;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.85rem; /* Compressed */
+            font-size: 0.8rem; /* Adjusted font size */
         }
 
         footer .footer-section p i {
-            margin-right: 8px; /* Compressed */
-            color: rgba(255, 255, 255, 0.6); /* Softer icon color */
-            font-size: 1rem; /* Compressed */
+            margin-right: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
         }
 
         footer .footer-section a {
@@ -1318,10 +1285,10 @@
         /* Custom Alert/Confirm Modal Styles */
         #customAlertModal .modal-content,
         #customConfirmModal .modal-content {
-            padding: 25px; /* Compressed */
-            max-width: 380px; /* Compressed */
+            padding: 25px;
+            max-width: 380px;
             text-align: center;
-            border-left: 6px solid; /* Compressed */
+            border-left: 6px solid;
             animation: slideDownFadeIn 0.3s ease-out;
             transition: border-color var(--transition-speed);
         }
@@ -1337,52 +1304,52 @@
 
         #customAlertModal h2,
         #customConfirmModal h2 {
-            font-size: 1.4rem; /* Compressed */
-            margin-bottom: 10px; /* Compressed */
+            font-size: 1.4rem;
+            margin-bottom: 10px;
             color: var(--text-primary);
         }
 
         #customAlertModal p,
         #customConfirmModal p {
-            font-size: 0.9rem; /* Compressed */
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 20px; /* Compressed */
+            margin-bottom: 20px;
         }
 
         #customAlertModal .modal-buttons,
         #customConfirmModal .modal-buttons {
             justify-content: center;
-            gap: 10px; /* Compressed */
+            gap: 10px;
         }
 
         #customAlertModal .modal-buttons .premium-button,
         #customConfirmModal .modal-buttons .premium-button {
-            padding: 8px 20px; /* Compressed */
-            font-size: 0.9rem; /* Compressed */
+            padding: 8px 20px;
+            font-size: 0.9rem;
         }
 
         /* Help Modal Specific Styles */
         .help-modal-content {
-            background-color: var(--bg-secondary); /* Use theme background */
+            background-color: var(--bg-secondary);
             text-align: center;
-            padding: 40px; /* Compressed */
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy animation */
+            padding: 40px;
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px var(--shadow-color); /* Compressed */
+            box-shadow: 0 10px 30px var(--shadow-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .help-modal-content h2 {
-            font-size: 2.2rem; /* Compressed */
+            font-size: 2.2rem;
             color: var(--accent-color);
-            margin-bottom: 15px; /* Compressed */
+            margin-bottom: 15px;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
         }
 
         .help-modal-content p {
-            font-size: 1.3rem; /* Compressed */
+            font-size: 1.2rem; /* Adjusted font size */
             color: var(--text-primary);
-            font-weight: 600;
+            font-weight: 500; /* Standard font weight */
         }
 
         @keyframes bounceIn {
@@ -1392,259 +1359,35 @@
             100% { transform: scale(1); }
         }
 
-        /* Tic-Tac-Toe Modal Specific Styles */
-        #ticTacToeModal .modal-content {
-            max-width: 400px; /* Compressed */
-            padding: 25px; /* Compressed */
-        }
-
-        .tic-tac-toe-board {
-            display: grid;
-            grid-template-columns: repeat(3, 90px); /* Compressed */
-            grid-template-rows: repeat(3, 90px); /* Compressed */
-            gap: 4px; /* Compressed */
-            width: 282px; /* 3*90 + 2*4 */ /* Compressed */
-            margin: 15px auto; /* Compressed */
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-base);
-            overflow: hidden;
-            background-color: var(--bg-primary);
-            transition: background-color var(--transition-speed), border-color var(--transition-speed);
-        }
-
-        .cell {
-            width: 90px; /* Compressed */
-            height: 90px; /* Compressed */
-            border: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 3em; /* Compressed */
-            font-weight: 700;
-            cursor: pointer;
-            user-select: none; /* Prevent text selection on click */
-            transition: background-color 0.2s ease, color 0.2s ease, border-color var(--transition-speed);
-            color: var(--text-primary); /* Default color, overridden by .x/.o */
-        }
-
-        .cell:hover {
-            background-color: var(--input-bg);
-        }
-
-        .cell.x { color: var(--accent-color); } /* Use accent color for X */
-        .cell.o { color: var(--status-absent); } /* Use alert-error color for O */
-
-        #ticTacToeGameOptions { /* Renamed from #gameOptions to be specific */
-            margin-bottom: 15px; /* Compressed */
-        }
-
-        #ticTacToeGameOptions button { /* Renamed from #gameOptions button */
-            margin: 4px; /* Compressed */
-        }
-
-        #ticTacToeGameStatus { /* Renamed from #gameStatus to be specific */
-            font-size: 1.1rem; /* Compressed */
-            font-weight: 600;
-            margin-top: 15px; /* Compressed */
-            color: var(--text-primary);
-        }
-
-        .tic-tac-toe-stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px; /* Compressed */
-            gap: 8px; /* Compressed */
-            font-size: 0.95rem; /* Compressed */
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-        .tic-tac-toe-stats div {
-            padding: 6px 10px; /* Compressed */
-            border-radius: 6px; /* Compressed */
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 1px 4px var(--shadow-color); /* Compressed */
-            transition: background-color 0.2s ease;
-        }
-        .tic-tac-toe-stats div span {
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-        .tic-tac-toe-stats .wins span { color: var(--alert-success); }
-        .tic-tac-toe-stats .losses span { color: var(--alert-error); }
-        .tic-tac-toe-stats .draws span { color: var(--alert-info); }
-
-
-        /* Typing Test Section Styling */
-        #typingTestSection {
-            display: none; /* Hidden by default */
-            padding-top: 20px; /* Compressed */
-        }
-
-        #paragraphDisplay {
-            font-size: 1.1em; /* Compressed */
-            line-height: 1.5; /* Compressed */
-            margin-bottom: 15px; /* Compressed */
-            white-space: pre-wrap; /* Preserves formatting */
-            word-wrap: break-word; /* Breaks long words */
-            background-color: var(--input-bg);
-            padding: 15px; /* Compressed */
-            border-radius: var(--border-radius-base);
-            border: 1px solid var(--border-color);
-            min-height: 120px; /* Compressed */
-            display: flex; /* Use flex to wrap spans */
-            flex-wrap: wrap;
-            align-content: flex-start;
-            transition: background-color var(--transition-speed), border-color var(--transition-speed);
-        }
-
-        #paragraphDisplay span {
-            transition: background-color 0.1s ease, color 0.1s ease;
-            padding: 0px; /* Compressed */
-        }
-
-        #typingInput {
-            font-family: monospace; /* For better character alignment */
-            font-size: 1em; /* Compressed */
-            padding: 12px; /* Compressed */
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-base);
-            width: 100%;
-            box-sizing: border-box; /* Include padding in width */
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
-            resize: vertical; /* Allow vertical resizing */
-            min-height: 80px; /* Compressed */
-        }
-
-        #typingInput:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2); /* Compressed */
-            outline: none;
-        }
-
-        /* Highlight correct/incorrect characters (JS will add these classes) */
-        .correct {
-            color: green;
-        }
-        .incorrect {
-            color: red;
-            background-color: rgba(255, 0, 0, 0.1); /* Subtle red background for errors */
-            border-bottom: 1px dashed red; /* Underline for errors */
-        }
-        .current-char {
-            background-color: yellow;
-            border-radius: 3px;
-            color: black; /* Ensure contrast */
-        }
-
-        .typing-stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 15px; /* Compressed */
-            flex-wrap: wrap;
-        }
-
-        .typing-stats div {
-            flex: 1;
-            min-width: 130px; /* Compressed */
-            text-align: center;
-            margin: 8px; /* Compressed */
-            padding: 12px; /* Compressed */
-            background-color: var(--bg-primary);
-            border-radius: var(--border-radius-base);
-            box-shadow: 0 1px 6px var(--shadow-color); /* Compressed */
-            transition: background-color var(--transition-speed);
-        }
-
-        .typing-stats h5 {
-            font-size: 1rem; /* Compressed */
-            margin-bottom: 3px; /* Compressed */
-        }
-
-        .typing-stats span {
-            font-size: 1.6rem; /* Compressed */
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
-        .level-selection .premium-button {
-            margin: 4px; /* Compressed */
-            padding: 6px 14px; /* Compressed */
-            font-size: 0.85rem; /* Compressed */
-            border-radius: 6px; /* Compressed */
-        }
-        .level-selection .premium-button.active {
-            background-color: var(--accent-color);
-            color: var(--nav-text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Compressed */
-        }
-        .level-selection .premium-button.active:hover {
-            transform: translateY(-1px); /* Compressed */
-        }
-
-        #testResultsList {
-            list-style: none;
-            padding: 0;
-        }
-
-        #testResultsList .list-item {
-            background-color: var(--bg-primary);
-            margin-bottom: 8px; /* Compressed */
-            padding: 12px; /* Compressed */
-            border-radius: var(--border-radius-base);
-            box-shadow: 0 1px 4px var(--shadow-color); /* Compressed */
-            font-size: 0.9rem; /* Compressed */
-            color: var(--text-primary);
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-        }
-
-        #testResultsList .list-item:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Users List Section */
-        /* This section is removed from the HTML based on user request */
-        /* #usersListSection {
-            display: none;
-            padding-top: 30px;
-        } */
-
-        /* Add User Modal */
-        /* This modal is removed from the HTML based on user request */
-        /* #addUserModal .modal-content {
-            max-width: 400px;
-        } */
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             #main-navbar {
                 flex-direction: column;
-                padding: 10px 15px; /* Compressed */
-                gap: 8px; /* Compressed */
+                padding: 10px 15px;
+                gap: 8px;
             }
             .nav-links {
                 margin-left: 0;
                 justify-content: center;
                 width: 100%;
-                gap: 10px; /* Compressed */
+                gap: 10px;
             }
             .user-profile-menu {
-                margin-top: 8px; /* Compressed */
+                margin-top: 8px;
             }
             .auth-container {
-                padding: 25px; /* Compressed */
+                padding: 25px;
+                max-width: 90%;
             }
             .auth-container h1.premium-heading {
-                font-size: 2rem; /* Compressed */
+                font-size: 1.6rem;
             }
             .auth-container .sub-heading {
-                font-size: 0.9rem; /* Compressed */
+                font-size: 0.85rem;
             }
             .premium-button {
-                padding: 10px 20px; /* Compressed */
-                font-size: 0.85rem; /* Compressed */
+                padding: 10px 20px;
+                font-size: 0.85rem;
             }
             .data-entry-form {
                 grid-template-columns: 1fr;
@@ -1673,42 +1416,11 @@
             }
 
             #historySection .date-range-inputs button {
-                margin-top: 8px; /* Compressed */
+                margin-top: 8px;
             }
 
-            /* Adjust game canvas size for smaller screens */
-            #gameCanvas { /* This is for snake game, which is removed, but keeping for reference */
-                width: 100%; /* Make canvas fill width */
-                height: 300px; /* Set a fixed height or adjust dynamically */
-            }
-            #gameControls { /* This is for snake game, which is removed, but keeping for reference */
-                flex-direction: column; /* Stack buttons vertically */
-            }
-            #gameControls button { /* This is for snake game, which is removed, but keeping for reference */
-                width: 80%; /* Make buttons wider */
-            }
-
-            .tic-tac-toe-board {
-                grid-template-columns: repeat(3, 70px); /* Compressed */
-                grid-template-rows: repeat(3, 70px); /* Compressed */
-                width: 222px; /* 3*70 + 2*4 */ /* Compressed */
-            }
-
-            .cell {
-                width: 70px; /* Compressed */
-                height: 70px; /* Compressed */
-                font-size: 2.5em; /* Compressed */
-            }
-
-            .game-list-grid {
-                grid-template-columns: 1fr; /* Stack game cards on small screens */
-            }
-
-            .typing-stats {
-                flex-direction: column;
-            }
-            .typing-stats div {
-                margin: 5px 0;
+            .history-summary {
+                grid-template-columns: 1fr; /* Stack summary and chart vertically */
             }
         }
     </style>
@@ -1717,8 +1429,6 @@
     <!-- Login/Registration Section -->
     <div id="authSection" class="login-page-body">
         <div class="auth-container">
-            <!-- The sub-heading is outside the forms, so it applies to the whole auth-container -->
-            <!-- We will update the h1 content dynamically in JS -->
             <h1 class="premium-heading" id="authHeading"></h1> 
 
             <form id="loginForm" class="auth-form active">
@@ -1788,9 +1498,6 @@
             <ul class="nav-links">
                 <li><a href="#" id="homeNavLink">Home</a></li>
                 <li><a href="#" id="historyNavLink">History</a></li>
-                <li><a href="#" id="gamesNavLink">Games</a></li> <!-- New Games Link -->
-                <li><a href="#" id="typingTestNavLink">Typing Test</a></li> <!-- New Typing Test Link -->
-                <!-- <li><a href="#" id="usersNavLink">Users</a></li> Removed Users Link -->
                 <li><a href="#" id="helpNavLink">Help</a></li>
             </ul>
             <div class="nav-right">
@@ -1850,14 +1557,12 @@
                     <p><strong>Worked For:</strong> <span id="workedForDisplay">0 years 0 months</span></p>
                     <p><strong>LnG ID:</b> <span id="lngIdDisplay">N/A</span></p>
                 </div>
-                <!-- Optional: Graph/Chart can go here -->
             </section>
 
             <!-- Second Section: Month Selection and History Result -->
             <section id="monthlySummarySection" class="section-card">
                 <h2>Attendance History</h2>
                 <div class="month-selector">
-                    <!-- Removed prevMonthBtn and nextMonthBtn -->
                     <select id="monthSelectDropdown"></select>
                 </div>
 
@@ -1866,18 +1571,24 @@
                 </div>
 
                 <div class="history-summary">
-                    <h3>Monthly Summary</h3>
-                    <div class="summary-grid">
-                        <div><strong>Total Hours:</strong> <span id="summaryTotalHours">0</span></div>
-                        <div><strong>Late:</strong> <span id="summaryLate">0</span></div>
-                        <div><strong>Absent:</strong> <span id="summaryAbsent">0</span></div>
-                        <div><strong>Weekends:</strong> <span id="summaryWeekend">0</span></div>
-                        <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div> <!-- New Holiday summary -->
-                        <div><strong>Working Days:</strong> <span id="summaryWorkingDays">0</span></div>
-                        <div><strong>Total Present:</strong> <span id="summaryTotalPresent">0</span></div> <!-- New Total Present -->
-                        <div><strong>Night Shifts:</strong> <span id="summaryNightShifts">0</span></div>
-                        <div><strong>Grace:</strong> <span id="summaryGrace">0</span></div>
-                        <div><strong>Day Shifts:</b> <span id="summaryDayShifts">0</span></div>
+                    <div>
+                        <h3>Monthly Summary</h3>
+                        <div class="summary-grid">
+                            <div><strong>Total Hours:</strong> <span id="summaryTotalHours">0</span></div>
+                            <div><strong>Late:</strong> <span id="summaryLate">0</span></div>
+                            <div><strong>Absent:</strong> <span id="summaryAbsent">0</span></div>
+                            <div><strong>Weekends:</strong> <span id="summaryWeekend">0</span></div>
+                            <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div> <!-- New Holiday summary -->
+                            <div><strong>Working Days:</strong> <span id="summaryWorkingDays">0</span></div>
+                            <div><strong>Total Present:</strong> <span id="summaryTotalPresent">0</span></div> <!-- New Total Present -->
+                            <div><strong>Night Shifts:</strong> <span id="summaryNightShifts">0</span></div>
+                            <div><strong>Grace:</strong> <span id="summaryGrace">0</span></div>
+                            <div><strong>Day Shifts:</b> <span id="summaryDayShifts">0</span></div>
+                        </div>
+                    </div>
+                    <!-- Chart container -->
+                    <div class="chart-container">
+                        <canvas id="monthlyAttendanceChart"></canvas>
                     </div>
                 </div>
             </section>
@@ -1897,6 +1608,7 @@
                                 <th>Late</th>
                                 <th>Shift</th>
                                 <th>Grace</th>
+                                <th>Approval</th> <!-- New Approval column -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -1953,119 +1665,13 @@
                                 <th>Late</th>
                                 <th>Shift</th>
                                 <th>Grace</th>
+                                <th>Approval</th> <!-- New Approval column -->
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Detailed entries will be populated here -->
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Games Section (New) -->
-        <section id="gamesSection" class="container">
-            <div class="section-card">
-                <h2>Our Games</h2>
-                <div class="game-list-grid">
-                    <div class="game-card" id="ticTacToeGameCard">
-                        <i class="fas fa-times-circle game-icon" style="color: blue;"></i> <!-- X icon for Tic-Tac-Toe -->
-                        <h3>Tic-Tac-Toe</h3>
-                        <button class="premium-button open-tic-tac-toe-modal">Play Now</button>
-                    </div>
-                    <div class="game-card">
-                        <i class="fas fa-palette game-icon"></i>
-                        <h3>Coloring Game</h3>
-                        <button class="premium-button secondary" disabled>Coming Soon</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Typing Test Section (New) -->
-        <section id="typingTestSection" class="container">
-            <div class="section-card">
-                <h2>Improve Your Typing Speed</h2>
-                <!-- Level Selection -->
-                <div class="text-center mb-4 level-selection">
-                    <h4>Select Difficulty:</h4>
-                    <div class="btn-group" role="group" aria-label="Typing Levels">
-                        <button type="button" class="premium-button secondary" id="levelEasy">Easy</button>
-                        <button type="button" class="premium-button secondary" id="levelNormal">Normal</button>
-                        <button type="button" class="premium-button secondary" id="levelHard">Hard</button>
-                    </div>
-                </div>
-
-                <!-- Paragraph Selection -->
-                <div class="input-group mb-4">
-                    <label for="paragraphHeadlineSelect">Select Paragraph:</label>
-                    <select id="paragraphHeadlineSelect" class="form-control">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
-
-                <!-- Time Selection -->
-                <div class="input-group mb-4">
-                    <label for="testDuration">Test Duration (minutes):</label>
-                    <select id="testDuration" class="form-control">
-                        <option value="1">1 minute</option>
-                        <option value="2" selected>2 minutes</option>
-                        <option value="3">3 minutes</option>
-                        <option value="4">4 minutes</option>
-                        <option value="5">5 minutes</option>
-                        <option value="6">6 minutes</option>
-                        <option value="7">7 minutes</option>
-                        <option value="8">8 minutes</option>
-                        <option value="9">9 minutes</option>
-                        <option value="10">10 minutes</option>
-                    </select>
-                </div>
-
-                <!-- Paragraph Display Area -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <p id="paragraphDisplay" class="lead text-muted"></p>
-                        <textarea id="typingInput" class="form-control" rows="5" placeholder="Start typing here..." autofocus></textarea>
-                    </div>
-                </div>
-
-                <!-- Speed and Accuracy Display -->
-                <div class="typing-stats">
-                    <div>
-                        <h5>Speed:</h5>
-                        <span id="wpmDisplay">0</span> WPM
-                    </div>
-                    <div>
-                        <h5>Accuracy:</h5>
-                        <span id="accuracyDisplay">100</span>%
-                    </div>
-                    <div>
-                        <h5>Time Left:</h5>
-                        <span id="timeLeftDisplay">00:00</span>
-                    </div>
-                    <div>
-                        <h5>Highest Score:</h5>
-                        <span id="highestWPMDisplay">0</span> WPM
-                    </div>
-                </div>
-
-                <!-- Timer/Controls -->
-                <div class="text-center mb-4">
-                    <button class="premium-button" id="startTest">Start Test</button>
-                    <button class="premium-button secondary" id="resetTest" style="display: none;">Reset Test</button>
-                </div>
-
-                <!-- Results Section -->
-                <div class="card mt-5 section-card">
-                    <div class="card-header">
-                        <h3>Your Typing History</h3>
-                    </div>
-                    <ul id="testResultsList" class="list-group list-group-flush">
-                        <!-- Results will be added here dynamically -->
-                    </ul>
-                    <div class="card-footer text-muted text-center" style="background-color: var(--bg-primary); border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        Results saved locally in your browser.
-                    </div>
                 </div>
             </div>
         </section>
@@ -2079,7 +1685,9 @@
                     <button class="premium-button" id="selectPresent">Present</button>
                     <button class="premium-button" id="selectWeekend">Weekend</button>
                     <button class="premium-button" id="selectAbsent">Absent</button>
-                    <button class="premium-button" id="selectHoliday">Holiday</button> <!-- New Holiday button -->
+                    <button class="premium-button" id="selectHoliday">Holiday</button>
+                    <button class="premium-button" id="selectGovernmentHoliday">Government Holiday</button> <!-- New button -->
+                    <button class="premium-button" id="selectSickLeave">Sick Leave</button> <!-- New button -->
                 </div>
             </div>
         </div>
@@ -2088,37 +1696,48 @@
         <div id="presentEntryModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" id="closePresentEntryModal">&times;</span>
-                <h2>Enter Present Details</h2>
+                <h2>Enter Details</h2>
                 <div class="input-group">
                     <label for="presentEntryDate">Date</label>
                     <input type="date" id="presentEntryDate" readonly>
                 </div>
                 <div class="input-group">
+                    <label for="presentEntryStatus">Status</label> <!-- New status display in present modal -->
+                    <input type="text" id="presentEntryStatus" readonly value="Present">
+                </div>
+                <div class="input-group" id="presentHourGroup">
                     <label for="presentHour">Hour</label>
-                    <input type="number" id="presentHour" min="0" max="24" value="9" placeholder="e.g., 9" required>
+                    <input type="number" id="presentHour" min="0" max="24" value="9" placeholder="e.g., 9">
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="presentExtraHourGroup">
                     <label for="presentExtraHour">Extra Hour</label>
-                    <input type="number" id="presentExtraHour" min="0" max="24" value="0" placeholder="e.g., 2" required>
+                    <input type="number" id="presentExtraHour" min="0" max="24" value="0" placeholder="e.g., 2">
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="presentLateGroup">
                     <label for="presentLate">Late (HH:MM)</label>
                     <input type="text" id="presentLate" value="00:00" readonly>
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="presentShiftTypeGroup">
                     <label for="presentShiftType">Shift</label>
                     <select id="presentShiftType">
                         <option value="Day">Day</option>
                         <option value="Night">Night</option>
                     </select>
                 </div>
-                <div class="input-group">
+                <div class="input-group" id="presentGraceGroup">
                     <label for="presentGrace">Grace</label>
                     <select id="presentGrace">
                         <option value="-">-</option>
                         <option value="Yes">Yes</option>
                     </select>
                     <small id="graceLimitMessage" style="color: var(--alert-error); display: none;">Grace limit reached for this month (5/5)</small>
+                </div>
+                <div class="input-group" id="presentApprovalGroup"> <!-- New Approval group -->
+                    <label for="presentApproval">Approval</label>
+                    <select id="presentApproval">
+                        <option value="-">-</option>
+                        <option value="Approved">Approved</option>
+                    </select>
                 </div>
                 <div class="modal-buttons">
                     <button id="savePresentEntryBtn" class="premium-button save">Save</button>
@@ -2143,16 +1762,18 @@
                         <option value="Present">Present</option>
                         <option value="Weekend">Weekend</option>
                         <option value="Absent">Absent</option>
-                        <option value="Holiday">Holiday</option> <!-- New Holiday option -->
+                        <option value="Holiday">Holiday</option>
+                        <option value="Government_Holiday">Government Holiday</option> <!-- New Holiday option -->
+                        <option value="Sick_Leave">Sick Leave</option> <!-- New Sick Leave option -->
                     </select>
                 </div>
-                <div class="input-group" id="editPresentDetailsGroup">
+                <div class="input-group" id="editHourGroup">
                     <label for="editHour">Hour</label>
-                    <input type="number" id="editHour" min="0" max="24" placeholder="e.g., 9" required>
+                    <input type="number" id="editHour" min="0" max="24" placeholder="e.g., 9">
                 </div>
                 <div class="input-group" id="editExtraHourGroup">
                     <label for="editExtraHour">Extra Hour</label>
-                    <input type="number" id="editExtraHour" min="0" max="24" placeholder="e.g., 2" required>
+                    <input type="number" id="editExtraHour" min="0" max="24" placeholder="e.g., 2">
                 </div>
                 <div class="input-group" id="editLateHourGroup">
                     <label for="editLateHour">Late (HH:MM)</label>
@@ -2172,6 +1793,13 @@
                         <option value="Yes">Yes</option>
                     </select>
                     <small id="editGraceLimitMessage" style="color: var(--alert-error); display: none;">Grace limit reached for this month (5/5)</small>
+                </div>
+                <div class="input-group" id="editApprovalGroup"> <!-- New Approval group -->
+                    <label for="editApproval">Approval</label>
+                    <select id="editApproval">
+                        <option value="-">-</option>
+                        <option value="Approved">Approved</option>
+                    </select>
                 </div>
                 <div class="modal-buttons">
                     <button id="updateEntryBtn" class="premium-button save">Update</button>
@@ -2211,43 +1839,6 @@
                 <span class="close-button" id="closeHelpModal">&times;</span>
                 <h2 id="helpModalTitle">Nothing to Help Here</h2>
                 <p id="helpModalMessage">😁😁</p>
-            </div>
-        </div>
-
-        <!-- Tic-Tac-Toe Game Modal (New) -->
-        <div id="ticTacToeModal" class="modal zoom-anim">
-            <div class="modal-content">
-                <span class="close-button" id="closeTicTacToeModal">&times;</span>
-                <h2>Tic-Tac-Toe</h2>
-                <!-- Game Options -->
-                <div id="ticTacToeGameOptions">
-                    <p>Select Opponent:</p>
-                    <button class="premium-button" id="playVsComputer">Play vs. Computer</button>
-                    <button class="premium-button secondary" id="playVsPlayer">Play vs. Player 2</button>
-                </div>
-
-                <!-- Game Area (initially hidden) -->
-                <div id="ticTacToeGameArea" style="display: none;">
-                    <div id="ticTacToeBoard" class="tic-tac-toe-board">
-                        <!-- 3x3 grid for the game -->
-                        <div class="cell" data-cell-index="0"></div>
-                        <div class="cell" data-cell-index="1"></div>
-                        <div class="cell" data-cell-index="2"></div>
-                        <div class="cell" data-cell-index="3"></div>
-                        <div class="cell" data-cell-index="4"></div>
-                        <div class="cell" data-cell-index="5"></div>
-                        <div class="cell" data-cell-index="6"></div>
-                        <div class="cell" data-cell-index="7"></div>
-                        <div class="cell" data-cell-index="8"></div>
-                    </div>
-                    <div id="ticTacToeGameStatus" class="mt-3 text-center"></div>
-                    <div class="tic-tac-toe-stats">
-                        <div class="wins">Wins: <span id="ticTacToeWins">0</span></div>
-                        <div class="losses">Losses: <span id="ticTacToeLosses">0</span></div>
-                        <div class="draws">Draws: <span id="ticTacToeDraws">0</span></div>
-                    </div>
-                    <button class="premium-button secondary mt-3" id="ticTacToeResetGame">Reset Game</button>
-                </div>
             </div>
         </div>
 
@@ -2340,7 +1931,7 @@
 
             // Theme toggle button (always present in HTML)
             const themeToggle = document.getElementById('themeToggle');
-            const themeList = ['light', 'dark', 'sunset-glow', 'neon', 'forest-green']; // Added 'forest-green' theme
+            const themeList = ['light', 'dark', 'neptune-vibe']; // Updated theme list
             let currentThemeIndex = 0;
 
             // Help Modal elements (always present in HTML)
@@ -2358,19 +1949,22 @@
                 summaryLate, summaryAbsent, summaryWeekend, summaryHoliday, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace, summaryTotalPresent,
                 attendanceTableBody, editDeleteModal, editDeleteModalCloseBtn, editDateInput, editHourInput,
                 editExtraHourInput, editLateHourInput, editShiftTypeInput, updateEntryBtn, deleteEntryBtn, currentYearSpan,
-                editStatusInput, editPresentDetailsGroup, editExtraHourGroup, editLateHourGroup, editShiftTypeGroup, editGraceGroup, editGraceInput, editGraceLimitMessage;
+                editStatusInput, editPresentDetailsGroup, editExtraHourGroup, editLateHourGroup, editShiftTypeGroup, editGraceGroup, editGraceInput, editGraceLimitMessage,
+                editApprovalGroup, editApprovalInput;
 
             // Status selection modal elements
-            let statusSelectionModal, closeStatusSelectionModal, selectPresentBtn, selectWeekendBtn, selectAbsentBtn, selectHolidayBtn;
+            let statusSelectionModal, closeStatusSelectionModal, selectPresentBtn, selectWeekendBtn, selectAbsentBtn, selectHolidayBtn,
+                selectGovernmentHolidayBtn, selectSickLeaveBtn; // New status buttons
             let currentSelectedDateForStatus = null; // To store the date for which status is being set
 
             // Present entry modal elements
-            let presentEntryModal, closePresentEntryModal, presentEntryDateInput, presentHourInput, presentExtraHourInput,
-                presentLateInput, presentShiftTypeInput, presentGraceInput, savePresentEntryBtn, cancelPresentEntryBtn, graceLimitMessage;
+            let presentEntryModal, closePresentEntryModal, presentEntryDateInput, presentEntryStatusInput, presentHourInput, presentExtraHourInput,
+                presentLateInput, presentShiftTypeInput, presentGraceInput, presentApprovalInput, savePresentEntryBtn, cancelPresentEntryBtn, graceLimitMessage,
+                presentHourGroup, presentExtraHourGroup, presentLateGroup, presentShiftTypeGroup, presentGraceGroup, presentApprovalGroup;
 
             // Navigation elements
-            let homeNavLink, historyNavLink, gamesNavLink, typingTestNavLink, helpNavLinkRef; 
-            let dashboardSection, monthlySummarySection, dailyEntriesSection, historySection, gamesSection, typingTestSection; 
+            let homeNavLink, historyNavLink, helpNavLinkRef; 
+            let dashboardSection, monthlySummarySection, dailyEntriesSection, historySection; 
 
             // History page elements
             let historyDateFromInput, historyDateToInput, findHistoryResultBtn;
@@ -2378,65 +1972,14 @@
                 historySummaryWorkingDays, historySummaryDayShifts, historySummaryNightShifts, historySummaryGrace, historySummaryTotalPresent;
             let historyAttendanceTableBody;
 
-            // Tic-Tac-Toe Game Elements
-            let ticTacToeModal, closeTicTacToeModal, ticTacToeGameOptions, playVsComputerBtn, playVsPlayerBtn,
-                ticTacToeGameArea, ticTacToeBoard, ticTacToeCells, ticTacToeGameStatus, ticTacToeResetGameBtn;
-            let ticTacToeBoardState = ['', '', '', '', '', '', '', '', ''];
-            let ticTacToeCurrentPlayer = 'X';
-            let ticTacToeIsGameActive = false;
-            let ticTacToeIsVsComputer = false;
-            let ticTacToeWinsDisplay, ticTacToeLossesDisplay, ticTacToeDrawsDisplay; 
-            const ticTacToeWinningConditions = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-                [0, 4, 8], [2, 4, 6]             // Diagonals
-            ];
-
-            // Typing Test Elements
-            let paragraphDisplay, typingInput, wpmDisplay, accuracyDisplay, startTestBtn, resetTestBtn,
-                levelEasyBtn, levelNormalBtn, levelHardBtn, testResultsList, testDurationSelect, timeLeftDisplay, highestWPMDisplay,
-                paragraphHeadlineSelect; // New element for paragraph selection
-            
-            // Hardcoded paragraphs
-            const paragraphs = {
-                easy: [
-                    { headline: "A Peaceful Morning", text: "The sun rises slowly, casting a golden light over everything. Birds begin to chirp, filling the air with cheerful sounds. The streets are still quiet, and only a few people are out for a morning walk. The smell of fresh bread and tea comes from nearby homes. This is the best time of the day to think, plan, or simply enjoy the calm. A peaceful morning can make the whole day feel better. You can sit with a warm drink, listen to the sounds around you, and feel your stress fade away. Many people start their day with some quiet time or a walk to clear their minds." },
-                    { headline: "My Visit to the Zoo", text: "Last weekend, I went to the zoo with my family. It was a sunny day, perfect for walking around and seeing animals. We saw lions, tigers, bears, and even colorful birds. The giraffes looked calm and tall, and the monkeys were playing in the trees. My favorite part was watching the elephants. They sprayed water on each other and seemed very happy. The zoo also had a small train that took visitors around the park. We took lots of photos and enjoyed ice cream near the panda area. It was a fun day full of joy and learning about animals." },
-                    { headline: "Helping Others", text: "Helping people is a kind thing to do, and it can make you feel good too. When someone is in trouble or needs help, a simple act of kindness can mean a lot. You don't always need to give money. Sometimes just listening to someone or giving your time can be more helpful. At school, helping a classmate understand a lesson or picking up something they dropped is a great way to show kindness. In your neighborhood, helping an older person carry their groceries or clean their yard can make a big difference. Kindness spreads easily." },
-                    { headline: "My Favorite Hobby", text: "Everyone should have a hobby. My favorite hobby is drawing. I love to sit with my pencil and colors and draw everything I see. Sometimes I draw animals, sometimes people, and sometimes just shapes and designs. Drawing helps me feel calm and happy. I often draw when I am bored or when I want to express how I feel. It’s a great way to be creative. I even made a small album of my best drawings. My family and friends like to see my artwork. One day, I want to learn painting too." },
-                    { headline: "Why Cleanliness Matters", text: "Being clean is not just about looking nice. It helps us stay healthy too. Washing hands before eating, brushing teeth twice a day, and keeping our clothes clean are all good habits. Clean surroundings also make us feel fresh. When our home and school are clean, it is easier to think and work better. Cleanliness also shows respect for others. If everyone keeps their area clean, the whole community benefits. So let’s throw trash in the bin, keep water sources clean, and teach others to do the same." }
-                ],
-                normal: [
-                    { headline: "The Power of Habit", text: "Habits are powerful because they shape our daily lives. What we do repeatedly becomes a part of us. Good habits such as waking up early, reading, or exercising regularly can make us healthier, smarter, and more productive. On the other hand, bad habits like procrastination, unhealthy eating, or wasting too much time on social media can slow us down. The good news is that habits can be changed. It takes time, effort, and a clear goal. Once you decide to improve, taking small steps every day can lead to big changes. A consistent habit forms a routine, and routines build discipline." },
-                    { headline: "The Magic of Nature", text: "Nature has a special way of healing and inspiring us. Whether it’s the sound of a river, the sight of a mountain, or the calm of a green forest, nature connects with our inner peace. Studies show that people who spend time in nature often feel less stress and more happiness. Walking barefoot on grass, listening to birds, or just watching the sky can clear your mind and refresh your energy. Nature is also full of lessons: patience from a tree that grows slowly, strength from a river that flows endlessly, and unity in how everything works together." },
-                    { headline: "Learning from Failure", text: "Failure is something everyone experiences, but it is not the end of the road. In fact, failure can teach us more than success. When we fail, we understand what doesn’t work, and that helps us try better next time. Great people like Thomas Edison and J.K. Rowling faced many failures before they succeeded. The key is to not give up. Each time you fall, stand up stronger. Learn from your mistakes and keep moving forward. Success tastes sweeter after you’ve struggled. Failure builds resilience, confidence, and wisdom. So don’t fear it—embrace it." },
-                    { headline: "Life in a Village", text: "Village life is simple but beautiful. People live closer to nature and lead peaceful lives. Most people grow their own food, wake up early, and go to bed early too. There is less pollution, and the air feels fresh. You can hear birds instead of car horns. The community in a village is often very close. People know each other well, help each other, and share festivals together. While there may not be big malls or cinemas, there’s a strong feeling of togetherness. Many people from cities visit villages just to relax and find peace." },
-                    { headline: "Why We Should Save Water", text: "Water is one of the most important resources on Earth. Every living being needs water to survive. However, many people waste water without realizing its value. Leaving taps open, using too much water for cleaning, and polluting rivers are serious problems. In some places, people don’t even get clean drinking water. We need to save water by fixing leaks, turning off taps when not needed, and using buckets instead of hoses. Schools and homes can spread awareness. If we don’t act now, future generations may suffer. Saving water today ensures life tomorrow." }
-                ],
-                hard: [
-                    { headline: "Digital Dependency and Human Behavior", text: "In today’s world, people are becoming increasingly dependent on digital technology. From smartphones to smart homes, our lives revolve around screens and devices. While this has brought great convenience, it has also raised concerns. Human behavior is shifting—attention spans are shrinking, social skills are declining, and people are becoming less present in the moment. Face-to-face interactions are being replaced by texts and emojis. Children are growing up with devices in their hands rather than books. While technology itself is not the problem, our over-reliance on it is. We must learn to find balance, using tech as a tool, not a crutch." },
-                    { headline: "The Value of Critical Thinking", text: "Critical thinking is the ability to analyze information, question assumptions, and make reasoned decisions. In a world full of misinformation, fake news, and social media influence, this skill is more important than ever. It helps us avoid blindly following trends or falling into emotional traps. When we think critically, we seek evidence, evaluate sources, and look at multiple viewpoints before forming opinions. Schools should encourage this habit from an early age. A society that thinks critically is more informed, rational, and less likely to be misled. It’s not about arguing more—it’s about understanding better." },
-                    { headline: "Climate Crisis and Global Unity", text: "Climate change is not just a future threat—it’s a present danger. Rising temperatures, melting glaciers, and unpredictable weather are already affecting millions. Yet, political delays and lack of action continue. True progress can only be made if all nations act together. This requires cooperation, not competition. It’s not enough for one country to reduce emissions if others continue polluting. Individual action matters too—choosing sustainable products, using less plastic, and saving energy can help. Climate change is a global challenge that demands global unity, urgency, and responsibility from both leaders and citizens." },
-                    { headline: "The Evolution of Language", text: "Language is one of the most fascinating aspects of human culture. It evolves constantly, shaped by time, technology, and interaction. Words are born, meanings change, and some languages even disappear. The internet has accelerated this change—slang, emojis, abbreviations, and memes have added a new dimension to communication. While language evolves, it also reflects social values and identity. Preserving endangered languages, studying linguistics, and understanding how language affects thought are important tasks. Language isn’t just a tool—it’s a mirror of the human mind." },
-                    { headline: "The Psychology Behind Procrastination", text: "Procrastination is not always about laziness. Psychologists suggest it's often tied to fear of failure, perfectionism, or lack of motivation. When people avoid tasks, they may be trying to protect their self-esteem or cope with anxiety. The mind tricks us into seeking temporary comfort by delaying discomfort. However, this usually leads to more stress later. Overcoming procrastination involves understanding your triggers, breaking tasks into smaller steps, and using positive reinforcement. Productivity isn't about working non-stop—it's about managing your time and mind wisely. Procrastination is common, but with awareness and strategy, it can be conquered." }
-                ]
-            };
-            let currentParagraph = '';
-            let currentLevel = 'normal';
-            let startTime;
-            let timerInterval;
-            let isTestRunning = false;
-            let charactersTyped = 0;
-            let correctCharacters = 0;
-            let typedCharactersSpan; // To hold the span element for character highlighting
-            let testCompleted = false; // Flag to track if the test was completed successfully
-
+            // Chart.js instance
+            let monthlyChart = null;
 
             let currentMonthView = new Date(); // Define currentMonthView here globally
 
             // --- Initial Setup and Authentication Flow ---
             function initializeApp() {
-                const savedTheme = localStorage.getItem('theme') || 'light';
+                const savedTheme = localStorage.getItem('theme') || 'neptune-vibe'; // Default to neptune-vibe
                 applyTheme(savedTheme);
 
                 // Check if there's a logged-in user session
@@ -2554,10 +2097,14 @@
                             loginPasswordInput.classList.add('error');
                             loginPasswordError.textContent = 'Incorrect password.';
                             return;
-                        }
+                            }
 
                         // Successful login
                         currentLoggedInUser = user;
+                        // Ensure all new fields are initialized for existing users
+                        if (!currentLoggedInUser.attendance) currentLoggedInUser.attendance = {};
+                        if (!currentLoggedInUser.graceCounts) currentLoggedInUser.graceCounts = {};
+
                         localStorage.setItem('lastLoggedInUserEmail', email); // Remember last logged in user
                         showMainActivitySection();
                     });
@@ -2629,9 +2176,7 @@
                             joiningDate: joiningDate,
                             lngId: lngId,
                             attendance: {},
-                            graceCounts: {},
-                            ticTacToeStats: { wins: 0, losses: 0, draws: 0 },
-                            highestWPM: 0
+                            graceCounts: {}
                         };
                         registeredUsers.push(newUser);
                         saveRegisteredUsers();
@@ -2699,11 +2244,13 @@
                 updateEntryBtn = document.getElementById('updateEntryBtn');
                 deleteEntryBtn = document.getElementById('deleteEntryBtn');
 
-                editPresentDetailsGroup = document.getElementById('editPresentDetailsGroup');
+                editHourGroup = document.getElementById('editHourGroup');
                 editExtraHourGroup = document.getElementById('editExtraHourGroup');
                 editLateHourGroup = document.getElementById('editLateHourGroup');
                 editShiftTypeGroup = document.getElementById('editShiftTypeGroup');
                 editGraceGroup = document.getElementById('editGraceGroup');
+                editApprovalGroup = document.getElementById('editApprovalGroup'); // New
+                editApprovalInput = document.getElementById('editApproval'); // New
 
                 currentYearSpan = document.getElementById('currentYear');
 
@@ -2713,30 +2260,38 @@
                 selectWeekendBtn = document.getElementById('selectWeekend');
                 selectAbsentBtn = document.getElementById('selectAbsent');
                 selectHolidayBtn = document.getElementById('selectHoliday'); // New Holiday button element
+                selectGovernmentHolidayBtn = document.getElementById('selectGovernmentHoliday'); // New
+                selectSickLeaveBtn = document.getElementById('selectSickLeave'); // New
 
                 presentEntryModal = document.getElementById('presentEntryModal');
                 closePresentEntryModal = presentEntryModal.querySelector('.close-button');
                 presentEntryDateInput = document.getElementById('presentEntryDate');
+                presentEntryStatusInput = document.getElementById('presentEntryStatus'); // New
                 presentHourInput = document.getElementById('presentHour');
                 presentExtraHourInput = document.getElementById('presentExtraHour');
                 presentLateInput = document.getElementById('presentLate');
                 presentShiftTypeInput = document.getElementById('presentShiftType');
                 presentGraceInput = document.getElementById('presentGrace');
+                presentApprovalInput = document.getElementById('presentApproval'); // New
                 savePresentEntryBtn = document.getElementById('savePresentEntryBtn');
                 cancelPresentEntryBtn = document.getElementById('cancelPresentEntryBtn');
                 graceLimitMessage = document.getElementById('graceLimitMessage');
 
+                presentHourGroup = document.getElementById('presentHourGroup');
+                presentExtraHourGroup = document.getElementById('presentExtraHourGroup');
+                presentLateGroup = document.getElementById('presentLateGroup');
+                presentShiftTypeGroup = document.getElementById('presentShiftTypeGroup');
+                presentGraceGroup = document.getElementById('presentGraceGroup');
+                presentApprovalGroup = document.getElementById('presentApprovalGroup');
+
+
                 homeNavLink = document.getElementById('homeNavLink');
                 historyNavLink = document.getElementById('historyNavLink');
-                gamesNavLink = document.getElementById('gamesNavLink');
-                typingTestNavLink = document.getElementById('typingTestNavLink');
                 helpNavLinkRef = document.getElementById('helpNavLink'); 
                 dashboardSection = document.getElementById('dashboardSection');
                 monthlySummarySection = document.getElementById('monthlySummarySection');
                 dailyEntriesSection = document.getElementById('dailyEntriesSection');
                 historySection = document.getElementById('historySection');
-                gamesSection = document.getElementById('gamesSection');
-                typingTestSection = document.getElementById('typingTestSection');
 
                 historyDateFromInput = document.getElementById('historyDateFrom');
                 historyDateToInput = document.getElementById('historyDateTo');
@@ -2752,35 +2307,6 @@
                 historySummaryGrace = document.getElementById('historySummaryGrace');
                 historySummaryTotalPresent = document.getElementById('historySummaryTotalPresent'); // New Total Present for history
                 historyAttendanceTableBody = document.querySelector('#historyAttendanceTable tbody');
-
-                ticTacToeModal = document.getElementById('ticTacToeModal');
-                closeTicTacToeModal = ticTacToeModal.querySelector('.close-button');
-                ticTacToeGameOptions = document.getElementById('ticTacToeGameOptions');
-                playVsComputerBtn = document.getElementById('playVsComputer');
-                playVsPlayerBtn = document.getElementById('playVsPlayer');
-                ticTacToeGameArea = document.getElementById('ticTacToeGameArea');
-                ticTacToeBoard = document.getElementById('ticTacToeBoard');
-                ticTacToeCells = document.querySelectorAll('#ticTacToeBoard .cell');
-                ticTacToeGameStatus = document.getElementById('ticTacToeGameStatus');
-                ticTacToeResetGameBtn = document.getElementById('ticTacToeResetGame');
-                ticTacToeWinsDisplay = document.getElementById('ticTacToeWins');
-                ticTacToeLossesDisplay = document.getElementById('ticTacToeLosses');
-                ticTacToeDrawsDisplay = document.getElementById('ticTacToeDraws');
-
-                paragraphDisplay = document.getElementById('paragraphDisplay');
-                typingInput = document.getElementById('typingInput');
-                wpmDisplay = document.getElementById('wpmDisplay');
-                accuracyDisplay = document.getElementById('accuracyDisplay');
-                startTestBtn = document.getElementById('startTest');
-                resetTestBtn = document.getElementById('resetTest');
-                levelEasyBtn = document.getElementById('levelEasy');
-                levelNormalBtn = document.getElementById('levelNormal');
-                levelHardBtn = document.getElementById('levelHard');
-                testResultsList = document.getElementById('testResultsList');
-                testDurationSelect = document.getElementById('testDuration'); // New element
-                timeLeftDisplay = document.getElementById('timeLeftDisplay'); // New element
-                highestWPMDisplay = document.getElementById('highestWPMDisplay'); // New element
-                paragraphHeadlineSelect = document.getElementById('paragraphHeadlineSelect'); // New element
             }
 
 
@@ -2794,12 +2320,8 @@
                         themeToggle.className = 'fas fa-sun';
                     } else if (theme === 'dark') {
                         themeToggle.className = 'fas fa-moon';
-                    } else if (theme === 'sunset-glow') {
-                        themeToggle.className = 'fas fa-cloud-sun'; // A different icon for the new theme
-                    } else if (theme === 'neon') {
-                        themeToggle.className = 'fas fa-atom'; // A different icon for neon theme
-                    } else if (theme === 'forest-green') { // New theme icon
-                        themeToggle.className = 'fas fa-tree'; 
+                    } else if (theme === 'neptune-vibe') {
+                        themeToggle.className = 'fas fa-tint'; // Using a water drop icon for NeptuneVibe
                     }
                     currentThemeIndex = themeList.indexOf(theme);
                 }
@@ -2913,6 +2435,8 @@
                 if (selectWeekendBtn) selectWeekendBtn.addEventListener('click', () => setAttendanceStatus('Weekend'));
                 if (selectAbsentBtn) selectAbsentBtn.addEventListener('click', () => setAttendanceStatus('Absent'));
                 if (selectHolidayBtn) selectHolidayBtn.addEventListener('click', () => setAttendanceStatus('Holiday')); // Event listener for new Holiday button
+                if (selectGovernmentHolidayBtn) selectGovernmentHolidayBtn.addEventListener('click', () => openPresentEntryModal('Government_Holiday')); // New
+                if (selectSickLeaveBtn) selectSickLeaveBtn.addEventListener('click', () => openPresentEntryModal('Sick_Leave')); // New
 
                 if (closePresentEntryModal) closePresentEntryModal.addEventListener('click', closePresentEntryModalFunc);
                 if (presentEntryModal) {
@@ -3001,24 +2525,6 @@
                     e.preventDefault();
                     showSection('history');
                 });
-                if (gamesNavLink) {
-                    gamesNavLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        showSection('games');
-                    });
-                }
-                if (typingTestNavLink) {
-                    typingTestNavLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        showSection('typingTest');
-                        // No need to clear typing history on navigation, it's user-specific
-                        // clearTypingHistory(); 
-                        populateParagraphHeadlines(); // Populate headlines based on current level
-                        loadNewParagraph(); // Load new paragraph when navigating to the section
-                        displayTypingResults();
-                        updateHighestWPMDisplay(); // Update highest WPM display
-                    });
-                }
                 if (helpNavLinkRef) {
                     helpNavLinkRef.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -3072,50 +2578,74 @@
                     });
                 }
 
-                document.getElementById('ticTacToeGameCard').addEventListener('click', () => {
-                    openTicTacToeModal();
+                // Initialize Chart.js
+                const ctx = document.getElementById('monthlyAttendanceChart').getContext('2d');
+                monthlyChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Present (incl. Excused)', 'Absent', 'Late (Equivalent Days)'],
+                        datasets: [{
+                            data: [0, 0, 0], // Initial data
+                            backgroundColor: [
+                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
+                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent'),
+                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-late')
+                            ],
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary'),
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%', // Makes it a doughnut chart
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                    font: {
+                                        family: 'Montserrat',
+                                        size: 10 // Smaller font size for legend
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' Days'; // Display as days
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 });
-                if (playVsComputerBtn) playVsComputerBtn.addEventListener('click', () => startTicTacToeGame(true));
-                if (playVsPlayerBtn) playVsPlayerBtn.addEventListener('click', () => startTicTacToeGame(false));
-                if (ticTacToeCells) ticTacToeCells.forEach(cell => cell.addEventListener('click', handleTicTacToeCellClick));
-                if (ticTacToeResetGameBtn) ticTacToeResetGameBtn.addEventListener('click', resetTicTacToeGame);
-                if (closeTicTacToeModal) closeTicTacToeModal.addEventListener('click', closeTicTacToeModalFunc);
-                if (ticTacToeModal) {
-                    ticTacToeModal.addEventListener('click', (event) => {
-                        if (event.target == ticTacToeModal) {
-                            closeTicTacToeModalFunc();
+
+                // Update chart colors on theme change
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.attributeName === 'data-theme') {
+                            if (monthlyChart) {
+                                monthlyChart.data.datasets[0].backgroundColor = [
+                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
+                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent'),
+                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-late')
+                                ];
+                                monthlyChart.options.plugins.legend.labels.color = getComputedStyle(document.documentElement).getPropertyValue('--text-primary');
+                                monthlyChart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary');
+                                monthlyChart.update();
+                            }
                         }
                     });
-                }
-
-                if (startTestBtn) startTestBtn.addEventListener('click', startTypingTest);
-                if (resetTestBtn) resetTestBtn.addEventListener('click', resetTypingTest);
-
-                if (levelEasyBtn) levelEasyBtn.addEventListener('click', () => {
-                    currentLevel = 'easy';
-                    [levelEasyBtn, levelNormalBtn, levelHardBtn].forEach(btn => btn.classList.remove('active'));
-                    levelEasyBtn.classList.add('active');
-                    populateParagraphHeadlines(); // Update headlines for new level
-                    resetTypingTest();
                 });
-                if (levelNormalBtn) levelNormalBtn.addEventListener('click', () => {
-                    currentLevel = 'normal';
-                    [levelEasyBtn, levelNormalBtn, levelHardBtn].forEach(btn => btn.classList.remove('active'));
-                    levelNormalBtn.classList.add('active');
-                    populateParagraphHeadlines(); // Update headlines for new level
-                    resetTypingTest();
-                });
-                if (levelHardBtn) levelHardBtn.addEventListener('click', () => {
-                    currentLevel = 'hard';
-                    [levelEasyBtn, levelNormalBtn, levelHardBtn].forEach(btn => btn.classList.remove('active'));
-                    levelHardBtn.classList.add('active');
-                    populateParagraphHeadlines(); // Update headlines for new level
-                    resetTypingTest();
-                });
-
-                if (paragraphHeadlineSelect) paragraphHeadlineSelect.addEventListener('change', loadNewParagraph); // Listen for headline change
-                if (typingInput) typingInput.addEventListener('input', handleTypingInput);
-                if (testDurationSelect) testDurationSelect.addEventListener('change', resetTypingTest); // Reset test when duration changes
+                observer.observe(document.documentElement, { attributes: true });
             }
 
             // --- Section Visibility Control ---
@@ -3124,8 +2654,6 @@
                 if (monthlySummarySection) monthlySummarySection.style.display = 'none';
                 if (dailyEntriesSection) dailyEntriesSection.style.display = 'none';
                 if (historySection) historySection.style.display = 'none';
-                if (gamesSection) gamesSection.style.display = 'none';
-                if (typingTestSection) typingTestSection.style.display = 'none';
 
                 if (sectionName === 'dashboard') {
                     if (dashboardSection) dashboardSection.style.display = 'flex';
@@ -3134,21 +2662,18 @@
                     setupMonthView(currentMonthView);
                 } else if (sectionName === 'history') {
                     if (historySection) historySection.style.display = 'block';
+                    // Reset summary values for history section
                     if (historySummaryTotalHours) historySummaryTotalHours.textContent = '0';
-                    if (historySummaryLate) historySummaryLate.textContent = '0';
+                    if (historySummaryLate) historySummaryLate.textContent = '00:00';
                     if (historySummaryAbsent) historySummaryAbsent.textContent = '0';
                     if (historySummaryWeekend) historySummaryWeekend.textContent = '0';
-                    if (historySummaryHoliday) historySummaryHoliday.textContent = '0'; // Reset Holiday summary
+                    if (historySummaryHoliday) historySummaryHoliday.textContent = '0';
                     if (historySummaryWorkingDays) historySummaryWorkingDays.textContent = '0';
                     if (historySummaryDayShifts) historySummaryDayShifts.textContent = '0';
                     if (historySummaryNightShifts) historySummaryNightShifts.textContent = '0';
                     if (historySummaryGrace) historySummaryGrace.textContent = '0';
-                    if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = '0'; // Reset Total Present
+                    if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = '0';
                     if (historyAttendanceTableBody) historyAttendanceTableBody.innerHTML = '';
-                } else if (sectionName === 'games') {
-                    if (gamesSection) gamesSection.style.display = 'block';
-                } else if (sectionName === 'typingTest') {
-                    if (typingTestSection) typingTestSection.style.display = 'block';
                 }
             }
 
@@ -3353,21 +2878,43 @@
                 closeStatusSelectionModalFunc();
                 if (presentEntryModal) {
                     presentEntryDateInput.value = currentSelectedDateForStatus;
-                    
+                    presentEntryStatusInput.value = status.replace(/_/g, ' '); // Display selected status
+
                     const existingEntry = currentLoggedInUser.attendance[currentSelectedDateForStatus];
-                    if (existingEntry && existingEntry.status === 'Present') {
-                        presentHourInput.value = existingEntry.hour;
-                        presentExtraHourInput.value = existingEntry.extraHour;
-                        presentLateInput.value = existingEntry.late;
-                        presentShiftTypeInput.value = existingEntry.shift;
-                        presentGraceInput.value = existingEntry.grace || '-';
-                    } else {
-                        presentHourInput.value = 9;
-                        presentExtraHourInput.value = 0;
-                        presentLateInput.value = '00:00';
-                        presentShiftTypeInput.value = 'Day';
-                        presentGraceInput.value = '-';
+
+                    // Default values for new entry or non-present entry
+                    let defaultHour = 9;
+                    let defaultExtraHour = 0;
+                    let defaultLate = '00:00';
+                    let defaultShift = 'Day';
+                    let defaultGrace = '-';
+                    let defaultApproval = '-';
+
+                    if (status === 'Sick_Leave' || status === 'Government_Holiday') {
+                        // For sick leave and government holiday, auto-select 9 hours present
+                        defaultHour = 9;
+                        defaultExtraHour = 0;
+                        defaultLate = calculateLateTime(defaultHour);
+                        defaultApproval = 'Approved';
                     }
+
+                    // If existing entry is present, use its values
+                    if (existingEntry && existingEntry.status === status) { // Only pre-fill if existing entry matches the chosen status
+                        defaultHour = existingEntry.hour;
+                        defaultExtraHour = existingEntry.extraHour;
+                        defaultLate = existingEntry.late;
+                        defaultShift = existingEntry.shift;
+                        defaultGrace = existingEntry.grace || '-';
+                        defaultApproval = existingEntry.approval || '-';
+                    }
+
+                    presentHourInput.value = defaultHour;
+                    presentExtraHourInput.value = defaultExtraHour;
+                    presentLateInput.value = defaultLate;
+                    presentShiftTypeInput.value = defaultShift;
+                    presentGraceInput.value = defaultGrace;
+                    presentApprovalInput.value = defaultApproval;
+
 
                     const monthKey = `${new Date(currentSelectedDateForStatus).getFullYear()}-${String(new Date(currentSelectedDateForStatus).getMonth() + 1).padStart(2, '0')}`;
                     const graceLimitReached = checkGraceLimit(monthKey);
@@ -3384,6 +2931,15 @@
                         }
                     }
 
+                    // Toggle visibility of present-specific fields based on status
+                    const isPresentLike = (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave');
+                    presentHourGroup.style.display = isPresentLike ? 'block' : 'none';
+                    presentExtraHourGroup.style.display = isPresentLike ? 'block' : 'none';
+                    presentLateGroup.style.display = isPresentLike ? 'block' : 'none';
+                    presentShiftTypeGroup.style.display = isPresentLike ? 'block' : 'none';
+                    presentGraceGroup.style.display = (status === 'Present') ? 'block' : 'none'; // Grace only for 'Present'
+                    presentApprovalGroup.style.display = (status === 'Sick_Leave' || status === 'Holiday' || status === 'Government_Holiday' || (isPresentLike && (parseFloat(presentExtraHourInput.value || 0) > 0))) ? 'block' : 'none';
+
                     presentEntryModal.style.display = 'flex';
                     presentLateInput.value = calculateLateTime(parseFloat(presentHourInput.value || 0));
                 }
@@ -3396,11 +2952,18 @@
 
             function savePresentEntry() {
                 const date = presentEntryDateInput.value;
-                const hour = parseFloat(presentHourInput.value);
-                const extraHour = parseFloat(presentExtraHourInput.value);
+                const status = presentEntryStatusInput.value.replace(/ /g, '_'); // Get status from the display input
+                
+                let hour = parseFloat(presentHourInput.value || 0);
+                let extraHour = parseFloat(presentExtraHourInput.value || 0); // Auto-select 0 if empty
                 const shift = presentShiftTypeInput.value;
                 const grace = presentGraceInput.value;
-                const late = calculateLateTime(hour);
+                const approval = presentApprovalInput.value;
+
+                if (status === 'Sick_Leave' || status === 'Government_Holiday') {
+                    hour = 9;
+                    extraHour = 0;
+                }
 
                 if (isNaN(hour) || hour < 0 || hour > 24) {
                     showCustomAlert('Input Error', "Please enter a valid hour (0-24).", 'error');
@@ -3410,59 +2973,62 @@
                     showCustomAlert('Input Error', "Please enter a valid extra hour (0-24).", 'error');
                     return;
                 }
+                const late = calculateLateTime(hour);
 
                 const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
                 const existingEntry = currentLoggedInUser.attendance[date];
                 const wasGrace = existingEntry && existingEntry.status === 'Present' && existingEntry.grace === 'Yes';
                 const isGraceNow = grace === 'Yes';
 
-                if (isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
+                if (status === 'Present' && isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
                     showCustomAlert('Grace Limit Reached', "Cannot apply grace. Monthly limit (5) reached.", 'warning');
                     return;
                 }
 
                 const newEntry = {
-                    status: 'Present',
+                    status: status,
                     hour: hour,
                     extraHour: extraHour,
                     late: late,
                     shift: shift,
-                    grace: grace
+                    grace: grace,
+                    approval: approval
                 };
 
-                // Update grace count if grace status changes
-                if (isGraceNow && !wasGrace) {
-                    updateGraceCount(monthKey, 1);
-                } else if (!isGraceNow && wasGrace) {
+                // Update grace count if grace status changes AND it's a 'Present' entry
+                if (status === 'Present') {
+                    if (isGraceNow && !wasGrace) {
+                        updateGraceCount(monthKey, 1);
+                    } else if (!isGraceNow && wasGrace) {
+                        updateGraceCount(monthKey, -1);
+                    }
+                } else if (wasPresent && wasGrace) { // If changing from Present (with grace) to another status
                     updateGraceCount(monthKey, -1);
                 }
 
-                // Update attendance entry in current user's data
                 currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: newEntry };
                 saveCurrentUserData(); // Save the updated current user data
 
-                // Removed: showCustomAlert('Success!', 'Present entry saved successfully!', 'success');
                 closePresentEntryModalFunc();
                 displayAttendanceHistory();
             }
 
-            function setAttendanceStatus(status) {
+            function setAttendanceStatus(status) { // For Weekend, Absent, Holiday
                 const date = currentSelectedDateForStatus;
                 const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
                 const existingEntry = currentLoggedInUser.attendance[date];
                 const wasPresent = existingEntry && existingEntry.status === 'Present';
                 const wasGrace = wasPresent && existingEntry.grace === 'Yes';
 
-                const newEntry = { status: status };
+                const newEntry = { status: status, approval: '-' }; // Default approval for these statuses
 
-                if (wasPresent && wasGrace && status !== 'Present') {
+                if (wasPresent && wasGrace) {
                     updateGraceCount(monthKey, -1);
                 }
                 
                 currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: newEntry };
                 saveCurrentUserData(); // Save the updated current user data
 
-                // Removed: showCustomAlert('Status Updated', `Status set to ${status} for ${formatDisplayDate(new Date(date))}`, 'success');
                 closeStatusSelectionModalFunc();
                 displayAttendanceHistory();
             }
@@ -3479,78 +3045,92 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
-                let totalHolidayDays = 0; // New variable for holidays
-                let totalWorkingDays = 0; // This will now count Present and Absent days
+                let totalHolidayDays = 0;
+                let totalGovernmentHolidayDays = 0; // New
+                let totalSickLeaveDays = 0; // New
+                let totalWorkingDays = 0;
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
+                let totalPresentLikeDaysForChart = 0; // New variable for chart's 'Present (incl. Excused)' slice
+                let totalPresentCount = 0; // To count days marked as Present (or equivalent) for summary text
 
                 let currentDate = new Date(start);
                 while (currentDate <= end) {
                     const dateKey = formatDate(currentDate);
-                    const dayOfWeek = getDayOfWeek(currentDate); // Get day of week
+                    const dayOfWeek = getDayOfWeek(currentDate);
                     const entry = currentUserAttendance[dateKey];
 
                     const row = attendanceTableBody.insertRow();
+                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); // Add status background class
+
                     const cellDate = row.insertCell();
-                    const cellDay = row.insertCell(); // New cell for Day
+                    const cellDay = row.insertCell();
                     const cellStatus = row.insertCell();
                     const cellHour = row.insertCell();
                     const cellExtraHour = row.insertCell();
                     const cellLate = row.insertCell();
                     const cellShift = row.insertCell();
                     const cellGrace = row.insertCell();
+                    const cellApproval = row.insertCell(); // New cell for Approval
                     const cellActions = row.insertCell();
 
                     cellDate.textContent = formatDisplayDate(currentDate);
-                    cellDay.textContent = dayOfWeek; // Populate Day cell
+                    cellDay.textContent = dayOfWeek;
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
-                        cellStatus.textContent = entry.status;
+                        cellStatus.textContent = entry.status.replace(/_/g, ' '); // Display with spaces
                         cellStatus.classList.add(`status-${entry.status.toLowerCase()}`);
 
-                        if (entry.status === 'Present') {
+                        if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
                             cellHour.textContent = entry.hour;
                             cellExtraHour.textContent = entry.extraHour;
                             cellLate.textContent = entry.late;
                             cellShift.textContent = entry.shift;
                             cellGrace.textContent = entry.grace || '-';
+                            cellApproval.textContent = entry.approval || '-';
 
-                            totalHours += entry.hour + entry.extraHour;
+                            totalHours += entry.hour + (entry.extraHour || 0);
                             const [lateHours, lateMinutes] = entry.late.split(':').map(Number);
                             totalLateMinutes += (lateHours * 60) + lateMinutes;
 
                             if (entry.shift === 'Day') totalDayShifts++;
                             else if (entry.shift === 'Night') totalNightShifts++;
-                            totalWorkingDays++; // Count Present as working day
+                            totalWorkingDays++;
                             if (entry.grace === 'Yes') totalGraceDays++;
+
+                            if (entry.status === 'Government_Holiday') totalGovernmentHolidayDays++;
+                            else if (entry.status === 'Sick_Leave') totalSickLeaveDays++;
+                            totalPresentCount++; // Count this as a present day for summary text
+                            totalPresentLikeDaysForChart++; // Count for chart as well
                         } else {
                             cellHour.textContent = '-';
                             cellExtraHour.textContent = '-';
                             cellLate.textContent = '-';
                             cellShift.textContent = '-';
                             cellGrace.textContent = '-';
+                            cellApproval.textContent = entry.approval || '-';
                             if (entry.status === 'Absent') {
                                 totalAbsentDays++;
-                                totalWorkingDays++; // Count Absent as working day
+                                totalWorkingDays++;
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
-                                // Weekend is not a working day, so no increment to totalWorkingDays
-                            } else if (entry.status === 'Holiday') { // Handle new Holiday status
+                                totalPresentLikeDaysForChart++; // Count weekends as "present-like" for chart
+                            } else if (entry.status === 'Holiday') {
                                 totalHolidayDays++;
-                                // Holiday is not a working day
+                                totalPresentLikeDaysForChart++; // Count holidays as "present-like" for chart
                             }
                         }
                     } else {
                         // If no entry, assume it's a regular day that hasn't been marked.
-                        // For this calculation, we only count explicitly marked Present/Absent days as working days.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
                         cellLate.textContent = '-';
                         cellShift.textContent = '-';
                         cellGrace.textContent = '-';
+                        cellApproval.textContent = '-';
                     }
 
                     const editBtn = document.createElement('button');
@@ -3570,13 +3150,24 @@
                 if (summaryLate) summaryLate.textContent = formattedLateTime;
                 if (summaryAbsent) summaryAbsent.textContent = totalAbsentDays;
                 if (summaryWeekend) summaryWeekend.textContent = totalWeekendDays;
-                if (summaryHoliday) summaryHoliday.textContent = totalHolidayDays; // Display total holidays
+                if (summaryHoliday) summaryHoliday.textContent = totalHolidayDays + totalGovernmentHolidayDays + totalSickLeaveDays; // All holiday types
                 if (summaryWorkingDays) summaryWorkingDays.textContent = totalWorkingDays;
                 if (summaryDayShifts) summaryDayShifts.textContent = totalDayShifts;
-                // Update combined Night Shifts and Grace
                 if (summaryNightShifts) summaryNightShifts.textContent = totalNightShifts;
                 if (summaryGrace) summaryGrace.textContent = totalGraceDays;
-                if (summaryTotalPresent) summaryTotalPresent.textContent = totalDayShifts + totalNightShifts; // Calculate Total Present
+                if (summaryTotalPresent) summaryTotalPresent.textContent = totalPresentCount + totalGovernmentHolidayDays + totalSickLeaveDays + totalWeekendDays + totalHolidayDays; // All present-like for text summary
+
+
+                // Update the chart
+                if (monthlyChart) {
+                    // Update chart with the new 'Present (incl. Excused)' logic
+                    monthlyChart.data.datasets[0].data = [
+                        totalPresentLikeDaysForChart, // Total present-like days for the chart
+                        totalAbsentDays,
+                        Math.round(totalLateMinutes / (24 * 60)) // Convert late minutes to approximate days for chart
+                    ];
+                    monthlyChart.update();
+                }
             }
 
 
@@ -3588,29 +3179,34 @@
 
                 if (entry) {
                     if (editStatusInput) editStatusInput.value = entry.status;
-                    if (entry.status === 'Present') {
-                        if (editHourInput) editHourInput.value = entry.hour;
+                    if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
+                        if (editHourInput) editHourInput.value = entry.hour || 9; // Auto-select 9 if 0 or undefined
                         if (editExtraHourInput) editExtraHourInput.value = entry.extraHour;
                         if (editLateHourInput) editLateHourInput.value = entry.late;
                         if (editShiftTypeInput) editShiftTypeInput.value = entry.shift;
                         if (editGraceInput) editGraceInput.value = entry.grace || '-';
+                        if (editApprovalInput) editApprovalInput.value = entry.approval || '-';
                     } else {
+                        // For non-present statuses, clear present-specific fields
                         if (editHourInput) editHourInput.value = '';
                         if (editExtraHourInput) editExtraHourInput.value = '';
                         if (editLateHourInput) editLateHourInput.value = '00:00';
                         if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
                         if (editGraceInput) editGraceInput.value = '-';
+                        if (editApprovalInput) editApprovalInput.value = entry.approval || '-'; // Keep approval if exists
                     }
                 } else {
-                    if (editStatusInput) editStatusInput.value = 'Absent'; 
+                    // If no entry exists for this date, pre-fill with defaults for 'Absent'
+                    if (editStatusInput) editStatusInput.value = 'Absent';
                     if (editHourInput) editHourInput.value = '';
                     if (editExtraHourInput) editExtraHourInput.value = '';
                     if (editLateHourInput) editLateHourInput.value = '00:00';
                     if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
                     if (editGraceInput) editGraceInput.value = '-';
+                    if (editApprovalInput) editApprovalInput.value = '-';
                 }
 
-                toggleEditPresentDetails();
+                toggleEditPresentDetails(); // Call to adjust field visibility
 
                 const monthKey = `${new Date(dateToEdit).getFullYear()}-${String(new Date(dateToEdit).getMonth() + 1).padStart(2, '0')}`;
                 const graceLimitReached = checkGraceLimit(monthKey);
@@ -3630,16 +3226,53 @@
             }
 
             function closeEditDeleteModalFunc() {
-                if (editDeleteModal) editDeleteModal.style.display = 'none';
+                if (editDeleteModal) {
+                    editDeleteModal.style.display = 'none';
+                    // Clear fields after closing to prevent showing old data on next open
+                    if (editDateInput) editDateInput.value = '';
+                    if (editStatusInput) editStatusInput.value = 'Absent'; // Default to Absent
+                    if (editHourInput) editHourInput.value = '';
+                    if (editExtraHourInput) editExtraHourInput.value = '';
+                    if (editLateHourInput) editLateHourInput.value = '00:00';
+                    if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
+                    if (editGraceInput) editGraceInput.value = '-';
+                    if (editApprovalInput) editApprovalInput.value = '-';
+                    if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
+                    toggleEditPresentDetails(); // Reset visibility of fields
+                }
             }
 
             function toggleEditPresentDetails() {
-                const isPresent = editStatusInput.value === 'Present';
-                if (editPresentDetailsGroup) editPresentDetailsGroup.style.display = isPresent ? 'block' : 'none';
-                if (editExtraHourGroup) editExtraHourGroup.style.display = isPresent ? 'block' : 'none';
-                if (editLateHourGroup) editLateHourGroup.style.display = isPresent ? 'block' : 'none';
-                if (editShiftTypeGroup) editShiftTypeGroup.style.display = isPresent ? 'block' : 'none';
-                if (editGraceGroup) editGraceGroup.style.display = isPresent ? 'block' : 'none';
+                const status = editStatusInput.value;
+                const isPresentLike = (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave');
+                // Ensure editExtraHourInput value is used for checking if approval is needed
+                const currentExtraHourValue = parseFloat(editExtraHourInput ? editExtraHourInput.value : 0) || 0;
+                const requiresApproval = (status === 'Sick_Leave' || status === 'Holiday' || status === 'Government_Holiday' || (isPresentLike && (currentExtraHourValue > 0)));
+
+                if (editHourGroup) editHourGroup.style.display = isPresentLike ? 'block' : 'none';
+                if (editExtraHourGroup) editExtraHourGroup.style.display = isPresentLike ? 'block' : 'none';
+                if (editLateHourGroup) editLateHourGroup.style.display = isPresentLike ? 'block' : 'none';
+                if (editShiftTypeGroup) editShiftTypeGroup.style.display = isPresentLike ? 'block' : 'none';
+                if (editGraceGroup) editGraceGroup.style.display = (status === 'Present') ? 'block' : 'none'; // Grace only for Present
+                if (editApprovalGroup) editApprovalGroup.style.display = requiresApproval ? 'block' : 'none';
+
+                 // Auto-set 9 hours for Sick_Leave and Government_Holiday if not already set or cleared
+                if ((status === 'Sick_Leave' || status === 'Government_Holiday') && editHourInput) {
+                    if (!editHourInput.value || parseFloat(editHourInput.value) === 0) { // Only set if empty or 0
+                        editHourInput.value = 9;
+                    }
+                    if (editExtraHourInput) editExtraHourInput.value = 0; // Ensure extra hour is 0
+                    if (editLateHourInput) editLateHourInput.value = '00:00'; // Ensure late is 00:00
+                }
+                if (editApprovalInput) { // Auto-set approval for specific statuses
+                    if (requiresApproval) {
+                        if (editApprovalInput.value === '-') { // Only change if not already set by user
+                            editApprovalInput.value = 'Approved';
+                        }
+                    } else {
+                         editApprovalInput.value = '-';
+                    }
+                }
             }
 
             function updateAttendanceEntry() {
@@ -3652,39 +3285,45 @@
                 const wasPresent = existingEntry && existingEntry.status === 'Present';
                 const wasGrace = wasPresent && existingEntry.grace === 'Yes';
 
-                let updatedEntry = { status: status };
+                let updatedEntry = { status: status, approval: editApprovalInput.value || '-' };
 
-                if (status === 'Present') {
-                    const updatedHour = parseFloat(editHourInput.value);
-                    const updatedExtraHour = parseFloat(editExtraHourInput.value);
+                if (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave') {
+                    const updatedHour = parseFloat(editHourInput.value || 0); // Auto-select 0 if empty
+                    const updatedExtraHour = parseFloat(editExtraHourInput.value || 0); // Auto-select 0 if empty
                     const updatedShift = editShiftTypeInput.value;
                     const updatedGrace = editGraceInput.value;
                     const updatedLate = calculateLateTime(updatedHour);
 
                     if (isNaN(updatedHour) || updatedHour < 0 || updatedHour > 24 ||
                         isNaN(updatedExtraHour) || updatedExtraHour < 0 || updatedExtraHour > 24) {
-                        showCustomAlert('Input Error', "Please enter valid hour and extra hour values (0-24) for Present status.", 'error');
+                        showCustomAlert('Input Error', "Please enter valid hour and extra hour values (0-24) for this status.", 'error');
                         return;
                     }
 
                     const isGraceNow = updatedGrace === 'Yes';
-                    if (isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
+                    if (status === 'Present' && isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
                         showCustomAlert('Grace Limit Reached', "Cannot apply grace. Monthly limit (5) reached.", 'warning');
                         return;
                     }
 
                     updatedEntry = {
-                        status: 'Present',
+                        status: status,
                         hour: updatedHour,
                         extraHour: updatedExtraHour,
                         late: updatedLate,
                         shift: updatedShift,
-                        grace: updatedGrace
+                        grace: updatedGrace,
+                        approval: editApprovalInput.value || '-'
                     };
 
-                    if (isGraceNow && !wasGrace) {
-                        updateGraceCount(monthKey, 1);
-                    } else if (!isGraceNow && wasGrace) {
+                    // Update grace count only for 'Present' status
+                    if (status === 'Present') {
+                        if (isGraceNow && !wasGrace) {
+                            updateGraceCount(monthKey, 1);
+                        } else if (!isGraceNow && wasGrace) {
+                            updateGraceCount(monthKey, -1);
+                        }
+                    } else if (wasPresent && wasGrace) { // If changing from Present (with grace) to another present-like status
                         updateGraceCount(monthKey, -1);
                     }
                 } else {
@@ -3696,7 +3335,6 @@
                 currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: updatedEntry };
                 saveCurrentUserData(); // Save the updated current user data
 
-                // Removed: showCustomAlert('Entry Updated', 'Entry updated successfully!', 'success');
                 closeEditDeleteModalFunc();
                 displayAttendanceHistory();
             }
@@ -3729,7 +3367,7 @@
 
                 showCustomAlert('Entry Deleted', 'Entry deleted successfully! Data for this date has been cleared.', 'success');
                 closeEditDeleteModalFunc();
-                displayAttendanceHistory();
+                displayAttendanceHistory(); // Refresh the table after deletion
             }
 
             // --- History Page Functions ---
@@ -3758,79 +3396,89 @@
                 let totalLateMinutes = 0;
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
-                let totalHolidayDays = 0; // New variable for holidays
-                let totalWorkingDays = 0; // This will now count Present and Absent days
+                let totalHolidayDays = 0;
+                let totalGovernmentHolidayDays = 0; // New
+                let totalSickLeaveDays = 0; // New
+                let totalWorkingDays = 0;
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
+                let totalPresentCount = 0; // for summary text
 
                 if (historyAttendanceTableBody) historyAttendanceTableBody.innerHTML = '';
 
                 let currentDate = new Date(startDate);
                 while (currentDate.getTime() <= endDate.getTime()) { 
                     const dateKey = formatDate(currentDate);
-                    const dayOfWeek = getDayOfWeek(currentDate); // Get day of week
+                    const dayOfWeek = getDayOfWeek(currentDate);
                     const entry = currentUserAttendance[dateKey];
 
                     const row = historyAttendanceTableBody.insertRow();
+                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); // Add status background class
+
                     const cellDate = row.insertCell();
-                    const cellDay = row.insertCell(); // New cell for Day
+                    const cellDay = row.insertCell();
                     const cellStatus = row.insertCell();
                     const cellHour = row.insertCell();
                     const cellExtraHour = row.insertCell();
                     const cellLate = row.insertCell();
                     const cellShift = row.insertCell();
                     const cellGrace = row.insertCell();
+                    const cellApproval = row.insertCell(); // New cell for Approval
 
                     cellDate.textContent = formatDisplayDate(currentDate);
-                    cellDay.textContent = dayOfWeek; // Populate Day cell
+                    cellDay.textContent = dayOfWeek;
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
-                        cellStatus.textContent = entry.status;
+                        cellStatus.textContent = entry.status.replace(/_/g, ' '); // Display with spaces
                         cellStatus.classList.add(`status-${entry.status.toLowerCase()}`);
 
-                        if (entry.status === 'Present') {
+                        if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
                             cellHour.textContent = entry.hour;
                             cellExtraHour.textContent = entry.extraHour;
                             cellLate.textContent = entry.late;
                             cellShift.textContent = entry.shift;
                             cellGrace.textContent = entry.grace || '-';
+                            cellApproval.textContent = entry.approval || '-';
 
-                            totalHours += entry.hour + entry.extraHour;
+                            totalHours += entry.hour + (entry.extraHour || 0);
                             const [lateHours, lateMinutes] = entry.late.split(':').map(Number);
                             totalLateMinutes += (lateHours * 60) + lateMinutes;
 
                             if (entry.shift === 'Day') totalDayShifts++;
                             else if (entry.shift === 'Night') totalNightShifts++;
-                            totalWorkingDays++; // Count Present as working day
+                            totalWorkingDays++;
                             if (entry.grace === 'Yes') totalGraceDays++;
+
+                            if (entry.status === 'Government_Holiday') totalGovernmentHolidayDays++;
+                            else if (entry.status === 'Sick_Leave') totalSickLeaveDays++;
+                            totalPresentCount++; // Count this as a present day
                         } else {
                             cellHour.textContent = '-';
                             cellExtraHour.textContent = '-';
                             cellLate.textContent = '-';
                             cellShift.textContent = '-';
                             cellGrace.textContent = '-';
+                            cellApproval.textContent = entry.approval || '-';
                             if (entry.status === 'Absent') {
                                 totalAbsentDays++;
-                                totalWorkingDays++; // Count Absent as working day
+                                totalWorkingDays++;
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
-                                // Weekend is not a working day, so no increment to totalWorkingDays
-                            } else if (entry.status === 'Holiday') { // Handle new Holiday status
+                            } else if (entry.status === 'Holiday') {
                                 totalHolidayDays++;
-                                // Holiday is not a working day
                             }
                         }
                     } else {
                         // If no entry, assume it's a regular day that hasn't been marked.
-                        // For this calculation, we only count explicitly marked Present/Absent days as working days.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
                         cellLate.textContent = '-';
                         cellShift.textContent = '-';
                         cellGrace.textContent = '-';
+                        cellApproval.textContent = '-';
                     }
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
@@ -3840,12 +3488,12 @@
                 if (historySummaryLate) historySummaryLate.textContent = formattedLateTime;
                 if (historySummaryAbsent) historySummaryAbsent.textContent = totalAbsentDays;
                 if (historySummaryWeekend) historySummaryWeekend.textContent = totalWeekendDays;
-                if (historySummaryHoliday) historySummaryHoliday.textContent = totalHolidayDays; // Display total holidays in history
+                if (historySummaryHoliday) historySummaryHoliday.textContent = totalHolidayDays + totalGovernmentHolidayDays + totalSickLeaveDays;
                 if (historySummaryWorkingDays) historySummaryWorkingDays.textContent = totalWorkingDays;
                 if (historySummaryDayShifts) historySummaryDayShifts.textContent = totalDayShifts;
                 if (historySummaryNightShifts) historySummaryNightShifts.textContent = totalNightShifts;
                 if (historySummaryGrace) historySummaryGrace.textContent = totalGraceDays;
-                if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = totalDayShifts + totalNightShifts; // Calculate Total Present
+                if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = totalPresentCount + totalGovernmentHolidayDays + totalSickLeaveDays + totalWeekendDays + totalHolidayDays;
             }
 
             // --- Help Modal Functions ---
@@ -3858,402 +3506,6 @@
             function closeHelpModalFunc() {
                 if (helpModal) {
                     helpModal.style.display = 'none';
-                }
-            }
-
-            // --- Tic-Tac-Toe Game Functions ---
-            function openTicTacToeModal() {
-                if (ticTacToeModal) {
-                    ticTacToeModal.style.display = 'flex';
-                    resetTicTacToeGame();
-                    updateTicTacToeStatsDisplay(); // Display stats when modal opens
-                }
-            }
-
-            function closeTicTacToeModalFunc() {
-                if (ticTacToeModal) {
-                    ticTacToeModal.style.display = 'none';
-                    ticTacToeIsGameActive = false;
-                }
-            }
-
-            function startTicTacToeGame(vsComputer) {
-                ticTacToeIsVsComputer = vsComputer;
-                ticTacToeGameOptions.style.display = 'none';
-                ticTacToeGameArea.style.display = 'block';
-                ticTacToeIsGameActive = true;
-                ticTacToeCurrentPlayer = 'X';
-                ticTacToeGameStatus.textContent = `Player ${ticTacToeCurrentPlayer}'s turn`;
-                if (ticTacToeIsVsComputer && ticTacToeCurrentPlayer === 'O') {
-                    setTimeout(ticTacToeComputerMove, 500);
-                }
-            }
-
-            function handleTicTacToeCellClick(e) {
-                const clickedCell = e.target;
-                const clickedCellIndex = parseInt(clickedCell.dataset.cellIndex);
-
-                if (ticTacToeBoardState[clickedCellIndex] !== '' || !ticTacToeIsGameActive) {
-                    return;
-                }
-
-                ticTacToeBoardState[clickedCellIndex] = ticTacToeCurrentPlayer;
-                clickedCell.textContent = ticTacToeCurrentPlayer;
-                clickedCell.classList.add(ticTacToeCurrentPlayer.toLowerCase());
-
-                checkTicTacToeResult();
-
-                if (ticTacToeIsGameActive && ticTacToeIsVsComputer && ticTacToeCurrentPlayer === 'O') {
-                    setTimeout(ticTacToeComputerMove, 500);
-                }
-            }
-
-            function ticTacToeComputerMove() {
-                let availableCells = [];
-                for (let i = 0; i < ticTacToeBoardState.length; i++) {
-                    if (ticTacToeBoardState[i] === '') {
-                        availableCells.push(i);
-                    }
-                }
-
-                if (availableCells.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * availableCells.length);
-                    const chosenIndex = availableCells[randomIndex];
-                    ticTacToeBoardState[chosenIndex] = 'O';
-                    ticTacToeCells[chosenIndex].textContent = 'O';
-                    ticTacToeCells[chosenIndex].classList.add('o');
-                    checkTicTacToeResult();
-                }
-            }
-
-            function checkTicTacToeResult() {
-                let roundWon = false;
-                for (let i = 0; i < ticTacToeWinningConditions.length; i++) {
-                    const winCondition = ticTacToeWinningConditions[i];
-                    let a = ticTacToeBoardState[winCondition[0]];
-                    let b = ticTacToeBoardState[winCondition[1]];
-                    let c = ticTacToeBoardState[winCondition[2]];
-
-                    if (a === '' || b === '' || c === '') {
-                        continue;
-                    }
-                    if (a === b && b === c) {
-                        roundWon = true;
-                        break;
-                    }
-                }
-
-                if (roundWon) {
-                    ticTacToeGameStatus.textContent = `Player ${ticTacToeCurrentPlayer} has won!`;
-                    ticTacToeIsGameActive = false;
-                    updateTicTacToeStats(ticTacToeCurrentPlayer === 'X' ? 'win' : 'loss'); // Update stats
-                    return;
-                }
-
-                let roundDraw = !ticTacToeBoardState.includes('');
-                if (roundDraw) {
-                    ticTacToeGameStatus.textContent = `Game ended in a draw!`;
-                    ticTacToeIsGameActive = false;
-                    updateTicTacToeStats('draw'); // Update stats
-                    return;
-                }
-
-                changeTicTacToePlayer();
-            }
-
-            function changeTicTacToePlayer() {
-                ticTacToeCurrentPlayer = ticTacToeCurrentPlayer === 'X' ? 'O' : 'X';
-                ticTacToeGameStatus.textContent = `Player ${ticTacToeCurrentPlayer}'s turn`;
-            }
-
-            function resetTicTacToeGame() {
-                ticTacToeBoardState = ['', '', '', '', '', '', '', '', ''];
-                ticTacToeCurrentPlayer = 'X';
-                ticTacToeIsGameActive = false;
-                ticTacToeGameStatus.textContent = '';
-                ticTacToeCells.forEach(cell => {
-                    cell.textContent = '';
-                    cell.classList.remove('x', 'o');
-                });
-                ticTacToeGameOptions.style.display = 'block';
-                ticTacToeGameArea.style.display = 'none';
-            }
-
-            function updateTicTacToeStats(result) {
-                // Ensure currentLoggedInUser and its ticTacToeStats are initialized
-                if (!currentLoggedInUser) {
-                    console.error("No user logged in to update Tic-Tac-Toe stats.");
-                    return;
-                }
-                if (!currentLoggedInUser.ticTacToeStats) {
-                    currentLoggedInUser.ticTacToeStats = { wins: 0, losses: 0, draws: 0 };
-                }
-
-                let stats = currentLoggedInUser.ticTacToeStats;
-                if (result === 'win') {
-                    stats.wins++;
-                } else if (result === 'loss') {
-                    stats.losses++;
-                } else if (result === 'draw') {
-                    stats.draws++;
-                }
-                saveCurrentUserData(); // Save the updated current user data
-                updateTicTacToeStatsDisplay();
-            }
-
-            function updateTicTacToeStatsDisplay() {
-                if (currentLoggedInUser && currentLoggedInUser.ticTacToeStats) {
-                    ticTacToeWinsDisplay.textContent = currentLoggedInUser.ticTacToeStats.wins;
-                    ticTacToeLossesDisplay.textContent = currentLoggedInUser.ticTacToeStats.losses;
-                    ticTacToeDrawsDisplay.textContent = currentLoggedInUser.ticTacToeStats.draws;
-                } else {
-                    ticTacToeWinsDisplay.textContent = '0';
-                    ticTacToeLossesDisplay.textContent = '0';
-                    ticTacToeDrawsDisplay.textContent = '0';
-                }
-            }
-
-
-            // --- Typing Test Functions ---
-            function populateParagraphHeadlines() {
-                if (!paragraphHeadlineSelect) return;
-
-                paragraphHeadlineSelect.innerHTML = ''; // Clear existing options
-                const currentLevelParagraphs = paragraphs[currentLevel];
-
-                if (currentLevelParagraphs && currentLevelParagraphs.length > 0) {
-                    currentLevelParagraphs.forEach((para, index) => {
-                        const option = document.createElement('option');
-                        option.value = index; // Store index to retrieve full text
-                        option.textContent = para.headline;
-                        paragraphHeadlineSelect.appendChild(option);
-                    });
-                    // Select the first paragraph by default
-                    paragraphHeadlineSelect.value = 0;
-                } else {
-                    const option = document.createElement('option');
-                    option.value = '';
-                    option.textContent = 'No paragraphs available for this level.';
-                    paragraphHeadlineSelect.appendChild(option);
-                    paragraphHeadlineSelect.disabled = true;
-                }
-            }
-
-            function loadNewParagraph() {
-                stopTypingTest(); // Stop any ongoing test
-
-                if (!paragraphHeadlineSelect || paragraphHeadlineSelect.value === '') {
-                    paragraphDisplay.textContent = "Please select a paragraph.";
-                    typingInput.disabled = true;
-                    startTestBtn.disabled = true;
-                    resetTestBtn.disabled = true;
-                    return;
-                }
-
-                const selectedParagraphIndex = parseInt(paragraphHeadlineSelect.value);
-                const selectedParagraph = paragraphs[currentLevel][selectedParagraphIndex];
-                
-                if (!selectedParagraph) {
-                    paragraphDisplay.textContent = "Error: Paragraph not found.";
-                    typingInput.disabled = true;
-                    startTestBtn.disabled = true;
-                    resetTestBtn.disabled = true;
-                    return;
-                }
-
-                currentParagraph = selectedParagraph.text;
-                paragraphDisplay.innerHTML = '';
-                currentParagraph.split('').forEach(char => {
-                    const charSpan = document.createElement('span');
-                    charSpan.textContent = char;
-                    paragraphDisplay.appendChild(charSpan);
-                });
-                typedCharactersSpan = paragraphDisplay.querySelectorAll('span');
-                typingInput.value = '';
-                wpmDisplay.textContent = '0';
-                accuracyDisplay.textContent = '100';
-                charactersTyped = 0;
-                correctCharacters = 0;
-                testCompleted = false; // Reset completion flag
-                if (typedCharactersSpan.length > 0) {
-                    typedCharactersSpan[0].classList.add('current-char');
-                }
-                typingInput.disabled = false;
-                startTestBtn.style.display = 'inline-block';
-                resetTestBtn.style.display = 'none';
-                clearInterval(timerInterval);
-                isTestRunning = false;
-                updateTimeLeftDisplay(parseInt(testDurationSelect.value) * 60); // Set initial time display
-            }
-
-            function updateTimeLeftDisplay(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = seconds % 60;
-                timeLeftDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-            }
-
-            function calculateWPM() {
-                const timeElapsed = (new Date() - startTime) / 1000 / 60;
-                if (timeElapsed <= 0) return 0;
-                // WPM = (Number of correct characters / 5) / time in minutes
-                return Math.round((correctCharacters / 5) / timeElapsed);
-            }
-
-            function calculateAccuracy() {
-                if (charactersTyped === 0) return 100;
-                return Math.round((correctCharacters / charactersTyped) * 100);
-            }
-
-            function startTypingTest() {
-                if (!currentLoggedInUser) {
-                    showCustomAlert('Login Required', 'Please log in to start a typing test.', 'info');
-                    return;
-                }
-                if (isTestRunning) return;
-                startTime = new Date();
-                isTestRunning = true;
-                typingInput.focus();
-                startTestBtn.style.display = 'none';
-                resetTestBtn.style.display = 'inline-block';
-                testDurationSelect.disabled = true; // Disable duration selection during test
-                paragraphHeadlineSelect.disabled = true; // Disable paragraph selection during test
-                levelEasyBtn.disabled = true;
-                levelNormalBtn.disabled = true;
-                levelHardBtn.disabled = true;
-
-                let totalSeconds = parseInt(testDurationSelect.value) * 60;
-                updateTimeLeftDisplay(totalSeconds);
-
-                timerInterval = setInterval(() => {
-                    totalSeconds--;
-                    updateTimeLeftDisplay(totalSeconds);
-                    if (totalSeconds <= 0) {
-                        clearInterval(timerInterval);
-                        stopTypingTest(true); // Indicate test ended by timer
-                        showCustomAlert('Time Up!', "Your typing test time is up!", 'info');
-                    }
-                }, 1000);
-            }
-
-            function stopTypingTest(timerEnded = false) {
-                isTestRunning = false;
-                clearInterval(timerInterval);
-                typingInput.disabled = true;
-                testDurationSelect.disabled = false; // Re-enable duration selection
-                paragraphHeadlineSelect.disabled = false; // Re-enable paragraph selection
-                levelEasyBtn.disabled = false;
-                levelNormalBtn.disabled = false;
-                levelHardBtn.disabled = false;
-                
-                // Only save if the test was completed (all characters typed or timer ran out)
-                if (testCompleted || timerEnded) {
-                    saveTypingResult();
-                }
-            }
-
-            function resetTypingTest() {
-                stopTypingTest();
-                loadNewParagraph();
-                updateHighestWPMDisplay(); // Ensure highest WPM is updated on reset
-            }
-
-            function saveTypingResult() {
-                if (!currentLoggedInUser) return; // Only save if a user is logged in
-
-                const wpm = calculateWPM();
-                const accuracy = calculateAccuracy();
-                const now = new Date();
-                const dateStr = now.toLocaleDateString();
-                const timeStr = now.toLocaleTimeString();
-
-                const result = {
-                    wpm: wpm,
-                    accuracy: accuracy,
-                    level: currentLevel,
-                    date: dateStr,
-                    time: timeStr,
-                    duration: parseInt(testDurationSelect.value),
-                    paragraphHeadline: paragraphs[currentLevel][parseInt(paragraphHeadlineSelect.value)].headline // Save the headline
-                };
-
-                // Ensure typingTestResults array exists for the current user
-                if (!currentLoggedInUser.typingTestResults) {
-                    currentLoggedInUser.typingTestResults = [];
-                }
-                currentLoggedInUser.typingTestResults.push(result);
-                saveCurrentUserData(); // Save the updated current user data
-                displayTypingResults();
-
-                // Update highest WPM for the current user
-                if (wpm > (currentLoggedInUser.highestWPM || 0)) {
-                    currentLoggedInUser.highestWPM = wpm;
-                    saveCurrentUserData();
-                    updateHighestWPMDisplay();
-                }
-            }
-
-            function displayTypingResults() {
-                testResultsList.innerHTML = '';
-                if (!currentLoggedInUser || !currentLoggedInUser.typingTestResults) return;
-
-                let results = [...currentLoggedInUser.typingTestResults]; // Create a copy to sort
-                // Sort results by date/time descending for most recent first
-                results.sort((a, b) => new Date(`${b.date} ${b.time}`) - new Date(`${a.date} ${a.date}`));
-
-                results.forEach(res => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('list-item');
-                    listItem.textContent = `Date: ${res.date} ${res.time} - Level: ${res.level.toUpperCase()} - Paragraph: "${res.paragraphHeadline}" - Speed: ${res.wpm} WPM - Accuracy: ${res.accuracy}% - Duration: ${res.duration} min`;
-                    testResultsList.appendChild(listItem);
-                });
-            }
-
-            function updateHighestWPMDisplay() {
-                if (highestWPMDisplay && currentLoggedInUser) {
-                    highestWPMDisplay.textContent = currentLoggedInUser.highestWPM || 0;
-                } else if (highestWPMDisplay) {
-                    highestWPMDisplay.textContent = '0'; // Display 0 if no user or no highest WPM
-                }
-            }
-
-            function handleTypingInput(e) {
-                if (!isTestRunning) {
-                    startTypingTest();
-                }
-
-                const typedText = typingInput.value;
-                charactersTyped = typedText.length;
-                correctCharacters = 0;
-
-                typedCharactersSpan.forEach((charSpan, index) => {
-                    const paragraphChar = currentParagraph[index];
-                    const typedChar = typedText[index];
-
-                    charSpan.classList.remove('correct', 'incorrect', 'current-char');
-
-                    if (typedChar == null) {
-                        if (index === typedText.length) {
-                            charSpan.classList.add('current-char');
-                        }
-                    } else if (typedChar === paragraphChar) {
-                        charSpan.classList.add('correct');
-                        correctCharacters++;
-                    } else {
-                        charSpan.classList.add('incorrect');
-                    }
-                });
-
-                wpmDisplay.textContent = calculateWPM();
-                accuracyDisplay.textContent = calculateAccuracy();
-
-                // Check if the user has typed the entire paragraph
-                if (typedText.length === currentParagraph.length) {
-                    if (typedText === currentParagraph) {
-                        testCompleted = true; // Mark as completed
-                        stopTypingTest();
-                        showCustomAlert('Test Complete!', "Well done! Your typing test is complete.", 'success');
-                        typingInput.disabled = true;
-                    }
                 }
             }
 
