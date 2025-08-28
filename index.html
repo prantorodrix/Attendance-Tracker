@@ -3,225 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>&#x2666; Activity - Attendance Tracker</title> <!-- Added diamond emoji to title -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- For icons, e.g., for user profile or arrows -->
+    <title>TaskFlow - Effortless Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         /* Basic Reset & Global Styles */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Poppins:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap');
 
         :root {
             /* Default Light Theme Colors (Fallback) */
-            --bg-primary: linear-gradient(135deg, #F0F4F8 0%, #E6EEF5 100%);
-            --bg-secondary: #FFFFFF;
-            --text-primary: #2C3E50;
-            --text-secondary: #607D8B;
-            --accent-color: #007BFF;
-            --border-color: #DDE6ED;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --input-bg: #F8FAFC;
-            --gradient-start: #6DD5FA;
-            --gradient-mid1: #2980B9;
-            --gradient-mid2: #1ABC9C;
-            --gradient-mid3: #3498DB;
-            --gradient-end: #8E44AD;
-            --nav-bg: #2C3E50;
-            --nav-text: #ffffff;
-            --footer-bg: #2C3E50;
-            --footer-text: #ffffff;
-            --table-header-bg: #007BFF;
-            --table-row-even: #F0F4F8;
-            --table-row-hover: #E6EEF5;
-            --status-present: #2C3E50;
-            --status-absent: #E74C3C;
-            --status-weekend: #808080;
-            --status-holiday: #4CAF50;
-            --status-govt-holiday: #FFD700;
-            --status-sick-leave: #FF8C00;
+            --bg-primary-light: linear-gradient(135deg, #F0F4F8 0%, #E6EEF5 100%);
+            --bg-secondary-light: #FFFFFF;
+            --text-primary-light: #2C3E50;
+            --text-secondary-light: #607D8B;
+            --accent-color-light: #007BFF;
+            --border-color-light: #DDE6ED;
+            --shadow-color-light: rgba(0, 0, 0, 0.08);
+            --input-bg-light: #F8FAFC;
+            
+            --nav-bg-light: #FFFFFF;
+            --nav-text-light: var(--text-primary-light);
+            --footer-bg-light: #2C3E50;
+            --footer-text-light: #ffffff;
 
-            --status-present-bg: #E3F2FD;
-            --status-absent-bg: #FFEBEE;
-            --status-weekend-bg: #EEEEEE;
-            --status-holiday-bg: #E8F5E9;
-            --status-govt-holiday-bg: #FFFDE7;
-            --status-sick-leave-bg: #FFF3E0;
+            --table-header-bg-light: var(--accent-color-light);
+            --table-header-text-light: #FFFFFF;
+            --table-row-even-light: #F0F4F8;
+            --table-row-hover-light: #E6EEF5;
 
-            --chart-color-present: #007BFF;
-            --chart-color-absent: #E74C3C;
-            --chart-color-late: #FFC107;
-            --chart-color-weekend: #808080;
-            --chart-color-holiday: #4CAF50;
+            /* Status Colors (Light) */
+            --status-present-light: #28a745;
+            --status-absent-light: #dc3545;
+            --status-weekend-light: #6c757d;
+            --status-holiday-light: #ffc107;
+            --status-govt-holiday-light: #17a2b8;
+            --status-sick-leave-light: #fd7e14;
+
+            --status-present-bg-light: rgba(40, 167, 69, 0.05);
+            --status-absent-bg-light: rgba(220, 53, 69, 0.05);
+            --status-weekend-bg-light: rgba(108, 117, 125, 0.05);
+            --status-holiday-bg-light: rgba(255, 193, 7, 0.05);
+            --status-govt-holiday-bg-light: rgba(23, 162, 184, 0.05);
+            --status-sick-leave-bg-light: rgba(253, 126, 20, 0.05);
+
+            /* Chart Colors (Light) */
+            --chart-color-present-light: #007AFF;
+            --chart-color-absent-light: #dc3545;
+            --chart-color-late-light: #ffc107;
         }
 
         /* Dark Theme Overrides */
         html[data-theme='dark'] {
-            --bg-primary: linear-gradient(135deg, #1A2A3A 0%, #0A1620 100%);
-            --bg-secondary: #2A3B4D;
-            --text-primary: #E0E6EB;
-            --text-secondary: #AAB8C2;
-            --accent-color: #00C896;
-            --border-color: #4A5C6F;
-            --shadow-color: rgba(0, 0, 0, 0.4);
-            --input-bg: #3A4C5E;
-            --gradient-start: #0A1620;
-            --gradient-mid1: #1A2A3A;
-            --gradient-mid2: #2A3B4D;
-            --gradient-mid3: #3A4C5E;
-            --gradient-end: #4A5C6F;
-            --nav-bg: #0A1620;
-            --nav-text: #E0E6EB;
-            --footer-bg: #0A1620;
-            --footer-text: #E0E6EB;
-            --table-header-bg: #00C896;
-            --table-row-even: #203040;
-            --table-row-hover: #30455A;
-            --status-present: #E0E6EB;
-            --status-absent: #FF6B6B;
-            --status-weekend: #AAB8C2;
-            --status-holiday: #00FF00;
-            --status-govt-holiday: #FFD700;
-            --status-sick-leave: #FFA500;
+            --bg-primary-dark: linear-gradient(135deg, #1A2A3A 0%, #0A1620 100%);
+            --bg-secondary-dark: #2A3B4D;
+            --text-primary-dark: #E0E6EB;
+            --text-secondary-dark: #AAB8C2;
+            --accent-color-dark: #00C896;
+            --border-color-dark: #4A5C6F;
+            --shadow-color-dark: rgba(0, 0, 0, 0.4);
+            --input-bg-dark: #3A4C5E;
+            
+            --nav-bg-dark: #0A1620;
+            --nav-text-dark: #E0E6EB;
+            --footer-bg-dark: #0A1620;
+            --footer-text-dark: #E0E6EB;
 
-            --status-present-bg: #2B4C6D;
-            --status-absent-bg: #4D2626;
-            --status-weekend-bg: #3A4C5E;
-            --status-holiday-bg: #2E4E2E;
-            --status-govt-holiday-bg: #4D4A26;
-            --status-sick-leave-bg: #4D3A26;
+            --table-header-bg-dark: var(--accent-color-dark);
+            --table-header-text-dark: #FFFFFF;
+            --table-row-even-dark: #203040;
+            --table-row-hover-dark: #30455A;
 
-            --chart-color-present: #00C896;
-            --chart-color-absent: #FF6B6B;
-            --chart-color-late: #FFD700;
-            --chart-color-weekend: #AAB8C2;
-            --chart-color-holiday: #00FF00;
+            /* Status Colors (Dark) */
+            --status-present-dark: #64FFDA;
+            --status-absent-dark: #FF6B6B;
+            --status-weekend-dark: #AAB8C2;
+            --status-holiday-dark: #A9DC76; /* Brighter green for holiday */
+            --status-govt-holiday-dark: #FFD700;
+            --status-sick-leave-dark: #FFA500;
+
+            --status-present-bg-dark: rgba(100, 255, 218, 0.1);
+            --status-absent-bg-dark: rgba(255, 107, 107, 0.1);
+            --status-weekend-bg-dark: rgba(170, 184, 194, 0.1);
+            --status-holiday-bg-dark: rgba(169, 220, 118, 0.1);
+            --status-govt-holiday-bg-dark: rgba(255, 215, 0, 0.1);
+            --status-sick-leave-bg-dark: rgba(255, 165, 0, 0.1);
+
+            /* Chart Colors (Dark) */
+            --chart-color-present-dark: #00C896;
+            --chart-color-absent-dark: #FF6B6B;
+            --chart-color-late-dark: #FFD700;
         }
         
         /* NeptuneVibe Theme (New & Default) */
         html[data-theme='neptune-vibe'] {
-            --bg-primary: linear-gradient(135deg, #0A192F 0%, #172A45 100%); /* Deep ocean blue */
-            --bg-secondary: #0F2038; /* Slightly lighter deep blue */
-            --text-primary: #8892B0; /* Light grayish blue */
-            --text-secondary: #CCD6F6; /* Lighter blue-gray for accents */
-            --accent-color: #4A90E2; /* Deeper blue for main accent */
-            --button-gradient-start: #4A90E2; /* New start for button gradient */
-            --button-gradient-end: #00BFFF; /* New end for button gradient */
+            --bg-primary: linear-gradient(135deg, #0A192F 0%, #172A45 100%, #0A192F 200%); /* Deep ocean blue with loop for animation */
+            --bg-secondary: #0F2038; /* Slightly lighter deep blue for cards */
+            --text-primary: #CCD6F6; /* Lighter blue-gray for main text */
+            --text-secondary: #8892B0; /* Light grayish blue for secondary text */
+            --accent-color: #64FFDA; /* Bright aqua for main accent */
+            --secondary-accent: #4A90E2; /* Deeper blue for secondary accent */
+            --button-gradient-start: #64FFDA; /* Aqua start for button gradient */
+            --button-gradient-end: #4A90E2; /* Blue end for button gradient */
             --border-color: #2A3B4D; /* Medium desaturated blue */
             --shadow-color: rgba(2, 12, 27, 0.7); /* Darker, more intense shadow */
             --input-bg: #112240; /* Dark blue for inputs */
-            --gradient-start: #0F2038;
-            --gradient-mid1: #0A192F;
-            --gradient-mid2: #172A45;
-            --gradient-mid3: #0F2038;
-            --gradient-end: #112240;
+            
             --nav-bg: #0A192F;
-            --nav-text: #CCD6F6; /* Lighter blue-gray for nav text */
+            --nav-text: var(--text-primary);
             --footer-bg: #0A192F;
-            --footer-text: #8892B0;
+            --footer-text: var(--text-secondary);
 
             --table-header-bg: linear-gradient(90deg, #112240, #2A3B4D); /* Gradient for table header */
+            --table-header-text: var(--text-primary); /* Ensure good contrast */
             --table-row-even: #112240;
             --table-row-hover: #172A45;
-            --status-present: #64FFDA; /* Keep a bright accent for present status text */
-            --status-absent: #E74C3C; /* Red */
-            --status-weekend: #8892B0; /* Light grayish blue */
-            --status-holiday: #FFD700; /* Gold */
-            --status-govt-holiday: #7FFF00; /* Chartreuse */
-            --status-sick-leave: #FFA500; /* Orange */
 
-            --status-present-bg: rgba(100, 255, 218, 0.1); /* Light aqua transparent */
-            --status-absent-bg: rgba(231, 76, 60, 0.1); /* Light red transparent */
-            --status-weekend-bg: rgba(136, 146, 176, 0.1); /* Light gray transparent */
-            --status-holiday-bg: rgba(255, 215, 0, 0.1); /* Light gold transparent */
-            --status-govt-holiday-bg: rgba(127, 255, 0, 0.1); /* Light chartreuse transparent */
-            --status-sick-leave-bg: rgba(255, 165, 0, 0.1); /* Light orange transparent */
+            /* Status Colors (NeptuneVibe) */
+            --status-present: #64FFDA; 
+            --status-absent: #E74C3C; 
+            --status-weekend: #8892B0; 
+            --status-holiday: #A9DC76; /* Bright green for holiday */
+            --status-govt-holiday: #7FFF00; 
+            --status-sick-leave: #FFA500; 
 
-            --chart-color-present: #4A90E2; /* New chart color for present */
+            --status-present-bg: rgba(100, 255, 218, 0.1); 
+            --status-absent-bg: rgba(231, 76, 60, 0.1); 
+            --status-weekend-bg: rgba(136, 146, 176, 0.1); 
+            --status-holiday-bg: rgba(169, 220, 118, 0.1); 
+            --status-govt-holiday-bg: rgba(127, 255, 0, 0.1); 
+            --status-sick-leave-bg: rgba(255, 165, 0, 0.1); 
+
+            /* Chart Colors (NeptuneVibe) */
+            --chart-color-present: #64FFDA; /* Aqua */
             --chart-color-absent: #E74C3C; /* Red */
-            --chart-color-late: #FFC107; /* Amber */
-            --chart-color-weekend: #8892B0; /* Light grayish blue (if used) */
-            --chart-color-holiday: #7FFF00; /* Chartreuse (if used) */
-
-            /* Specific styling for neptune-vibe elements */
-            .premium-button {
-                background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
-                color: var(--text-secondary); /* Lighter text for buttons */
-                box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4); /* Shadow based on blue gradient */
-            }
-            .premium-button:hover {
-                box-shadow: 0 6px 20px rgba(0, 191, 255, 0.6);
-            }
-            .auth-container {
-                box-shadow: 0 15px 40px var(--shadow-color);
-            }
-            .section-card {
-                box-shadow: 0 8px 30px var(--shadow-color);
-            }
-            #main-navbar {
-                box-shadow: 0 2px 15px var(--shadow-color);
-            }
-            .logo-icon {
-                filter: drop-shadow(0 0 5px var(--accent-color));
-            }
-            .user-photo {
-                border: 2px solid var(--accent-color);
-            }
-            .user-dashboard-photo {
-                border: 3px solid var(--accent-color);
-            }
-            .summary-grid div {
-                background-color: var(--input-bg);
-                box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-            }
-            .summary-grid span {
-                color: var(--accent-color);
-            }
-            #attendanceTable thead, #historyAttendanceTable thead {
-                background: var(--table-header-bg); /* Use gradient for table header */
-                color: var(--nav-text); /* Ensure good contrast */
-            }
-            .table-actions button {
-                background: linear-gradient(90deg, var(--button-gradient-start), var(--button-gradient-end)); /* Small buttons also gradient */
-                color: var(--text-secondary); /* Lighter text for small buttons */
-                box-shadow: 0 1px 6px rgba(0, 191, 255, 0.3);
-            }
-            .table-actions button:hover {
-                background: linear-gradient(90deg, var(--button-gradient-end), var(--button-gradient-start));
-                box-shadow: 0 2px 8px rgba(0, 191, 255, 0.5);
-            }
-            .table-actions .delete-button {
-                background-color: var(--status-absent);
-                color: var(--bg-secondary);
-            }
-            .modal-content {
-                box-shadow: 0 10px 40px var(--shadow-color);
-            }
-            #customAlertModal .modal-content,
-            #customConfirmModal .modal-content {
-                border-left: 6px solid var(--accent-color);
-            }
-            .help-modal-content h2 {
-                text-shadow: 0 0 10px var(--accent-color);
-            }
-            footer {
-                border-top: 3px solid var(--accent-color);
-                box-shadow: 0 -3px 20px var(--shadow-color);
-            }
-            footer .footer-section h4 {
-                color: var(--accent-color);
-            }
-            /* Headlines with subtle text shadow for NeptuneVibe */
-            html[data-theme='neptune-vibe'] h1, 
-            html[data-theme='neptune-vibe'] h2, 
-            html[data-theme='neptune-vibe'] h3, 
-            html[data-theme='neptune-vibe'] h4 {
-                text-shadow: 0px 0px 8px rgba(0, 191, 255, 0.3); /* Subtle blue glow */
-            }
+            --chart-color-late: #FFD700; /* Gold */
         }
-
 
         /* Alert/Warning Colors (remain consistent but adapt to theme text) */
         --alert-info: #2196F3;
@@ -230,8 +148,8 @@
         --alert-error: #F44336;
 
         --transition-speed: 0.3s ease-in-out;
-        --border-radius-base: 8px; /* Slightly more rounded */
-        --border-radius-large: 12px;
+        --border-radius-base: 8px; /* Slightly less rounded for tight fit */
+        --border-radius-large: 12px; /* Less rounded for main cards */
 
         * {
             margin: 0;
@@ -242,83 +160,111 @@
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--text-primary);
-            line-height: 1.6; /* Slightly increased for readability */
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            background: var(--bg-primary); /* Default background now uses gradient variable */
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: var(--bg-primary); 
+            background-size: 200% 200%; /* For animated background */
             transition: background var(--transition-speed), color var(--transition-speed);
         }
 
         body.main-page-body {
-            background: var(--bg-primary); /* Use theme primary background for main page */
-            padding-top: 60px; /* Space for fixed navbar */
+            padding-top: 60px; /* Adjusted space for fixed navbar */
+            background: var(--bg-primary); /* Ensure this is set for main page */
+            background-size: 200% 200%;
+            background-position: 0% 50%; /* Initial position */
+            transition: background var(--transition-speed), color var(--transition-speed);
         }
 
-        @keyframes gradientAnimation {
+        @keyframes gradientScroll {
             0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
+        /* Dynamic scroll animation */
+        body.main-page-body.animate-scroll {
+            animation: none; /* Disable static animation if dynamic is active */
+        }
+        
         h1, h2, h3, h4 {
             font-family: 'Poppins', sans-serif;
             color: var(--text-primary);
-            font-weight: 500; /* Standard font weight */
+            font-weight: 600; 
             transition: color var(--transition-speed);
+            text-shadow: 0px 0px 6px rgba(100, 255, 218, 0.15); /* Subtle accent glow for headers */
         }
 
         /* Premium Button Style */
         .premium-button {
-            background-color: var(--accent-color); /* Vibrant accent color */
-            color: var(--nav-text); /* White text for buttons */
-            padding: 10px 20px; /* Standard padding */
+            background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+            color: var(--nav-text); 
+            padding: 10px 20px; /* Tighter padding */
             border: none;
-            border-radius: 6px; /* Slightly less rounded */
-            font-size: 0.9rem; /* Standard font size */
-            font-weight: 500; /* Standard font weight */
+            border-radius: var(--border-radius-base);
+            font-size: 0.9rem; 
+            font-weight: 600; 
             cursor: pointer;
-            transition: all var(--transition-speed);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Standard shadow */
-            letter-spacing: 0.3px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            letter-spacing: 0.5px; 
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px; /* Tighter gap */
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .premium-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1); 
+            transform: skewX(-30deg);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: -1;
+        }
+
+        .premium-button:hover::before {
+            left: 100%;
         }
 
         .premium-button:hover {
-            background-color: var(--accent-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
-            transform: translateY(-1px) scale(1.005);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px) scale(1.005); /* Less pronounced lift and scale */
         }
 
         .premium-button:active {
             transform: translateY(0);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
         /* Secondary Button Style */
         .premium-button.secondary {
-            background-color: var(--border-color);
+            background: var(--input-bg); 
             color: var(--text-primary);
-            box-shadow: 0 2px 5px var(--shadow-color);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
 
         .premium-button.secondary:hover {
-            background-color: var(--border-color); /* Keep same color, but change shadow/transform */
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            transform: translateY(-1px) scale(1.005);
+            background-color: var(--border-color); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         /* Delete Button Style */
         .premium-button.delete-button {
-            background-color: var(--status-absent); /* Red for delete */
-            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+            background: linear-gradient(135deg, var(--alert-error) 0%, #B71C1C 100%); 
+            box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3);
         }
 
         .premium-button.delete-button:hover {
-            background-color: var(--status-absent);
-            box-shadow: 0 3px 8px rgba(192, 57, 43, 0.3);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+            background: linear-gradient(135deg, #B71C1C 0%, var(--alert-error) 100%);
         }
 
         /* --- Login Page Specific Styles --- */
@@ -327,23 +273,28 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%); /* Use theme gradient */
+            background: linear-gradient(135deg, #0A192F 0%, #172A45 100%);
             background-size: 200% 200%;
-            animation: gradientAnimation 15s ease infinite;
-            color: var(--nav-text);
+            animation: gradientAnimation 15s ease infinite; /* Faster, more subtle animation */
+            color: var(--text-primary);
             transition: background var(--transition-speed);
         }
 
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .auth-container {
-            background-color: var(--bg-secondary); /* Use secondary background for auth container */
-            backdrop-filter: blur(8px); /* More pronounced blur effect */
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 15px 40px var(--shadow-color);
+            background-color: var(--bg-secondary);
+            padding: 30px; /* Reduced padding */
+            border-radius: var(--border-radius-large); 
+            box-shadow: 0 15px 40px var(--shadow-color); 
             text-align: center;
             width: 90%;
-            max-width: 320px; /* Slightly wider */
-            animation: fadeInScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            max-width: 400px; /* Slightly narrower */
+            animation: fadeInScale 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
             color: var(--text-primary);
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -356,24 +307,29 @@
         }
 
         .auth-container h1.premium-heading {
-            font-size: 1.8rem; /* Adjusted font size */
+            font-size: 2rem; 
             margin-bottom: 10px;
             color: var(--text-primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            text-shadow: 0px 0px 8px rgba(100, 255, 218, 0.25); 
         }
 
         .auth-container .sub-heading {
-            font-size: 0.9rem;
-            margin-bottom: 25px;
-            color: var(--accent-color);
-            font-weight: 400; /* Standard font weight */
+            font-size: 1rem;
+            margin-bottom: 25px; /* Reduced margin */
+            color: var(--text-secondary);
+            font-weight: 400;
         }
 
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 15px; /* Reduced gap */
             animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .input-group {
@@ -383,10 +339,10 @@
 
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500; /* Standard font weight */
-            color: var(--text-primary);
-            font-size: 0.85rem;
+            margin-bottom: 8px; /* Reduced margin */
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
             letter-spacing: 0.2px;
         }
 
@@ -396,18 +352,20 @@
         .input-group input[type="date"],
         .input-group select {
             width: 100%;
-            padding: 10px 14px;
+            padding: 10px 14px; /* Reduced padding */
             border: 1px solid var(--border-color);
-            border-radius: 6px; /* Less rounded */
-            font-size: 0.9rem;
+            border-radius: var(--border-radius-base);
+            font-size: 1rem; 
             transition: all var(--transition-speed);
             background-color: var(--input-bg);
             color: var(--text-primary);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.08); /* Lighter inset shadow */
+            outline: none;
         }
 
         .input-group input::placeholder {
             color: var(--text-secondary);
+            opacity: 0.7;
         }
 
         .input-group input[type="email"]:focus,
@@ -416,8 +374,7 @@
         .input-group input[type="date"]:focus,
         .input-group select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
-            outline: none;
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.25); /* Tighter focus ring */
         }
 
         /* Styles for input error states */
@@ -428,8 +385,8 @@
 
         .input-group .error-message {
             color: var(--alert-error);
-            font-size: 0.75rem;
-            margin-top: 3px;
+            font-size: 0.8rem;
+            margin-top: 5px; /* Reduced margin */
             display: none;
         }
 
@@ -439,44 +396,45 @@
 
         .login-links {
             display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
-            font-size: 0.85rem;
+            justify-content: center; 
+            margin-top: 15px; /* Reduced margin */
+            font-size: 0.9rem;
+            gap: 10px; 
         }
 
         .login-links a {
-            color: var(--accent-color);
+            color: var(--secondary-accent); 
             text-decoration: none;
-            transition: color var(--transition-speed);
-            font-weight: 400; /* Standard font weight */
+            transition: color var(--transition-speed), text-decoration var(--transition-speed);
+            font-weight: 500;
         }
 
         .login-links a:hover {
-            color: var(--text-primary);
+            color: var(--accent-color);
             text-decoration: underline;
         }
 
         /* --- Main Page General Styles --- */
         .container {
-            max-width: 1000px; /* Slightly smaller max width */
-            margin: 20px auto;
-            padding: 0 15px;
+            max-width: 1100px; /* Slightly narrower for focus */
+            margin: 20px auto; /* Reduced margin */
+            padding: 0 15px; /* Reduced padding */
         }
 
         .section-card {
             background-color: var(--bg-secondary);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 6px 20px var(--shadow-color); /* Slightly smaller shadow */
-            animation: slideUp 0.6s ease-out forwards;
+            padding: 25px; /* Reduced padding */
+            margin-bottom: 20px; /* Reduced margin */
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 30px var(--shadow-color); 
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color var(--transition-speed), border-color var(--transition-speed);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
         .section-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px); /* Less pronounced lift */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
         }
 
         @keyframes slideUp {
@@ -485,12 +443,12 @@
         }
 
         h2 {
-            font-size: 1.6rem; /* Adjusted font size */
+            font-size: 1.8rem; /* Slightly smaller */
             color: var(--text-primary);
-            margin-bottom: 15px;
+            margin-bottom: 20px; /* Reduced margin */
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color); /* Thinner border */
+            padding-bottom: 15px; /* Reduced padding */
         }
 
         /* --- Navigation Bar --- */
@@ -502,76 +460,102 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 10px 25px; /* Reduced padding */
             background-color: var(--nav-bg);
             color: var(--nav-text);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.25);
             z-index: 1000;
-            transition: background-color 0.3s ease, padding 0.3s ease, backdrop-filter 0.3s ease, color var(--transition-speed);
+            transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, color var(--transition-speed);
         }
 
         #main-navbar.scrolled {
-            background-color: rgba(44, 62, 80, 0.9);
-            padding: 8px 20px;
-            backdrop-filter: blur(6px);
+            padding: 8px 25px; /* Even smaller padding on scroll */
+            background-color: rgba(10, 25, 47, 0.9); /* More transparent on scroll */
+            backdrop-filter: blur(6px); /* Less blur */
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px; /* Reduced gap */
         }
 
         .logo-text {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem; /* Adjusted font size */
-            font-weight: 600; /* Standard font weight */
+            font-size: 1.4rem; /* Smaller logo text */
+            font-weight: 700;
             color: var(--nav-text);
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .logo-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px; /* Smaller icon */
+            height: 24px;
             fill: var(--accent-color);
-            transition: fill var(--transition-speed);
+            transition: fill var(--transition-speed), transform 0.25s ease;
+        }
+        .logo-icon:hover {
+            transform: rotate(10deg) scale(1.08); /* Less pronounced hover */
         }
 
         .nav-links {
             display: flex;
-            gap: 20px; /* Slightly more space */
+            gap: 25px; /* Reduced gap */
             list-style: none;
             margin-right: auto;
-            margin-left: 20px;
+            margin-left: 25px; /* Reduced margin */
         }
 
         .nav-links a {
             color: var(--nav-text);
             text-decoration: none;
-            font-weight: 400; /* Standard font weight */
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.95rem; /* Slightly smaller nav links */
             position: relative;
-            padding-bottom: 3px;
+            padding-bottom: 5px; /* Reduced padding */
+            transition: color var(--transition-speed);
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
             width: 0;
-            height: 2px;
+            height: 3px; /* Thinner underline */
             background-color: var(--accent-color);
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            transition: width var(--transition-speed), background-color var(--transition-speed);
+            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color var(--transition-speed);
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after, .nav-links a.active-nav-link::after {
             width: 100%;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active-nav-link {
             color: var(--accent-color);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Reduced gap */
+        }
+
+        .nav-buttons .premium-button {
+            padding: 8px 15px; /* Reduced padding */
+            font-size: 0.85rem;
+            text-transform: none;
+            box-shadow: none; 
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+        .nav-buttons .premium-button:hover {
+            background-color: var(--border-color);
+            color: var(--accent-color);
+            box-shadow: none;
+            transform: translateY(-1px);
         }
 
         .user-profile-menu {
@@ -579,34 +563,35 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-            font-weight: 400; /* Standard font weight */
+            font-weight: 500;
             color: var(--nav-text);
-            padding: 3px 8px;
+            padding: 6px 10px; /* Reduced padding */
             border-radius: var(--border-radius-base);
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
         .user-profile-menu:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--input-bg);
+            color: var(--accent-color);
         }
 
         .user-photo {
-            width: 30px;
-            height: 30px;
+            width: 35px; /* Smaller photo */
+            height: 35px;
             border-radius: 50%;
-            margin-left: 8px;
-            border: 2px solid var(--accent-color);
+            margin-left: 10px; /* Reduced margin */
+            border: 2px solid var(--accent-color); /* Thinner border */
             object-fit: cover;
             transition: transform var(--transition-speed), border-color var(--transition-speed);
         }
 
         .user-photo:hover {
-            transform: scale(1.08);
-            border-color: var(--nav-text);
+            transform: scale(1.05); /* Less pronounced scale */
+            border-color: var(--secondary-accent);
         }
 
         .user-profile-menu i {
-            margin-left: 4px;
+            margin-left: 6px; /* Reduced margin */
             transition: transform var(--transition-speed);
         }
 
@@ -618,21 +603,21 @@
             display: none;
             position: absolute;
             background-color: var(--bg-secondary);
-            min-width: 140px;
-            box-shadow: 0 6px 12px var(--shadow-color);
+            min-width: 160px; /* Slightly narrower */
+            box-shadow: 0 8px 20px var(--shadow-color);
             z-index: 1;
             top: 100%;
             right: 0;
-            border-radius: 8px;
+            border-radius: var(--border-radius-base);
             overflow: hidden;
             transform-origin: top right;
-            animation: scaleIn 0.2s ease-out forwards;
+            animation: scaleIn 0.2s ease-out forwards; /* Faster animation */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.98); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -643,17 +628,17 @@
 
         .dropdown-content a {
             color: var(--text-primary);
-            padding: 10px 14px;
+            padding: 10px 15px; /* Reduced padding */
             text-decoration: none;
             display: block;
             transition: background-color var(--transition-speed), color var(--transition-speed);
             font-weight: 400;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .dropdown-content a:hover {
-            background-color: var(--bg-primary);
-            color: var(--accent-color);
+            background-color: var(--input-bg);
+            color: var(--secondary-accent);
         }
 
         /* Theme Toggle Button */
@@ -661,15 +646,15 @@
             background: none;
             border: none;
             color: var(--nav-text);
-            font-size: 1.2rem;
+            font-size: 1.4rem; /* Smaller icon */
             cursor: pointer;
-            margin-left: 15px;
-            transition: color 0.3s ease, transform 0.2s ease;
+            margin-left: 15px; /* Reduced margin */
+            transition: color 0.3s ease, transform 0.3s ease;
         }
 
         #themeToggle:hover {
             color: var(--accent-color);
-            transform: scale(1.1);
+            transform: rotate(10deg) scale(1.1);
         }
 
         /* Modal Styling */
@@ -682,10 +667,10 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.7); /* Slightly less opaque */
             justify-content: center;
             align-items: center;
-            animation: fadeInOverlay 0.2s ease-out;
+            animation: fadeInOverlay 0.25s ease-out; /* Faster fade */
         }
 
         @keyframes fadeInOverlay {
@@ -696,58 +681,60 @@
         .modal-content {
             background-color: var(--bg-secondary);
             margin: auto;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px var(--shadow-color);
+            padding: 30px; /* Reduced padding */
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 15px 40px var(--shadow-color);
             width: 90%;
-            max-width: 450px;
+            max-width: 500px; /* Slightly narrower */
             position: relative;
-            animation: slideDownFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: slideDownFadeIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Faster animation */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         @keyframes slideDownFadeIn {
-            from { opacity: 0; transform: translateY(-50px); }
+            from { opacity: 0; transform: translateY(-80px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-content h2 {
             margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
+            margin-bottom: 20px; /* Reduced margin */
+            font-size: 1.8rem;
             color: var(--text-primary);
             text-align: center;
+            border-bottom: none; 
+            padding-bottom: 0;
         }
 
         .modal-content .close-button {
-            color: var(--border-color);
-            font-size: 24px;
-            font-weight: 600; /* Standard font weight */
+            color: var(--text-secondary);
+            font-size: 28px; /* Smaller close button */
+            font-weight: 600;
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 15px; /* Adjusted position */
+            right: 20px; /* Adjusted position */
             cursor: pointer;
-            transition: all var(--transition-speed);
+            transition: all 0.25s ease; /* Faster transition */
         }
 
         .modal-content .close-button:hover,
         .modal-content .close-button:focus {
-            color: var(--text-primary);
-            transform: rotate(90deg);
+            color: var(--accent-color);
+            transform: rotate(90deg) scale(1.1);
         }
 
         .user-photo-preview {
-            width: 80px;
-            height: 80px;
+            width: 100px; /* Smaller preview */
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--accent-color);
-            margin-top: 10px;
+            border: 3px solid var(--secondary-accent); /* Thinner border */
+            margin-top: 15px; /* Reduced margin */
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 2px 8px var(--shadow-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transition: border-color var(--transition-speed);
         }
 
@@ -757,47 +744,51 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            padding: 25px;
+            gap: 25px; /* Reduced gap */
+            padding: 30px; /* Reduced padding */
             background-color: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: 0 8px 25px var(--shadow-color);
-            margin-bottom: 20px;
-            animation: slideUp 0.6s ease-out forwards;
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            margin-bottom: 20px; /* Reduced margin */
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         .user-dashboard-photo {
-            width: 120px;
-            height: 120px;
+            width: 150px; /* Smaller photo */
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            transition: border-color var(--transition-speed);
+            border: 4px solid var(--accent-color); /* Thinner border */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            transition: border-color var(--transition-speed), transform 0.25s ease;
+        }
+        .user-dashboard-photo:hover {
+            transform: scale(1.02);
+            border-color: var(--secondary-accent);
         }
 
         .user-dashboard-info {
             text-align: left;
             flex-grow: 1;
-            min-width: 250px;
+            min-width: 300px; /* Adjusted min-width */
         }
 
         .user-dashboard-info h3 {
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 2.2rem; /* Smaller heading */
+            margin-bottom: 8px; /* Reduced margin */
             color: var(--text-primary);
         }
 
         .user-dashboard-info p {
-            font-size: 0.95rem;
-            margin-bottom: 4px;
+            font-size: 1.05rem; /* Slightly smaller text */
+            margin-bottom: 6px; /* Reduced margin */
             color: var(--text-secondary);
         }
 
         .user-dashboard-info strong {
-            font-weight: 500; /* Standard font weight */
+            font-weight: 600;
             color: var(--text-primary);
         }
 
@@ -806,157 +797,113 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
+            gap: 15px; /* Reduced gap */
+            margin-bottom: 20px; /* Reduced margin */
         }
 
-        /* Styling for the new month dropdown */
         #monthSelectDropdown {
-            padding: 8px 16px;
-            font-size: 0.9rem; /* Standard font size */
-            border-radius: 6px;
+            padding: 10px 18px; /* Reduced padding */
+            font-size: 1rem;
+            border-radius: var(--border-radius-base);
             border: 1px solid var(--border-color);
             background-color: var(--input-bg);
             color: var(--text-primary);
             cursor: pointer;
             transition: all var(--transition-speed);
-            box-shadow: 0 2px 6px var(--shadow-color);
-            font-weight: 400; /* Standard font weight */
+            box-shadow: 0 2px 8px var(--shadow-color);
+            font-weight: 500;
+            outline: none;
         }
 
         #monthSelectDropdown:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
-            outline: none;
-        }
-
-        .current-month {
-            font-size: 1.1rem; /* Standard font size */
-            font-weight: 500; /* Standard font weight */
-            color: var(--text-primary);
-            transition: color var(--transition-speed);
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.25);
         }
 
         .date-range-display {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px; /* Reduced margin */
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 1rem;
             transition: color var(--transition-speed);
         }
 
         .history-summary {
-            background-color: var(--bg-primary);
+            background-color: var(--input-bg); 
             border-radius: var(--border-radius-base);
-            padding: 15px;
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
-            margin-top: 15px;
+            padding: 20px; /* Reduced padding */
+            box-shadow: inset 0 1px 6px rgba(0,0,0,0.1); 
+            margin-top: 20px; /* Reduced margin */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
-            display: grid; /* Use grid for layout */
-            grid-template-columns: 1fr; /* Default to single column */
-            gap: 20px; /* Space between summary and chart */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px; /* Reduced gap */
         }
 
         @media (min-width: 768px) {
             .history-summary {
-                grid-template-columns: 1fr 250px; /* Two columns: summary grid and chart */
+                grid-template-columns: 1fr 300px; /* Smaller chart column */
             }
         }
 
         .history-summary h3 {
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 1.4rem;
         }
 
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Adjusted minmax */
+            gap: 12px; /* Reduced gap */
             text-align: center;
         }
 
         .summary-grid div {
             background-color: var(--bg-secondary);
-            padding: 12px;
-            border-radius: 6px;
-            box-shadow: 0 1px 6px var(--shadow-color);
-            font-weight: 400; /* Standard font weight */
+            padding: 15px; /* Reduced padding */
+            border-radius: var(--border-radius-base);
+            box-shadow: 0 3px 10px var(--shadow-color);
+            font-weight: 500;
             transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--transition-speed);
             border: 1px solid var(--border-color);
         }
 
         .summary-grid div:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .summary-grid strong {
-            color: var(--text-primary);
+            color: var(--text-secondary);
             display: block;
-            margin-bottom: 3px;
-            font-size: 0.8rem; /* Adjusted font size */
+            margin-bottom: 6px; /* Reduced margin */
+            font-size: 0.85rem;
         }
 
         .summary-grid span {
-            font-size: 1rem; /* Adjusted font size */
+            font-size: 1.2rem; /* Slightly smaller */
             color: var(--accent-color);
-            font-weight: 600; /* Standard font weight */
+            font-weight: 700;
         }
 
         /* Chart container styling */
         .chart-container {
             position: relative;
-            width: 100%; /* Take full width of its grid column */
-            max-width: 250px; /* Max width for circular chart */
-            margin: 0 auto;
-            padding: 10px;
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            box-shadow: 0 1px 6px var(--shadow-color);
-            align-self: center; /* Vertically align in grid */
-        }
-
-        /* --- Data Entry Form (if visible) --- */
-        .data-entry-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .data-entry-form .input-group {
-            margin-bottom: 0;
-        }
-
-        .data-entry-form input[type="date"],
-        .data-entry-form input[type="number"],
-        .data-entry-form input[type="text"],
-        .data-entry-form select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-base);
-            font-size: 0.9rem;
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
-        }
-
-        .data-entry-form input:focus,
-        .data-entry-form select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
-            outline: none;
-        }
-
-        #addEntryBtn {
-            grid-column: 1 / -1;
-            width: 70%;
+            max-width: 300px; /* Smaller max-width */
+            height: 300px; /* Smaller height */
             margin: 0 auto;
-            display: block;
+            padding: 15px; /* Reduced padding */
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius-base);
+            box-shadow: 0 3px 10px var(--shadow-color);
+            align-self: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* --- Saved Entries Table --- */
@@ -968,38 +915,38 @@
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin-top: 15px;
+            margin-top: 20px; /* Reduced margin */
             background-color: var(--bg-secondary);
-            box-shadow: 0 4px 15px var(--shadow-color);
-            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border-radius: var(--border-radius-large);
             overflow: hidden;
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
         #attendanceTable thead, #historyAttendanceTable thead {
-            background-color: var(--table-header-bg);
-            color: var(--nav-text);
-            transition: background-color var(--transition-speed), color var(--transition-speed);
+            background: var(--table-header-bg);
+            color: var(--table-header-text);
+            transition: background var(--transition-speed), color var(--transition-speed);
         }
 
         #attendanceTable th,
         #attendanceTable td,
         #historyAttendanceTable th,
         #historyAttendanceTable td {
-            padding: 10px 12px;
+            padding: 12px 15px; /* Reduced padding */
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
             transition: color var(--transition-speed), border-color var(--transition-speed);
-            font-size: 0.9rem; /* Standard font size for table cells */
+            font-size: 0.95rem; /* Slightly smaller text */
         }
 
         #attendanceTable th, #historyAttendanceTable th {
-            font-weight: 500; /* Standard font weight for table headers */
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem; /* Slightly smaller font for headers */
-            letter-spacing: 0.2px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
 
         #attendanceTable tbody tr:nth-child(even), #historyAttendanceTable tbody tr:nth-child(even) {
@@ -1013,7 +960,7 @@
             transition: background-color var(--transition-speed);
         }
 
-        /* Status Background Colors for Table Rows */
+        /* Status Background Colors for Table Rows (keeping this, but will primarily use text colors) */
         .status-present-row { background-color: var(--status-present-bg) !important; }
         .status-absent-row { background-color: var(--status-absent-bg) !important; }
         .status-weekend-row { background-color: var(--status-weekend-bg) !important; }
@@ -1021,406 +968,201 @@
         .status-government_holiday-row { background-color: var(--status-govt-holiday-bg) !important; }
         .status-sick_leave-row { background-color: var(--status-sick-leave-bg) !important; }
 
-
         .table-actions button {
-            background-color: var(--accent-color);
+            background: linear-gradient(90deg, var(--secondary-accent), var(--button-gradient-start)); 
             color: var(--nav-text);
             border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 8px 12px; /* Reduced padding */
+            border-radius: 6px; /* Smaller radius */
             cursor: pointer;
-            font-size: 0.7rem; /* Adjusted font size */
-            margin-right: 4px;
-            transition: all var(--transition-speed);
-            box-shadow: 0 1px 4px rgba(108, 99, 255, 0.2);
+            font-size: 0.8rem;
+            margin-right: 6px; /* Reduced margin */
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
         }
 
         .table-actions button:hover {
-            background-color: var(--accent-color);
+            background: linear-gradient(90deg, var(--button-gradient-start), var(--secondary-accent));
             transform: translateY(-1px);
-            box-shadow: 0 2px 6px rgba(108, 99, 255, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .table-actions .delete-button {
-            background-color: var(--status-absent);
-            box-shadow: 0 1px 4px rgba(231, 76, 60, 0.2);
+        .table-actions .delete-button { /* Only for explicit delete button if any */
+            background: linear-gradient(90deg, var(--alert-error), #B71C1C);
+            box-shadow: 0 1px 6px rgba(244, 67, 54, 0.2);
         }
 
         .table-actions .delete-button:hover {
-            background-color: var(--status-absent);
-            box-shadow: 0 2px 6px rgba(192, 57, 43, 0.3);
+            background: linear-gradient(90deg, #B71C1C, var(--alert-error));
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.25);
         }
 
         /* Specific Status Colors (Text Only) */
-        .status-present { color: var(--status-present); font-weight: 500; transition: color var(--transition-speed); }
-        .status-absent { color: var(--status-absent); font-weight: 500; transition: color var(--transition-speed); }
-        .status-weekend { color: var(--status-weekend); font-weight: 500; transition: color var(--transition-speed); }
-        .status-holiday { color: var(--status-holiday); font-weight: 500; transition: color var(--transition-speed); }
-        .status-government_holiday { color: var(--status-govt-holiday); font-weight: 500; transition: color var(--transition-speed); }
-        .status-sick_leave { color: var(--status-sick-leave); font-weight: 500; transition: color var(--transition-speed); }
+        .status-present { color: var(--status-present); font-weight: 600; transition: color var(--transition-speed); }
+        .status-absent { color: var(--status-absent); font-weight: 600; transition: color var(--transition-speed); }
+        .status-weekend { color: var(--status-weekend); font-weight: 600; transition: color var(--transition-speed); }
+        .status-holiday { color: var(--status-holiday); font-weight: 600; transition: color var(--transition-speed); }
+        .status-government_holiday { color: var(--status-govt-holiday); font-weight: 600; transition: color var(--transition-speed); }
+        .status-sick_leave { color: var(--status-sick-leave); font-weight: 600; transition: color var(--transition-speed); }
         
-        /* Modal for Status Selection */
-        #statusSelectionModal .modal-options button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            box-shadow: 0 2px 6px var(--shadow-color);
-            font-weight: 400; /* Standard font weight */
+        /* Edit/Delete Modal specific styles (now handles all entry types) */
+        #editDeleteModal .modal-content .input-group {
+            margin-bottom: 12px; /* Reduced margin */
         }
-        #statusSelectionModal .modal-options button:hover {
-            background-color: var(--border-color);
-            transform: translateY(-1px);
-            box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2);
-        }
-        #statusSelectionModal .modal-options button:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Modal for Present Entry */
-        #presentEntryModal .input-group {
-            margin-bottom: 12px;
-        }
-        #presentEntryModal .input-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 500; /* Standard font weight */
-            color: var(--text-primary);
-        }
-        #presentEntryModal .input-group input,
-        #presentEntryModal .input-group select {
-            padding: 10px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-            font-size: 0.9rem;
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            font-weight: 400; /* Standard font weight */
-        }
-        #presentEntryModal .input-group input:focus,
-        #presentEntryModal .input-group select:focus {
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
-            outline: none;
-        }
-        #presentEntryModal .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        #presentEntryModal .modal-buttons .premium-button {
-            padding: 8px 16px;
-            font-size: 0.85rem; /* Adjusted font size */
-        }
-        #presentEntryModal .modal-buttons .premium-button.save {
-            background-color: var(--accent-color);
-            color: var(--nav-text);
-        }
-        #presentEntryModal .modal-buttons .premium-button.save:hover {
-            background-color: var(--accent-color);
-        }
-        #presentEntryModal .modal-buttons .premium-button.cancel {
-            background-color: var(--border-color);
-            color: var(--text-primary);
-        }
-        #presentEntryModal .modal-buttons .premium-button.cancel:hover {
-            background-color: var(--border-color);
-        }
-
-        /* Edit/Delete Modal specific styles */
         #editDeleteModal .modal-content .input-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 500; /* Standard font weight */
-            color: var(--text-primary);
+            margin-bottom: 6px; /* Reduced margin */
         }
         #editDeleteModal .modal-content .input-group input,
         #editDeleteModal .modal-content .input-group select {
-            padding: 10px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-            font-size: 0.9rem;
-            background-color: var(--input-bg);
-            color: var(--text-primary);
-            font-weight: 400; /* Standard font weight */
-        }
-        #editDeleteModal .modal-content .input-group input:focus,
-        #editDeleteModal .modal-content .input-group select:focus {
-            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
-            outline: none;
+            padding: 10px 14px; /* Reduced padding */
         }
         #editDeleteModal .modal-content .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 15px;
+            gap: 10px; /* Reduced gap */
+            margin-top: 20px; /* Reduced margin */
         }
         #editDeleteModal .modal-content .modal-buttons .premium-button {
-            padding: 8px 16px;
-            font-size: 0.85rem; /* Adjusted font size */
-        }
-        #editDeleteModal .modal-content .modal-buttons .premium-button.save {
-            background-color: var(--accent-color);
-            color: var(--nav-text);
-        }
-        #editDeleteModal .modal-content .modal-buttons .premium-button.save:hover {
-            background-color: var(--accent-color);
-        }
-        #editDeleteModal .modal-content .modal-buttons .premium-button.delete-button {
-            background-color: var(--status-absent);
-        }
-        #editDeleteModal .modal-content .modal-buttons .premium-button.delete-button:hover {
-            background-color: var(--status-absent);
-        }
-
-        /* --- History Page Specific Styles --- */
-        #historySection {
-            display: none;
-        }
-
-        #historySection .date-range-inputs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        #historySection .date-range-inputs .input-group {
-            flex: 1;
-            min-width: 220px;
-        }
-
-        #historySection .date-range-inputs button {
-            flex-grow: 1;
-            max-width: 160px;
-            margin-top: 24px;
-        }
-
-        #historySummaryResult {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: var(--bg-primary);
-            border-radius: var(--border-radius-base);
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-            transition: background-color var(--transition-speed), border-color var(--transition-speed);
-        }
-
-        #historySummaryResult h3 {
-            text-align: center;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
-        }
-
-        /* --- Footer --- */
-        footer {
-            text-align: center;
-            padding: 20px 15px;
-            background-color: var(--footer-bg);
-            color: var(--footer-text);
-            font-size: 0.8rem;
-            margin-top: 30px;
-            border-top: 3px solid var(--accent-color);
-            animation: fadeIn 0.8s ease-out;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: flex-start;
-            gap: 15px;
-            box-shadow: 0 -3px 15px rgba(0,0,0,0.3);
-            transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
-        }
-
-        footer .footer-section {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-        }
-
-        footer .footer-section h4 {
-            font-size: 1rem;
-            margin-bottom: 10px;
-            color: var(--accent-color);
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600; /* Standard font weight */
-            transition: color var(--transition-speed);
-        }
-
-        footer .footer-section p {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.8rem; /* Adjusted font size */
-        }
-
-        footer .footer-section p i {
-            margin-right: 8px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-        }
-
-        footer .footer-section a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color var(--transition-speed);
-        }
-
-        footer .footer-section a:hover {
-            color: var(--accent-color);
-            text-decoration: underline;
+            padding: 10px 20px; /* Reduced padding */
+            font-size: 0.9rem;
         }
 
         /* Custom Alert/Confirm Modal Styles */
         #customAlertModal .modal-content,
         #customConfirmModal .modal-content {
-            padding: 25px;
-            max-width: 380px;
-            text-align: center;
-            border-left: 6px solid;
-            animation: slideDownFadeIn 0.3s ease-out;
+            padding: 25px; /* Reduced padding */
+            max-width: 400px; /* Narrower */
+            border-left: 8px solid; /* Thinner border */
+            animation: slideDownFadeIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Faster animation */
             transition: border-color var(--transition-speed);
+            box-shadow: 0 10px 30px var(--shadow-color);
         }
-
-        #customAlertModal .modal-content.info,
-        #customConfirmModal .modal-content.info { border-color: var(--alert-info); }
-        #customAlertModal .modal-content.success,
-        #customConfirmModal .modal-content.success { border-color: var(--alert-success); }
-        #customAlertModal .modal-content.warning,
-        #customConfirmModal .modal-content.warning { border-color: var(--alert-warning); }
-        #customAlertModal .modal-content.error,
-        #customConfirmModal .modal-content.error { border-color: var(--alert-error); }
 
         #customAlertModal h2,
         #customConfirmModal h2 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--text-primary);
+            font-size: 1.6rem; /* Smaller heading */
+            margin-bottom: 15px; /* Reduced margin */
         }
 
         #customAlertModal p,
         #customConfirmModal p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
+            font-size: 1rem;
+            margin-bottom: 20px; /* Reduced margin */
         }
 
         #customAlertModal .modal-buttons,
         #customConfirmModal .modal-buttons {
-            justify-content: center;
-            gap: 10px;
+            gap: 10px; /* Reduced gap */
         }
 
         #customAlertModal .modal-buttons .premium-button,
         #customConfirmModal .modal-buttons .premium-button {
-            padding: 8px 20px;
+            padding: 10px 20px; /* Reduced padding */
             font-size: 0.9rem;
         }
 
         /* Help Modal Specific Styles */
         .help-modal-content {
-            background-color: var(--bg-secondary);
-            text-align: center;
-            padding: 40px;
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px var(--shadow-color);
-            transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
+            padding: 50px; /* Reduced padding */
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Faster animation */
         }
 
         .help-modal-content h2 {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-size: 2.5rem; /* Smaller heading */
+            margin-bottom: 20px; /* Reduced margin */
+            text-shadow: 0 0 12px rgba(100, 255, 218, 0.4); 
         }
 
         .help-modal-content p {
-            font-size: 1.2rem; /* Adjusted font size */
-            color: var(--text-primary);
-            font-weight: 500; /* Standard font weight */
+            font-size: 1.2rem; /* Smaller text */
         }
 
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); opacity: 1; }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
+        /* --- History Page Specific Styles --- */
+        #historySection .date-range-inputs {
+            gap: 20px; /* Reduced gap */
+            margin-bottom: 25px; /* Reduced margin */
+        }
+
+        #historySection .date-range-inputs .input-group {
+            min-width: 250px;
+        }
+
+        #historySection .date-range-inputs button {
+            max-width: 180px;
+            margin-top: 20px; /* Reduced margin */
+        }
+
+        #historySummaryResult {
+            margin-top: 20px; /* Reduced margin */
+            padding: 20px; /* Reduced padding */
+        }
+
+        #historyDetailedEntries {
+            margin-top: 30px !important; /* Reduced margin */
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 25px 15px; /* Reduced padding */
+            font-size: 0.85rem;
+            margin-top: 40px; /* Reduced margin */
+            border-top: 3px solid var(--accent-color); /* Thinner border */
+            gap: 20px; /* Reduced gap */
+            box-shadow: 0 -3px 20px rgba(0,0,0,0.35); /* Less strong shadow */
+        }
+
+        footer .footer-section {
+            min-width: 200px;
+        }
+
+        footer .footer-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 12px; /* Reduced margin */
+        }
+
+        footer .footer-section p {
+            margin-bottom: 8px; /* Reduced margin */
+            font-size: 0.9rem;
+        }
+
+        footer .footer-section p i {
+            margin-right: 10px; /* Reduced margin */
+            font-size: 1.1rem;
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
             #main-navbar {
-                flex-direction: column;
                 padding: 10px 15px;
-                gap: 8px;
             }
             .nav-links {
-                margin-left: 0;
-                justify-content: center;
-                width: 100%;
-                gap: 10px;
-            }
-            .user-profile-menu {
-                margin-top: 8px;
+                gap: 15px;
             }
             .auth-container {
                 padding: 25px;
-                max-width: 90%;
             }
             .auth-container h1.premium-heading {
-                font-size: 1.6rem;
-            }
-            .auth-container .sub-heading {
-                font-size: 0.85rem;
+                font-size: 1.8rem;
             }
             .premium-button {
                 padding: 10px 20px;
                 font-size: 0.85rem;
             }
-            .data-entry-form {
+            .user-dashboard-info {
+                min-width: auto;
+                text-align: center;
+            }
+            .history-summary {
                 grid-template-columns: 1fr;
             }
-            #addEntryBtn {
-                width: 90%;
+            .chart-container {
+                max-width: 100%;
+                height: 250px;
             }
-            footer {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            footer .footer-section {
-                text-align: center;
-            }
-            footer .footer-section p {
-                justify-content: center;
-            }
-
-            .user-dashboard-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            .user-dashboard-info {
-                text-align: center;
-            }
-
-            #historySection .date-range-inputs button {
-                margin-top: 8px;
-            }
-
-            .history-summary {
-                grid-template-columns: 1fr; /* Stack summary and chart vertically */
+            #attendanceTable th,
+            #attendanceTable td,
+            #historyAttendanceTable th,
+            #historyAttendanceTable td {
+                padding: 10px 12px;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -1430,6 +1172,7 @@
     <div id="authSection" class="login-page-body">
         <div class="auth-container">
             <h1 class="premium-heading" id="authHeading"></h1> 
+            <p class="sub-heading" id="authSubHeading"></p>
 
             <form id="loginForm" class="auth-form active">
                 <div class="input-group">
@@ -1443,7 +1186,7 @@
                     <span class="error-message" id="loginPasswordError"></span>
                 </div>
                 <div class="login-links">
-                    <a href="#" id="registerHereLink">Register Here</a>
+                    <a href="#" id="registerHereLink">Create an Account</a>
                 </div>
                 <button type="submit" class="premium-button">Login</button>
             </form>
@@ -1454,7 +1197,7 @@
                     <input type="email" id="registerEmail" placeholder="Enter your email address" required>
                     <span class="error-message" id="registerEmailError"></span>
                 </div>
-                <div id="registrationDetails" style="display: block;"> <!-- Always visible now -->
+                <div id="registrationDetails" style="display: block;">
                     <div class="input-group">
                         <label for="registerUsername">Username</label>
                         <input type="text" id="registerUsername" placeholder="Choose a username" required>
@@ -1478,8 +1221,8 @@
                         <input type="text" id="registerLngId" placeholder="Enter your LnG ID" required>
                     </div>
                 </div>
-                <button type="submit" class="premium-button" id="registerSubmitBtn">Register</button> <!-- Not disabled anymore -->
-                <p style="color: var(--text-primary); font-size: 0.95rem;">Already have an account? <a href="#" id="loginHereLink" style="color: var(--accent-color); text-decoration: underline;">Login Here</a></p>
+                <button type="submit" class="premium-button" id="registerSubmitBtn">Register</button>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 15px;">Already have an account? <a href="#" id="loginHereLink" style="color: var(--secondary-accent); text-decoration: underline;">Login Here</a></p>
             </form>
         </div>
     </div>
@@ -1489,25 +1232,28 @@
         <!-- First Section: Navigation Bar -->
         <nav id="main-navbar">
             <div class="logo-container">
-                <span class="logo-text">Activity</span>
-                <!-- Diamond Logo SVG -->
+                <span class="logo-text">TaskFlow</span>
+                <!-- Diamond Logo SVG (Updated to be more modern) -->
                 <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 12L12 22L22 12L12 2Z"/>
+                    <path d="M12 1L2 12H7L12 23L17 12H22L12 1Z" />
                 </svg>
             </div>
             <ul class="nav-links">
-                <li><a href="#" id="homeNavLink">Home</a></li>
-                <li><a href="#" id="historyNavLink">History</a></li>
+                <li><a href="#" id="homeNavLink">Dashboard</a></li>
+                <li><a href="#" id="historyNavLink">Reports</a></li>
                 <li><a href="#" id="helpNavLink">Help</a></li>
             </ul>
             <div class="nav-right">
-                <button id="themeToggle" class="fas fa-sun"></button> <!-- Theme Toggle Button -->
+                <div class="nav-buttons">
+                    <button class="premium-button secondary" id="navSignInBtn">Sign Out</button>
+                </div>
+                <button id="themeToggle" class="fas fa-palette"></button>
                 <div class="user-profile-menu">
+                    <img id="userPhotoDisplay" src="https://placehold.co/40x40/64FFDA/0A192F?text=U" alt="User Photo" class="user-photo">
                     <span id="usernameDisplay">Username</span>
-                    <img id="userPhotoDisplay" src="https://placehold.co/40x40/000000/ffffff?text=User" alt="User Photo" class="user-photo">
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-content">
-                        <a href="#" id="personalProfileBtn">Personal Profile</a>
+                        <a href="#" id="personalProfileBtn">My Profile</a>
                         <a href="#" id="logoutBtn">Logout</a>
                     </div>
                 </div>
@@ -1542,7 +1288,7 @@
                 <div class="input-group">
                     <label for="profilePictureInput">Profile Picture</label>
                     <input type="file" id="profilePictureInput" accept="image/*">
-                    <img id="profilePicturePreview" src="https://placehold.co/100x100/000000/ffffff?text=User" alt="Profile Picture Preview" class="user-photo-preview">
+                    <img id="profilePicturePreview" src="https://placehold.co/120x120/64FFDA/0A192F?text=U" alt="Profile Picture Preview" class="user-photo-preview">
                 </div>
                 <button id="saveProfileBtn" class="premium-button">Save Changes</button>
             </div>
@@ -1551,7 +1297,7 @@
         <main class="container">
             <!-- New 1st Section: User Dashboard -->
             <section id="dashboardSection" class="user-dashboard-section">
-                <img id="dashboardUserPhoto" src="https://placehold.co/150x150/000000/ffffff?text=User" alt="User Photo" class="user-dashboard-photo">
+                <img id="dashboardUserPhoto" src="https://placehold.co/180x180/64FFDA/0A192F?text=U" alt="User Photo" class="user-dashboard-photo">
                 <div class="user-dashboard-info">
                     <h3 id="dashboardUsername">Username</h3>
                     <p><strong>Worked For:</strong> <span id="workedForDisplay">0 years 0 months</span></p>
@@ -1561,7 +1307,7 @@
 
             <!-- Second Section: Month Selection and History Result -->
             <section id="monthlySummarySection" class="section-card">
-                <h2>Attendance History</h2>
+                <h2>Monthly Attendance Overview</h2>
                 <div class="month-selector">
                     <select id="monthSelectDropdown"></select>
                 </div>
@@ -1572,17 +1318,17 @@
 
                 <div class="history-summary">
                     <div>
-                        <h3>Monthly Summary</h3>
+                        <h3>Summary Metrics</h3>
                         <div class="summary-grid">
                             <div><strong>Total Hours:</strong> <span id="summaryTotalHours">0</span></div>
                             <div><strong>Late:</strong> <span id="summaryLate">0</span></div>
                             <div><strong>Absent:</strong> <span id="summaryAbsent">0</span></div>
                             <div><strong>Weekends:</strong> <span id="summaryWeekend">0</span></div>
-                            <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div> <!-- New Holiday summary -->
+                            <div><strong>Holidays:</strong> <span id="summaryHoliday">0</span></div>
                             <div><strong>Working Days:</strong> <span id="summaryWorkingDays">0</span></div>
-                            <div><strong>Total Present:</strong> <span id="summaryTotalPresent">0</span></div> <!-- New Total Present -->
+                            <div><strong>Total Present:</strong> <span id="summaryTotalPresent">0</span></div>
                             <div><strong>Night Shifts:</strong> <span id="summaryNightShifts">0</span></div>
-                            <div><strong>Grace:</strong> <span id="summaryGrace">0</span></div>
+                            <div><strong>Grace Used:</strong> <span id="summaryGrace">0</span></div>
                             <div><strong>Day Shifts:</b> <span id="summaryDayShifts">0</span></div>
                         </div>
                     </div>
@@ -1595,20 +1341,20 @@
 
             <!-- Fourth Section: Saved Entries Data -->
             <section id="dailyEntriesSection" class="section-card">
-                <h2>Daily Attendance Entries</h2> <!-- Heading added here -->
+                <h2>Daily Entries</h2>
                 <div class="table-responsive">
                     <table id="attendanceTable">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Day</th> <!-- New Day column -->
+                                <th>Day</th>
                                 <th>Status</th>
                                 <th>Hour</th>
                                 <th>Extra Hour</th>
                                 <th>Late</th>
                                 <th>Shift</th>
                                 <th>Grace</th>
-                                <th>Approval</th> <!-- New Approval column -->
+                                <th>Approval</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -1623,7 +1369,7 @@
         <!-- History Page Section (Initially hidden) -->
         <section id="historySection" class="container">
             <div class="section-card">
-                <h2>Custom History Report</h2>
+                <h2>Custom Report Generator</h2>
                 <div class="date-range-inputs">
                     <div class="input-group">
                         <label for="historyDateFrom">From Date:</label>
@@ -1633,39 +1379,39 @@
                         <label for="historyDateTo">To Date:</label>
                         <input type="date" id="historyDateTo">
                     </div>
-                    <button id="findHistoryResultBtn" class="premium-button">Find Result</button>
+                    <button id="findHistoryResultBtn" class="premium-button">Generate Report</button>
                 </div>
                 
                 <div id="historySummaryResult" class="history-summary">
                     <h3>Report Summary</h3>
                     <div class="summary-grid">
                         <div><strong>Total Hours:</strong> <span id="historySummaryTotalHours">0</span></div>
-                        <div><strong>Late:</b> <span id="historySummaryLate">0</span></div>
+                        <div><strong>Late:</strong> <span id="historySummaryLate">0</span></div>
                         <div><strong>Absent:</strong> <span id="historySummaryAbsent">0</span></div>
                         <div><strong>Weekends:</strong> <span id="historySummaryWeekend">0</span></div>
-                        <div><strong>Holidays:</strong> <span id="historySummaryHoliday">0</span></div> <!-- New Holiday summary for history -->
+                        <div><strong>Holidays:</strong> <span id="historySummaryHoliday">0</span></div>
                         <div><strong>Working Days:</strong> <span id="historySummaryWorkingDays">0</span></div>
-                        <div><strong>Total Present:</strong> <span id="historySummaryTotalPresent">0</span></div> <!-- New Total Present for history -->
+                        <div><strong>Total Present:</strong> <span id="historySummaryTotalPresent">0</span></div>
                         <div><strong>Day Shifts:</strong> <span id="historySummaryDayShifts">0</span></div>
                         <div><strong>Night Shifts:</strong> <span id="historySummaryNightShifts">0</span></div>
-                        <div><strong>Grace:</strong> <span id="historySummaryGrace">0</span></div>
+                        <div><strong>Grace Used:</strong> <span id="historySummaryGrace">0</span></div>
                     </div>
                 </div>
 
                 <div id="historyDetailedEntries" class="table-responsive" style="margin-top: 30px;">
-                    <h3>Detailed Entries for Selected Period</h3>
+                    <h3>Detailed Entries</h3>
                     <table id="historyAttendanceTable">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Day</th> <!-- New Day column -->
+                                <th>Day</th>
                                 <th>Status</th>
                                 <th>Hour</th>
                                 <th>Extra Hour</th>
                                 <th>Late</th>
                                 <th>Shift</th>
                                 <th>Grace</th>
-                                <th>Approval</th> <!-- New Approval column -->
+                                <th>Approval</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1676,82 +1422,11 @@
             </div>
         </section>
 
-        <!-- Status Selection Modal -->
-        <div id="statusSelectionModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button" id="closeStatusSelectionModal">&times;</span>
-                <h2>Select Status</h2>
-                <div class="modal-options">
-                    <button class="premium-button" id="selectPresent">Present</button>
-                    <button class="premium-button" id="selectWeekend">Weekend</button>
-                    <button class="premium-button" id="selectAbsent">Absent</button>
-                    <button class="premium-button" id="selectHoliday">Holiday</button>
-                    <button class="premium-button" id="selectGovernmentHoliday">Government Holiday</button> <!-- New button -->
-                    <button class="premium-button" id="selectSickLeave">Sick Leave</button> <!-- New button -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Present Entry Modal -->
-        <div id="presentEntryModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button" id="closePresentEntryModal">&times;</span>
-                <h2>Enter Details</h2>
-                <div class="input-group">
-                    <label for="presentEntryDate">Date</label>
-                    <input type="date" id="presentEntryDate" readonly>
-                </div>
-                <div class="input-group">
-                    <label for="presentEntryStatus">Status</label> <!-- New status display in present modal -->
-                    <input type="text" id="presentEntryStatus" readonly value="Present">
-                </div>
-                <div class="input-group" id="presentHourGroup">
-                    <label for="presentHour">Hour</label>
-                    <input type="number" id="presentHour" min="0" max="24" value="9" placeholder="e.g., 9">
-                </div>
-                <div class="input-group" id="presentExtraHourGroup">
-                    <label for="presentExtraHour">Extra Hour</label>
-                    <input type="number" id="presentExtraHour" min="0" max="24" value="0" placeholder="e.g., 2">
-                </div>
-                <div class="input-group" id="presentLateGroup">
-                    <label for="presentLate">Late (HH:MM)</label>
-                    <input type="text" id="presentLate" value="00:00" readonly>
-                </div>
-                <div class="input-group" id="presentShiftTypeGroup">
-                    <label for="presentShiftType">Shift</label>
-                    <select id="presentShiftType">
-                        <option value="Day">Day</option>
-                        <option value="Night">Night</option>
-                    </select>
-                </div>
-                <div class="input-group" id="presentGraceGroup">
-                    <label for="presentGrace">Grace</label>
-                    <select id="presentGrace">
-                        <option value="-">-</option>
-                        <option value="Yes">Yes</option>
-                    </select>
-                    <small id="graceLimitMessage" style="color: var(--alert-error); display: none;">Grace limit reached for this month (5/5)</small>
-                </div>
-                <div class="input-group" id="presentApprovalGroup"> <!-- New Approval group -->
-                    <label for="presentApproval">Approval</label>
-                    <select id="presentApproval">
-                        <option value="-">-</option>
-                        <option value="Approved">Approved</option>
-                    </select>
-                </div>
-                <div class="modal-buttons">
-                    <button id="savePresentEntryBtn" class="premium-button save">Save</button>
-                    <button id="cancelPresentEntryBtn" class="premium-button cancel secondary">Cancel</button>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Edit/Delete Modal -->
+        <!-- Edit/Delete Modal (Now handles Add/Edit/Delete) -->
         <div id="editDeleteModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" id="closeEditDeleteModal">&times;</span>
-                <h2>Edit Entry</h2>
+                <h2 id="editDeleteModalTitle"></h2>
                 <div class="input-group">
                     <label for="editDate">Date</label>
                     <input type="date" id="editDate" readonly>
@@ -1762,17 +1437,17 @@
                         <option value="Present">Present</option>
                         <option value="Weekend">Weekend</option>
                         <option value="Absent">Absent</option>
-                        <option value="Holiday">Holiday</option>
-                        <option value="Government_Holiday">Government Holiday</option> <!-- New Holiday option -->
-                        <option value="Sick_Leave">Sick Leave</option> <!-- New Sick Leave option -->
+                        <option value="Holiday">General Holiday</option>
+                        <option value="Government_Holiday">Government Holiday</option>
+                        <option value="Sick_Leave">Sick Leave</option>
                     </select>
                 </div>
                 <div class="input-group" id="editHourGroup">
-                    <label for="editHour">Hour</label>
+                    <label for="editHour">Hours Worked</label>
                     <input type="number" id="editHour" min="0" max="24" placeholder="e.g., 9">
                 </div>
                 <div class="input-group" id="editExtraHourGroup">
-                    <label for="editExtraHour">Extra Hour</label>
+                    <label for="editExtraHour">Extra Hours</label>
                     <input type="number" id="editExtraHour" min="0" max="24" placeholder="e.g., 2">
                 </div>
                 <div class="input-group" id="editLateHourGroup">
@@ -1780,30 +1455,31 @@
                     <input type="text" id="editLateHour" value="00:00" readonly>
                 </div>
                 <div class="input-group" id="editShiftTypeGroup">
-                    <label for="editShiftType">Shift</label>
+                    <label for="editShiftType">Shift Type</label>
                     <select id="editShiftType">
                         <option value="Day">Day</option>
                         <option value="Night">Night</option>
                     </select>
                 </div>
                 <div class="input-group" id="editGraceGroup">
-                    <label for="editGrace">Grace</label>
+                    <label for="editGrace">Apply Grace Period</label>
                     <select id="editGrace">
                         <option value="-">-</option>
                         <option value="Yes">Yes</option>
                     </select>
                     <small id="editGraceLimitMessage" style="color: var(--alert-error); display: none;">Grace limit reached for this month (5/5)</small>
                 </div>
-                <div class="input-group" id="editApprovalGroup"> <!-- New Approval group -->
-                    <label for="editApproval">Approval</label>
+                <div class="input-group" id="editApprovalGroup">
+                    <label for="editApproval">Approval Status</label>
                     <select id="editApproval">
                         <option value="-">-</option>
                         <option value="Approved">Approved</option>
                     </select>
                 </div>
                 <div class="modal-buttons">
-                    <button id="updateEntryBtn" class="premium-button save">Update</button>
-                    <button id="deleteEntryBtn" class="premium-button delete-button">Delete</button>
+                    <button id="updateEntryBtn" class="premium-button"></button> <!-- Text updated by JS -->
+                    <button id="deleteEntryBtn" class="premium-button delete-button" style="display:none;">Delete Entry</button>
+                    <button id="cancelEditEntryBtn" class="premium-button secondary">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1815,7 +1491,7 @@
                 <h2 id="customAlertTitle"></h2>
                 <p id="customAlertMessage"></p>
                 <div class="modal-buttons">
-                    <button id="customAlertOkBtn" class="premium-button save">OK</button>
+                    <button id="customAlertOkBtn" class="premium-button">OK</button>
                 </div>
             </div>
         </div>
@@ -1827,7 +1503,7 @@
                 <h2 id="customConfirmTitle"></h2>
                 <p id="customConfirmMessage"></p>
                 <div class="modal-buttons">
-                    <button id="customConfirmYesBtn" class="premium-button save">Yes</button>
+                    <button id="customConfirmYesBtn" class="premium-button">Yes</button>
                     <button id="customConfirmNoBtn" class="premium-button secondary">No</button>
                 </div>
             </div>
@@ -1837,8 +1513,8 @@
         <div id="helpModal" class="modal">
             <div class="modal-content help-modal-content">
                 <span class="close-button" id="closeHelpModal">&times;</span>
-                <h2 id="helpModalTitle">Nothing to Help Here</h2>
-                <p id="helpModalMessage">😁😁</p>
+                <h2 id="helpModalTitle">Need Assistance?</h2>
+                <p id="helpModalMessage">Feel free to contact support or refer to the documentation for any queries!</p>
             </div>
         </div>
 
@@ -1846,22 +1522,25 @@
         <footer>
             <div class="footer-section">
                 <h4>Contact Us</h4>
-                <p><i class="fas fa-phone"></i> Phone: +8801518138951</p>
-                <p><i class="fas fa-envelope"></i> E-Mail: <a href="mailto:prantorodrix9@gmail.com">prantorodrix9@gmail.com</a></p>
-                <p><i class="fas fa-map-marker-alt"></i> Address: Baridhara-DOHS, Gulshan, Dhaka</p>
-                <p><i class="fas fa-globe"></i> Website: <a href="https://www.reallygreatsite.com" target="_blank">www.abcd.com</a></p>
+                <p><i class="fas fa-phone"></i> +8801518138951</p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:prantorodrix9@gmail.com">prantorodrix9@gmail.com</a></p>
+                <p><i class="fas fa-map-marker-alt"></i> Baridhara-DOHS, Gulshan, Dhaka</p>
             </div>
             <div class="footer-section">
-                <h4>Activity</h4>
-                <p>&copy; <span id="currentYear"></span> Made by @PrantoAnthonyRodrix. All rights reserved.</p>
-             </div>
+                <h4>TaskFlow</h4>
+                <p>&copy; <span id="currentYear"></span> Crafted with ❤️ by PrantoAnthonyRodrix. All rights reserved.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/prantoanthonyrodrix" target="_blank">LinkedIn</a></p>
+                <p><i class="fab fa-github"></i> <a href="https://github.com/PrantoAnthonyRodrix" target="_blank">GitHub</a></p>
+            </div>
         </footer>
     </div>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             // Local Data Storage (Loaded from localStorage or initialized)
-            // Changed localUserData to registeredUsers for multiple user storage
             let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
             let currentLoggedInUser = null; // To store the currently logged-in user's data
 
@@ -1873,13 +1552,10 @@
             // Save currentLoggedInUser's specific data
             function saveCurrentUserData() {
                 if (currentLoggedInUser) {
-                    // Find the index of the current user in registeredUsers array
                     const userIndex = registeredUsers.findIndex(user => user.email === currentLoggedInUser.email);
                     if (userIndex !== -1) {
                         registeredUsers[userIndex] = currentLoggedInUser;
                     } else {
-                        // This case should ideally not happen if user is truly logged in
-                        // But as a fallback, add if not found (e.g., first login after clearing localStorage for some reason)
                         registeredUsers.push(currentLoggedInUser);
                     }
                     saveRegisteredUsers();
@@ -1891,6 +1567,7 @@
             const authSection = document.getElementById('authSection');
             const mainActivitySection = document.getElementById('mainActivitySection');
             const authHeading = document.getElementById('authHeading');
+            const authSubHeading = document.getElementById('authSubHeading'); // New sub-heading
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
             const registerHereLink = document.getElementById('registerHereLink');
@@ -1900,8 +1577,6 @@
             const loginEmailError = document.getElementById('loginEmailError');
             const loginPasswordError = document.getElementById('loginPasswordError');
 
-
-            // Register form specific inputs
             const registerEmailInput = document.getElementById('registerEmail');
             const registerEmailError = document.getElementById('registerEmailError');
             const registrationDetails = document.getElementById('registrationDetails'); 
@@ -1931,7 +1606,7 @@
 
             // Theme toggle button (always present in HTML)
             const themeToggle = document.getElementById('themeToggle');
-            const themeList = ['light', 'dark', 'neptune-vibe']; // Updated theme list
+            const themeList = ['light', 'dark', 'neptune-vibe']; 
             let currentThemeIndex = 0;
 
             // Help Modal elements (always present in HTML)
@@ -1947,24 +1622,15 @@
                 profileJoiningDateInput, profileLngIdInput, dashboardUserPhoto, dashboardUsername, workedForDisplay, lngIdDisplay,
                 monthSelectDropdown, dateFromDisplay, dateToDisplay, summaryTotalHours,
                 summaryLate, summaryAbsent, summaryWeekend, summaryHoliday, summaryWorkingDays, summaryDayShifts, summaryNightShifts, summaryGrace, summaryTotalPresent,
-                attendanceTableBody, editDeleteModal, editDeleteModalCloseBtn, editDateInput, editHourInput,
-                editExtraHourInput, editLateHourInput, editShiftTypeInput, updateEntryBtn, deleteEntryBtn, currentYearSpan,
+                attendanceTableBody, editDeleteModal, editDeleteModalCloseBtn, editDeleteModalTitle, editDateInput, editHourInput,
+                editExtraHourInput, editLateHourInput, editShiftTypeInput, updateEntryBtn, deleteEntryBtn, cancelEditEntryBtn, currentYearSpan,
                 editStatusInput, editPresentDetailsGroup, editExtraHourGroup, editLateHourGroup, editShiftTypeGroup, editGraceGroup, editGraceInput, editGraceLimitMessage,
                 editApprovalGroup, editApprovalInput;
-
-            // Status selection modal elements
-            let statusSelectionModal, closeStatusSelectionModal, selectPresentBtn, selectWeekendBtn, selectAbsentBtn, selectHolidayBtn,
-                selectGovernmentHolidayBtn, selectSickLeaveBtn; // New status buttons
-            let currentSelectedDateForStatus = null; // To store the date for which status is being set
-
-            // Present entry modal elements
-            let presentEntryModal, closePresentEntryModal, presentEntryDateInput, presentEntryStatusInput, presentHourInput, presentExtraHourInput,
-                presentLateInput, presentShiftTypeInput, presentGraceInput, presentApprovalInput, savePresentEntryBtn, cancelPresentEntryBtn, graceLimitMessage,
-                presentHourGroup, presentExtraHourGroup, presentLateGroup, presentShiftTypeGroup, presentGraceGroup, presentApprovalGroup;
 
             // Navigation elements
             let homeNavLink, historyNavLink, helpNavLinkRef; 
             let dashboardSection, monthlySummarySection, dailyEntriesSection, historySection; 
+            let navSignInBtn; 
 
             // History page elements
             let historyDateFromInput, historyDateToInput, findHistoryResultBtn;
@@ -1975,24 +1641,23 @@
             // Chart.js instance
             let monthlyChart = null;
 
-            let currentMonthView = new Date(); // Define currentMonthView here globally
+            let currentMonthView = new Date(); 
 
             // --- Initial Setup and Authentication Flow ---
             function initializeApp() {
-                const savedTheme = localStorage.getItem('theme') || 'neptune-vibe'; // Default to neptune-vibe
+                const savedTheme = localStorage.getItem('theme') || 'neptune-vibe';
                 applyTheme(savedTheme);
 
-                // Check if there's a logged-in user session
                 const lastLoggedInEmail = localStorage.getItem('lastLoggedInUserEmail');
                 if (lastLoggedInEmail) {
                     const user = registeredUsers.find(u => u.email === lastLoggedInEmail);
                     if (user) {
                         currentLoggedInUser = user;
                         showMainActivitySection();
-                        return; // Exit if already logged in
+                        return; 
                     }
                 }
-                showAuthSection(); // Show login/registration if no active session
+                showAuthSection(); 
             }
 
             function showAuthSection() {
@@ -2000,6 +1665,7 @@
                 mainActivitySection.style.display = 'none';
                 document.body.classList.add('login-page-body');
                 document.body.classList.remove('main-page-body');
+                document.body.classList.remove('animate-scroll'); // Remove dynamic scroll class
                 setupAuthPage();
             }
 
@@ -2008,35 +1674,38 @@
                 mainActivitySection.style.display = 'block';
                 document.body.classList.remove('login-page-body');
                 document.body.classList.add('main-page-body');
-                queryMainAppElements(); // Query elements once main section is visible
+                document.body.classList.add('animate-scroll'); // Add dynamic scroll class
+                queryMainAppElements(); 
                 setupMainApp();
-                updateUserProfileDisplay(); // Display initial user data
-                populateMonthDropdown(); // Populate month dropdown on main app load
-                setupMonthView(currentMonthView); // Set up initial month view
+                updateUserProfileDisplay(); 
+                populateMonthDropdown(); 
+                setupMonthView(currentMonthView); 
                 showSection('dashboard');
             }
 
             function clearErrors() {
-                loginEmailInput.classList.remove('error');
-                loginPasswordInput.classList.remove('error');
-                loginEmailError.textContent = '';
-                loginPasswordError.textContent = '';
+                if (loginEmailInput) loginEmailInput.classList.remove('error');
+                if (loginPasswordInput) loginPasswordInput.classList.remove('error');
+                if (loginEmailError) loginEmailError.textContent = '';
+                if (loginPasswordError) loginPasswordError.textContent = '';
 
-                registerEmailInput.classList.remove('error');
-                registerPasswordInput.classList.remove('error');
-                confirmPasswordInput.classList.remove('error');
-                registerEmailError.textContent = '';
-                registerPasswordError.textContent = '';
-                confirmPasswordError.textContent = '';
+                if (registerEmailInput) registerEmailInput.classList.remove('error');
+                if (registerPasswordInput) registerPasswordInput.classList.remove('error');
+                if (confirmPasswordInput) confirmPasswordInput.classList.remove('error');
+                if (registerEmailError) registerEmailError.textContent = '';
+                if (registerPasswordError) registerPasswordError.textContent = '';
+                if (confirmPasswordError) confirmPasswordError.textContent = '';
             }
 
             function setupAuthPage() {
-                clearErrors(); // Clear errors on page load/switch
+                clearErrors(); 
 
                 if (loginForm.classList.contains('active')) {
-                    if (authHeading) authHeading.textContent = 'ENTER YOUR ACCOUNT';
+                    if (authHeading) authHeading.textContent = 'Welcome Back!';
+                    if (authSubHeading) authSubHeading.textContent = 'Log in to your TaskFlow account.';
                 } else if (registerForm.classList.contains('active')) {
-                    if (authHeading) authHeading.textContent = 'CREATE ACCOUNT';
+                    if (authHeading) authHeading.textContent = 'Join TaskFlow';
+                    if (authSubHeading) authSubHeading.textContent = 'Create an account to get started.';
                 }
 
                 if (registerHereLink) {
@@ -2044,8 +1713,10 @@
                         e.preventDefault();
                         loginForm.style.display = 'none';
                         registerForm.style.display = 'flex';
-                        if (authHeading) authHeading.textContent = 'CREATE ACCOUNT';
-                        // Reset register form fields and errors
+                        registerForm.classList.add('active'); 
+                        loginForm.classList.remove('active'); 
+                        if (authHeading) authHeading.textContent = 'Join TaskFlow';
+                        if (authSubHeading) authSubHeading.textContent = 'Create an account to get started.';
                         registerEmailInput.value = '';
                         registerUsernameInput.value = '';
                         registerPasswordInput.value = '';
@@ -2061,15 +1732,18 @@
                         e.preventDefault();
                         registerForm.style.display = 'none';
                         loginForm.style.display = 'flex';
-                        if (authHeading) authHeading.textContent = 'ENTER YOUR ACCOUNT';
-                        clearErrors(); // Clear errors on switch back to login
+                        loginForm.classList.add('active'); 
+                        registerForm.classList.remove('active'); 
+                        if (authHeading) authHeading.textContent = 'Welcome Back!';
+                        if (authSubHeading) authSubHeading.textContent = 'Log in to your TaskFlow account.';
+                        clearErrors(); 
                     });
                 }
 
                 if (loginForm) {
                     loginForm.addEventListener('submit', (e) => {
                         e.preventDefault();
-                        clearErrors(); // Clear previous errors
+                        clearErrors(); 
 
                         const email = loginEmailInput.value.trim();
                         const password = loginPasswordInput.value.trim();
@@ -2093,19 +1767,17 @@
                             return;
                         }
 
-                        if (user.password !== password) { // In a real app, use hashed passwords
+                        if (user.password !== password) { 
                             loginPasswordInput.classList.add('error');
                             loginPasswordError.textContent = 'Incorrect password.';
                             return;
                             }
 
-                        // Successful login
                         currentLoggedInUser = user;
-                        // Ensure all new fields are initialized for existing users
                         if (!currentLoggedInUser.attendance) currentLoggedInUser.attendance = {};
                         if (!currentLoggedInUser.graceCounts) currentLoggedInUser.graceCounts = {};
 
-                        localStorage.setItem('lastLoggedInUserEmail', email); // Remember last logged in user
+                        localStorage.setItem('lastLoggedInUserEmail', email); 
                         showMainActivitySection();
                     });
                 }
@@ -2113,7 +1785,7 @@
                 if (registerForm) {
                     registerForm.addEventListener('submit', (e) => {
                         e.preventDefault();
-                        clearErrors(); // Clear previous errors
+                        clearErrors(); 
 
                         const email = registerEmailInput.value.trim();
                         const username = registerUsernameInput.value.trim();
@@ -2133,10 +1805,7 @@
                             registerEmailError.textContent = 'This email is already registered.';
                             hasError = true;
                         }
-                        if (!username) {
-                            // No specific error message for username, but it's required
-                            // For simplicity, not adding .error class to username for now
-                        }
+                        if (!username) { /* required, but no specific error class for now */ }
                         if (!password) {
                             registerPasswordInput.classList.add('error');
                             registerPasswordError.textContent = 'Password is required.';
@@ -2155,24 +1824,19 @@
                             confirmPasswordError.textContent = 'Passwords do not match!';
                             hasError = true;
                         }
-                        if (!joiningDate) {
-                            // No specific error message for joining date, but it's required
-                        }
-                        if (!lngId) {
-                            // No specific error message for LnG ID, but it's required
-                        }
+                        if (!joiningDate) { /* required, but no specific error class for now */ }
+                        if (!lngId) { /* required, but no specific error class for now */ }
 
                         if (hasError) {
                             return;
                         }
 
-                        // Simulate registration success
                         const newUser = {
                             profileName: username,
                             username: username,
                             email: email,
-                            password: password, // In a real app, hash this password!
-                            photo: `https://placehold.co/40x40/000000/ffffff?text=${username.charAt(0).toUpperCase()}`,
+                            password: password,
+                            photo: `https://placehold.co/40x40/${(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0')}/ffffff?text=${username.charAt(0).toUpperCase()}`,
                             joiningDate: joiningDate,
                             lngId: lngId,
                             attendance: {},
@@ -2184,14 +1848,15 @@
                         showCustomAlert('Success!', 'Registration successful! You can now login with this email.', 'success');
                         loginForm.style.display = 'flex';
                         registerForm.style.display = 'none';
-                        if (authHeading) authHeading.textContent = 'ENTER YOUR ACCOUNT';
+                        loginForm.classList.add('active'); 
+                        registerForm.classList.remove('active'); 
+                        if (authHeading) authHeading.textContent = 'Welcome Back!';
+                        if (authSubHeading) authSubHeading.textContent = 'Log in to your TaskFlow account.';
                     });
                 }
             }
 
             function queryMainAppElements() {
-                // This function is called only when mainActivitySection is displayed.
-                // All these elements should exist in the DOM at this point.
                 mainNavbar = document.getElementById('main-navbar');
                 usernameDisplay = document.getElementById('usernameDisplay');
                 userPhotoDisplay = document.getElementById('userPhotoDisplay');
@@ -2214,7 +1879,6 @@
                 workedForDisplay = document.getElementById('workedForDisplay');
                 lngIdDisplay = document.getElementById('lngIdDisplay');
 
-                // monthSelectDropdown replaces prevMonthBtn and nextMonthBtn
                 monthSelectDropdown = document.getElementById('monthSelectDropdown');
                 dateFromDisplay = document.getElementById('dateFrom');
                 dateToDisplay = document.getElementById('dateTo');
@@ -2223,16 +1887,19 @@
                 summaryLate = document.getElementById('summaryLate');
                 summaryAbsent = document.getElementById('summaryAbsent');
                 summaryWeekend = document.getElementById('summaryWeekend');
-                summaryHoliday = document.getElementById('summaryHoliday'); // New Holiday summary element
+                summaryHoliday = document.getElementById('summaryHoliday');
                 summaryWorkingDays = document.getElementById('summaryWorkingDays');
                 summaryDayShifts = document.getElementById('summaryDayShifts');
                 summaryNightShifts = document.getElementById('summaryNightShifts');
                 summaryGrace = document.getElementById('summaryGrace');
-                summaryTotalPresent = document.getElementById('summaryTotalPresent'); // New Total Present element
+                summaryTotalPresent = document.getElementById('summaryTotalPresent');
 
                 attendanceTableBody = document.querySelector('#attendanceTable tbody');
+                
+                // Edit/Delete/Add Modal elements (consolidated)
                 editDeleteModal = document.getElementById('editDeleteModal');
                 editDeleteModalCloseBtn = editDeleteModal.querySelector('.close-button');
+                editDeleteModalTitle = document.getElementById('editDeleteModalTitle');
                 editDateInput = document.getElementById('editDate');
                 editStatusInput = document.getElementById('editStatus');
                 editHourInput = document.getElementById('editHour');
@@ -2243,51 +1910,21 @@
                 editGraceLimitMessage = document.getElementById('editGraceLimitMessage');
                 updateEntryBtn = document.getElementById('updateEntryBtn');
                 deleteEntryBtn = document.getElementById('deleteEntryBtn');
+                cancelEditEntryBtn = document.getElementById('cancelEditEntryBtn');
 
                 editHourGroup = document.getElementById('editHourGroup');
                 editExtraHourGroup = document.getElementById('editExtraHourGroup');
                 editLateHourGroup = document.getElementById('editLateHourGroup');
                 editShiftTypeGroup = document.getElementById('editShiftTypeGroup');
                 editGraceGroup = document.getElementById('editGraceGroup');
-                editApprovalGroup = document.getElementById('editApprovalGroup'); // New
-                editApprovalInput = document.getElementById('editApproval'); // New
+                editApprovalGroup = document.getElementById('editApprovalGroup');
+                editApprovalInput = document.getElementById('editApproval');
 
                 currentYearSpan = document.getElementById('currentYear');
-
-                statusSelectionModal = document.getElementById('statusSelectionModal');
-                closeStatusSelectionModal = statusSelectionModal.querySelector('.close-button');
-                selectPresentBtn = document.getElementById('selectPresent');
-                selectWeekendBtn = document.getElementById('selectWeekend');
-                selectAbsentBtn = document.getElementById('selectAbsent');
-                selectHolidayBtn = document.getElementById('selectHoliday'); // New Holiday button element
-                selectGovernmentHolidayBtn = document.getElementById('selectGovernmentHoliday'); // New
-                selectSickLeaveBtn = document.getElementById('selectSickLeave'); // New
-
-                presentEntryModal = document.getElementById('presentEntryModal');
-                closePresentEntryModal = presentEntryModal.querySelector('.close-button');
-                presentEntryDateInput = document.getElementById('presentEntryDate');
-                presentEntryStatusInput = document.getElementById('presentEntryStatus'); // New
-                presentHourInput = document.getElementById('presentHour');
-                presentExtraHourInput = document.getElementById('presentExtraHour');
-                presentLateInput = document.getElementById('presentLate');
-                presentShiftTypeInput = document.getElementById('presentShiftType');
-                presentGraceInput = document.getElementById('presentGrace');
-                presentApprovalInput = document.getElementById('presentApproval'); // New
-                savePresentEntryBtn = document.getElementById('savePresentEntryBtn');
-                cancelPresentEntryBtn = document.getElementById('cancelPresentEntryBtn');
-                graceLimitMessage = document.getElementById('graceLimitMessage');
-
-                presentHourGroup = document.getElementById('presentHourGroup');
-                presentExtraHourGroup = document.getElementById('presentExtraHourGroup');
-                presentLateGroup = document.getElementById('presentLateGroup');
-                presentShiftTypeGroup = document.getElementById('presentShiftTypeGroup');
-                presentGraceGroup = document.getElementById('presentGraceGroup');
-                presentApprovalGroup = document.getElementById('presentApprovalGroup');
-
-
+                
                 homeNavLink = document.getElementById('homeNavLink');
                 historyNavLink = document.getElementById('historyNavLink');
-                helpNavLinkRef = document.getElementById('helpNavLink'); 
+                helpNavLinkRef = document.getElementById('helpNavLink');
                 dashboardSection = document.getElementById('dashboardSection');
                 monthlySummarySection = document.getElementById('monthlySummarySection');
                 dailyEntriesSection = document.getElementById('dailyEntriesSection');
@@ -2300,28 +1937,36 @@
                 historySummaryLate = document.getElementById('historySummaryLate');
                 historySummaryAbsent = document.getElementById('historySummaryAbsent');
                 historySummaryWeekend = document.getElementById('historySummaryWeekend');
-                historySummaryHoliday = document.getElementById('historySummaryHoliday'); // New Holiday summary element for history
+                historySummaryHoliday = document.getElementById('historySummaryHoliday');
                 historySummaryWorkingDays = document.getElementById('historySummaryWorkingDays');
                 historySummaryDayShifts = document.getElementById('historySummaryDayShifts');
                 historySummaryNightShifts = document.getElementById('historySummaryNightShifts');
                 historySummaryGrace = document.getElementById('historySummaryGrace');
-                historySummaryTotalPresent = document.getElementById('historySummaryTotalPresent'); // New Total Present for history
+                historySummaryTotalPresent = document.getElementById('historySummaryTotalPresent');
                 historyAttendanceTableBody = document.querySelector('#historyAttendanceTable tbody');
+
+                navSignInBtn = document.getElementById('navSignInBtn');
             }
 
 
             // --- Theme Management ---
+            function getThemeProperty(property) {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme === 'light') return getComputedStyle(document.documentElement).getPropertyValue(`${property}-light`);
+                if (currentTheme === 'dark') return getComputedStyle(document.documentElement).getPropertyValue(`${property}-dark`);
+                return getComputedStyle(document.documentElement).getPropertyValue(`${property}`); // Neptune-vibe is default
+            }
+
             function applyTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
-                if (themeToggle) { // Ensure themeToggle is available
-                    // Update icon based on the current theme
+                if (themeToggle) {
                     if (theme === 'light') {
                         themeToggle.className = 'fas fa-sun';
                     } else if (theme === 'dark') {
                         themeToggle.className = 'fas fa-moon';
                     } else if (theme === 'neptune-vibe') {
-                        themeToggle.className = 'fas fa-tint'; // Using a water drop icon for NeptuneVibe
+                        themeToggle.className = 'fas fa-palette';
                     }
                     currentThemeIndex = themeList.indexOf(theme);
                 }
@@ -2331,11 +1976,22 @@
                 currentThemeIndex = (currentThemeIndex + 1) % themeList.length;
                 const newTheme = themeList[currentThemeIndex];
                 applyTheme(newTheme);
+                // Update chart colors immediately after theme change
+                if (monthlyChart) {
+                    monthlyChart.data.datasets[0].backgroundColor = [
+                        getThemeProperty('--chart-color-present'),
+                        getThemeProperty('--chart-color-absent'),
+                        getThemeProperty('--chart-color-late')
+                    ];
+                    monthlyChart.options.plugins.legend.labels.color = getThemeProperty('--text-primary');
+                    monthlyChart.data.datasets[0].borderColor = getThemeProperty('--bg-secondary');
+                    monthlyChart.update();
+                }
             }
 
             // --- Custom Alert/Confirm Modal Functions ---
             function showCustomAlert(title, message, type = 'info') {
-                if (customAlertModal) { // Ensure modal exists
+                if (customAlertModal) {
                     customAlertTitle.textContent = title;
                     customAlertMessage.textContent = message;
                     customAlertModal.querySelector('.modal-content').className = 'modal-content ' + type;
@@ -2344,13 +2000,13 @@
             }
 
             function closeCustomAlertModalFunc() {
-                if (customAlertModal) { // Ensure modal exists
+                if (customAlertModal) {
                     customAlertModal.style.display = 'none';
                 }
             }
 
             function showCustomConfirm(title, message, onConfirm) {
-                if (customConfirmModal) { // Ensure modal exists
+                if (customConfirmModal) {
                     customConfirmTitle.textContent = title;
                     customConfirmMessage.textContent = message;
                     customConfirmModal.querySelector('.modal-content').className = 'modal-content info';
@@ -2360,7 +2016,7 @@
             }
 
             function closeCustomConfirmModalFunc() {
-                if (customConfirmModal) { // Ensure modal exists
+                if (customConfirmModal) {
                     customConfirmModal.style.display = 'none';
                     confirmCallback = null;
                 }
@@ -2371,12 +2027,19 @@
                 
                 window.addEventListener('scroll', () => {
                     if (mainNavbar) {
-                        if (window.scrollY > 50) {
+                        if (window.scrollY > 30) { // Reduced scroll threshold
                             mainNavbar.classList.add('scrolled');
                         } else {
                             mainNavbar.classList.remove('scrolled');
                         }
                     }
+                    // Dynamic background position based on scroll
+                    const scrollY = window.scrollY;
+                    const totalHeight = document.body.scrollHeight - window.innerHeight;
+                    const scrollPercentage = scrollY / totalHeight;
+                    // Adjust multiplier for desired speed, 100% means 0% to 100% background-position change
+                    const backgroundPositionX = scrollPercentage * 50; // Move from 0% to 50% across the 200% width
+                    document.body.style.backgroundPosition = `${backgroundPositionX}% 50%`;
                 });
 
                 if (usernameDisplay && usernameDisplay.parentElement) {
@@ -2402,6 +2065,13 @@
                     });
                 }
 
+                if (navSignInBtn) {
+                    navSignInBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        logout(); 
+                    });
+                }
+
                 if (profileModalCloseBtn) profileModalCloseBtn.addEventListener('click', closeProfileModal);
                 if (profileModal) {
                     profileModal.addEventListener('click', (event) => {
@@ -2414,67 +2084,15 @@
                 if (profilePictureInput) profilePictureInput.addEventListener('change', handleProfilePictureChange);
                 if (saveProfileBtn) saveProfileBtn.addEventListener('click', saveProfileChanges);
 
-                // Removed event listeners for prevMonthBtn and nextMonthBtn
                 if (monthSelectDropdown) {
                     monthSelectDropdown.addEventListener('change', (e) => {
                         const [year, month] = e.target.value.split('-').map(Number);
-                        currentMonthView = new Date(year, month - 1, 1); // Set to the first day of the selected month
+                        currentMonthView = new Date(year, month - 1, 1);
                         setupMonthView(currentMonthView);
                     });
                 }
                 
-                if (closeStatusSelectionModal) closeStatusSelectionModal.addEventListener('click', closeStatusSelectionModalFunc);
-                if (statusSelectionModal) {
-                    statusSelectionModal.addEventListener('click', (event) => {
-                        if (event.target == statusSelectionModal) {
-                            closeStatusSelectionModalFunc();
-                        }
-                    });
-                }
-                if (selectPresentBtn) selectPresentBtn.addEventListener('click', () => openPresentEntryModal('Present'));
-                if (selectWeekendBtn) selectWeekendBtn.addEventListener('click', () => setAttendanceStatus('Weekend'));
-                if (selectAbsentBtn) selectAbsentBtn.addEventListener('click', () => setAttendanceStatus('Absent'));
-                if (selectHolidayBtn) selectHolidayBtn.addEventListener('click', () => setAttendanceStatus('Holiday')); // Event listener for new Holiday button
-                if (selectGovernmentHolidayBtn) selectGovernmentHolidayBtn.addEventListener('click', () => openPresentEntryModal('Government_Holiday')); // New
-                if (selectSickLeaveBtn) selectSickLeaveBtn.addEventListener('click', () => openPresentEntryModal('Sick_Leave')); // New
-
-                if (closePresentEntryModal) closePresentEntryModal.addEventListener('click', closePresentEntryModalFunc);
-                if (presentEntryModal) {
-                    presentEntryModal.addEventListener('click', (event) => {
-                        if (event.target == presentEntryModal) {
-                            closePresentEntryModalFunc();
-                        }
-                        if (event.target.closest('.modal-content')) {
-                            event.stopPropagation();
-                        }
-                    });
-                }
-                if (presentHourInput && presentExtraHourInput && presentLateInput) {
-                    const updateLate = () => {
-                        presentLateInput.value = calculateLateTime(parseFloat(presentHourInput.value || 0));
-                    };
-                    presentHourInput.addEventListener('input', updateLate);
-                }
-                if (presentGraceInput) {
-                    presentGraceInput.addEventListener('change', () => {
-                        if (presentGraceInput.value === 'Yes') {
-                            const currentMonthKey = `${currentMonthView.getFullYear()}-${String(currentMonthView.getMonth() + 1).padStart(2, '0')}`;
-                            const graceUsed = currentLoggedInUser.graceCounts[currentMonthKey] || 0;
-                            if (graceUsed >= 5) {
-                                if (graceLimitMessage) graceLimitMessage.style.display = 'block';
-                                presentGraceInput.value = '-';
-                            } else {
-                                if (graceLimitMessage) graceLimitMessage.style.display = 'none';
-                            }
-                        } else {
-                            if (graceLimitMessage) graceLimitMessage.style.display = 'none';
-                        }
-                    });
-                }
-                if (savePresentEntryBtn) savePresentEntryBtn.addEventListener('click', savePresentEntry);
-                if (cancelPresentEntryBtn) cancelPresentEntryBtn.addEventListener('click', closePresentEntryModalFunc);
-
-
+                // Edit/Delete/Add Modal Event Listeners
                 if (closeEditDeleteModal) closeEditDeleteModal.addEventListener('click', closeEditDeleteModalFunc);
                 if (editDeleteModal) {
                     editDeleteModal.addEventListener('click', (event) => {
@@ -2497,15 +2115,19 @@
                 }
                 if (editGraceInput) {
                     editGraceInput.addEventListener('change', () => {
-                        if (editGraceInput.value === 'Yes') {
-                            const currentMonthKey = `${new Date(editDateInput.value).getFullYear()}-${String(new Date(editDateInput.value).getMonth() + 1).padStart(2, '0')}`; // Use date from editDateInput
-                            const graceUsed = currentLoggedInUser.graceCounts[currentMonthKey] || 0;
-                            const originalEntry = currentLoggedInUser.attendance[editDateInput.value]; // Use editDateInput.value for the current editing date
-                            const wasGrace = originalEntry && originalEntry.status === 'Present' && originalEntry.grace === 'Yes';
+                        const date = editDateInput.value;
+                        if (!date) return; // Should not happen in this flow
+                        
+                        const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
+                        const graceUsed = getGraceCount(monthKey);
+                        const originalEntry = currentLoggedInUser.attendance[date];
+                        const wasGrace = originalEntry && originalEntry.status === 'Present' && originalEntry.grace === 'Yes';
 
+                        if (editGraceInput.value === 'Yes') {
+                            // If grace limit reached AND it was NOT already a grace entry, disable
                             if (graceUsed >= 5 && !wasGrace) {
                                 if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'block';
-                                editGraceInput.value = '-';
+                                editGraceInput.value = '-'; // Revert selection
                             } else {
                                 if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
                             }
@@ -2514,8 +2136,9 @@
                         }
                     });
                 }
-                if (updateEntryBtn) updateEntryBtn.addEventListener('click', updateAttendanceEntry);
+                if (updateEntryBtn) updateEntryBtn.addEventListener('click', handleSaveOrUpdateEntry);
                 if (deleteEntryBtn) deleteEntryBtn.addEventListener('click', confirmDeleteEntry);
+                if (cancelEditEntryBtn) cancelEditEntryBtn.addEventListener('click', closeEditDeleteModalFunc);
 
                 if (homeNavLink) homeNavLink.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -2583,29 +2206,30 @@
                 monthlyChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Present (incl. Excused)', 'Absent'], // Removed 'Late (Equivalent Days)'
+                        labels: ['Present (incl. Excused)', 'Absent', 'Late (Equivalent Days)'],
                         datasets: [{
-                            data: [0, 0], // Initial data, now only two slices
+                            data: [0, 0, 0],
                             backgroundColor: [
-                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
-                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent')
+                                getThemeProperty('--chart-color-present'),
+                                getThemeProperty('--chart-color-absent'),
+                                getThemeProperty('--chart-color-late')
                             ],
-                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary'),
-                            borderWidth: 2
+                            borderColor: getThemeProperty('--bg-secondary'),
+                            borderWidth: 2 // Slightly thinner border for chart slices
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        cutout: '70%', // Makes it a doughnut chart
+                        cutout: '70%', // Slightly smaller cutout
                         plugins: {
                             legend: {
                                 position: 'bottom',
                                 labels: {
-                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                    color: getThemeProperty('--text-primary'),
                                     font: {
                                         family: 'Montserrat',
-                                        size: 10 // Smaller font size for legend
+                                        size: 11 // Smaller font size
                                     }
                                 }
                             },
@@ -2617,7 +2241,7 @@
                                             label += ': ';
                                         }
                                         if (context.parsed !== null) {
-                                            label += context.parsed + ' Days'; // Display as days
+                                            label += context.parsed + ' Days';
                                         }
                                         return label;
                                     }
@@ -2633,11 +2257,12 @@
                         if (mutation.attributeName === 'data-theme') {
                             if (monthlyChart) {
                                 monthlyChart.data.datasets[0].backgroundColor = [
-                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
-                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent')
+                                    getThemeProperty('--chart-color-present'),
+                                    getThemeProperty('--chart-color-absent'),
+                                    getThemeProperty('--chart-color-late')
                                 ];
-                                monthlyChart.options.plugins.legend.labels.color = getComputedStyle(document.documentElement).getPropertyValue('--text-primary');
-                                monthlyChart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary');
+                                monthlyChart.options.plugins.legend.labels.color = getThemeProperty('--text-primary');
+                                monthlyChart.data.datasets[0].borderColor = getThemeProperty('--bg-secondary');
                                 monthlyChart.update();
                             }
                         }
@@ -2653,14 +2278,17 @@
                 if (dailyEntriesSection) dailyEntriesSection.style.display = 'none';
                 if (historySection) historySection.style.display = 'none';
 
+                const allNavLinks = document.querySelectorAll('.nav-links a');
+                allNavLinks.forEach(link => link.classList.remove('active-nav-link'));
+
                 if (sectionName === 'dashboard') {
                     if (dashboardSection) dashboardSection.style.display = 'flex';
                     if (monthlySummarySection) monthlySummarySection.style.display = 'block';
                     if (dailyEntriesSection) dailyEntriesSection.style.display = 'block';
                     setupMonthView(currentMonthView);
+                    if (homeNavLink) homeNavLink.classList.add('active-nav-link');
                 } else if (sectionName === 'history') {
                     if (historySection) historySection.style.display = 'block';
-                    // Reset summary values for history section
                     if (historySummaryTotalHours) historySummaryTotalHours.textContent = '0';
                     if (historySummaryLate) historySummaryLate.textContent = '00:00';
                     if (historySummaryAbsent) historySummaryAbsent.textContent = '0';
@@ -2672,6 +2300,7 @@
                     if (historySummaryGrace) historySummaryGrace.textContent = '0';
                     if (historySummaryTotalPresent) historySummaryTotalPresent.textContent = '0';
                     if (historyAttendanceTableBody) historyAttendanceTableBody.innerHTML = '';
+                    if (historyNavLink) historyNavLink.classList.add('active-nav-link');
                 }
             }
 
@@ -2704,12 +2333,12 @@
                 if (!currentLoggedInUser) return;
 
                 const displayName = currentLoggedInUser.profileName || currentLoggedInUser.username || currentLoggedInUser.email.split('@')[0] || 'User';
-                const displayPhoto = currentLoggedInUser.photo || `https://placehold.co/40x40/000000/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
+                const displayPhoto = currentLoggedInUser.photo || `https://placehold.co/40x40/${(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0')}/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
 
                 if (usernameDisplay) usernameDisplay.textContent = displayName;
                 if (userPhotoDisplay) userPhotoDisplay.src = displayPhoto;
                 
-                if (dashboardUserPhoto) dashboardUserPhoto.src = currentLoggedInUser.photo || `https://placehold.co/150x150/000000/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
+                if (dashboardUserPhoto) dashboardUserPhoto.src = currentLoggedInUser.photo || `https://placehold.co/180x180/${(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0')}/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
                 if (dashboardUsername) dashboardUsername.textContent = displayName;
                 if (workedForDisplay) workedForDisplay.textContent = calculateWorkedFor(currentLoggedInUser.joiningDate);
                 if (lngIdDisplay) lngIdDisplay.textContent = currentLoggedInUser.lngId || 'N/A';
@@ -2719,12 +2348,12 @@
                 if (usernameInput) usernameInput.value = currentLoggedInUser.username || '';
                 if (profileJoiningDateInput) profileJoiningDateInput.value = currentLoggedInUser.joiningDate || '';
                 if (profileLngIdInput) profileLngIdInput.value = currentLoggedInUser.lngId || '';
-                if (profilePicturePreview) profilePicturePreview.src = currentLoggedInUser.photo || `https://placehold.co/100x100/000000/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
+                if (profilePicturePreview) profilePicturePreview.src = currentLoggedInUser.photo || `https://placehold.co/120x120/${(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0')}/ffffff?text=${displayName.charAt(0).toUpperCase()}`;
             }
 
             function openProfileModal() {
                 if (profileModal) profileModal.style.display = 'flex';
-                updateUserProfileDisplay(); // Ensure latest data is loaded into modal
+                updateUserProfileDisplay(); 
             }
 
             function closeProfileModal() {
@@ -2739,12 +2368,11 @@
                     username: usernameInput.value.trim(),
                     joiningDate: profileJoiningDateInput.value,
                     lngId: profileLngIdInput.value.trim(),
-                    photo: profilePicturePreview.src // Use the preview src
+                    photo: profilePicturePreview.src 
                 };
 
-                // Update current logged-in user object
                 currentLoggedInUser = { ...currentLoggedInUser, ...updatedProfile };
-                saveCurrentUserData(); // Save to localStorage (updates the specific user in registeredUsers)
+                saveCurrentUserData(); 
 
                 updateUserProfileDisplay();
                 showCustomAlert('Profile Update', 'Profile updated successfully!', 'success');
@@ -2763,19 +2391,17 @@
             }
 
             function logout() {
-                localStorage.removeItem('lastLoggedInUserEmail'); // Clear logged in user session
-                currentLoggedInUser = null; // Clear current user data
-                showAuthSection(); // Go back to login page
+                localStorage.removeItem('lastLoggedInUserEmail'); 
+                currentLoggedInUser = null; 
+                showAuthSection(); 
                 showCustomAlert('Logged Out', 'You have been successfully logged out.', 'info');
             }
 
             function getMonthRange(date) {
                 const year = date.getFullYear();
-                const month = date.getMonth(); // 0-indexed
+                const month = date.getMonth(); 
 
-                // Start date is 26th of previous month
                 const startDate = new Date(year, month - 1, 26);
-                // End date is 25th of current month
                 const endDate = new Date(year, month, 25);
 
                 return { start: startDate, end: endDate };
@@ -2804,12 +2430,11 @@
             function populateMonthDropdown() {
                 if (!monthSelectDropdown) return;
 
-                monthSelectDropdown.innerHTML = ''; // Clear existing options
+                monthSelectDropdown.innerHTML = ''; 
                 const today = new Date();
-                const currentMonth = today.getMonth(); // 0-indexed
+                const currentMonth = today.getMonth(); 
                 const currentYear = today.getFullYear();
 
-                // Add previous 6 months and next 6 months
                 for (let i = -6; i <= 6; i++) {
                     const date = new Date(currentYear, currentMonth + i, 1);
                     const optionValue = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -2819,7 +2444,6 @@
                     option.value = optionValue;
                     option.textContent = optionText;
 
-                    // Select the current month in the dropdown
                     if (date.getFullYear() === currentMonthView.getFullYear() && date.getMonth() === currentMonthView.getMonth()) {
                         option.selected = true;
                     }
@@ -2829,7 +2453,6 @@
 
             function setupMonthView(date) {
                 const { start, end } = getMonthRange(date);
-                // currentMonthDisplay is removed, so we don't update it
                 if (dateFromDisplay) dateFromDisplay.textContent = formatDisplayDate(start);
                 if (dateToDisplay) dateToDisplay.textContent = formatDisplayDate(end);
                 displayAttendanceHistory();
@@ -2854,182 +2477,12 @@
             function updateGraceCount(monthKey, increment) {
                 let newGraceCounts = { ...(currentLoggedInUser.graceCounts || {}) };
                 newGraceCounts[monthKey] = (newGraceCounts[monthKey] || 0) + increment;
-                currentLoggedInUser.graceCounts = newGraceCounts; // Update current user's grace counts
-                saveCurrentUserData(); // Save the updated current user data
+                currentLoggedInUser.graceCounts = newGraceCounts; 
+                saveCurrentUserData(); 
             }
 
             function checkGraceLimit(monthKey) {
                 return getGraceCount(monthKey) >= 5;
-            }
-
-            function openStatusSelectionModal(dateKey) {
-                currentSelectedDateForStatus = dateKey;
-                if (statusSelectionModal) statusSelectionModal.style.display = 'flex';
-            }
-
-            function closeStatusSelectionModalFunc() {
-                if (statusSelectionModal) statusSelectionModal.style.display = 'none';
-                currentSelectedDateForStatus = null;
-            }
-
-            function openPresentEntryModal(status) {
-                closeStatusSelectionModalFunc();
-                if (presentEntryModal) {
-                    presentEntryDateInput.value = currentSelectedDateForStatus;
-                    presentEntryStatusInput.value = status.replace(/_/g, ' '); // Display selected status
-
-                    const existingEntry = currentLoggedInUser.attendance[currentSelectedDateForStatus];
-
-                    // Default values for new entry or non-present entry
-                    let defaultHour = 9;
-                    let defaultExtraHour = 0;
-                    let defaultLate = '00:00';
-                    let defaultShift = 'Day';
-                    let defaultGrace = '-';
-                    let defaultApproval = '-';
-
-                    if (status === 'Sick_Leave' || status === 'Government_Holiday') {
-                        // For sick leave and government holiday, auto-select 9 hours present
-                        defaultHour = 9;
-                        defaultExtraHour = 0;
-                        defaultLate = calculateLateTime(defaultHour);
-                        defaultApproval = 'Approved';
-                    }
-
-                    // If existing entry is present, use its values
-                    if (existingEntry && existingEntry.status === status) { // Only pre-fill if existing entry matches the chosen status
-                        defaultHour = existingEntry.hour;
-                        defaultExtraHour = existingEntry.extraHour;
-                        defaultLate = existingEntry.late;
-                        defaultShift = existingEntry.shift;
-                        defaultGrace = existingEntry.grace || '-';
-                        defaultApproval = existingEntry.approval || '-';
-                    }
-
-                    presentHourInput.value = defaultHour;
-                    presentExtraHourInput.value = defaultExtraHour;
-                    presentLateInput.value = defaultLate;
-                    presentShiftTypeInput.value = defaultShift;
-                    presentGraceInput.value = defaultGrace;
-                    presentApprovalInput.value = defaultApproval;
-
-
-                    const monthKey = `${new Date(currentSelectedDateForStatus).getFullYear()}-${String(new Date(currentSelectedDateForStatus).getMonth() + 1).padStart(2, '0')}`;
-                    const graceLimitReached = checkGraceLimit(monthKey);
-                    
-                    if (presentGraceInput.querySelector('option[value="Yes"]')) {
-                        const originalEntry = currentLoggedInUser.attendance[currentSelectedDateForStatus];
-                        const wasGrace = originalEntry && originalEntry.status === 'Present' && originalEntry.grace === 'Yes';
-                        if (graceLimitReached && !wasGrace) {
-                            presentGraceInput.querySelector('option[value="Yes"]').disabled = true;
-                            if (graceLimitMessage) graceLimitMessage.style.display = 'block';
-                        } else {
-                            presentGraceInput.querySelector('option[value="Yes"]').disabled = false;
-                            if (graceLimitMessage) graceLimitMessage.style.display = 'none';
-                        }
-                    }
-
-                    // Toggle visibility of present-specific fields based on status
-                    const isPresentLike = (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave');
-                    presentHourGroup.style.display = isPresentLike ? 'block' : 'none';
-                    presentExtraHourGroup.style.display = isPresentLike ? 'block' : 'none';
-                    presentLateGroup.style.display = isPresentLike ? 'block' : 'none';
-                    presentShiftTypeGroup.style.display = isPresentLike ? 'block' : 'none';
-                    presentGraceGroup.style.display = (status === 'Present') ? 'block' : 'none'; // Grace only for 'Present'
-                    presentApprovalGroup.style.display = (status === 'Sick_Leave' || status === 'Holiday' || status === 'Government_Holiday' || (isPresentLike && (parseFloat(presentExtraHourInput.value || 0) > 0))) ? 'block' : 'none';
-
-                    presentEntryModal.style.display = 'flex';
-                    presentLateInput.value = calculateLateTime(parseFloat(presentHourInput.value || 0));
-                }
-            }
-
-            function closePresentEntryModalFunc() {
-                if (presentEntryModal) presentEntryModal.style.display = 'none';
-                currentSelectedDateForStatus = null;
-            }
-
-            function savePresentEntry() {
-                const date = presentEntryDateInput.value;
-                const status = presentEntryStatusInput.value.replace(/ /g, '_'); // Get status from the display input
-                
-                let hour = parseFloat(presentHourInput.value || 0);
-                let extraHour = parseFloat(presentExtraHourInput.value || 0); // Auto-select 0 if empty
-                const shift = presentShiftTypeInput.value;
-                const grace = presentGraceInput.value;
-                const approval = presentApprovalInput.value;
-
-                if (status === 'Sick_Leave' || status === 'Government_Holiday') {
-                    hour = 9;
-                    extraHour = 0;
-                }
-
-                if (isNaN(hour) || hour < 0 || hour > 24) {
-                    showCustomAlert('Input Error', "Please enter a valid hour (0-24).", 'error');
-                    return;
-                }
-                if (isNaN(extraHour) || extraHour < 0 || extraHour > 24) {
-                    showCustomAlert('Input Error', "Please enter a valid extra hour (0-24).", 'error');
-                    return;
-                }
-                const late = calculateLateTime(hour);
-
-                const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
-                const existingEntry = currentLoggedInUser.attendance[date];
-                const wasPresent = existingEntry && existingEntry.status === 'Present';
-                const wasGrace = wasPresent && existingEntry.grace === 'Yes';
-                const isGraceNow = grace === 'Yes';
-
-                if (status === 'Present' && isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
-                    showCustomAlert('Grace Limit Reached', "Cannot apply grace. Monthly limit (5) reached.", 'warning');
-                    return;
-                }
-
-                const newEntry = {
-                    status: status,
-                    hour: hour,
-                    extraHour: extraHour,
-                    late: late,
-                    shift: shift,
-                    grace: grace,
-                    approval: approval
-                };
-
-                // Update grace count if grace status changes AND it's a 'Present' entry
-                if (status === 'Present') {
-                    if (isGraceNow && !wasGrace) {
-                        updateGraceCount(monthKey, 1);
-                    } else if (!isGraceNow && wasGrace) {
-                        updateGraceCount(monthKey, -1);
-                    }
-                } else if (wasPresent && wasGrace) { // If changing from Present (with grace) to another status
-                    updateGraceCount(monthKey, -1);
-                }
-
-                currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: newEntry };
-                saveCurrentUserData(); // Save the updated current user data
-
-                closePresentEntryModalFunc();
-                displayAttendanceHistory();
-            }
-
-            function setAttendanceStatus(status) { // For Weekend, Absent, Holiday
-                const date = currentSelectedDateForStatus;
-                const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
-                const existingEntry = currentLoggedInUser.attendance[date];
-                const wasPresent = existingEntry && existingEntry.status === 'Present';
-                const wasGrace = wasPresent && existingEntry.grace === 'Yes';
-
-                const newEntry = { status: status, approval: '-' }; // Default approval for these statuses
-
-                if (wasPresent && wasGrace) {
-                    updateGraceCount(monthKey, -1);
-                }
-                
-                currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: newEntry };
-                saveCurrentUserData(); // Save the updated current user data
-
-                closeStatusSelectionModalFunc();
-                displayAttendanceHistory();
             }
 
             function displayAttendanceHistory() {
@@ -3045,14 +2498,14 @@
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
                 let totalHolidayDays = 0;
-                let totalGovernmentHolidayDays = 0; // New
-                let totalSickLeaveDays = 0; // New
+                let totalGovernmentHolidayDays = 0; 
+                let totalSickLeaveDays = 0; 
                 let totalWorkingDays = 0;
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
-                let totalPresentLikeDaysForChart = 0; // New variable for chart's 'Present (incl. Excused)' slice
-                let totalPresentCount = 0; // To count days marked as Present (or equivalent) for summary text
+                let totalPresentLikeDaysForChart = 0; 
+                let totalPresentCount = 0; 
 
                 let currentDate = new Date(start);
                 while (currentDate <= end) {
@@ -3061,7 +2514,7 @@
                     const entry = currentUserAttendance[dateKey];
 
                     const row = attendanceTableBody.insertRow();
-                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); // Add status background class
+                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); 
 
                     const cellDate = row.insertCell();
                     const cellDay = row.insertCell();
@@ -3071,7 +2524,7 @@
                     const cellLate = row.insertCell();
                     const cellShift = row.insertCell();
                     const cellGrace = row.insertCell();
-                    const cellApproval = row.insertCell(); // New cell for Approval
+                    const cellApproval = row.insertCell(); 
                     const cellActions = row.insertCell();
 
                     cellDate.textContent = formatDisplayDate(currentDate);
@@ -3079,7 +2532,7 @@
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
-                        cellStatus.textContent = entry.status.replace(/_/g, ' '); // Display with spaces
+                        cellStatus.textContent = entry.status.replace(/_/g, ' '); 
                         cellStatus.classList.add(`status-${entry.status.toLowerCase()}`);
 
                         if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
@@ -3101,8 +2554,8 @@
 
                             if (entry.status === 'Government_Holiday') totalGovernmentHolidayDays++;
                             else if (entry.status === 'Sick_Leave') totalSickLeaveDays++;
-                            totalPresentCount++; // Count this as a present day for summary text
-                            totalPresentLikeDaysForChart++; // Count for chart as well
+                            totalPresentCount++; 
+                            totalPresentLikeDaysForChart++; 
                         } else {
                             cellHour.textContent = '-';
                             cellExtraHour.textContent = '-';
@@ -3115,14 +2568,13 @@
                                 totalWorkingDays++;
                             } else if (entry.status === 'Weekend') {
                                 totalWeekendDays++;
-                                totalPresentLikeDaysForChart++; // Count weekends as "present-like" for chart
+                                totalPresentLikeDaysForChart++; 
                             } else if (entry.status === 'Holiday') {
                                 totalHolidayDays++;
-                                totalPresentLikeDaysForChart++; // Count holidays as "present-like" for chart
+                                totalPresentLikeDaysForChart++; 
                             }
                         }
                     } else {
-                        // If no entry, assume it's a regular day that hasn't been marked.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
@@ -3132,14 +2584,15 @@
                         cellApproval.textContent = '-';
                     }
 
-                    const editBtn = document.createElement('button');
-                    editBtn.textContent = 'Edit';
-                    editBtn.classList.add('premium-button');
-                    editBtn.dataset.date = dateKey;
-                    editBtn.onclick = openEditModal;
+                    const manageEntryBtn = document.createElement('button');
+                    manageEntryBtn.textContent = (entry ? 'Manage Entry' : 'Add Entry');
+                    manageEntryBtn.classList.add('premium-button');
+                    if (!entry) manageEntryBtn.classList.add('secondary'); // Style "Add" differently
+                    manageEntryBtn.dataset.date = dateKey;
+                    manageEntryBtn.onclick = openManageEntryModal;
 
                     cellActions.classList.add('table-actions');
-                    cellActions.appendChild(editBtn);
+                    cellActions.appendChild(manageEntryBtn);
 
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
@@ -3149,74 +2602,86 @@
                 if (summaryLate) summaryLate.textContent = formattedLateTime;
                 if (summaryAbsent) summaryAbsent.textContent = totalAbsentDays;
                 if (summaryWeekend) summaryWeekend.textContent = totalWeekendDays;
-                if (summaryHoliday) summaryHoliday.textContent = totalHolidayDays + totalGovernmentHolidayDays + totalSickLeaveDays; // All holiday types
+                if (summaryHoliday) summaryHoliday.textContent = totalHolidayDays + totalGovernmentHolidayDays + totalSickLeaveDays; 
                 if (summaryWorkingDays) summaryWorkingDays.textContent = totalWorkingDays;
                 if (summaryDayShifts) summaryDayShifts.textContent = totalDayShifts;
                 if (summaryNightShifts) summaryNightShifts.textContent = totalNightShifts;
                 if (summaryGrace) summaryGrace.textContent = totalGraceDays;
-                if (summaryTotalPresent) summaryTotalPresent.textContent = totalPresentCount + totalGovernmentHolidayDays + totalSickLeaveDays + totalWeekendDays + totalHolidayDays; // All present-like for text summary
+                if (summaryTotalPresent) summaryTotalPresent.textContent = totalPresentCount + totalGovernmentHolidayDays + totalSickLeaveDays + totalWeekendDays + totalHolidayDays; 
 
-
-                // Update the chart
                 if (monthlyChart) {
-                    // Update chart with the new 'Present (incl. Excused)' logic
+                    const lateEquivalentDays = Math.round(totalLateMinutes / (9 * 60)); 
                     monthlyChart.data.datasets[0].data = [
-                        totalPresentLikeDaysForChart, // Total present-like days for the chart
-                        totalAbsentDays
+                        totalPresentLikeDaysForChart, 
+                        totalAbsentDays,
+                        lateEquivalentDays
                     ];
                     monthlyChart.update();
                 }
             }
 
 
-            function openEditModal(event) {
-                const dateToEdit = event.target.dataset.date;
-                const entry = currentLoggedInUser.attendance[dateToEdit];
+            function openManageEntryModal(event) {
+                const dateToManage = event.target.dataset.date;
+                const entry = currentLoggedInUser.attendance[dateToManage];
 
-                if (editDateInput) editDateInput.value = dateToEdit;
+                if (editDateInput) editDateInput.value = dateToManage;
 
-                if (entry) {
+                // Reset all fields to default/empty state
+                if (editStatusInput) editStatusInput.value = 'Present';
+                if (editHourInput) editHourInput.value = 9;
+                if (editExtraHourInput) editExtraHourInput.value = 0;
+                if (editLateHourInput) editLateHourInput.value = '00:00';
+                if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
+                if (editGraceInput) editGraceInput.value = '-';
+                if (editApprovalInput) editApprovalInput.value = '-';
+                if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
+
+                if (entry) { // Editing existing entry
+                    if (editDeleteModalTitle) editDeleteModalTitle.textContent = 'Edit Attendance Entry';
+                    if (updateEntryBtn) updateEntryBtn.textContent = 'Update Entry';
+                    if (deleteEntryBtn) deleteEntryBtn.style.display = 'inline-flex'; // Show delete button
+
                     if (editStatusInput) editStatusInput.value = entry.status;
                     if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
-                        if (editHourInput) editHourInput.value = entry.hour || 9; // Auto-select 9 if 0 or undefined
-                        if (editExtraHourInput) editExtraHourInput.value = entry.extraHour;
-                        if (editLateHourInput) editLateHourInput.value = entry.late;
-                        if (editShiftTypeInput) editShiftTypeInput.value = entry.shift;
+                        if (editHourInput) editHourInput.value = entry.hour || 9; 
+                        if (editExtraHourInput) editExtraHourInput.value = entry.extraHour || 0;
+                        if (editLateHourInput) editLateHourInput.value = entry.late || calculateLateTime(entry.hour || 9);
+                        if (editShiftTypeInput) editShiftTypeInput.value = entry.shift || 'Day';
                         if (editGraceInput) editGraceInput.value = entry.grace || '-';
                         if (editApprovalInput) editApprovalInput.value = entry.approval || '-';
                     } else {
-                        // For non-present statuses, clear present-specific fields
+                        // For non-present statuses, clear related fields
                         if (editHourInput) editHourInput.value = '';
                         if (editExtraHourInput) editExtraHourInput.value = '';
                         if (editLateHourInput) editLateHourInput.value = '00:00';
                         if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
                         if (editGraceInput) editGraceInput.value = '-';
-                        if (editApprovalInput) editApprovalInput.value = entry.approval || '-'; // Keep approval if exists
+                        if (editApprovalInput) editApprovalInput.value = entry.approval || '-'; 
                     }
-                } else {
-                    // If no entry exists for this date, pre-fill with defaults for 'Absent'
-                    if (editStatusInput) editStatusInput.value = 'Absent';
-                    if (editHourInput) editHourInput.value = '';
-                    if (editExtraHourInput) editExtraHourInput.value = '';
-                    if (editLateHourInput) editLateHourInput.value = '00:00';
-                    if (editShiftTypeInput) editShiftTypeInput.value = 'Day';
-                    if (editGraceInput) editGraceInput.value = '-';
-                    if (editApprovalInput) editApprovalInput.value = '-';
+                } else { // Adding new entry
+                    if (editDeleteModalTitle) editDeleteModalTitle.textContent = 'Add Attendance Entry';
+                    if (updateEntryBtn) updateEntryBtn.textContent = 'Save Entry';
+                    if (deleteEntryBtn) deleteEntryBtn.style.display = 'none'; // Hide delete button
+                    // Default values are already set above
                 }
 
-                toggleEditPresentDetails(); // Call to adjust field visibility
+                toggleEditPresentDetails(); // Adjust visibility based on initial/current status
 
-                const monthKey = `${new Date(dateToEdit).getFullYear()}-${String(new Date(dateToEdit).getMonth() + 1).padStart(2, '0')}`;
+                const monthKey = `${new Date(dateToManage).getFullYear()}-${String(new Date(dateToManage).getMonth() + 1).padStart(2, '0')}`;
                 const graceLimitReached = checkGraceLimit(monthKey);
                 const originalGraceStatus = entry && entry.status === 'Present' && entry.grace === 'Yes';
 
                 if (editGraceInput) {
-                    if (graceLimitReached && !originalGraceStatus) {
-                        editGraceInput.querySelector('option[value="Yes"]').disabled = true;
-                        if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'block';
-                    } else {
-                        editGraceInput.querySelector('option[value="Yes"]').disabled = false;
-                        if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
+                    const graceOption = editGraceInput.querySelector('option[value="Yes"]');
+                    if (graceOption) {
+                        if (graceLimitReached && !originalGraceStatus) {
+                            graceOption.disabled = true;
+                            if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'block';
+                        } else {
+                            graceOption.disabled = false;
+                            if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
+                        }
                     }
                 }
                 
@@ -3226,9 +2691,9 @@
             function closeEditDeleteModalFunc() {
                 if (editDeleteModal) {
                     editDeleteModal.style.display = 'none';
-                    // Clear fields after closing to prevent showing old data on next open
+                    // Reset fields for next open
                     if (editDateInput) editDateInput.value = '';
-                    if (editStatusInput) editStatusInput.value = 'Absent'; // Default to Absent
+                    if (editStatusInput) editStatusInput.value = 'Present'; 
                     if (editHourInput) editHourInput.value = '';
                     if (editExtraHourInput) editExtraHourInput.value = '';
                     if (editLateHourInput) editLateHourInput.value = '00:00';
@@ -3236,14 +2701,15 @@
                     if (editGraceInput) editGraceInput.value = '-';
                     if (editApprovalInput) editApprovalInput.value = '-';
                     if (editGraceLimitMessage) editGraceLimitMessage.style.display = 'none';
-                    toggleEditPresentDetails(); // Reset visibility of fields
+                    if (updateEntryBtn) updateEntryBtn.textContent = 'Save Entry';
+                    if (deleteEntryBtn) deleteEntryBtn.style.display = 'none';
+                    toggleEditPresentDetails(); // Ensure correct initial state
                 }
             }
 
             function toggleEditPresentDetails() {
                 const status = editStatusInput.value;
                 const isPresentLike = (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave');
-                // Ensure editExtraHourInput value is used for checking if approval is needed
                 const currentExtraHourValue = parseFloat(editExtraHourInput ? editExtraHourInput.value : 0) || 0;
                 const requiresApproval = (status === 'Sick_Leave' || status === 'Holiday' || status === 'Government_Holiday' || (isPresentLike && (currentExtraHourValue > 0)));
 
@@ -3251,20 +2717,19 @@
                 if (editExtraHourGroup) editExtraHourGroup.style.display = isPresentLike ? 'block' : 'none';
                 if (editLateHourGroup) editLateHourGroup.style.display = isPresentLike ? 'block' : 'none';
                 if (editShiftTypeGroup) editShiftTypeGroup.style.display = isPresentLike ? 'block' : 'none';
-                if (editGraceGroup) editGraceGroup.style.display = (status === 'Present') ? 'block' : 'none'; // Grace only for Present
+                if (editGraceGroup) editGraceGroup.style.display = (status === 'Present') ? 'block' : 'none'; 
                 if (editApprovalGroup) editApprovalGroup.style.display = requiresApproval ? 'block' : 'none';
 
-                 // Auto-set 9 hours for Sick_Leave and Government_Holiday if not already set or cleared
                 if ((status === 'Sick_Leave' || status === 'Government_Holiday') && editHourInput) {
-                    if (!editHourInput.value || parseFloat(editHourInput.value) === 0) { // Only set if empty or 0
+                    if (!editHourInput.value || parseFloat(editHourInput.value) === 0) { 
                         editHourInput.value = 9;
                     }
-                    if (editExtraHourInput) editExtraHourInput.value = 0; // Ensure extra hour is 0
-                    if (editLateHourInput) editLateHourInput.value = '00:00'; // Ensure late is 00:00
+                    if (editExtraHourInput) editExtraHourInput.value = 0; 
+                    if (editLateHourInput) editLateHourInput.value = '00:00'; 
                 }
-                if (editApprovalInput) { // Auto-set approval for specific statuses
+                if (editApprovalInput) { 
                     if (requiresApproval) {
-                        if (editApprovalInput.value === '-') { // Only change if not already set by user
+                        if (editApprovalInput.value === '-') { 
                             editApprovalInput.value = 'Approved';
                         }
                     } else {
@@ -3273,7 +2738,7 @@
                 }
             }
 
-            function updateAttendanceEntry() {
+            function handleSaveOrUpdateEntry() {
                 const date = editDateInput.value;
                 if (!date || !currentLoggedInUser) return;
 
@@ -3286,8 +2751,8 @@
                 let updatedEntry = { status: status, approval: editApprovalInput.value || '-' };
 
                 if (status === 'Present' || status === 'Government_Holiday' || status === 'Sick_Leave') {
-                    const updatedHour = parseFloat(editHourInput.value || 0); // Auto-select 0 if empty
-                    const updatedExtraHour = parseFloat(editExtraHourInput.value || 0); // Auto-select 0 if empty
+                    const updatedHour = parseFloat(editHourInput.value || 0); 
+                    const updatedExtraHour = parseFloat(editExtraHourInput.value || 0); 
                     const updatedShift = editShiftTypeInput.value;
                     const updatedGrace = editGraceInput.value;
                     const updatedLate = calculateLateTime(updatedHour);
@@ -3314,32 +2779,39 @@
                         approval: editApprovalInput.value || '-'
                     };
 
-                    // Update grace count only for 'Present' status
+                    // Grace count logic for the current month
                     if (status === 'Present') {
-                        if (isGraceNow && !wasGrace) {
+                        if (isGraceNow && !wasGrace) { // New grace entry
                             updateGraceCount(monthKey, 1);
-                        } else if (!isGraceNow && wasGrace) {
+                        } else if (!isGraceNow && wasGrace) { // Grace removed
                             updateGraceCount(monthKey, -1);
                         }
-                    } else if (wasPresent && wasGrace) { // If changing from Present (with grace) to another present-like status
+                    } else if (wasPresent && wasGrace) { // Status changed from present-with-grace to non-present
                         updateGraceCount(monthKey, -1);
                     }
-                } else {
-                    if (wasPresent && wasGrace) {
+                } else { // Non-present status
+                    if (wasPresent && wasGrace) { // If original entry was present-with-grace, decrement grace count
                         updateGraceCount(monthKey, -1);
                     }
+                    // For non-present statuses, ensure related fields are not saved
+                    delete updatedEntry.hour;
+                    delete updatedEntry.extraHour;
+                    delete updatedEntry.late;
+                    delete updatedEntry.shift;
+                    delete updatedEntry.grace;
                 }
 
                 currentLoggedInUser.attendance = { ...currentLoggedInUser.attendance, [date]: updatedEntry };
-                saveCurrentUserData(); // Save the updated current user data
+                saveCurrentUserData(); 
 
+                showCustomAlert('Entry Saved', 'Attendance entry has been successfully saved!', 'success');
                 closeEditDeleteModalFunc();
                 displayAttendanceHistory();
             }
 
             function confirmDeleteEntry() {
                 const dateToDelete = editDateInput.value;
-                showCustomConfirm('Confirm Deletion', "Do you want to delete?", (confirmed) => { // Updated confirmation message
+                showCustomConfirm('Confirm Deletion', `Are you sure you want to delete ALL data for ${formatDisplayDate(new Date(dateToDelete))}? This action cannot be undone.`, (confirmed) => {
                     if (confirmed) {
                         deleteAttendanceEntry(dateToDelete);
                     }
@@ -3356,8 +2828,8 @@
 
                 const updatedAttendance = { ...currentLoggedInUser.attendance };
                 delete updatedAttendance[dateToDelete];
-                currentLoggedInUser.attendance = updatedAttendance; // Update current user's attendance
-                saveCurrentUserData(); // Save the updated current user data
+                currentLoggedInUser.attendance = updatedAttendance; 
+                saveCurrentUserData(); 
 
                 if (wasPresent && wasGrace) {
                     updateGraceCount(monthKey, -1);
@@ -3365,7 +2837,7 @@
 
                 showCustomAlert('Entry Deleted', 'Entry deleted successfully! Data for this date has been cleared.', 'success');
                 closeEditDeleteModalFunc();
-                displayAttendanceHistory(); // Refresh the table after deletion
+                displayAttendanceHistory(); 
             }
 
             // --- History Page Functions ---
@@ -3395,13 +2867,13 @@
                 let totalAbsentDays = 0;
                 let totalWeekendDays = 0;
                 let totalHolidayDays = 0;
-                let totalGovernmentHolidayDays = 0; // New
-                let totalSickLeaveDays = 0; // New
+                let totalGovernmentHolidayDays = 0; 
+                let totalSickLeaveDays = 0; 
                 let totalWorkingDays = 0;
                 let totalDayShifts = 0;
                 let totalNightShifts = 0;
                 let totalGraceDays = 0;
-                let totalPresentCount = 0; // for summary text
+                let totalPresentCount = 0; 
 
                 if (historyAttendanceTableBody) historyAttendanceTableBody.innerHTML = '';
 
@@ -3412,7 +2884,7 @@
                     const entry = currentUserAttendance[dateKey];
 
                     const row = historyAttendanceTableBody.insertRow();
-                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); // Add status background class
+                    row.classList.add(`status-${(entry?.status || 'unmarked').toLowerCase()}-row`); 
 
                     const cellDate = row.insertCell();
                     const cellDay = row.insertCell();
@@ -3422,14 +2894,14 @@
                     const cellLate = row.insertCell();
                     const cellShift = row.insertCell();
                     const cellGrace = row.insertCell();
-                    const cellApproval = row.insertCell(); // New cell for Approval
+                    const cellApproval = row.insertCell(); 
 
                     cellDate.textContent = formatDisplayDate(currentDate);
                     cellDay.textContent = dayOfWeek;
                     cellStatus.className = '';
 
                     if (entry && entry.status) {
-                        cellStatus.textContent = entry.status.replace(/_/g, ' '); // Display with spaces
+                        cellStatus.textContent = entry.status.replace(/_/g, ' '); 
                         cellStatus.classList.add(`status-${entry.status.toLowerCase()}`);
 
                         if (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave') {
@@ -3451,7 +2923,7 @@
 
                             if (entry.status === 'Government_Holiday') totalGovernmentHolidayDays++;
                             else if (entry.status === 'Sick_Leave') totalSickLeaveDays++;
-                            totalPresentCount++; // Count this as a present day
+                            totalPresentCount++; 
                         } else {
                             cellHour.textContent = '-';
                             cellExtraHour.textContent = '-';
@@ -3469,7 +2941,6 @@
                             }
                         }
                     } else {
-                        // If no entry, assume it's a regular day that hasn't been marked.
                         cellStatus.textContent = '-';
                         cellHour.textContent = '-';
                         cellExtraHour.textContent = '-';
