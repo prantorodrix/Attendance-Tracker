@@ -550,7 +550,6 @@
             text-decoration: none;
             font-weight: 400; /* Standard font weight */
             font-size: 0.9rem;
-            transition: color var(--transition-speed);
             position: relative;
             padding-bottom: 3px;
         }
@@ -993,12 +992,13 @@
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
             transition: color var(--transition-speed), border-color var(--transition-speed);
+            font-size: 0.9rem; /* Standard font size for table cells */
         }
 
         #attendanceTable th, #historyAttendanceTable th {
-            font-weight: 500; /* Standard font weight */
+            font-weight: 500; /* Standard font weight for table headers */
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.8rem; /* Slightly smaller font for headers */
             letter-spacing: 0.2px;
         }
 
@@ -2214,7 +2214,7 @@
                 workedForDisplay = document.getElementById('workedForDisplay');
                 lngIdDisplay = document.getElementById('lngIdDisplay');
 
-                // monthSelectDropdown replaces prevMonthBtn, nextMonthBtn, currentMonthDisplay
+                // monthSelectDropdown replaces prevMonthBtn and nextMonthBtn
                 monthSelectDropdown = document.getElementById('monthSelectDropdown');
                 dateFromDisplay = document.getElementById('dateFrom');
                 dateToDisplay = document.getElementById('dateTo');
@@ -2583,13 +2583,12 @@
                 monthlyChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Present (incl. Excused)', 'Absent', 'Late (Equivalent Days)'],
+                        labels: ['Present (incl. Excused)', 'Absent'], // Removed 'Late (Equivalent Days)'
                         datasets: [{
-                            data: [0, 0, 0], // Initial data
+                            data: [0, 0], // Initial data, now only two slices
                             backgroundColor: [
                                 getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
-                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent'),
-                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-late')
+                                getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent')
                             ],
                             borderColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary'),
                             borderWidth: 2
@@ -2635,8 +2634,7 @@
                             if (monthlyChart) {
                                 monthlyChart.data.datasets[0].backgroundColor = [
                                     getComputedStyle(document.documentElement).getPropertyValue('--chart-color-present'),
-                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent'),
-                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-late')
+                                    getComputedStyle(document.documentElement).getPropertyValue('--chart-color-absent')
                                 ];
                                 monthlyChart.options.plugins.legend.labels.color = getComputedStyle(document.documentElement).getPropertyValue('--text-primary');
                                 monthlyChart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary');
@@ -2977,7 +2975,8 @@
 
                 const monthKey = `${new Date(date).getFullYear()}-${String(new Date(date).getMonth() + 1).padStart(2, '0')}`;
                 const existingEntry = currentLoggedInUser.attendance[date];
-                const wasGrace = existingEntry && existingEntry.status === 'Present' && existingEntry.grace === 'Yes';
+                const wasPresent = existingEntry && existingEntry.status === 'Present';
+                const wasGrace = wasPresent && existingEntry.grace === 'Yes';
                 const isGraceNow = grace === 'Yes';
 
                 if (status === 'Present' && isGraceNow && !wasGrace && checkGraceLimit(monthKey)) {
@@ -3163,8 +3162,7 @@
                     // Update chart with the new 'Present (incl. Excused)' logic
                     monthlyChart.data.datasets[0].data = [
                         totalPresentLikeDaysForChart, // Total present-like days for the chart
-                        totalAbsentDays,
-                        Math.round(totalLateMinutes / (24 * 60)) // Convert late minutes to approximate days for chart
+                        totalAbsentDays
                     ];
                     monthlyChart.update();
                 }
@@ -3341,7 +3339,7 @@
 
             function confirmDeleteEntry() {
                 const dateToDelete = editDateInput.value;
-                showCustomConfirm('Confirm Deletion', `Are you sure you want to delete ALL data for ${formatDisplayDate(new Date(dateToDelete))}?`, (confirmed) => {
+                showCustomConfirm('Confirm Deletion', "Do you want to delete?", (confirmed) => { // Updated confirmation message
                     if (confirmed) {
                         deleteAttendanceEntry(dateToDelete);
                     }
