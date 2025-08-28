@@ -836,6 +836,9 @@
             margin-top: 20px; /* Reduced margin */
             border: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px; /* Reduced gap */
         }
 
         @media (min-width: 768px) {
@@ -1436,7 +1439,7 @@
                 <h2 id="editDeleteModalTitle"></h2>
                 <div class="input-group">
                     <label for="editDate">Date</label>
-                    <input type="date" placeholder="Date" id="editDate" readonly>
+                    <input type="date" id="editDate" readonly>
                 </div>
                 <div class="input-group">
                     <label for="editStatus">Status</label>
@@ -2991,4 +2994,3 @@
     </script>
 </body>
 </html>
-
