@@ -678,9 +678,9 @@
             gap: 8px; /* Minimized gap */
         }
         .summary-card {
-          margin-top: 3px;
+          margin-top: 4px;
             background-color: var(--bg-secondary);
-            padding: 10px 12px; /* Minimized padding */
+            padding: 7px 12px; /* Minimized padding */
             border-radius: var(--border-radius-large);
             box-shadow: 5px 5px 1px #cdfaff; /* Minimized shadow */
             border: 1px solid var(--border-color);
@@ -1423,12 +1423,12 @@
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             padding: 8px 12px;
-            border-radius: var(--border-radius-base);
+            border-radius: 25px;
             cursor: pointer;
             font-size: 0.8rem;
             font-weight: 500;
             transition: all var(--transition-speed);
-            box-shadow: 0 1px 4px var(--shadow-color);
+            box-shadow: 5px 5px 1px #cdfaff;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -1685,9 +1685,7 @@
 
             <div class="sidebar-footer">
                 <p>&copy; <span id="currentYear"></span> TrackFlow</p>
-                <button id="themeToggle" class="theme-toggle-button">
-                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
-                </button>
+                
             </div>
         </aside>
 
@@ -1695,9 +1693,10 @@
             <!-- Header -->
             <header class="main-header">
                 <span class="page-title-display" id="pageTitleDisplay">Dashboard</span>
-                <div class="header-actions">
-                    <i class="fas fa-bell header-notification-icon"></i>
-                </div>
+
+                <button id="themeToggle" class="theme-toggle-button">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
             </header>
 
             <!-- Fixed Dashboard Top Section -->
