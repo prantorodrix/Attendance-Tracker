@@ -41,12 +41,12 @@
             --status-govt-holiday: #17A2B8; /* Cyan */
             --status-sick-leave: #FD7E14; /* Orange */
 
-            --status-present-bg: rgba(40, 167, 69, 0.08);
-            --status-absent-bg: rgba(220, 53, 69, 0.08);
-            --status-weekend-bg: rgba(108, 117, 125, 0.08);
-            --status-holiday-bg: rgba(255, 193, 7, 0.08);
-            --status-govt-holiday-bg: rgba(23, 162, 184, 0.08);
-            --status-sick-leave-bg: rgba(253, 126, 20, 0.08);
+            --status-present-bg: rgba(40, 167, 69, 0.15); /* Deeper */
+            --status-absent-bg: rgba(220, 53, 69, 0.15); /* Deeper */
+            --status-weekend-bg: rgba(108, 117, 125, 0.15); /* Deeper */
+            --status-holiday-bg: rgba(255, 193, 7, 0.15); /* Deeper */
+            --status-govt-holiday-bg: rgba(23, 162, 184, 0.15); /* Deeper */
+            --status-sick-leave-bg: rgba(253, 126, 20, 0.15); /* Deeper */
 
             /* Chart Colors */
             --chart-color-present: var(--accent-color); /* Use accent color for present */
@@ -99,12 +99,12 @@
             --status-govt-holiday: #03A9F4; 
             --status-sick-leave: #FF9800; 
 
-            --status-present-bg: rgba(76, 175, 80, 0.15);
-            --status-absent-bg: rgba(244, 67, 54, 0.15);
-            --status-weekend-bg: rgba(158, 158, 158, 0.15);
-            --status-holiday-bg: rgba(255, 235, 59, 0.15);
-            --status-govt-holiday-bg: rgba(3, 169, 244, 0.15);
-            --status-sick-leave-bg: rgba(255, 152, 0, 0.15);
+            --status-present-bg: rgba(76, 175, 80, 0.25); /* Deeper */
+            --status-absent-bg: rgba(244, 67, 54, 0.25); /* Deeper */
+            --status-weekend-bg: rgba(158, 158, 158, 0.25); /* Deeper */
+            --status-holiday-bg: rgba(255, 235, 59, 0.25); /* Deeper */
+            --status-govt-holiday-bg: rgba(3, 169, 244, 0.25); /* Deeper */
+            --status-sick-leave-bg: rgba(255, 152, 0, 0.25); /* Deeper */
 
             --chart-color-present: var(--accent-color);
             --chart-color-absent: var(--alert-error);
@@ -117,7 +117,8 @@
                 background-color: rgba(40, 40, 40, 0.6); /* More transparent dark */
             }
             .section-card, .summary-card, .month-selector-card, .chart-container-card,
-            #attendanceTable, #historyAttendanceTable, .auth-container {
+            #attendanceTable, #historyAttendanceTable, .auth-container,
+            .working-days-cola-category-wrapper .summary-card { /* Added new cards */
                 background-color: rgba(40, 40, 40, 0.8); /* Darker, slightly transparent */
                 border: 1px solid rgba(80, 80, 80, 0.5);
             }
@@ -652,12 +653,12 @@
 
         /* Fixed Dashboard Top Section */
         .dashboard-fixed-top {
-          justify-content: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* Minimized gap */
             background: var(--bg-primary); /* Use subtle gradient */
             padding: 15px 20px; /* Minimized padding */
-            display: flex;
-            grid-template-columns: 1fr 280px; /* Summary cards take left, Month selector/chart fixed width right */
-            gap: 15px; /* Minimized gap */
             position: sticky;
             top: 48px; /* Height of the main-header */
             z-index: 80;
@@ -670,7 +671,12 @@
             background-color: rgba(255, 255, 255, 0.8); /* Slightly opaque white */
         }
 
-
+        .month-chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
         .summary-cards-grid {
             display: grid;
@@ -678,7 +684,7 @@
             gap: 8px; /* Minimized gap */
         }
         .summary-card {
-          margin-top: 4px;
+            margin-top: 4px;
             background-color: var(--bg-secondary);
             padding: 7px 12px; /* Minimized padding */
             border-radius: var(--border-radius-large);
@@ -704,14 +710,6 @@
             font-size: 1.1rem; /* Minimized font size */
             font-weight: 700;
             color: var(--text-primary);
-        }
-
-        .month-chart-wrapper {
-                display: flex
-;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
         }
 
         .month-selector-card {
@@ -1268,11 +1266,12 @@
             font-size: 0.8rem; /* Minimized font size */
         }
 
-        #historySummaryResult {
-            margin-top: 15px; /* Minimized margin */
-            padding: 15px; /* Minimized padding */
+        /* Removed historySummaryResult from historySection */
+        /* #historySummaryResult {
+            margin-top: 15px; 
+            padding: 15px; 
             background-color: var(--bg-secondary); 
-        }
+        } */
 
         #historyDetailedEntries {
             margin-top: 20px !important; /* Minimized margin */
@@ -1353,7 +1352,7 @@
         }
 
         .right-sidebar-section {
-            margin-bottom: 20px;
+            margin-bot0om: 20px;
             padding: 15px;
             background-color: var(--bg-secondary);
             border-radius: var(--border-radius-large);
@@ -1361,10 +1360,10 @@
             border: 1px solid var(--border-color);
             transition: all var(--transition-speed);
         }
-        .right-sidebar-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+        /*.right-sidebar-section:hover {*/
+        /*    transform: translateY(-2px);*/
+        /*    box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
+        /*}*/
 
         .right-sidebar-section h4 {
             font-size: 0.9rem;
@@ -1374,19 +1373,22 @@
 
         .right-sidebar-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px dashed var(--border-color);
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 5px;
+    border: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 1px 1px 4px 0px #a1ebd2;
         }
         .right-sidebar-item:last-child {
-            border-bottom: none;
         }
         .right-sidebar-item strong {
             color: var(--text-primary);
             font-weight: 600;
+            font-size: 1.0rem;
         }
 
         /* Profile Details in Right Sidebar */
@@ -1436,6 +1438,84 @@
         .theme-toggle-button:hover {
             background-color: var(--border-color);
             color: var(--accent-color);
+        }
+
+        /* New Dashboard Cards */
+        .working-days-cola-category-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .working-days-cola-category-wrapper .summary-card {
+
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 80%; /* Ensure cards take full height */
+        }
+        .working-days-cola-category-wrapper .summary-card h4 {
+            font-size: 0.8rem;
+           
+            color: var(--text-primary);
+        }
+        .working-days-cola-category-wrapper .summary-card .value {
+            font-size: 1.rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .working-days-cola-category-wrapper .summary-card .details-button {
+            background-color: var(--input-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 5px 10px;
+            border-radius: var(--border-radius-base);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            align-self: flex-end; /* Align button to the right */
+        }
+        .working-days-cola-category-wrapper .summary-card .details-button:hover {
+            background-color: var(--border-color);
+            color: var(--accent-color);
+        }
+
+        /* COLA Progress Bar */
+        .cola-progress-bar-container {
+            width: 100%;
+            background-color:#e9eaed;
+            border-radius: var(--border-radius-base);
+            overflow: hidden;
+            margin-top: 10px;
+            height: 13px;
+            position: relative;
+        }
+        .cola-progress-bar {
+            height: 100%;
+            background-color: #00fb93;    width: 0%;
+            transition: width 0.5s ease-out;
+            border-radius: var(--border-radius-base);
+        }
+        .cola-eligibility-status {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--status-present);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .cola-eligibility-status i {
+            font-size: 1rem;
+        }
+
+        /* Page Transition Animation */
+        .page-transition {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive adjustments */
@@ -1524,6 +1604,19 @@
             }
             .main-content-wrapper {
                 width: 100%;
+            }
+
+            .dashboard-fixed-top {
+                grid-template-columns: 1fr; /* Stack all sections on smaller screens */
+            }
+            .working-days-cola-category-wrapper {
+                flex-direction: row; /* Arrange new cards horizontally on tablet */
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .working-days-cola-category-wrapper .summary-card {
+                flex: 1 1 45%; /* Allow cards to grow and wrap */
+                max-width: 48%; /* Max width to allow two per row */
             }
         }
 
@@ -1621,6 +1714,13 @@
             .sidebar-mini-profile-details .detail-item i {
                 font-size: 0.7rem;
             }
+
+            .working-days-cola-category-wrapper {
+                flex-direction: column; /* Stack new cards vertically on mobile */
+            }
+            .working-days-cola-category-wrapper .summary-card {
+                max-width: 100%; /* Full width on mobile */
+            }
         }
     </style>
 </head>
@@ -1716,31 +1816,55 @@
                         <canvas id="monthlyAttendanceChart"></canvas>
                         <div class="chart-percentage-text" id="chartPercentageText"></div>
                 </div>
-                    <!-- Calendar Card -->
-                    <div class="calendar-card">
-                        <div class="calendar-header">
-                            <button id="prevMonthBtn"><i class="fas fa-chevron-left"></i></button>
-                            <h3 id="currentMonthYear"></h3>
-                            <button id="nextMonthBtn"><i class="fas fa-chevron-right"></i></button>
-                        </div>
-                        <div class="calendar-grid" id="calendarGrid">
-                            <div class="calendar-day-name">Sun</div>
-                            <div class="calendar-day-name">Mon</div>
-                            <div class="calendar-day-name">Tue</div>
-                            <div class="calendar-day-name">Wed</div>
-                            <div class="calendar-day-name">Thu</div>
-                            <div class="calendar-day-name">Fri</div>
-                            <div class="calendar-day-name">Sat</div>
-                            <!-- Dates will be populated here by JavaScript -->
-                        </div>
+
+                <!-- New: Working Days, COLA, Category Wrapper -->
+                <div class="working-days-cola-category-wrapper">
+                    <div class="summary-card">
+                        <h4>Total Working Days</h4>
+                        <span class="value" id="totalWorkingDaysDisplay">0 Days</span>
+                        <button class="details-button" id="totalWorkingDaysDetailsBtn">Details</button>
                     </div>
+                    <div class="summary-card">
+                        <h4>COLA Eligibility</h4>
+                        <span class="value" id="colaEligibilityDisplay">Need present 0 days</span>
+                        <div class="cola-progress-bar-container">
+                            <div class="cola-progress-bar" id="colaProgressBar"></div>
+                        </div>
+                        <div class="cola-eligibility-status" id="colaEligibilityStatus"></div>
+                        <button class="details-button" id="colaEligibilityDetailsBtn">Details</button>
+                    </div>
+                    <!--<div class="summary-card">-->
+                    <!--    <h4>Category</h4>-->
+                    <!--    <span class="value" id="employeeCategoryDisplay">Category: A, Excellent</span>-->
+                    <!--    <button class="details-button" id="categoryDetailsBtn">Details</button>-->
+                    <!--</div>-->
+                </div>
+
+                <!-- Calendar Card -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button id="prevMonthBtn"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="currentMonthYear"></h3>
+                        <button id="nextMonthBtn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <div class="calendar-day-name">Sun</div>
+                        <div class="calendar-day-name">Mon</div>
+                        <div class="calendar-day-name">Tue</div>
+                        <div class="calendar-day-name">Wed</div>
+                        <div class="calendar-day-name">Thu</div>
+                        <div class="calendar-day-name">Fri</div>
+                        <div class="calendar-day-name">Sat</div>
+                        <!-- Dates will be populated here by JavaScript -->
+                    </div>
+                </div>
                 
             </div>
 
             <!-- Scrolling Content Area -->
             <div class="dashboard-scrolling-content">
                 <!-- Daily Entries Data -->
-                <section id="dailyEntriesSection" class="section-card">
+                <section id="dailyEntriesSection" class="section-card page-transition">
                     <h2>Daily Entries</h2>
                     <div class="table-responsive">
                         <table id="attendanceTable">
@@ -1766,7 +1890,7 @@
                 </section>
 
                 <!-- History Page Section (Initially hidden) -->
-                <section id="historySection" class="section-card" style="display: none;">
+                <section id="historySection" class="section-card page-transition" style="display: none;">
                     <h2>Custom Report Generator</h2>
                     <div class="date-range-inputs">
                         <div class="input-group">
@@ -1780,7 +1904,8 @@
                         <button id="findHistoryResultBtn" class="premium-button">Generate Report</button>
                     </div>
                     
-                    <div id="historySummaryResult" class="section-card" style="margin-top: 20px;">
+                    <!-- Removed historySummaryResult from here -->
+                    <!-- <div id="historySummaryResult" class="section-card" style="margin-top: 20px;">
                         <h2>Report Summary</h2>
                         <div class="summary-cards-grid">
                             <div class="summary-card">
@@ -1824,7 +1949,7 @@
                                 <span class="value" id="historySummaryGrace">0</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div id="historyDetailedEntries" class="table-responsive" style="margin-top: 20px;">
                         <h2>Detailed Entries</h2>
@@ -1850,7 +1975,7 @@
                 </section>
                 
                 <!-- My Profile Page Section (initially hidden) -->
-                <section id="profilePageSection" style="display: none;">
+                <section id="profilePageSection" class="page-transition" style="display: none;">
                     <div class="profile-content-card">
                         <h2>Edit Profile</h2>
                         <div class="profile-picture-upload">
@@ -1909,6 +2034,7 @@
                         </div>
                         <button id="saveProfileBtn" class="premium-button">Save Changes</button>
                     </div>
+                    <!-- Removed extra profile details from here -->
                 </section>
             </div>
             
@@ -1934,48 +2060,22 @@
 
         <!-- Right Sidebar -->
         <aside id="rightSidebar" class="collapsed">
-            <div class="summary-card">
-                        <h4>Total Hours</h4>
-                        <span class="value" id="summaryTotalHours">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Late</h4>
-                        <span class="value" id="summaryLate">00:00</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Absent</h4>
-                        <span class="value" id="summaryAbsent">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Weekends</h4>
-                        <span class="value" id="summaryWeekend">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Holidays</h4>
-                        <span class="value" id="summaryHoliday">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Working Days</h4>
-                        <span class="value" id="summaryWorkingDays">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Total Present</h4>
-                        <span class="value" id="summaryTotalPresent">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Night Shifts</h4>
-                        <span class="value" id="summaryNightShifts">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Day Shifts</h4>
-                        <span class="value" id="summaryDayShifts">0</span>
-                    </div>
-                    <div class="summary-card">
-                        <h4>Grace Used</h4>
-                        <span class="value" id="summaryGrace">0</span>
-                    </div>
-                </div>
+            <!-- Dashboard Summary (visible only on dashboard) -->
+            <div id="dashboardSummaryRight" class="right-sidebar-section">
+                <h3>Monthly Summary</h3>
+                <div class="right-sidebar-item"><span>Total Hours:</span> <strong id="rsTotalHours">0</strong></div>
+                <div class="right-sidebar-item"><span>Late:</span> <strong id="rsLate">00:00</strong></div>
+                <div class="right-sidebar-item"><span>Absent:</span> <strong id="rsAbsent">0</strong></div>
+                <div class="right-sidebar-item"><span>Weekends:</span> <strong id="rsWeekend">0</strong></div>
+                <div class="right-sidebar-item"><span>Holidays:</span> <strong id="rsHoliday">0</strong></div>
+                <div class="right-sidebar-item"><span>Working Days:</span> <strong id="rsWorkingDays">0</strong></div>
+                <div class="right-sidebar-item"><span>Total Present:</span> <strong id="rsTotalPresent">0</strong></div>
+                <div class="right-sidebar-item"><span>Night Shifts:</span> <strong id="rsNightShifts">0</strong></div>
+                <div class="right-sidebar-item"><span>Day Shifts:</span> <strong id="rsDayShifts">0</strong></div>
+                <div class="right-sidebar-item"><span>Grace Used:</span> <strong id="rsGrace">0</strong></div>
+            </div>
 
+            <!-- History Summary (visible only on history page) -->
             <div id="historySummaryRight" class="right-sidebar-section" style="display: none;">
                 <h3>Report Summary</h3>
                 <div class="right-sidebar-item"><span>Total Hours:</span> <strong id="rhsTotalHours">0</strong></div>
@@ -1990,6 +2090,7 @@
                 <div class="right-sidebar-item"><span>Grace Used:</span> <strong id="rhsGrace">0</strong></div>
             </div>
 
+            <!-- Profile Details (visible only on profile page) -->
             <div id="profileDetailsRight" class="right-sidebar-section" style="display: none;">
                 <h3>My Details</h3>
                 <div class="profile-detail-item">
@@ -2096,6 +2197,96 @@
                 </div>
             </div>
         </div>
+
+        <!-- New Modals for Dashboard Details -->
+        <!-- Total Working Days Modal -->
+        <div id="totalWorkingDaysModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeTotalWorkingDaysModal">&times;</span>
+                <h2>Total Working Days Details</h2>
+                <p><strong>Selected Month:</strong> <span id="twdMonthDisplay"></span></p>
+                <p><strong>Total Days in Month:</strong> <span id="twdTotalDays"></span></p>
+                <p><strong>Total Sundays:</strong> <span id="twdTotalSundays"></span></p>
+                <p><strong>Calculated Working Days:</strong> <span id="twdCalculatedWorkingDays"></span></p>
+                <div class="modal-buttons">
+                    <button class="premium-button" onclick="closeCustomModal(document.getElementById('totalWorkingDaysModal'))">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLA Eligibility Modal -->
+        <div id="colaEligibilityModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeColaEligibilityModal">&times;</span>
+                <h2>COLA Eligibility Details</h2>
+                <p><strong>Selected Month:</strong> <span id="colaMonthDisplay"></span></p>
+                <p><strong>Total Working Days:</strong> <span id="colaTotalWorkingDays"></span></p>
+                <p><strong>Required Present Days:</strong> <span id="colaRequiredPresentDays"></span></p>
+                <p><strong>Your Present Days:</strong> <span id="colaYourPresentDays"></span></p>
+                <div class="cola-progress-bar-container" style="height: 20px; margin-top: 15px;">
+                    <div class="cola-progress-bar" id="colaModalProgressBar" style="height: 100%;"></div>
+                </div>
+                <div class="cola-eligibility-status" id="colaModalEligibilityStatus" style="justify-content: center; margin-top: 10px; font-size: 1rem;"></div>
+                
+                <h4 style="margin-top: 20px; text-align: center;">COLA Rules:</h4>
+                <ul style="list-style-type: disc; padding-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+                    <li>If Working days 27-26 days, Need present 22 days.</li>
+                    <li>If working days 25-24 days, Need present 21 Days.</li>
+                    <li>If working days below 24 days, Need Present 20 days.</li>
+                </ul>
+                <div class="modal-buttons">
+                    <button class="premium-button" onclick="closeCustomModal(document.getElementById('colaEligibilityModal'))">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Details Modal -->
+        <div id="categoryDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeCategoryDetailsModal">&times;</span>
+                <h2>Employee Category Details</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background-color: var(--table-header-bg);">
+                            <th style="padding: 8px; border: 1px solid var(--border-color); text-align: left;">Category</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); text-align: left;">Treated As</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); text-align: left;">Eligibility Working Hours %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">A</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Excellent</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">90%-100%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">B</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Very Good</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">85%-89%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">C</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Good</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">80%-84%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">D</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Need Improvement</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">75%-79%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">E</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Failure</td>
+                            <td style="padding: 8px; border: 1px solid var(--border-color);">Below 70% or equal to 74%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="modal-buttons">
+                    <button class="premium-button" onclick="closeCustomModal(document.getElementById('categoryDetailsModal'))">OK</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Custom Alert Modal (for general messages) -->
         <div id="customAlertModal" class="modal">
@@ -2250,6 +2441,17 @@
 
             // Theme Toggle
             let themeToggle;
+
+            // New Dashboard Card Elements
+            let totalWorkingDaysDisplay, totalWorkingDaysDetailsBtn,
+                colaEligibilityDisplay, colaEligibilityDetailsBtn, colaProgressBar, colaEligibilityStatus,
+                employeeCategoryDisplay, categoryDetailsBtn;
+
+            // New Modals
+            let totalWorkingDaysModal, closeTotalWorkingDaysModal, twdMonthDisplay, twdTotalDays, twdTotalSundays, twdCalculatedWorkingDays;
+            let colaEligibilityModal, closeColaEligibilityModal, colaMonthDisplay, colaTotalWorkingDays, colaRequiredPresentDays, colaYourPresentDays, colaModalProgressBar, colaModalEligibilityStatus;
+            let categoryDetailsModal, closeCategoryDetailsModal;
+
 
             // --- Initial Setup and Auto-Login Simulation ---
             function initializeApp() {
@@ -2508,6 +2710,36 @@
                 rpDesignation = document.getElementById('rpDesignation');
 
                 themeToggle = document.getElementById('themeToggle');
+
+                // New Dashboard Card Elements
+                totalWorkingDaysDisplay = document.getElementById('totalWorkingDaysDisplay');
+                totalWorkingDaysDetailsBtn = document.getElementById('totalWorkingDaysDetailsBtn');
+                colaEligibilityDisplay = document.getElementById('colaEligibilityDisplay');
+                colaEligibilityDetailsBtn = document.getElementById('colaEligibilityDetailsBtn');
+                colaProgressBar = document.getElementById('colaProgressBar');
+                colaEligibilityStatus = document.getElementById('colaEligibilityStatus');
+                employeeCategoryDisplay = document.getElementById('employeeCategoryDisplay');
+                categoryDetailsBtn = document.getElementById('categoryDetailsBtn');
+
+                // New Modals
+                totalWorkingDaysModal = document.getElementById('totalWorkingDaysModal');
+                closeTotalWorkingDaysModal = document.getElementById('closeTotalWorkingDaysModal');
+                twdMonthDisplay = document.getElementById('twdMonthDisplay');
+                twdTotalDays = document.getElementById('twdTotalDays');
+                twdTotalSundays = document.getElementById('twdTotalSundays');
+                twdCalculatedWorkingDays = document.getElementById('twdCalculatedWorkingDays');
+
+                colaEligibilityModal = document.getElementById('colaEligibilityModal');
+                closeColaEligibilityModal = document.getElementById('closeColaEligibilityModal');
+                colaMonthDisplay = document.getElementById('colaMonthDisplay');
+                colaTotalWorkingDays = document.getElementById('colaTotalWorkingDays');
+                colaRequiredPresentDays = document.getElementById('colaRequiredPresentDays');
+                colaYourPresentDays = document.getElementById('colaYourPresentDays');
+                colaModalProgressBar = document.getElementById('colaModalProgressBar');
+                colaModalEligibilityStatus = document.getElementById('colaModalEligibilityStatus');
+
+                categoryDetailsModal = document.getElementById('categoryDetailsModal');
+                closeCategoryDetailsModal = document.getElementById('closeCategoryDetailsModal');
             }
 
 
@@ -2854,6 +3086,37 @@
                     });
                 });
                 observer.observe(document.documentElement, { attributes: true });
+
+                // New Dashboard Card Event Listeners
+                if (totalWorkingDaysDetailsBtn) totalWorkingDaysDetailsBtn.addEventListener('click', showTotalWorkingDaysDetails);
+                if (closeTotalWorkingDaysModal) closeTotalWorkingDaysModal.addEventListener('click', closeCustomModal.bind(null, totalWorkingDaysModal));
+                if (totalWorkingDaysModal) {
+                    totalWorkingDaysModal.addEventListener('click', (event) => {
+                        if (event.target == totalWorkingDaysModal) {
+                            closeCustomModal(totalWorkingDaysModal);
+                        }
+                    });
+                }
+
+                if (colaEligibilityDetailsBtn) colaEligibilityDetailsBtn.addEventListener('click', showColaEligibilityDetails);
+                if (closeColaEligibilityModal) closeColaEligibilityModal.addEventListener('click', closeCustomModal.bind(null, colaEligibilityModal));
+                if (colaEligibilityModal) {
+                    colaEligibilityModal.addEventListener('click', (event) => {
+                        if (event.target == colaEligibilityModal) {
+                            closeCustomModal(colaEligibilityModal);
+                        }
+                    });
+                }
+
+                if (categoryDetailsBtn) categoryDetailsBtn.addEventListener('click', showCategoryDetails);
+                if (closeCategoryDetailsModal) closeCategoryDetailsModal.addEventListener('click', closeCustomModal.bind(null, categoryDetailsModal));
+                if (categoryDetailsModal) {
+                    categoryDetailsModal.addEventListener('click', (event) => {
+                        if (event.target == categoryDetailsModal) {
+                            closeCustomModal(categoryDetailsModal);
+                        }
+                    });
+                }
             }
 
             // --- Section Visibility Control ---
@@ -2863,6 +3126,11 @@
                 if (dailyEntriesSection) dailyEntriesSection.style.display = 'none';
                 if (historySection) historySection.style.display = 'none';
                 if (profilePageSection) profilePageSection.style.display = 'none';
+
+                // Remove page-transition class from all sections first
+                document.querySelectorAll('.page-transition').forEach(section => {
+                    section.classList.remove('page-transition');
+                });
 
                 // Hide all right sidebar sections
                 if (dashboardSummaryRight) dashboardSummaryRight.style.display = 'none';
@@ -2874,14 +3142,20 @@
                 allNavLinks.forEach(link => link.classList.remove('active'));
 
                 if (sectionName === 'dashboard') {
-                    if (dashboardFixedTop) dashboardFixedTop.style.display = 'flex';
-                    if (dailyEntriesSection) dailyEntriesSection.style.display = 'block';
+                    if (dashboardFixedTop) dashboardFixedTop.style.display = 'flex'; // Changed to grid
+                    if (dailyEntriesSection) {
+                        dailyEntriesSection.style.display = 'block';
+                        dailyEntriesSection.classList.add('page-transition'); // Add transition class
+                    }
                     if (dashboardSummaryRight) dashboardSummaryRight.style.display = 'block';
                     setupMonthView(currentMonthView);
                     if (homeNavLink) homeNavLink.classList.add('active');
                     if (pageTitleDisplay) pageTitleDisplay.textContent = 'Dashboard';
                 } else if (sectionName === 'history') {
-                    if (historySection) historySection.style.display = 'flex';
+                    if (historySection) {
+                        historySection.style.display = 'flex';
+                        historySection.classList.add('page-transition'); // Add transition class
+                    }
                     if (historySummaryRight) historySummaryRight.style.display = 'block';
                     // Reset history summaries and table
                     if (historySummaryTotalHours) historySummaryTotalHours.textContent = '0';
@@ -2911,7 +3185,10 @@
                     if (historyNavLink) historyNavLink.classList.add('active');
                     if (pageTitleDisplay) pageTitleDisplay.textContent = 'Attendance History';
                 } else if (sectionName === 'profile') {
-                    if (profilePageSection) profilePageSection.style.display = 'flex';
+                    if (profilePageSection) {
+                        profilePageSection.style.display = 'flex';
+                        profilePageSection.classList.add('page-transition'); // Add transition class
+                    }
                     if (profileDetailsRight) profileDetailsRight.style.display = 'block';
                     updateUserProfileDisplay(); // Load profile data
                     if (personalProfileBtn) personalProfileBtn.classList.add('active');
@@ -2953,7 +3230,7 @@
                 const placeholderBg = 'DEE2E6';
                 const placeholderText = '343A40';
 
-                const displayPhoto = currentLoggedInUser.photo || `https://placehold.co/36x36/${placeholderBg}/${placeholderText}?text=${displayName.charAt(0).toUpperCase()}`;
+                const displayPhoto = currentLoggedInUser.photo || `https://placehold.co/36x36/${(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0')}/FFFFFF?text=${displayName.charAt(0).toUpperCase()}`;
 
                 // Sidebar main user info
                 if (sidebarUsername) sidebarUsername.textContent = displayName;
@@ -3105,6 +3382,7 @@
                 if (dateToDisplay) dateToDisplay.textContent = formatDisplayDate(end);
                 displayAttendanceHistory();
                 renderCalendar(date); // Render calendar for the current month view
+                updateDashboardCards(date); // Update new dashboard cards
             }
 
             function calculateLateTime(hour) {
@@ -3574,6 +3852,7 @@
                 closeCustomModal(editDeleteModal);
                 displayAttendanceHistory();
                 renderCalendar(currentMonthView); // Update calendar after entry change
+                updateDashboardCards(currentMonthView); // Update new dashboard cards
             }
 
             function confirmDeleteEntry() {
@@ -3602,6 +3881,7 @@
                 closeCustomModal(editDeleteModal);
                 displayAttendanceHistory(); 
                 renderCalendar(currentMonthView); // Update calendar after entry change
+                updateDashboardCards(currentMonthView); // Update new dashboard cards
             }
 
             // --- History Page Functions ---
@@ -3766,11 +4046,170 @@
                 closeCustomModal(helpModal);
             }
 
+            // --- New Dashboard Card Functions ---
+
+            function updateDashboardCards(date) {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let totalSundays = 0;
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const d = new Date(year, month, i);
+                    if (d.getDay() === 0) { // Sunday
+                        totalSundays++;
+                    }
+                }
+                const calculatedWorkingDays = daysInMonth - totalSundays;
+
+                if (totalWorkingDaysDisplay) totalWorkingDaysDisplay.textContent = `${calculatedWorkingDays} Days`;
+
+                // COLA Eligibility
+                let requiredPresentDays;
+                if (calculatedWorkingDays >= 26) { // 27-26 days
+                    requiredPresentDays = 22;
+                } else if (calculatedWorkingDays >= 24) { // 25-24 days
+                    requiredPresentDays = 21;
+                } else { // Below 24 days
+                    requiredPresentDays = 20;
+                }
+
+                const { start, end } = getMonthRange(date);
+                let presentDaysCount = 0;
+                const currentUserAttendance = currentLoggedInUser.attendance || {};
+                let currentDate = new Date(start);
+                while (currentDate.getTime() <= end.getTime()) {
+                    const dateKey = formatDate(currentDate);
+                    const entry = currentUserAttendance[dateKey];
+                    if (entry && (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave')) {
+                        presentDaysCount++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                if (colaEligibilityDisplay) colaEligibilityDisplay.textContent = `Need present ${requiredPresentDays} days`;
+                
+                const progressPercentage = (presentDaysCount / requiredPresentDays) * 100;
+                if (colaProgressBar) colaProgressBar.style.width = `${Math.min(progressPercentage, 100)}%`;
+                if (colaEligibilityStatus) {
+                    if (presentDaysCount >= requiredPresentDays) {
+                        colaEligibilityStatus.innerHTML = '<i class="fas fa-check-circle"></i> COLA Eligibility Met!';
+                        colaEligibilityStatus.style.color = 'var(--status-present)';
+                    } else {
+                        colaEligibilityStatus.innerHTML = `Present: ${presentDaysCount} / ${requiredPresentDays} Days`;
+                        colaEligibilityStatus.style.color = 'var(--text-secondary)';
+                    }
+                }
+
+                // Category Employee Treated As
+                const totalWorkingHours = parseFloat(summaryTotalHours.textContent) || 0;
+                const totalPossibleHours = calculatedWorkingDays * 9; // Assuming 9 hours per working day
+                let workingHoursPercentage = 0;
+                if (totalPossibleHours > 0) {
+                    workingHoursPercentage = (totalWorkingHours / totalPossibleHours) * 100;
+                }
+
+                let category = 'E';
+                let treatedAs = 'Failure';
+                if (workingHoursPercentage >= 90) {
+                    category = 'A';
+                    treatedAs = 'Excellent';
+                } else if (workingHoursPercentage >= 85) {
+                    category = 'B';
+                    treatedAs = 'Very Good';
+                } else if (workingHoursPercentage >= 80) {
+                    category = 'C';
+                    treatedAs = 'Good';
+                } else if (workingHoursPercentage >= 75) {
+                    category = 'D';
+                    treatedAs = 'Need Improvement';
+                }
+
+                if (employeeCategoryDisplay) employeeCategoryDisplay.textContent = `Category: ${category}, ${treatedAs}`;
+            }
+
+            function showTotalWorkingDaysDetails() {
+                const year = currentMonthView.getFullYear();
+                const month = currentMonthView.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let totalSundays = 0;
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const d = new Date(year, month, i);
+                    if (d.getDay() === 0) { // Sunday
+                        totalSundays++;
+                    }
+                }
+                const calculatedWorkingDays = daysInMonth - totalSundays;
+
+                if (twdMonthDisplay) twdMonthDisplay.textContent = currentMonthView.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                if (twdTotalDays) twdTotalDays.textContent = daysInMonth;
+                if (twdTotalSundays) twdTotalSundays.textContent = totalSundays;
+                if (twdCalculatedWorkingDays) twdCalculatedWorkingDays.textContent = calculatedWorkingDays;
+
+                if (totalWorkingDaysModal) totalWorkingDaysModal.style.display = 'flex';
+            }
+
+            function showColaEligibilityDetails() {
+                const year = currentMonthView.getFullYear();
+                const month = currentMonthView.getMonth();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let totalSundays = 0;
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const d = new Date(year, month, i);
+                    if (d.getDay() === 0) { // Sunday
+                        totalSundays++;
+                    }
+                }
+                const calculatedWorkingDays = daysInMonth - totalSundays;
+
+                let requiredPresentDays;
+                if (calculatedWorkingDays >= 26) { // 27-26 days
+                    requiredPresentDays = 22;
+                } else if (calculatedWorkingDays >= 24) { // 25-24 days
+                    requiredPresentDays = 21;
+                } else { // Below 24 days
+                    requiredPresentDays = 20;
+                }
+
+                const { start, end } = getMonthRange(currentMonthView);
+                let presentDaysCount = 0;
+                const currentUserAttendance = currentLoggedInUser.attendance || {};
+                let currentDate = new Date(start);
+                while (currentDate.getTime() <= end.getTime()) {
+                    const dateKey = formatDate(currentDate);
+                    const entry = currentUserAttendance[dateKey];
+                    if (entry && (entry.status === 'Present' || entry.status === 'Government_Holiday' || entry.status === 'Sick_Leave')) {
+                        presentDaysCount++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                if (colaMonthDisplay) colaMonthDisplay.textContent = currentMonthView.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                if (colaTotalWorkingDays) colaTotalWorkingDays.textContent = calculatedWorkingDays;
+                if (colaRequiredPresentDays) colaRequiredPresentDays.textContent = requiredPresentDays;
+                if (colaYourPresentDays) colaYourPresentDays.textContent = presentDaysCount;
+
+                const progressPercentage = (presentDaysCount / requiredPresentDays) * 100;
+                if (colaModalProgressBar) colaModalProgressBar.style.width = `${Math.min(progressPercentage, 100)}%`;
+                if (colaModalEligibilityStatus) {
+                    if (presentDaysCount >= requiredPresentDays) {
+                        colaModalEligibilityStatus.innerHTML = '<i class="fas fa-check-circle"></i> COLA Eligibility Met!';
+                        colaModalEligibilityStatus.style.color = 'var(--status-present)';
+                    } else {
+                        colaModalEligibilityStatus.innerHTML = `Present: ${presentDaysCount} / ${requiredPresentDays} Days`;
+                        colaModalEligibilityStatus.style.color = 'var(--text-secondary)';
+                    }
+                }
+
+                if (colaEligibilityModal) colaEligibilityModal.style.display = 'flex';
+            }
+
+            function showCategoryDetails() {
+                if (categoryDetailsModal) categoryDetailsModal.style.display = 'flex';
+            }
+
             // Initial call
             initializeApp();
         });
     </script>
 </body>
 </html>
-
-
