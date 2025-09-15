@@ -71,8 +71,8 @@
 
         /* Dark Theme Variables */
         html[data-theme="dark"] {
-            --bg-primary: linear-gradient(135deg, #1A1A1A 0%, #2C2C2C 100%); /* Dark gradient */
-            --bg-secondary: rgba(40, 40, 40, 0.8); /* Darker, slightly transparent for glass effect */
+            --bg-primary: linear-gradient(135deg, #1B1B1B, #003153); /* Dark gradient */
+            --bg-secondary: rgb(26 37 56 / 75%); /* Darker, slightly transparent for glass effect */
             --text-primary: #E0E0E0; /* Light grey for main text */
             --text-secondary: #B0B0B0; /* Medium grey for secondary text */
             --accent-color: #9B98F0; /* Lighter purple accent */
@@ -1288,7 +1288,6 @@
             display: flex;
             flex-wrap: wrap; 
             justify-content: center;
-            background-color: var(--footer-bg); 
             color: var(--footer-text);
             transition: all var(--transition-speed);
             border-radius: var(--border-radius-large) var(--border-radius-large) 0 0; /* Rounded top corners */
@@ -1321,7 +1320,7 @@
         #rightSidebar {
             background-color: var(--nav-bg);
             box-shadow: -1px 0 8px var(--shadow-color);
-            padding: 15px;
+            padding: 4px;
             display: flex;
             flex-direction: column;
             transition: width var(--transition-speed), background-color var(--transition-speed);
@@ -1353,7 +1352,7 @@
 
         .right-sidebar-section {
             margin-bot0om: 20px;
-            padding: 15px;
+            padding: 8px;
             background-color: var(--bg-secondary);
             border-radius: var(--border-radius-large);
             box-shadow: 0 2px 8px var(--shadow-color);
@@ -1372,15 +1371,16 @@
         }
 
         .right-sidebar-item {
-            display: flex;
-    justify-content: space-between;
+            display: grid;
+    justify-content: space-around;
+    text-align: center;
     align-items: center;
     padding: 8px 5px;
     border: 1px solid var(--border-color);
     font-size: 0.8rem;
     color: var(--text-secondary);
     border-radius: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     box-shadow: 1px 1px 4px 0px #a1ebd2;
         }
         .right-sidebar-item:last-child {
