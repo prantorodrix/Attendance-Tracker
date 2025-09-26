@@ -4057,18 +4057,19 @@
 
             // --- New Dashboard Card Functions ---
 
-            function updateDashboardCards(date) {
-                const year = date.getFullYear();
-                const month = date.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                let totalSundays = 0;
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const d = new Date(year, month, i);
-                    if (d.getDay() === 0) { // Sunday
-                        totalSundays++;
+           function updateDashboardCards(date) {
+                const { start, end } = getMonthRange(date);
+                let totalDaysInPeriod = 0;
+                let totalSundaysInPeriod = 0;
+                let currentDate = new Date(start);
+                while (currentDate.getTime() <= end.getTime()) {
+                    totalDaysInPeriod++;
+                    if (currentDate.getDay() === 0) { // Sunday
+                        totalSundaysInPeriod++;
                     }
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
-                const calculatedWorkingDays = daysInMonth - totalSundays;
+                const calculatedWorkingDays = totalDaysInPeriod - totalSundaysInPeriod;
 
                 if (totalWorkingDaysDisplay) totalWorkingDaysDisplay.textContent = `${calculatedWorkingDays} Days`;
 
@@ -4082,10 +4083,9 @@
                     requiredPresentDays = 20;
                 }
 
-                const { start, end } = getMonthRange(date);
                 let presentDaysCount = 0;
                 const currentUserAttendance = currentLoggedInUser.attendance || {};
-                let currentDate = new Date(start);
+                currentDate = new Date(start); // Reset currentDate for this loop
                 while (currentDate.getTime() <= end.getTime()) {
                     const dateKey = formatDate(currentDate);
                     const entry = currentUserAttendance[dateKey];
@@ -4110,7 +4110,8 @@
                 }
 
                 // Category Employee Treated As
-                const totalWorkingHours = parseFloat(summaryTotalHours.textContent) || 0;
+                // This calculation needs the total hours from displayAttendanceHistory, which is updated in rsTotalHours
+                const totalWorkingHours = parseFloat(rsTotalHours.textContent) || 0;
                 const totalPossibleHours = calculatedWorkingDays * 9; // Assuming 9 hours per working day
                 let workingHoursPercentage = 0;
                 if (totalPossibleHours > 0) {
@@ -4137,38 +4138,40 @@
             }
 
             function showTotalWorkingDaysDetails() {
-                const year = currentMonthView.getFullYear();
-                const month = currentMonthView.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                let totalSundays = 0;
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const d = new Date(year, month, i);
-                    if (d.getDay() === 0) { // Sunday
-                        totalSundays++;
+                const { start, end } = getMonthRange(currentMonthView);
+                let totalDaysInPeriod = 0;
+                let totalSundaysInPeriod = 0;
+                let currentDate = new Date(start);
+                while (currentDate.getTime() <= end.getTime()) {
+                    totalDaysInPeriod++;
+                    if (currentDate.getDay() === 0) { // Sunday
+                        totalSundaysInPeriod++;
                     }
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
-                const calculatedWorkingDays = daysInMonth - totalSundays;
+                const calculatedWorkingDays = totalDaysInPeriod - totalSundaysInPeriod;
 
                 if (twdMonthDisplay) twdMonthDisplay.textContent = currentMonthView.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                if (twdTotalDays) twdTotalDays.textContent = daysInMonth;
-                if (twdTotalSundays) twdTotalSundays.textContent = totalSundays;
+                if (twdTotalDays) twdTotalDays.textContent = totalDaysInPeriod;
+                if (twdTotalSundays) twdTotalSundays.textContent = totalSundaysInPeriod;
                 if (twdCalculatedWorkingDays) twdCalculatedWorkingDays.textContent = calculatedWorkingDays;
 
                 if (totalWorkingDaysModal) totalWorkingDaysModal.style.display = 'flex';
             }
 
             function showColaEligibilityDetails() {
-                const year = currentMonthView.getFullYear();
-                const month = currentMonthView.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                let totalSundays = 0;
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const d = new Date(year, month, i);
-                    if (d.getDay() === 0) { // Sunday
-                        totalSundays++;
+                const { start, end } = getMonthRange(currentMonthView);
+                let totalDaysInPeriod = 0;
+                let totalSundaysInPeriod = 0;
+                let currentDate = new Date(start);
+                while (currentDate.getTime() <= end.getTime()) {
+                    totalDaysInPeriod++;
+                    if (currentDate.getDay() === 0) { // Sunday
+                        totalSundaysInPeriod++;
                     }
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
-                const calculatedWorkingDays = daysInMonth - totalSundays;
+                const calculatedWorkingDays = totalDaysInPeriod - totalSundaysInPeriod;
 
                 let requiredPresentDays;
                 if (calculatedWorkingDays >= 26) { // 27-26 days
@@ -4179,10 +4182,9 @@
                     requiredPresentDays = 20;
                 }
 
-                const { start, end } = getMonthRange(currentMonthView);
                 let presentDaysCount = 0;
                 const currentUserAttendance = currentLoggedInUser.attendance || {};
-                let currentDate = new Date(start);
+                currentDate = new Date(start); // Reset currentDate for this loop
                 while (currentDate.getTime() <= end.getTime()) {
                     const dateKey = formatDate(currentDate);
                     const entry = currentUserAttendance[dateKey];
