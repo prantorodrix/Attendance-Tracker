@@ -22,7 +22,7 @@
             --accent-color-hover: #5A57D9; /* Darker purple hover */
             --border-color: #E0E6ED; /* Light grey border */
             --shadow-color: rgba(0, 0, 0, 0.05); /* Very light shadow */
-            --input-bg: #F8F9FB; /* Off-white for inputs */
+            /*--input-bg: #F8F9FB; */
             
             --nav-bg: linear-gradient(90deg, #070F2B, #1B1A55, #535C91, #9290C3); /* Sidebar background */
             --nav-text: var(--text-primary); /* Sidebar text */
@@ -738,6 +738,7 @@
             cursor: pointer;
             width: 100%;
             margin-bottom: 20px; /* Minimized margin */
+            box-shadow: 4px 3px 5px var(--footer-text);
             transition: all var(--transition-speed), transform 0.1s ease-out; /* Add transform for animation */
         }
         .month-selector-card select:focus {
@@ -1474,6 +1475,7 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: all var(--transition-speed);
+            box-shadow: 3px 3px 5px var(--footer-text);
             align-self: flex-end; /* Align button to the right */
         }
         .working-days-cola-category-wrapper .summary-card .details-button:hover {
