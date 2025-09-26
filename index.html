@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="neptune-vibe">
 <head>
@@ -13,8 +14,8 @@
 
         /* NeptuneVibe Theme Variables */
         :root {
-            --bg-primary: linear-gradient(135deg, #f5e4af, #f1f3f4, #d1e9f1, #ccf0c6, #eff3f6);
-            --bg-secondary: #FFFFFF; /* White for cards/elements */
+            --bg-primary: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);
+            --bg-secondary: #f0f1f529; /* White for cards/elements */
             --text-primary: #333333; /* Dark grey for main text */
             --text-secondary: #666666; /* Medium grey for secondary text */
             --accent-color: #6A67E9; /* Purple accent from logo */
@@ -23,14 +24,14 @@
             --shadow-color: rgba(0, 0, 0, 0.05); /* Very light shadow */
             --input-bg: #F8F9FB; /* Off-white for inputs */
             
-            --nav-bg: linear-gradient (90deg, #b9efda, #d4ffef, #d4fff1); /* Sidebar background */
+            --nav-bg: linear-gradient(90deg, #070F2B, #1B1A55, #535C91, #9290C3); /* Sidebar background */
             --nav-text: var(--text-primary); /* Sidebar text */
             --footer-bg: #FFFFFF; /* Footer background */
             --footer-text: var(--text-secondary); /* Footer text */
 
             --table-header-bg: #fef0c5; /* Light blue-grey header */
             --table-header-text: var(--text-primary); /* Table header text */
-            --table-row-even: #FFFFFF; /* Even row background */
+            --table-row-even: #f0f1f529; /* Even row background */
             --table-row-hover: #F8F9FB; /* Row hover background */
 
             /* Status Colors */
@@ -71,7 +72,7 @@
 
         /* Dark Theme Variables */
         html[data-theme="dark"] {
-            --bg-primary: linear-gradient(135deg, #1B1B1B, #003153); /* Dark gradient */
+            --bg-primary: linear-gradient(to right, #243949 0%, #517fa4 100%); /* Dark gradient */
             --bg-secondary: rgb(26 37 56 / 75%); /* Darker, slightly transparent for glass effect */
             --text-primary: #E0E0E0; /* Light grey for main text */
             --text-secondary: #B0B0B0; /* Medium grey for secondary text */
@@ -436,9 +437,9 @@
 
 
         #sidebar .sidebar-user-profile .user-photo {
-            width: 100px; /* Minimized size */
-            height: 120px;
-            border-radius: 50%;
+            width: 130px; /* Minimized size */
+            height: 140px;
+            border-radius: 30%;
             object-fit: cover;
             border: 1px solid var(--accent-color); /* Minimized border */
             transition: border-color var(--transition-speed);
@@ -688,7 +689,7 @@
             background-color: var(--bg-secondary);
             padding: 7px 12px; /* Minimized padding */
             border-radius: var(--border-radius-large);
-            box-shadow: 5px 5px 1px #cdfaff; /* Minimized shadow */
+         
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
@@ -1002,7 +1003,7 @@
         }
         #editDeleteModal .modal-content .input-group label {
             margin-bottom: 3px; /* Minimized margin */
-            color: var(--text-primary); 
+            color: #efe5e5; 
         }
         #editDeleteModal .modal-content .input-group input,
         #editDeleteModal .modal-content .input-group select {
