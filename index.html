@@ -192,7 +192,7 @@
             .note-content-area, .notes-list-sidebar {
                 background-color: rgba(255, 255, 255, 0.8); /* Lighter, slightly transparent */
                 border: 1px solid rgba(200, 200, 200, 0.3);
-                box-shadow: -5px 0px 0px #135CFF;
+                box-shadow: -5px 0px 0px var(--shadow-color);
             }
             .premium-button.secondary {
                 background-color: rgba(240, 244, 255, 0.7);
@@ -852,7 +852,7 @@
             padding: 30px; /* Larger padding */
             margin-bottom: 20px; /* Increased margin */
             border-radius: var(--border-radius-large);
-            box-shadow: -5px 0px 0px #135CFF;
+            box-shadow: -5px 0px 0px var(--shadow-color);
             border: 1px solid var(--border-color);
             width: 100%;
             max-width: 950px; /* Wider for profile details */
@@ -866,7 +866,7 @@
         }
         #dashboardProfileSection:hover {
             transform: translateY(-3px); /* More pronounced lift */
-            box-shadow: -3px 3px 5px #0C2CFF;
+            box-shadow: 0px 0px 10px var(--shadow-color);
         }
         #dashboardProfileSection .user-photo {
             width: 210px; /* Larger photo */
@@ -890,6 +890,9 @@
             margin-bottom: 20px;
         }
         #dashboardProfileSection .profile-details-grid {
+            box-shadow: 0px 0px 19px var(--shadow-color);
+            padding: 5px;
+            border-radius: 10px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Wider columns */
             gap: 15px; /* Increased gap */
@@ -921,7 +924,7 @@
         /* New Dashboard Cards Layout (Full Width Rows) */
         .working-days-cola-category-wrapper {
             display: flex;
-            flex-direction: column; 
+            flex-direction: row; 
             gap: 20px; /* Increased gap */
             width: 100%; 
             max-width: 950px; /* Match profile section width */
@@ -944,7 +947,7 @@
         }
         .working-days-cola-category-wrapper .summary-card:hover {
             transform: translateY(-2px);
-            box-shadow: -3px 3px 1px #135CFF;
+            box-shadow: -3px 3px 1px var(--border-color);
         }
         .working-days-cola-category-wrapper .summary-card h4 {
             font-size: 1rem; /* Larger font size */
@@ -2303,7 +2306,7 @@
                 <!-- New: Working Days, COLA, Category Wrapper (Full Width Rows) -->
                 <div class="working-days-cola-category-wrapper page-transition">
                     <div class="summary-card">
-                        <h4>Total Working Days (For the selected month)</h4>
+                        <h4>Total Working Days </br>* For the selected month</h4>
                         <span class="value" id="totalWorkingDaysDisplay">0 Days</span>
                         <!-- Details button removed -->
                     </div>
@@ -2317,7 +2320,7 @@
                         <!-- Details button removed -->
                     </div>
                     <div class="summary-card">
-                        <h4>Category</h4>
+                        <h4>Category </br>* This will update after full month complete!</h4>
                         <span class="value" id="employeeCategoryDisplay">Category: A, Excellent</span>
                         <!-- Details button removed -->
                     </div>
