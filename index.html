@@ -23,30 +23,30 @@
             --bs-body-font-family: 'Roboto', sans-serif;
             --bs-heading-font-family: 'Roboto', sans-serif;
             
-            /* --- Light Mode (NEW: Gradient BG) --- */
-            --bs-body-bg-light: #f3e7ff; /* Light purple fallback */
-            --bs-body-color-light: #212529; /* Dark text on cards */
-            --bs-tertiary-bg-light: #ffffff; /* Solid white cards */
-            --bs-secondary-bg-light: #f8f9fa; /* Hover color */
-            --bs-border-color-light: #dee2e6;
+            /* --- Light Mode (NEW: Translucent Glass) --- */
+            --bs-body-bg-light: #f3e7ff; /* Fallback */
+            --bs-body-color-light: #212529;
+            --bs-tertiary-bg-light: rgba(255, 255, 255, 0.7); /* Translucent White Cards */
+            --bs-secondary-bg-light: #f8f9fa; 
+            --bs-border-color-light: rgba(0, 0, 0, 0.1); /* Lighter border */
             
-            /* NEW: Light Mode SOLID Colors */
-            --bs-glass-bg-light: var(--bs-tertiary-bg-light);
+            /* NEW: Light Mode GLASS Colors */
+            --bs-glass-bg-light: rgba(255, 255, 255, 0.6); /* Translucent Sidebar */
             --bs-glass-border-light: var(--bs-border-color-light);
             --bs-card-bg-light: var(--bs-tertiary-bg-light);
             --bs-card-border-light: var(--bs-border-color-light);
 
 
-            /* --- Dark Mode (Solid Tech) --- */
-            --bs-body-bg-dark: #0a0c10; /* Main BG */
+            /* --- Dark Mode (NEW: Translucent Glass) --- */
+            --bs-body-bg-dark: #0a0c10; /* Fallback */
             --bs-body-color-dark: #e0e0e0;
-            --bs-tertiary-bg-dark: #161b22; /* Card/Sidebar BG */
+            --bs-tertiary-bg-dark: rgba(22, 27, 34, 0.7); /* Translucent Dark Cards */
             --bs-secondary-bg-dark: #2a2a2a;
-            --bs-border-color-dark: #30363d; /* Border color */
+            --bs-border-color-dark: rgba(255, 255, 255, 0.1); /* Lighter border for dark */
             --bs-light-bg-subtle-dark: #161b22;
 
-            /* NEW: Dark Mode Solid Colors */
-            --bs-glass-bg-dark: var(--bs-tertiary-bg-dark);
+            /* NEW: Dark Mode GLASS Colors */
+            --bs-glass-bg-dark: rgba(10, 12, 16, 0.6); /* Translucent Dark Sidebar */
             --bs-glass-border-dark: var(--bs-border-color-dark);
             --bs-card-bg-dark: var(--bs-tertiary-bg-dark);
             --bs-card-border-dark: var(--bs-border-color-dark);
@@ -55,33 +55,27 @@
             --bs-primary-dark: #00f0b5;
             --bs-primary-rgb-dark: 0, 240, 181;
             
-            /* Status Colors (Gradients) - Made stronger */
-            --status-present-gradient: linear-gradient(135deg, rgba(40, 167, 69, 0.25), rgba(40, 167, 69, 0.15));
-            --status-present-text: #198754;
-            --status-absent-gradient: linear-gradient(135deg, rgba(220, 53, 69, 0.25), rgba(220, 53, 69, 0.15));
-            --status-absent-text: #dc3545;
-            --status-weekend-gradient: linear-gradient(135deg, rgba(13, 110, 253, 0.2), rgba(13, 110, 253, 0.1));
-            --status-weekend-text: #0d6efd;
-            --status-holiday-gradient: linear-gradient(135deg, rgba(255, 193, 7, 0.25), rgba(255, 193, 7, 0.15));
-            --status-holiday-text: #ffc107;
+            /* --- NEW: Status Colors (Solid Gradients) --- */
+            --status-present-gradient: linear-gradient(135deg, #d1e7dd, #c2e0ce);
+            --status-present-text: #0f5132;
+            --status-absent-gradient: linear-gradient(135deg, #f8d7da, #f1c9cd);
+            --status-absent-text: #842029;
+            --status-weekend-gradient: linear-gradient(135deg, #cff4fc, #bde8f8);
+            --status-weekend-text: #055160;
+            --status-holiday-gradient: linear-gradient(135deg, #fff3cd, #fbe9b1);
+            --status-holiday-text: #664d03;
             --status-default-bg: transparent;
 
-            /* Dark Status Colors (Gradients) */
-            --status-present-gradient-dark: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.1));
+            /* --- NEW: Dark Status Colors (Dark Glass Gradients) --- */
+            --status-present-gradient-dark: linear-gradient(135deg, rgba(13, 26, 18, 0.8), rgba(12, 22, 30, 0.8));
             --status-present-text-dark: #34c356;
-            --status-absent-gradient-dark: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.1));
+            --status-absent-gradient-dark: linear-gradient(135deg, rgba(43, 17, 20, 0.8), rgba(34, 17, 24, 0.8));
             --status-absent-text-dark: #ea5462;
-            --status-weekend-gradient-dark: linear-gradient(135deg, rgba(13, 110, 253, 0.2), rgba(13, 110, 253, 0.1));
+            --status-weekend-gradient-dark: linear-gradient(135deg, rgba(3, 21, 31, 0.8), rgba(15, 19, 37, 0.8));
             --status-weekend-text-dark: #3c8aff;
-            --status-holiday-gradient-dark: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+            --status-holiday-gradient-dark: linear-gradient(135deg, rgba(36, 28, 10, 0.8), rgba(35, 17, 24, 0.8));
             --status-holiday-text-dark: #ffca2c;
             --status-default-bg-dark: transparent;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         /* Add smooth scrolling */
@@ -97,7 +91,7 @@
             --bs-border-color: var(--bs-border-color-light);
             --bs-light-bg-subtle: var(--bs-light-bg-subtle-light);
 
-            /* NEW: Light SOLID Vars */
+            /* NEW: Light GLASS Vars */
             --bs-glass-bg: var(--bs-glass-bg-light);
             --bs-glass-border: var(--bs-glass-border-light);
             --bs-card-bg: var(--bs-card-bg-light);
@@ -122,7 +116,7 @@
             --status-holiday-text: var(--status-holiday-text-dark);
             --status-default-bg: var(--status-default-bg-dark);
 
-            /* NEW: Dark Solid Vars */
+            /* NEW: Dark GLASS Vars */
             --bs-glass-bg: var(--bs-glass-bg-dark);
             --bs-glass-border: var(--bs-glass-border-dark);
             --bs-card-bg: var(--bs-card-bg-dark);
@@ -138,31 +132,79 @@
 
         body {
             font-family: var(--bs-body-font-family);
-            background-color: var(--bs-body-bg);
+            /* NEW: Body background is now transparent to show animated BG */
+            background-color: transparent; 
             transition: background-color 0.3s ease;
             overflow: hidden;
         }
         
-        /* NEW: Light Mode Gradient Background */
-        [data-bs-theme="light"] body {
-            background: linear-gradient(-45deg, #f3e7ff, #e3eeff, #fde4e4, #e7f8f3);
-            background-size: 400% 400%;
-            animation: gradientBG 20s ease infinite;
+        /* --- NEW: Animated Background Container --- */
+        #animated-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -10; /* Behind everything */
+            overflow: hidden;
+        }
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            /* Eitai blurry effect dey */
+            filter: blur(20px); 
+            -webkit-filter: blur(20px);
+            /* Eita fade animation control kore */
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; 
+            transform: scale(1.1); /* Slight zoom for effect */
+        }
+        .bg-image.active {
+            opacity: 1;
         }
 
-        /* NEW: Dark Mode Tech Background */
-        [data-bs-theme="dark"] body {
-            background-color: #0a0c10;
-            background-image: radial-gradient(circle at top center, rgba(0, 240, 181, 0.1), transparent 30%);
-            background-repeat: no-repeat;
-            background-size: 100% 1000px; /* Gradient at top */
-            background-attachment: fixed;
-        }
+        /* --- NEW: Background Image URLs --- */
+        
+        /* Light Theme Images (White type) */
+        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2014/09/21/14/39/surface-455124_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2015/10/24/11/09/drop-1004250_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2024/12/04/15/37/leaves-9244714_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-4 { background-image: url('https://cdn.pixabay.com/photo/2025/04/08/10/42/landscape-9521261_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-5 { background-image: url('https://cdn.pixabay.com/photo/2018/01/12/14/24/night-3078326_1280.jpg'); }
+        
+        /* Dark Theme Images (Black type) */
+        [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2022/08/02/02/28/cherry-7359319_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2020/04/20/20/47/red-5069808_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2015/07/10/14/56/moon-839306_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-4 { background-image: url('https://cdn.pixabay.com/photo/2020/01/10/20/07/water-drop-4756167_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-5 { background-image: url('https://images.unsplash.com/photo-1484268315138-54397a723e4c?q=80&w=1920&auto=format&fit=crop'); }
+
+        /* Hide images of the inactive theme */
+        [data-bs-theme="light"] .bg-image-dark { display: none; }
+        [data-bs-theme="dark"] .bg-image-light { display: none; }
         
         h1, h2, h3, h4, h5, h6, .display-4, .sidebar-title, .fw-bold {
             font-family: var(--bs-heading-font-family);
             font-weight: 700;
         }
+
+        /* --- NEW: Scroll Reveal Animation --- */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* --- End Scroll Reveal --- */
+
 
         /* General Animations */
         .btn {
@@ -243,15 +285,16 @@
         /* NEW: Dark mode login card is SOLID */
         [data-bs-theme="dark"] #login-page {
              background-image: none;
-             background-color: var(--bs-body-bg-dark);
+             /* Use the fallback color, as body bg is transparent */
+             background-color: var(--bs-body-bg-dark); 
              background-image: radial-gradient(circle at top center, rgba(0, 240, 181, 0.1), transparent 30%);
              background-repeat: no-repeat;
              background-size: 100% 1000px;
         }
         [data-bs-theme="dark"] .login-card {
             background-color: var(--bs-tertiary-bg-dark);
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
+            backdrop-filter: blur(15px); /* Keep blur for dark mode login */
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--bs-border-color-dark);
         }
 
@@ -348,10 +391,6 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* --- REMOVED: Background Overlay --- */
-        /* #background-overlay { ... } */
-        /* #background-overlay::after { ... } */
-
         /* --- Dashboard Layout --- */
         #dashboard-page {
             min-height: 100vh;
@@ -367,21 +406,20 @@
             left: 0;
             background-color: var(--bs-glass-bg);
             border-right: 1px solid var(--bs-glass-border);
+            /* NEW: Glassmorphism effect */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             z-index: 1020;
         }
-        /* NEW: Solid sidebar for light mode */
+        /* NEW: Glass sidebar for light mode */
         [data-bs-theme="light"] #sidebar {
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
             border-radius: 0 1.5rem 1.5rem 0; /* Rounded on one side */
             border-right: none;
         }
-        /* NEW: Solid dark sidebar for dark mode */
+        /* NEW: Glass dark sidebar for dark mode */
         [data-bs-theme="dark"] #sidebar {
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
             box-shadow: none;
             border-right-color: var(--bs-border-color-dark);
         }
@@ -410,6 +448,7 @@
         }
         #sidebar-toggle-button {
             transition: transform 0.3s ease;
+            border-radius: 50%;
         }
         /* NEW: Sidebar logo gradient */
         .sidebar-logo-icon {
@@ -496,18 +535,15 @@
             background-color: var(--bs-card-bg);
             border: 1px solid var(--bs-card-border);
             border-radius: 1.5rem; /* More rounded */
-        }
-        /* NEW: Solid cards for light mode */
-        [data-bs-theme="light"] .card {
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
+            /* NEW: Glassmorphism effect for cards */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
         }
-        /* NEW: Solid cards for dark mode */
+        
+        /* NEW: Glass cards for dark mode */
         [data-bs-theme="dark"] .card {
-             backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            box-shadow: none;
+             box-shadow: none;
              border-radius: 0.75rem; /* Less rounded for tech look */
         }
 
@@ -526,17 +562,14 @@
             height: 250px;
             object-fit: cover;
             border-radius: 50%;
-            border: 5px solid var(--bs-card-bg);
+            /* NEW: Border color needs to adapt */
+            border: 5px solid;
+            border-color: var(--bs-card-bg);
             margin-top: -75px; /* Pulls avatar up */
             position: relative;
             z-index: 2;
         }
-        [data-bs-theme="light"] .profile-card-avatar {
-            border-color: var(--bs-card-bg-light);
-        }
-        [data-bs-theme="dark"] .profile-card-avatar {
-            border-color: var(--bs-card-bg-dark);
-        }
+        
         .profile-stats {
             padding: 1.5rem 0;
             border-top: 1px solid var(--bs-border-color);
@@ -567,6 +600,7 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
+        /* NEW: Brighter gradients for light mode */
         .grad-1 { background-image: linear-gradient(to right, #d1e7dd, #cce3de, var(--bs-card-bg)); }
         .grad-2 { background-image: linear-gradient(to right, #cff4fc, #d6dffc, var(--bs-card-bg)); }
         .grad-3 { background-image: linear-gradient(to right, #fff3cd, #fde4e4, var(--bs-card-bg)); }
@@ -579,10 +613,10 @@
 
 
         /* --- Slideshow --- */
-        /* NEW: Lighter gradient BG for slides */
-        .slide-1-bg { background-image: linear-gradient(to right, #4facfe, #00f2fe); }
-        .slide-2-bg { background-image: linear-gradient(to right, #43e97b, #38f9d7); }
-        .slide-3-bg { background-image: linear-gradient(to right, #fa709a, #fee140); }
+        /* --- NEW: Lighter, smoother gradient BG for slides --- */
+        .slide-1-bg { background-image: linear-gradient(to right, #a1c4fd, #c2e9fb); }
+        .slide-2-bg { background-image: linear-gradient(to right, #b2f0c7, #b4f7e8); }
+        .slide-3-bg { background-image: linear-gradient(to right, #fecfdf, #fef4b0); }
 
         .carousel-item {
             height: 400px;
@@ -603,14 +637,36 @@
             position: relative;
             z-index: 2;
         }
-        .slide-table {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            transition: background 0.3s ease;
+        
+        /* --- NEW: Slide content text color (light bg fix) --- */
+        .slide-content-light-text .slide-content,
+        .slide-content-light-text .slide-content h3 {
+            color: #000; /* Black text */
         }
-        [data-bs-theme="dark"] .slide-table {
-            background: rgba(0,0,0,0.2);
+        .slide-content-light-text .slide-content h3 {
+            border-bottom-color: rgba(0,0,0,0.3) !important; /* Darker border */
         }
+        .slide-content-light-text .slide-table {
+            background: rgba(255, 255, 255, 0.3); /* Lighter glass table */
+            color: #000; /* Black text in table */
+            border-color: rgba(0,0,0,0.2);
+        }
+        
+        /* Dark mode override */
+        [data-bs-theme="dark"] .slide-content-light-text .slide-content,
+        [data-bs-theme="dark"] .slide-content-light-text .slide-content h3 {
+            color: #fff; /* White text for dark mode */
+        }
+        [data-bs-theme="dark"] .slide-content-light-text .slide-content h3 {
+            border-bottom-color: rgba(255,255,255,0.3) !important;
+        }
+        [data-bs-theme="dark"] .slide-content-light-text .slide-table {
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            border-color: var(--bs-border-color-dark);
+        }
+        /* --- End Slideshow --- */
+
 
         /* --- Calendar --- */
         .calendar-wrapper {
@@ -683,6 +739,7 @@
             table-layout: fixed;
             border-collapse: separate;
             border-spacing: 0;
+            padding: 8px;
         }
         .attendance-table thead th {
             background-color: var(--bs-secondary-bg);
@@ -695,7 +752,11 @@
             letter-spacing: 0.5px;
         }
         .attendance-table tbody tr {
-            transition: all 0.2s ease-out; /* NEW: Smooth transition */
+            /* NEW: Added smooth transition */
+            transition: background-color 0.2s ease-in-out, 
+                        transform 0.2s ease-in-out, 
+                        box-shadow 0.2s ease-in-out,
+                        color 0.2s ease-in-out;
         }
         .attendance-table tbody tr:hover {
             transform: translateY(-3px); /* NEW: Lift effect */
@@ -786,13 +847,14 @@
             overflow-y: auto;
             border: 1px solid var(--bs-border-color);
             border-radius: 0.375rem;
-            background-color: var(--bs-body-bg);
+            /* NEW: Needs a subtle background */
+            background-color: rgba(0,0,0,0.02);
         }
         [data-bs-theme="light"] #notes-list-wrapper {
              background-color: #f1f3f5;
         }
         [data-bs-theme="dark"] #notes-list-wrapper {
-             background-color: var(--bs-body-bg-dark);
+             background-color: rgba(0,0,0,0.1);
         }
         .note-item {
             cursor: pointer;
@@ -818,6 +880,7 @@
             padding: 3rem 1rem;
             margin-top: 3rem;
             color: var(--bs-secondary-color);
+            border-radius: 10px;
         }
         #main-footer h5 {
             color: var(--bs-body-color);
@@ -862,12 +925,15 @@
         }
         /* NEW: Modal styles */
         .modal-content {
-             background-color: var(--bs-card-bg-light); /* Solid white for light */
+             /* NEW: Modal glass effect */
+             background-color: var(--bs-glass-bg-light); 
+             backdrop-filter: blur(20px);
+             -webkit-backdrop-filter: blur(20px);
              border: 1px solid var(--bs-card-border-light);
              border-radius: 1rem;
         }
         [data-bs-theme="dark"] .modal-content {
-             background-color: var(--bs-card-bg-dark); /* Solid dark for dark */
+             background-color: var(--bs-glass-bg-dark); 
              border: 1px solid var(--bs-card-border-dark);
         }
         
@@ -878,6 +944,7 @@
             color: var(--bs-secondary-color);
             font-weight: 600;
             transition: all 0.2s ease;
+            border-radius: 13px;
         }
         .btn-theme-toggle:hover {
             background-color: var(--bs-primary);
@@ -948,7 +1015,22 @@
 </head>
 
 <body>
-    <!-- REMOVED: Background Overlay -->
+    <!-- ======== NEW: Animated BG Container ======== -->
+    <div id="animated-bg-container">
+        <!-- Light Theme Images -->
+        <div class="bg-image bg-image-light bg-1 active"></div>
+        <div class="bg-image bg-image-light bg-2"></div>
+        <div class="bg-image bg-image-light bg-3"></div>
+        <div class="bg-image bg-image-light bg-4"></div>
+        <div class="bg-image bg-image-light bg-5"></div>
+        <!-- Dark Theme Images -->
+        <div class="bg-image bg-image-dark bg-1"></div>
+        <div class="bg-image bg-image-dark bg-2"></div>
+        <div class="bg-image bg-image-dark bg-3"></div>
+        <div class="bg-image bg-image-dark bg-4"></div>
+        <div class="bg-image bg-image-dark bg-5"></div>
+    </div>
+
 
     <!-- ======== NEW LOGIN PAGE ======== -->
     <div id="login-page" class="container-fluid p-0">
@@ -1062,6 +1144,9 @@
                     <i class="bi bi-box-arrow-left me-2"></i>
                     <span class="nav-link-text fw-medium">Logout</span>
                 </button>
+                </br>
+
+                <p>Made by <span class="text-primary">@PrantoRodrix</span></p>
             </div>
         </div>
 
@@ -1070,7 +1155,8 @@
             
             <!-- ======== 1. PROFILE SECTION (NEW DESIGN) ======== -->
             <section id="profile-section" class="page-section">
-                <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+                <!-- NEW: Added .fade-in-section -->
+                <div class="card shadow-sm border-0 rounded-3 overflow-hidden fade-in-section">
                     <!-- Profile Banner -->
                     <img id="profile-cover-photo" src="https://placehold.co/1000x250/6a11cb/ffffff?text=Cover+Photo" class="profile-card-banner-img" alt="Profile Cover Photo">
                     
@@ -1114,22 +1200,15 @@
                             
                         </div>
                         
-                        <!-- Full Designation -->
-                        <!--<div class="text-center">-->
-                        <!--    <h6 class="text-muted small text-uppercase mb-">Full Designation</h6>-->
-                        <!--    <p id="designation-full-display" class="fw-semibold mb-0">Junior Associate</p>-->
-                            
-                        <!--    <h6 class="text-muted small text-uppercase mb-1 mt-3">Employment Type</h6>-->
-                        <!--    <p id="emp-type-display" class="fw-semibold mb-0">Resource pool</p>-->
-                        <!--</div>-->
                     </div>
                 </div>
             </section>
 
             <!-- ======== 2. PERFORMANCE SECTION ======== -->
             <section id="performance-section" class="page-section">
-                <h2 class="mb-4">Performance (Monthly Data)</h2>
-                <div class="row g-4">
+                <h2 class="mb-4 fade-in-section">Performance (Monthly Data)</h2>
+                <!-- NEW: Added .fade-in-section -->
+                <div class="row g-4 fade-in-section">
                     <!-- Box 1: Total Working Days -->
                     <div class="col-4">
                         <div class="card h-100 gradient-card grad-1 rounded-3">
@@ -1171,19 +1250,20 @@
 
             <!-- ======== 3. DETAILED DATA (SLIDESHOW) ======== -->
             <section id="details-section" class="page-section">
-                <h2 class="mb-4">Detailed Data & Rules</h2>
-                <div id="slideshow" class="carousel slide carousel-fade rounded-3 overflow-hidden shadow-lg" data-bs-ride="carousel" data-bs-interval="5000">
+                <h2 class="mb-4 fade-in-section">Detailed Data & Rules</h2>
+                <!-- NEW: Added .fade-in-section -->
+                <div id="slideshow" class="carousel slide carousel-fade rounded-3 overflow-hidden shadow-lg fade-in-section" data-bs-ride="carousel" data-bs-interval="5000">
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#slideshow" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#slideshow" data-bs-slide-to="1" aria-label="Slide 2"></button>
                         <button type="button" data-bs-target="#slideshow" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
                     <div class="carousel-inner">
-                        <!-- Slide 1: Total Working Days Details -->
-                        <div class="carousel-item active slide-1-bg">
+                        <!-- Slide 1: Total Working Days Details (NEW: Added .slide-content-light-text) -->
+                        <div class="carousel-item active slide-1-bg slide-content-light-text">
                             <div class="d-flex align-items-center justify-content-center h-100">
-                                <div class="slide-content text-center text-white p-4">
-                                    <h3 class="mb-3 border-bottom border-light-subtle pb-2">Total Working Days Details</h3>
+                                <div class="slide-content text-center p-4">
+                                    <h3 class="mb-3 border-bottom pb-2">Total Working Days Details</h3>
                                     <div class="fs-5">
                                         <p>Selected Month: <span id="slide-selected-month" class="fw-bolder">November 2025</span></p>
                                         <p>Total Days in Period: <span id="slide-total-days" class="fw-bolder">31</span></p>
@@ -1194,11 +1274,11 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Slide 2: COLA Eligibility Details -->
-                        <div class="carousel-item slide-2-bg">
+                        <!-- Slide 2: COLA Eligibility Details (NEW: Added .slide-content-light-text) -->
+                        <div class="carousel-item slide-2-bg slide-content-light-text">
                              <div class="d-flex align-items-center justify-content-center h-100">
-                                <div class="slide-content text-center text-white p-4">
-                                    <h3 class="mb-3 border-bottom border-light-subtle pb-2">COLA Eligibility Details (Rules)</h3>
+                                <div class="slide-content text-center p-4">
+                                    <h3 class="mb-3 border-bottom pb-2">COLA Eligibility Details (Rules)</h3>
                                     <div class="fs-5 text-start mx-auto">
                                         <p class="fw-bolder text-warning">COLA Rules:</p>
                                         <ul class="list-unstyled">
@@ -1210,13 +1290,13 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Slide 3: Employee Category Details -->
-                        <div class="carousel-item slide-3-bg">
+                        <!-- Slide 3: Employee Category Details (NEW: Added .slide-content-light-text, removed .table-dark) -->
+                        <div class="carousel-item slide-3-bg slide-content-light-text">
                             <div class="d-flex align-items-center justify-content-center h-100">
-                                <div class="slide-content text-center text-white p-4 w-100">
-                                    <h3 class="mb-3 border-bottom border-light-subtle pb-2">Employee Category Details</h3>
+                                <div class="slide-content text-center p-4 w-100">
+                                    <h3 class="mb-3 border-bottom pb-2">Employee Category Details</h3>
                                     <div class="overflow-x-auto">
-                                        <table class="table table-dark table-striped table-bordered slide-table m-0">
+                                        <table class="table table-striped table-bordered slide-table m-0">
                                             <thead>
                                                 <tr>
                                                     <th>Category</th>
@@ -1250,8 +1330,9 @@
             
             <!-- ======== 4. MONTHLY DASHBOARD ======== -->
             <section id="dashboard-section" class="page-section">
-                <h2 class="mb-4">Monthly Dashboard</h2>
-                <div class="row g-4">
+                <h2 class="mb-4 fade-in-section">Monthly Dashboard</h2>
+                <!-- NEW: Added .fade-in-section -->
+                <div class="row g-4 fade-in-section">
                     <!-- Box 1: Month Selector -->
                     <div class="col-3">
                         <div class="card h-100 shadow-sm gradient-card grad-1 rounded-3">
@@ -1313,10 +1394,10 @@
             
             <!-- ======== 5. MONTHLY SUMMARY ======== -->
             <section id="summary-section" class="page-section">
-                <h2 class="mb-4">Monthly Summary</h2>
+                <h2 class="mb-4 fade-in-section">Monthly Summary</h2>
                 
-                <!-- Grid Container -->
-                <div class="row g-3 row-cols-5">
+                <!-- Grid Container (NEW: Added .fade-in-section) -->
+                <div class="row g-3 row-cols-5 fade-in-section">
                     <!-- 1. Total Hours -->
                     <div class="col">
                         <div class="card summary-card gradient-card grad-1 rounded-3 h-100">
@@ -1419,8 +1500,8 @@
                     </div>
                 </div>
 
-                <!-- Comments Summary Section -->
-                <div id="comments-summary-section" class="mt-4">
+                <!-- Comments Summary Section (NEW: Added .fade-in-section) -->
+                <div id="comments-summary-section" class="mt-4 fade-in-section">
                     <h3 class="fw-semibold mb-3">Comments Summary</h3>
                     <div id="comments-summary-list" class="card card-body shadow-sm border-0 rounded-3">
                         <!-- Comments will be dynamically added here by JS -->
@@ -1431,12 +1512,13 @@
             <!-- ======== 6. DAILY ATTENDANCE INPUT ======== -->
             <section id="attendance-section" class="page-section">
                 <div class="container-fluid px-lg-5">
-                    <h2 class="mb-4 text-center text-lg-start">
+                    <h2 class="mb-4 text-center text-lg-start fade-in-section">
                         Daily Attendance Input
                         <span id="attendance-date-range" class="fs-6 fw-normal text-primary ms-2 d-block d-lg-inline"></span>
                     </h2>
                     
-                    <div class="table-responsive-wrapper shadow-sm rounded-3">
+                    <!-- NEW: Added .fade-in-section -->
+                    <div class="table-responsive-wrapper shadow-sm rounded-3 fade-in-section">
                         <table class="table table-hover align-middle attendance-table">
                             <thead class="sticky-top">
                                 <tr>
@@ -1460,8 +1542,9 @@
 
             <!-- ======== 7. MY NOTES SECTION (NEW) ======== -->
             <section id="notes-section" class="page-section">
-                <h2 class="mb-4">My Notes</h2>
-                <div class="card shadow-sm border-0 rounded-3">
+                <h2 class="mb-4 fade-in-section">My Notes</h2>
+                <!-- NEW: Added .fade-in-section -->
+                <div class="card shadow-sm border-0 rounded-3 fade-in-section">
                     <div class="card-body p-4 p-md-5">
                         <div class="row g-4">
                             <!-- Notes Editor (Left) -->
@@ -1492,7 +1575,8 @@
             </section>
             
             <!-- ======== FOOTER ======== -->
-            <footer id="main-footer">
+            <!-- NEW: Added .fade-in-section -->
+            <footer id="main-footer" class="fade-in-section">
                 <div class="container-fluid">
                     <div class="row g-4">
                         <!-- Column 1: About -->
@@ -1743,6 +1827,7 @@
             }
 
             setupEventListeners();
+            setupScrollRevealObserver(); // NEW: Call scroll reveal setup
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
         });
@@ -1752,7 +1837,8 @@
             populateMonthSelector();
             const currentMonthValue = monthSelector.value;
             updateDateRange(currentMonthValue); 
-            setupScrollObserver(); 
+            setupScrollSpyObserver(); 
+            updateAnimatedBackground(); // NEW: Initial BG update
         }
 
         // --- PAGE/VIEW MANAGEMENT ---
@@ -1918,16 +2004,55 @@
                 notesTextarea.value = ""; 
             });
 
-            // REMOVED: Background Scroll Listener
-            // mainContent.addEventListener('scroll', handleBackgroundScroll);
+            // NEW: Background Scroll Listener
+            mainContent.addEventListener('scroll', handleBackgroundScroll);
         }
 
-        // --- REMOVED: Handle Background Scroll Effect ---
-        // function handleBackgroundScroll() { ... }
+        // --- NEW: Handle Background Scroll Effect ---
+        function handleBackgroundScroll() {
+            updateAnimatedBackground();
+        }
+        
+        // --- NEW: Update Animated Background Function ---
+        function updateAnimatedBackground() {
+            // Select only the images for the *current* theme
+            const theme = htmlEl.getAttribute('data-bs-theme');
+            const bgImages = document.querySelectorAll(`.bg-image-${theme}`);
+            if (bgImages.length === 0) return;
+
+            const scrollableHeight = mainContent.scrollHeight - mainContent.clientHeight;
+            if (scrollableHeight <= 0) { // Fix for no scrollbar
+                 bgImages.forEach((img, index) => {
+                    img.classList.toggle('active', index === 0);
+                });
+                return;
+            }
+            
+            const scrollPercentage = (mainContent.scrollTop / scrollableHeight) * 100;
+            
+            // Determine which image to show
+            // Example: 5 images. Each gets 20% of the scroll height.
+            // 0-19.9% -> img 0
+            // 20-39.9% -> img 1
+            // ...
+            // 80-100% -> img 4
+            const segment = 100 / bgImages.length;
+            let activeIndex = Math.floor(scrollPercentage / segment);
+            
+            // Ensure activeIndex is within bounds (e.g., 100% scroll should be last image)
+            if (activeIndex >= bgImages.length) {
+                activeIndex = bgImages.length - 1;
+            }
+
+            // Update active class
+            bgImages.forEach((img, index) => {
+                img.classList.toggle('active', index === activeIndex);
+            });
+        }
 
 
         // --- Intersection Observer for Scroll Spying ---
-        function setupScrollObserver() {
+        function setupScrollSpyObserver() {
             // Observe scrolling within the main-content element
             const observerOptions = {
                 root: mainContent, 
@@ -1956,6 +2081,32 @@
             });
         }
 
+        // --- NEW: Intersection Observer for Scroll REVEAL ---
+        function setupScrollRevealObserver() {
+            const sectionsToAnimate = document.querySelectorAll('.fade-in-section');
+
+            const observerOptions = {
+                root: mainContent, // Animate based on main content viewport
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Animate only once
+                    }
+                });
+            }, observerOptions);
+
+            sectionsToAnimate.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        // --- End Scroll Reveal ---
+
+
         // --- THEME ---
         function setTheme(theme) {
             htmlEl.setAttribute('data-bs-theme', theme);
@@ -1969,7 +2120,8 @@
                 themeIcon.classList.add('bi-sun-fill');
                 themeText.textContent = 'Light Mode';
             }
-            // REMOVED: handleBackgroundScroll();
+            // NEW: Update background on theme change
+            updateAnimatedBackground();
         }
 
         // --- Joining Date Calculation ---
