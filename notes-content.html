@@ -477,50 +477,59 @@
     /* Main Container Styles */
     font-family:'Poppins',sans-serif; font-weight:600;
     padding:8px 80px; /* Daan o Ban dhar theke 30px jaiga chhara holo */
-    border-radius:10px; 
-    display:flex; justify-content:space-between; align-items:center; 
-    background:rgba(255,255,255,0.05); backdrop-filter:blur(8px); 
-    border:1px solid rgba(255,255,255,0.1); 
+    border-radius:10px;
+    display:flex; justify-content:space-between; align-items:center;
+    background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.1);
     box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
     font-size:14px; width: 100%;
-        ">
-    <!-- Left Content: Made By Pranto Rodrix -->
+    ">
     <div style="flex-shrink: 0;">
-        Made by 
+        Made by
         <span style="
             background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%);
-            -webkit-background-clip:text; background-clip:text; color:transparent; 
+            -webkit-background-clip:text; background-clip:text; color:transparent;
             text-shadow:0 0 6px rgba(168,85,247,0.4);
             font-weight:700;">
             Pranto Rodrix
         </span>
     </div>
 
-    <!-- Right Button: Back to Main Page -->
-    <a href="index.html" 
-       onclick="window.open(this.href, '_self'); return false;"
-       style="
-        /* Button Styles */
-        display: inline-flex; align-items: center; text-decoration: none;
-        padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
-        white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
+    <div style="display: flex; align-items: center; gap: 10px;">
         
-        /* Glass Effect */
-        background: rgba(255, 255, 255, 0.15); 
-        /* Color shada kora holo jate Dark Theme e dekha jay */
-        color: #fff; 
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        /* Text shadow kalo kora holo jate Light Theme e shada lekha shpoto hoy */
-        text-shadow: 0 0 2px rgba(0,0,0,0.8); 
-    " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'" 
-       onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
-       
-        <!-- Arrow Icon (←) -->
-        <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span> 
-        Main Page
-    </a>
-  </div>
+        <button type="button" class="btn btn-primary btn-lg rounded-pill" id="processButton" 
+                style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+            <i class="bi bi-magic"></i> Extract
+        </button>
+        <button type="button" class="btn btn-outline-danger btn-lg rounded-pill" id="clearButton" 
+                style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+            <i class="bi bi-x-lg"></i> Clear
+        </button>
+
+        <a href="index.html"
+            onclick="window.open(this.href, '_self'); return false;"
+            style="
+            /* Button Styles */
+            display: inline-flex; align-items: center; text-decoration: none;
+            padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
+            white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
+            
+            /* Glass Effect */
+            background: rgba(255, 255, 255, 0.15);
+            /* Color shada kora holo jate Dark Theme e dekha jay */
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* Text shadow kalo kora holo jate Light Theme e shada lekha shpoto hoy */
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
+        " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
+            
+            <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span>
+            Main Page
+        </a>
+    </div>
+</div>
 
     <div id="theme-toggle-container" class="" style="margin-top:2px;">
         <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-2">
@@ -537,7 +546,7 @@
         <div class="row g-3" style="margin-top:60px">
             
             <!-- Column 1: Input Area -->
-            <div class="col-3">
+            <div class="col-4">
                 <!-- Section 1: Input Card (Glass UI) -->
                 <div class="card p-4 h-100 d-flex flex-column">
                     <!-- EOB Input -->
@@ -551,7 +560,7 @@ EOB Details Here"></textarea>
             </div>
             
             <!-- Column 2: EOB Output Area 1 -->
-            <div class="col-3">
+            <div class="col-4">
                  <!-- EOB Output Card 1 (Glass UI) -->
                 <div class="card p-4 h-100">
                     <h5 class="text-success fw-bold">EOB Results</h5>
@@ -566,7 +575,7 @@ EOB Details Here"></textarea>
             </div>
             
             <!-- Column 3: EOB Output Area 2 -->
-            <div class="col-3">
+            <div class="col-4">
                  <!-- EOB Output Card 2 (Glass UI) -->
                 <div class="card p-4 h-100">
                      <!--<h5 class="text-success fw-bold">EOB Results (2)</h5>-->
@@ -588,12 +597,12 @@ EOB Details Here"></textarea>
                 <!-- Button Card (Glass UI) -->
                 <div class=" p-1 h-100 d-flex flex-column justify-content-center">
                      <div class="d-grid gap-4">
-                        <button type="button" class="btn btn-primary btn-lg w-100 rounded-pill" id="processButton">
-                            <i class="bi bi-magic"></i> Extract
-                        </button>
-                        <button type="button" class="btn btn-outline-danger btn-lg w-100 rounded-pill" id="clearButton">
-                            <i class="bi bi-x-lg"></i> Clear
-                        </button>
+                        <!--<button type="button" class="btn btn-primary btn-lg w-100 rounded-pill" id="processButton">-->
+                        <!--    <i class="bi bi-magic"></i> Extract-->
+                        <!--</button>-->
+                        <!--<button type="button" class="btn btn-outline-danger btn-lg w-100 rounded-pill" id="clearButton">-->
+                        <!--    <i class="bi bi-x-lg"></i> Clear-->
+                        <!--</button>-->
                     </div>
                 </div>
             </div>
