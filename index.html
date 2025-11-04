@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> --> <!-- Removed for PC-only layout -->
-    <title>Monthly Dashboard</title>
+    <title>Pranto's WorkSpace</title>
     
     <!-- Google Font: Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@
             /* NEW: Dark Mode GLASS Colors */
             --bs-glass-bg-dark: rgba(10, 12, 16, 0.6); /* Translucent Dark Sidebar */
             --bs-glass-border-dark: var(--bs-border-color-dark);
-            --bs-card-bg-dark: var(--bs-tertiary-bg-dark);
+            --bs-card-bg-dark: var(--bs-tertiary-bg-dark); /* Fixed: Use tertiary for dark cards */
             --bs-card-border-dark: var(--bs-border-color-dark);
 
             /* NEW: Dark Mode Accent Color */
@@ -120,9 +120,9 @@
             --bs-glass-bg: var(--bs-glass-bg-dark);
             --bs-glass-border: var(--bs-glass-border-dark);
             --bs-card-bg: var(--bs-card-bg-dark);
-            --bs-card-border: var(--bs-card-border-dark);
+            --bs-card-border: var(--bs-border-color-dark);
 
-            /* NEW: Override Bootstrap Primary with Accent */
+            /* NEW: Dark Mode Accent Color */
             --bs-primary: var(--bs-primary-dark);
             --bs-primary-rgb: var(--bs-primary-rgb-dark);
             --bs-link-color: var(--bs-primary-dark);
@@ -798,12 +798,7 @@
         }
 
 
-        /* Status Gradient Backgrounds for Rows */
-        .status-present-bg { background-image: var(--status-present-gradient); color: var(--status-present-text); }
-        .status-absent-bg { background-image: var(--status-absent-gradient); color: var(--status-absent-text); }
-        .status-weekend-bg { background-image: var(--status-weekend-gradient); color: var(--status-weekend-text); }
-        .status-holiday-bg { background-image: var(--status-holiday-gradient); color: var(--status-holiday-text); }
-        .status--bg { background-color: var(--status-default-bg) !important; color: var(--bs-body-color); }
+        /* Status Gradient Backgrounds for Rows (REMOVED) */
         
         /* NEW: Premium Status buttons */
         .status-btn {
@@ -836,42 +831,6 @@
         }
         [data-bs-theme="dark"] .btn-text-like:hover {
             background-color: rgba(255,255,255,0.05);
-        }
-
-        /* --- NEW: Notes Section --- */
-        #notes-textarea {
-            height: 250px;
-            resize: none;
-        }
-        #notes-list-wrapper {
-            height: 350px;
-            overflow-y: auto;
-            border: 1px solid var(--bs-border-color);
-            border-radius: 0.375rem;
-            /* NEW: Needs a subtle background */
-            background-color: rgba(0,0,0,0.02);
-        }
-        [data-bs-theme="light"] #notes-list-wrapper {
-             background-color: #f1f3f5;
-        }
-        [data-bs-theme="dark"] #notes-list-wrapper {
-             background-color: rgba(0,0,0,0.1);
-        }
-        .note-item {
-            cursor: pointer;
-        }
-        .note-item:hover {
-            background-color: var(--bs-secondary-bg);
-        }
-        .note-item-content {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--bs-body-color);
-        }
-        .note-item-date {
-            font-size: 0.8rem;
-            color: var(--bs-secondary-color);
         }
 
         /* --- Footer --- */
@@ -1011,6 +970,8 @@
         .attendance-table th:nth-child(8) { width: 30%; }
         .progress { height: 10px; }
         #cola-progress-bar { width: 0%; }
+        
+        /* --- Styles for new IDR Notes Section (REMOVED) --- */
 
     </style>
 </head>
@@ -1126,21 +1087,33 @@
                         <span class="nav-link-text">&nbsp;Attendance Input</span>
                     </a>
                 </li>
+                
+                <!-- ======== "Corr. Note" DROPDOWN (KEPT) ======== -->
                 <li class="nav-item mb-1">
-                    <a href="#notes-section" class="nav-link">
-                        <i class="bi bi-journal-text"></i>
-                        <span class="nav-link-text">&nbsp;My Notes</span>
+                    <a href="#corr-note-submenu" data-bs-toggle="collapse" class="nav-link" aria-expanded="false">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span class="nav-link-text">&nbsp;Correspondence Note</span>
+                        <i class="bi bi-chevron-down ms-auto nav-link-text"></i> <!-- Dropdown arrow -->
                     </a>
+                    <!-- Submenu -->
+                    <div class="collapse" id="corr-note-submenu">
+                        <ul class="nav flex-column ms-4 mt-1"> 
+                            <li class="nav-item">
+                                <!-- Use target="_blank" so it opens in a new tab -->
+                                <a href="notes-content.html" class="nav-link py-1 nav-link-text force-self-load" style="font-size: 0.9rem;">
+                                    IDR Notes
+                                </a>
+                            </li>
+                          </ul>
+                    </div>
                 </li>
+                <!-- ======== END NEW DROPDOWN ======== -->
+                
             </ul>
             
             <!-- Footer -->
             <div class="mt-auto pt-3 border-top border-2">
                 <!-- NEW: Redesigned Buttons -->
-                <a href="notes-content.html" target="self" style="text-decoration:none;"> <button id="" class="btn btn-outline-primary rounded-3 px-3 py-2 w-100 mb-2 d-flex align-items-center justify-content-center">
-                    <i class="bi bi-file-earmark-text mr-2"></i>
-                    <span id="" class="nav-link-text fw-medium "><b> &nbsp;IDR Notes</b></span>
-                </button></a>
                 <button id="theme-toggle" class="btn btn-theme-toggle w-100 mb-2 d-flex align-items-center justify-content-center">
                     <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
                     <span id="theme-text" class="nav-link-text fw-medium">Light Mode</span>
@@ -1544,40 +1517,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- ======== 7. MY NOTES SECTION (NEW) ======== -->
-            <section id="notes-section" class="page-section">
-                <h2 class="mb-4 fade-in-section">My Notes</h2>
-                <!-- NEW: Added .fade-in-section -->
-                <div class="card shadow-sm border-0 rounded-3 fade-in-section">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="row g-4">
-                            <!-- Notes Editor (Left) -->
-                            <div class="col-5">
-                                <h4 class="fw-semibold">Note Editor</h4>
-                                <p class="text-muted small">
-                                    Last saved: <span id="notes-last-saved" class="fw-semibold">Never</span>
-                                </p>
-                                <textarea id="notes-textarea" class="form-control" rows="10" placeholder="Type a new note here..."></textarea>
-                                <div class="mt-3">
-                                    <button id="save-note-button" class="btn btn-primary">
-                                        <i class="bi bi-save me-2"></i>Save New Note
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Saved Notes List (Right) -->
-                            <div class="col-7">
-                                <h4 class="fw-semibold">Saved Notes</h4>
-                                <div id="notes-list-wrapper" class="p-2">
-                                    <div id="notes-list" class="list-group list-group-flush">
-                                        <!-- Notes will be added here by JS -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
             
             <!-- ======== FOOTER ======== -->
             <!-- NEW: Added .fade-in-section -->
@@ -1605,7 +1544,7 @@
                                 <li><a href="#performance-section">Performance</a></li>
                                 <li><a href="#dashboard-section">Dashboard</a></li>
                                 <li><a href="#attendance-section">Attendance</a></li>
-                                <li><a href="#notes-section">My Notes</a></li>
+                                <li><a href="#idr-notes-section">IDR Notes</a></li>
                             </ul>
                         </div>
 
@@ -1705,10 +1644,24 @@
             </div>
         </div>
     </div>
+    
+    <!-- ======== NEW: Email Edit Modal (REMOVED) ======== -->
+
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var links = document.querySelectorAll('a.force-self-load');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                // e.preventDefault() কে বাতিল করার জন্য কোনো জাভাস্ক্রিপ্ট না থাকলে এটি প্রয়োজন নেই।
+                // তবে এটি জোর করে নেভিগেশন ঘটায়।
+                window.location.href = link.href;
+            });
+        });
+    });
+  </script>
     <script>
         // --- GLOBAL APP STATE ---
         let appState = {
@@ -1722,10 +1675,10 @@
                 team: 'BCBS',
                 designationFull: 'Junior Associate',
                 photoSrc: null,
-                coverPhotoSrc: null // NEW: Cover photo
+                coverPhotoSrc: null 
             },
             attendanceData: [],
-            notes: [] 
+            // notes: [] // REMOVED: My Notes feature is removed
         };
 
         let currentPeriodInfo = {
@@ -1764,17 +1717,11 @@
         const joiningDateInput = document.getElementById('input-joining-date');
         const joiningDurationPreview = document.getElementById('joining-duration-preview');
         
-        // NEW: Notes Elements
-        const notesTextarea = document.getElementById('notes-textarea');
-        const saveNoteButton = document.getElementById('save-note-button');
-        const notesList = document.getElementById('notes-list');
-        const notesLastSaved = document.getElementById('notes-last-saved');
+        // REMOVED: Notes Elements
         
-        // NEW: Cover Photo Elements
         const coverPhotoImg = document.getElementById('profile-cover-photo');
         const coverPhotoInput = document.getElementById('input-cover-photo');
 
-        // NEW: Sidebar Toggle Button
         const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
 
 
@@ -1785,7 +1732,7 @@
                 const parsedData = JSON.parse(savedData);
                 appState.profile = { ...appState.profile, ...parsedData.profile };
                 appState.attendanceData = parsedData.attendanceData || [];
-                appState.notes = parsedData.notes || []; 
+                // appState.notes = parsedData.notes || []; // REMOVED
             } else {
                 appState.profile = {
                     name: 'PrantoAnthony',
@@ -1796,14 +1743,13 @@
                     team: 'BCBS',
                     designationFull: 'Junior Associate',
                     photoSrc: null,
-                    coverPhotoSrc: null // NEW
+                    coverPhotoSrc: null 
                 };
                 appState.attendanceData = [];
-                appState.notes = []; 
+                // appState.notes = []; // REMOVED
             }
             updateProfileUI();
-            notesTextarea.value = ""; 
-            renderNotesList(); 
+            // REMOVED: Notes UI update
         }
 
         function saveData() {
@@ -1812,10 +1758,10 @@
             const dataToSave = {
                 profile: appState.profile,
                 attendanceData: appState.attendanceData,
-                notes: appState.notes
+                // notes: appState.notes // REMOVED
             };
             localStorage.setItem(appState.currentUser, JSON.stringify(dataToSave));
-            notesLastSaved.textContent = new Date().toLocaleTimeString();
+            // notesLastSaved.textContent = new Date().toLocaleTimeString(); // REMOVED
         }
 
         // --- INITIALIZATION ---
@@ -1832,9 +1778,11 @@
             }
 
             setupEventListeners();
-            setupScrollRevealObserver(); // NEW: Call scroll reveal setup
+            setupScrollRevealObserver(); 
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
+            
+            // REMOVED: Setup IDR Notes listeners
         });
 
         function initializeApp() {
@@ -1843,7 +1791,7 @@
             const currentMonthValue = monthSelector.value;
             updateDateRange(currentMonthValue); 
             setupScrollSpyObserver(); 
-            updateAnimatedBackground(); // NEW: Initial BG update
+            updateAnimatedBackground(); 
         }
 
         // --- PAGE/VIEW MANAGEMENT ---
@@ -1884,10 +1832,7 @@
                 passwordInput.value = '';
                 showLogin();
                 appState.attendanceData = []; 
-                appState.notes = [];
-                notesTextarea.value = "";
-                notesLastSaved.textContent = "Never";
-                renderNotesList();
+                // appState.notes = []; // REMOVED
             });
 
             // NEW: Sidebar Toggle
@@ -1898,20 +1843,30 @@
 
             // Sidebar Navigation (Smooth Scroll)
             navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        document.getElementById('main-content').scrollTo({
-                            top: targetElement.offsetTop - 30, 
-                            behavior: 'smooth'
-                        });
-                    }
-                });
+                // Don't add smooth scroll to dropdown toggles or external links
+                const isDropdownToggle = link.getAttribute('data-bs-toggle') === 'collapse';
+                const isExternal = link.getAttribute('target') === '_blank';
+                
+                if (!isDropdownToggle && !isExternal) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Find all nav links, including submenu links
+                        document.querySelectorAll('#sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                        
+                        this.classList.add('active');
+                        
+                        const targetId = this.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            document.getElementById('main-content').scrollTo({
+                                top: targetElement.offsetTop - 30, 
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                }
             });
 
             // Theme Toggle
@@ -1992,22 +1947,7 @@
                 joiningDurationPreview.textContent = duration.full;
             });
 
-            // NEW: Notes Listeners
-            saveNoteButton.addEventListener('click', () => {
-                const content = notesTextarea.value.trim();
-                if (content === "") return;
-
-                const newNote = {
-                    id: new Date().toISOString(),
-                    date: new Date().toLocaleDateString(),
-                    content: content
-                };
-
-                appState.notes.unshift(newNote); 
-                saveData(); 
-                renderNotesList(); 
-                notesTextarea.value = ""; 
-            });
+            // REMOVED: Notes Listeners
 
             // NEW: Background Scroll Listener
             mainContent.addEventListener('scroll', handleBackgroundScroll);
@@ -2035,16 +1975,9 @@
             
             const scrollPercentage = (mainContent.scrollTop / scrollableHeight) * 100;
             
-            // Determine which image to show
-            // Example: 5 images. Each gets 20% of the scroll height.
-            // 0-19.9% -> img 0
-            // 20-39.9% -> img 1
-            // ...
-            // 80-100% -> img 4
             const segment = 100 / bgImages.length;
             let activeIndex = Math.floor(scrollPercentage / segment);
             
-            // Ensure activeIndex is within bounds (e.g., 100% scroll should be last image)
             if (activeIndex >= bgImages.length) {
                 activeIndex = bgImages.length - 1;
             }
@@ -2069,11 +2002,23 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.id;
-                        if (document.activeElement.tagName !== 'A') {
-                            navLinks.forEach(link => {
-                                link.classList.remove('active');
-                                if (link.getAttribute('href') === `#${id}`) {
-                                    link.classList.add('active');
+                        // Check if user is actively clicking a link
+                        const activeLink = document.querySelector('#sidebar .nav-link.active');
+                        const activeLinkHref = activeLink ? activeLink.getAttribute('href') : '';
+                        
+                        // Only update scrollspy if the active link isn't the one being clicked
+                        // (prevents jitter)
+                        if (activeLinkHref !== `#${id}`) {
+                             navLinks.forEach(link => {
+                                const isDropdownToggle = link.getAttribute('data-bs-toggle') === 'collapse';
+                                const isExternal = link.getAttribute('target') === '_blank';
+                                
+                                // Only apply to main section links
+                                if (!isDropdownToggle && !isExternal) {
+                                    link.classList.remove('active');
+                                    if (link.getAttribute('href') === `#${id}`) {
+                                        link.classList.add('active');
+                                    }
                                 }
                             });
                         }
@@ -2224,53 +2169,7 @@
             }
         }
 
-        // --- NEW: Notes UI Functions ---
-        function renderNotesList() {
-            notesList.innerHTML = ""; // Clear the list
-            if (appState.notes.length === 0) {
-                notesList.innerHTML = `<p class="text-muted p-3">No notes saved yet.</p>`;
-                return;
-            }
-
-            appState.notes.forEach(note => {
-                const noteEl = document.createElement('div');
-                noteEl.className = 'list-group-item note-item p-3';
-                
-                const contentPreview = note.content.split('\n')[0]; // Get first line
-
-                noteEl.innerHTML = `
-                    <div class="d-flex w-100 justify-content-between">
-                        <div class="note-item-content mb-1" onclick="loadNoteForEdit('${note.id}')">
-                            ${contentPreview}
-                        </div>
-                        <button class="btn btn-outline-danger btn-sm" onclick="deleteNote('${note.id}')">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                    <small class="note-item-date" onclick="loadNoteForEdit('${note.id}')">
-                        Saved on: ${note.date}
-                    </small>
-                `;
-                notesList.appendChild(noteEl);
-            });
-        }
-        
-        function loadNoteForEdit(noteId) {
-            const note = appState.notes.find(n => n.id === noteId);
-            if (note) {
-                notesTextarea.value = note.content;
-                notesTextarea.focus();
-            }
-        }
-        window.loadNoteForEdit = loadNoteForEdit; // Attach to window
-
-        function deleteNote(noteId) {
-            appState.notes = appState.notes.filter(n => n.id !== noteId);
-            saveData();
-            renderNotesList();
-        }
-        window.deleteNote = deleteNote; // Attach to window
-
+        // --- REMOVED: Notes UI Functions ---
 
         // --- CORE LOGIC & RENDERING ---
         function updateDateRange(selectedMonthYear) {
@@ -2372,8 +2271,8 @@
                 const tr = document.createElement('tr');
                 tr.id = `row-card-${persistentId}`; // Use persistent ID for row
                 
-                const statusClass = row.status === '-' ? '--' : row.status.toLowerCase();
-                tr.className = `status-${statusClass}-bg`;
+                // const statusClass = row.status === '-' ? '--' : row.status.toLowerCase(); // REMOVED
+                // tr.className = `status-${statusClass}-bg`; // REMOVED
                 
                 const weekendClass = row.isWeekend ? 'text-danger' : '';
                 
@@ -2427,11 +2326,11 @@
             statusBtn.textContent = nextStatus;
             statusBtn.className = `btn w-100 btn-sm status-btn status-${nextStatus.toLowerCase()}`;
             
-            const tr = document.getElementById(`row-card-${rowId}`); // Now we can find the row
-            if (tr) {
-                const nextStatusClass = nextStatus === '-' ? '--' : nextStatus.toLowerCase();
-                tr.className = `status-${nextStatusClass}-bg`;
-            }
+            // const tr = document.getElementById(`row-card-${rowId}`); // REMOVED
+            // if (tr) { // REMOVED
+            //     const nextStatusClass = nextStatus === '-' ? '--' : nextStatus.toLowerCase(); // REMOVED
+            //     tr.className = `status-${nextStatusClass}-bg`; // REMOVED
+            // } // REMOVED
 
             updateRowState(rowId, nextStatus, true);
             updateDateRange(monthSelector.value); 
@@ -2707,7 +2606,13 @@
                 calendarGrid.innerHTML += `<span class="${dayClasses}">${day}</span>`;
             }
         }
+        
+        
+        // --------------------------------------------------
+        // --- REMOVED: IDR NOTES SECTION SCRIPT ---
+        // --------------------------------------------------
 
     </script>
 </body>
 </html>
+
