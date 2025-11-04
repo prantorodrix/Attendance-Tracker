@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- data-bs-theme="light" ডিফল্ট হিসেবে সেট করা হলো -->
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Website</title>
+    <title>Prato's Notes</title>
     
-    <!-- Google Font: Poppins & Inter -->
+    <!-- Google Font: Roboto (index.html থেকে আনা) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,138 +17,173 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
-        /* --- 1. Premium Navbar Styles --- */
+        /* --- index.html থেকে আনা Base & Typography --- */
+        :root {
+            --bs-body-font-family: 'Roboto', sans-serif;
+            --bs-heading-font-family: 'Roboto', sans-serif;
+            
+            /* --- Light Mode (Translucent Glass) --- */
+            --bs-body-bg-light: #f3e7ff; 
+            --bs-body-color-light: #212529;
+            --bs-tertiary-bg-light: rgba(255, 255, 255, 0.7); 
+            --bs-secondary-bg-light: #f8f9fa; 
+            --bs-border-color-light: rgba(0, 0, 0, 0.1); 
+            
+            --bs-glass-bg-light: rgba(255, 255, 255, 0.6); 
+            --bs-glass-border-light: var(--bs-border-color-light);
+            --bs-card-bg-light: var(--bs-tertiary-bg-light);
+            --bs-card-border-light: var(--bs-border-color-light);
+
+            /* --- Dark Mode (Translucent Glass) --- */
+            --bs-body-bg-dark: #0a0c10; 
+            --bs-body-color-dark: #e0e0e0;
+            --bs-tertiary-bg-dark: rgba(22, 27, 34, 0.7); 
+            --bs-secondary-bg-dark: #2a2a2a;
+            --bs-border-color-dark: rgba(255, 255, 255, 0.1); 
+            --bs-light-bg-subtle-dark: #161b22;
+
+            --bs-glass-bg-dark: rgba(10, 12, 16, 0.6); 
+            --bs-glass-border-dark: var(--bs-border-color-dark);
+            --bs-card-bg-dark: var(--bs-tertiary-bg-dark); /* ডার্ক মোড কার্ডের রঙ */
+            --bs-card-border-dark: var(--bs-border-color-dark);
+
+            --bs-primary-dark: #00f0b5;
+            --bs-primary-rgb-dark: 0, 240, 181;
+        }
+
+        [data-bs-theme="light"] {
+            --bs-body-bg: var(--bs-body-bg-light);
+            --bs-body-color: var(--bs-body-color-light);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-light);
+            --bs-secondary-bg: var(--bs-secondary-bg-light);
+            --bs-border-color: var(--bs-border-color-light);
+            --bs-light-bg-subtle: var(--bs-light-bg-subtle-light);
+
+            --bs-glass-bg: var(--bs-glass-bg-light);
+            --bs-glass-border: var(--bs-glass-border-light);
+            --bs-card-bg: var(--bs-card-bg-light);
+            --bs-card-border: var(--bs-card-border-light);
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--bs-body-bg-dark);
+            --bs-body-color: var(--bs-body-color-dark);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-dark);
+            --bs-secondary-bg: var(--bs-secondary-bg-dark);
+            --bs-border-color: var(--bs-border-color-dark);
+            --bs-light-bg-subtle: var(--bs-light-bg-subtle-dark);
+
+            --bs-glass-bg: var(--bs-glass-bg-dark);
+            --bs-glass-border: var(--bs-glass-border-dark);
+            --bs-card-bg: var(--bs-card-bg-dark);
+            --bs-card-border: var(--bs-border-color-dark);
+
+            --bs-primary: var(--bs-primary-dark);
+            --bs-primary-rgb: var(--bs-primary-rgb-dark);
+            --bs-link-color: var(--bs-primary-dark);
+            --bs-link-color-rgb: var(--bs-primary-rgb-dark);
+            --bs-link-hover-color: #33ffc7;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif; /* Default font */
-            background-color: #f4f7f6;
+            font-family: var(--bs-body-font-family); /* Roboto ফন্ট ব্যবহার করা হলো */
+            background-color: transparent; /* অ্যানিমেটেড ব্যাকগ্রাউন্ড দেখানোর জন্য */
+            transition: background-color 0.3s ease;
         }
-
-        .premium-navbar {
-            background-color: #1a1a1a; /* Dark premium background */
-            padding: 1rem 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .premium-navbar .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            /* Gradient Logo Text */
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent; /* Fallback */
-        }
-
-        .premium-navbar .nav-link {
-            color: #ccc; /* Light text color */
-            font-weight: 500;
-            margin: 0 0.5rem;
-            position: relative;
-            transition: color 0.3s ease;
-            cursor: pointer; /* Change cursor for JS links */
-        }
-
-        /* Hover Animation: Underline */
-        .premium-navbar .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
+        
+        /* --- index.html থেকে আনা Animated Background --- */
+        #animated-bg-container {
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-out;
+            height: 100vh;
+            z-index: -10; 
+            overflow: hidden;
+        }
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px); 
+            -webkit-filter: blur(20px);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; 
+            transform: scale(1.1); 
+        }
+        .bg-image.active {
+            opacity: 1;
         }
 
-        .premium-navbar .nav-link:hover {
-            color: #fff; /* Brighter text on hover */
-        }
-
-        .premium-navbar .nav-link:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-
-        .premium-navbar .nav-link.active {
-            color: #fff;
-            font-weight: 600;
-        }
+        /* Light Theme Images */
+        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
         
-        .premium-navbar .nav-link.active::after {
-             transform: scaleX(1); /* Keep underline for active */
-             transform-origin: bottom left;
-        }
+        /* Dark Theme Images */
+        [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
 
-        /* Premium Button */
-        .btn-premium {
-            background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
-        }
-
-        .btn-premium:hover {
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.5);
-        }
+        [data-bs-theme="light"] .bg-image-dark { display: none; }
+        [data-bs-theme="dark"] .bg-image-light { display: none; }
         
-        /* --- 2. Home Page Hero Section Style --- */
-        .hero-section {
-            background: linear-gradient(to right, #141e30, #243b55);
-            color: white;
-            padding: 8rem 0;
-            text-align: center;
-        }
-        .hero-section h1 {
-            font-size: 3.5rem;
+        h1, h2, h3, h4, h5, h6, .fw-bold {
+            font-family: var(--bs-heading-font-family);
             font-weight: 700;
         }
-        .hero-section p {
-            font-size: 1.25rem;
-            color: #ccc;
-        }
 
-        /* --- 3. EOB/IDR Processor Styles --- */
-        .eob-content {
-            padding-top: 30px; 
-            font-family: 'Inter', sans-serif; /* EOB tool uses Inter font */
-        }
+        /* --- index.html থেকে আনা Glass Card Style --- */
         .card {
-            margin-bottom: 25px;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        .card:last-child {
-            margin-bottom: 0;
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-card-border);
+            border-radius: 1.5rem; /* More rounded */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
         }
         
-        /* NEW: Result List Styles */
+        [data-bs-theme="dark"] .card {
+             box-shadow: none;
+             border-radius: 0.75rem; /* Less rounded for tech look */
+        }
+
+        /* --- notes-content.txt থেকে আনা Tool Styles (UI Kit) --- */
+        
+        /* Input/Textarea গুলোকে Glass UI এর সাথে মানানসই করা */
+        .form-control, .form-select {
+            background-color: var(--bs-tertiary-bg);
+            color: var(--bs-body-color);
+            border: 1px solid var(--bs-border-color);
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bs-tertiary-bg);
+            color: var(--bs-body-color);
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
+        }
+        
         .result-list {
-            font-size: 0.9rem; /* Smaller font */
+            font-size: 0.9rem; 
         }
         .result-list p {
-            margin-bottom: 0.5rem; /* Tighter spacing */
-            border-bottom: 1px solid #eee;
+            margin-bottom: 0.5rem; 
+            border-bottom: 1px solid var(--bs-border-color); /* Updated Border */
             padding-bottom: 0.5rem;
             display: flex;
             justify-content: space-between;
-            white-space: nowrap; /* No line wrap */
+            white-space: nowrap; 
         }
          .result-list p:last-child {
             border-bottom: none;
             margin-bottom: 0;
          }
         .result-list strong {
-            color: #343a40;
+            color: var(--bs-body-color); /* Updated Text Color */
             margin-right: 10px;
         }
         .result-list .output-value {
@@ -156,84 +192,98 @@
             text-align: right;
         }
         .result-list .output-value.text-dark {
-             color: #212529 !important;
+             color: var(--bs-body-color) !important; /* Updated Text Color */
         }
 
-        /* NEW: IDR Result Table Style */
+        /* টেবিল স্টাইল Glass UI এর সাথে মানানসই করা */
         .result-table {
-            font-size: 0.9rem; /* Smaller font */
+            font-size: 0.9rem; 
         }
         .result-table th, .result-table td {
             vertical-align: middle;
             font-weight: 500;
             padding: 0.5rem 0.75rem;
-            white-space: nowrap; /* No line wrap */
+            white-space: nowrap; 
+            border-color: var(--bs-border-color); /* Updated Border */
+            color: var(--bs-body-color); /* Updated Text Color */
         }
-        /* Header cells */
         .result-table thead th { 
-            background-color: #e9ecef;
+            background-color: var(--bs-secondary-bg); /* Updated Header BG */
             text-align: left;
         }
-        /* Body row header cells */
          .result-table tbody th {
             font-weight: bold;
-            color: #212529;
+            color: var(--bs-body-color);
             text-align: left;
          }
-         /* Body data cells */
          .result-table td {
             font-weight: bold;
-            color: #212529;
-            text-align: left; /* NEW: Left align results */
+            color: var(--bs-body-color);
+            text-align: left; 
          }
         .result-table .output-value-amount {
             color: #28a745;
         }
 
         textarea {
-            border-radius: 8px;
             font-family: monospace;
-            min-height: 200px; /* EOB Text Area */
+            min-height: 200px; 
         }
         
         .idr-textarea {
-             min-height: 100px; /* Smaller IDR boxes */
+             min-height: 100px; 
         }
         
-        /* NEW: Comparison BG Colors */
+        /* Comparison BG Colors (এগুলো ঠিক আছে) */
         .bg-match { 
-            background-color: #d4edda !important; /* light green */
+            background-color: rgba(212, 237, 218, 0.7) !important; /* light green */
+            color: #0f5132 !important;
             border-radius: 5px;
         }
         .bg-mismatch { 
-            background-color: #f8d7da !important; /* light red */
+            background-color: rgba(248, 215, 218, 0.7) !important; /* light red */
+            color: #842029 !important;
             border-radius: 5px;
         }
         .bg-overpaid { 
-            background-color: #fff3cd !important; /* light yellow */
+            background-color: rgba(255, 243, 205, 0.7) !important; /* light yellow */
+            color: #664d03 !important;
             border-radius: 5px;
         }
         
-        /* Comparison for list view */
+        /* ডার্ক মোডে Comparison কালার */
+        [data-bs-theme="dark"] .bg-match { 
+            background-color: rgba(13, 26, 18, 0.8) !important;
+            color: #34c356 !important;
+        }
+        [data-bs-theme="dark"] .bg-mismatch { 
+            background-color: rgba(43, 17, 20, 0.8) !important;
+            color: #ea5462 !important;
+        }
+        [data-bs-theme="dark"] .bg-overpaid { 
+            background-color: rgba(36, 28, 10, 0.8) !important;
+            color: #ffca2c !important;
+        }
+
         .result-list .output-value.bg-match,
         .result-list .output-value.bg-mismatch,
         .result-list .output-value.bg-overpaid {
              padding: 2px 6px;
         }
         
-        /* NEW: Editable input styles */
         .editable-input {
             width: 100px;
-            border: 1px solid #ccc;
+            background-color: var(--bs-tertiary-bg); /* Updated */
+            color: var(--bs-body-color); /* Updated */
+            border: 1px solid var(--bs-border-color); /* Updated */
             border-radius: 4px;
             padding: 0.25rem 0.5rem;
         }
         .editable-input:disabled {
-            background-color: #e9ecef;
-            border-color: #dee2e6;
+            background-color: var(--bs-secondary-bg);
+            border-color: var(--bs-border-color);
         }
         
-        /* NEW: Error animation */
         @keyframes shake-red {
             0% { transform: translateX(0); box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); }
             25% { transform: translateX(5px); }
@@ -243,155 +293,269 @@
         }
         .is-invalid {
             border-color: #dc3545;
-            /* animation: shake-red 0.5s ease-out; */
         }
         .form-control.is-invalid, .form-select.is-invalid {
              border-color: #dc3545;
              animation: shake-red 0.5s ease-out;
         }
-        .editable-input.is-invalid {
-            background-color: #f8d7da;
+        /* --- Footer --- */
+        #main-footer {
+            background-color: var(--bs-card-bg);
+            border-top: 1px solid var(--bs-card-border);
+            padding: 3rem 1rem;
+            margin-top: 3rem;
+            color: var(--bs-secondary-color);
+            border-radius: 10px;
         }
+        #main-footer h5 {
+            color: var(--bs-body-color);
+            font-weight: 600;
+        }
+        #main-footer .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        #main-footer .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        #main-footer .footer-links a {
+            text-decoration: none;
+            color: var(--bs-secondary-color);
+            transition: all 0.2s ease;
+        }
+        #main-footer .footer-links a:hover {
+            color: var(--bs-primary);
+            text-decoration: underline;
+        }
+        #main-footer .social-links a {
+            font-size: 1.5rem;
+            color: var(--bs-secondary-color);
+            margin-right: 1rem;
+            transition: all 0.2s ease;
+        }
+        #main-footer .social-links a:hover {
+            color: var(--bs-primary);
+            transform: scale(1.1);
+        }
+
         
-        /* NEW: Sticky Column CSS */
-        .result-table th:nth-child(1), .result-table td:nth-child(1), /* Result # */
-        .result-table th:nth-child(2), .result-table td:nth-child(2), /* Ticket # */
-        .result-table th:nth-child(3), .result-table td:nth-child(3), /* IDR # */
-        .result-table th:nth-child(4), .result-table td:nth-child(4),  /* Claim # */
-        .result-table th:nth-child(5), .result-table td:nth-child(5)  /* CPT */
+        /* Sticky Column CSS (Glass UI) */
+        .result-table th:nth-child(1), .result-table td:nth-child(1), 
+        .result-table th:nth-child(2), .result-table td:nth-child(2), 
+        .result-table th:nth-child(3), .result-table td:nth-child(3), 
+        .result-table th:nth-child(4), .result-table td:nth-child(4), 
+        .result-table th:nth-child(5), .result-table td:nth-child(5)
         {
             position: sticky;
             z-index: 2;
         }
         
-        /* Define widths and sticky positions */
         .result-table th:nth-child(1), .result-table td:nth-child(1) { left: 0; min-width: 100px; }
         .result-table th:nth-child(2), .result-table td:nth-child(2) { left: 100px; min-width: 120px; }
         .result-table th:nth-child(3), .result-table td:nth-child(3) { left: 220px; min-width: 120px; }
-        .result-table th:nth-child(4), .result-table td:nth-child(4) { left: 340px; min-width: 150px; } /* Claim # */
-        .result-table th:nth-child(5), .result-table td:nth-child(5) { left: 490px; min-width: 80px; } /* CPT */
+        .result-table th:nth-child(4), .result-table td:nth-child(4) { left: 340px; min-width: 150px; } 
+        .result-table th:nth-child(5), .result-table td:nth-child(5) { left: 490px; min-width: 80px; } 
 
-
-        /* Sticky column backgrounds */
+        /* Sticky column backgrounds (Glass UI) */
         .result-table thead th {
-            background-color: #cfe2ff; /* table-primary */
+            background-color: var(--bs-secondary-bg); /* Updated */
         }
-         /* Sticky body header (Result #) */
         .result-table tbody th {
-            background-color: #f8f9fa; /* Row header bg */
+            background-color: var(--bs-tertiary-bg); /* Updated */
         }
-        /* Sticky body data cells need solid background */
         .result-table tbody td:nth-child(2),
         .result-table tbody td:nth-child(3),
         .result-table tbody td:nth-child(4),
         .result-table tbody td:nth-child(5) {
-             background-color: #ffffff;
+             background-color: var(--bs-card-bg); /* Updated */
         }
         
-        /* NEW: Note Generation Section */
         #note_Text, #note_Mail_Text, #mail_Note_Text {
             min-height: 200px;
             font-family: monospace;
             font-size: 0.9rem;
         }
         
-        /* NEW: Accordion Button Style */
+        /* Accordion Button Style (Glass UI) */
+        .accordion-item {
+            background-color: transparent; /* Full Glass */
+            border: none;
+        }
         .accordion-button {
-            padding: 1rem 1.25rem;
+            background-color: var(--bs-card-bg); /* Glass */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--bs-card-border);
+            border-radius: 1rem !important;
+            color: var(--bs-body-color);
         }
         .accordion-button:not(.collapsed) {
-            color: #0c63e4;
-            background-color: #e7f1ff;
+            color: var(--bs-primary);
+            background-color: var(--bs-tertiary-bg);
+            box-shadow: none;
         }
         .accordion-button:focus {
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+            border-color: var(--bs-primary);
+        }
+        .accordion-body {
+            /* বডি-কে কার্ডের মতো দেখানো হচ্ছে */
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-card-border);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin-top: 1rem;
+            padding: 1.5rem;
         }
 
-        /* NEW: Click-to-copy style */
         .form-control[readonly].copyable {
             cursor: pointer;
+            background-color: var(--bs-secondary-bg);
+        }
+        [data-bs-theme="light"] .form-control[readonly].copyable:hover {
             background-color: #e9ecef;
         }
-        .form-control[readonly].copyable:hover {
-            background-color: #dde6ef;
+        [data-bs-theme="dark"] .form-control[readonly].copyable:hover {
+            background-color: #3a3a3a;
         }
         
-        /* NEW: Copyable textarea */
-        #note_Text.copyable, #mail_Note_Text.copyable, #mail_Note_Text.copyable {
-            cursor: pointer;
-        }
-        #note_Text.copyable:hover, #mail_Note_Text.copyable:hover, #note_Mail_Text.copyable:hover {
-            background-color: #f8f9fa;
-        }
-        
-        /* NEW: Button hover styles */
-        #note_CopyBtn:hover {
-            background-color: #157347;
-        }
-         #note_Mail_CopyBtn:hover {
-            background-color: #1a8a8a;
-        }
-        
-        /* NEW: Timezone Selector */
-        .timezone-selector {
-            position: absolute;
+        /* --- index.html থেকে আনা Theme Toggle Button --- */
+        #theme-toggle-container {
+            position: fixed;
             top: 1rem;
-            right: 1.5rem;
-            z-index: 10;
+            right: 1rem;
+            z-index: 1030;
         }
-        .timezone-selector .form-check-label {
-            font-size: 0.8rem;
+        .btn-theme-toggle {
+            background-color: var(--bs-glass-bg);
+            border: 1px solid var(--bs-glass-border);
+            color: var(--bs-secondary-color);
             font-weight: 600;
+            transition: all 0.2s ease;
+            border-radius: 13px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        .timezone-selector .form-check-input:checked {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
+        [data-bs-theme="light"] .btn-theme-toggle {
+            color: #495057;
+        }
+        .btn-theme-toggle:hover {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+        }
+        [data-bs-theme="dark"] .btn-theme-toggle {
+            color: var(--bs-body-color-dark);
+        }
+        [data-bs-theme="dark"] .btn-theme-toggle:hover {
+            background-color: var(--bs-primary-dark);
+            border-color: var(--bs-primary-dark);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb-dark), 0.3);
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Premium Menubar (REMOVED) -->
-    
-    <!-- SECTION 1: Home Page Content (REMOVED) -->
-    
-    <!-- SECTION 2: Dashboard (EOB Tool) Content -->
-    <!-- NEW: Made visible, reduced padding (my-3 px-4) -->
+    <!-- ======== index.html থেকে আনা Animated BG Container ======== -->
+    <div id="animated-bg-container">
+        <!-- Light Theme Images -->
+        <div class="bg-image bg-image-light bg-1 active"></div>
+        <div class="bg-image bg-image-light bg-2"></div>
+        <div class="bg-image bg-image-light bg-3"></div>
+        <!-- Dark Theme Images -->
+        <div class="bg-image bg-image-dark bg-1"></div>
+        <div class="bg-image bg-image-dark bg-2"></div>
+        <div class="bg-image bg-image-dark bg-3"></div>
+    </div>
+
+    <!-- ======== index.html থেকে আনা Theme Toggle Button ======== -->
+ <div id="theme-toggle-container" class="col-11" style="
+    /* Main Container Styles */
+    font-family:'Poppins',sans-serif; font-weight:600;
+    padding:8px 80px; /* Daan o Ban dhar theke 30px jaiga chhara holo */
+    border-radius:10px; 
+    display:flex; justify-content:space-between; align-items:center; 
+    background:rgba(255,255,255,0.05); backdrop-filter:blur(8px); 
+    border:1px solid rgba(255,255,255,0.1); 
+    box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
+    font-size:14px; width: 100%;
+        ">
+    <!-- Left Content: Made By Pranto Rodrix -->
+    <div style="flex-shrink: 0;">
+        Made by 
+        <span style="
+            background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip:text; background-clip:text; color:transparent; 
+            text-shadow:0 0 6px rgba(168,85,247,0.4);
+            font-weight:700;">
+            Pranto Rodrix
+        </span>
+    </div>
+
+    <!-- Right Button: Back to Main Page -->
+    <a href="index.html" 
+       onclick="window.open(this.href, '_self'); return false;"
+       style="
+        /* Button Styles */
+        display: inline-flex; align-items: center; text-decoration: none;
+        padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
+        white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
+        
+        /* Glass Effect */
+        background: rgba(255, 255, 255, 0.15); 
+        /* Color shada kora holo jate Dark Theme e dekha jay */
+        color: #fff; 
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        /* Text shadow kalo kora holo jate Light Theme e shada lekha shpoto hoy */
+        text-shadow: 0 0 2px rgba(0,0,0,0.8); 
+    " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'" 
+       onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
+       
+        <!-- Arrow Icon (←) -->
+        <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span> 
+        Main Page
+    </a>
+  </div>
+
+    <div id="theme-toggle-container" class="" style="margin-top:2px;">
+        <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-2">
+            <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
+            <span id="theme-text" class="fw-medium">Light</span>
+        </button>
+    </div>
+
+    <!-- ======== notes-content.txt থেকে আনা Tool Content ======== -->
+    <!-- Glass UI এর সাথে মানানসই করার জন্য container-fluid ব্যবহার করা হলো -->
     <div id="dashboard-page" class="container-fluid eob-content my-3 px-4">
 
-        <!-- NEW: Timezone Selector (REMOVED) -->
-        <!--
-        <div class="timezone-selector card p-2 shadow-sm">
-            ...
-        </div>
-        -->
-
-        <!-- NEW: 4-Column EOB Layout, reduced gap (g-3) -->
-        <div class="row g-3">
+<!-- 4-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
+        <div class="row g-3" style="margin-top:60px">
             
             <!-- Column 1: Input Area -->
             <div class="col-3">
-                <!-- Section 1: Input Card -->
+                <!-- Section 1: Input Card (Glass UI) -->
                 <div class="card p-4 h-100 d-flex flex-column">
                     <!-- EOB Input -->
                     <div class="mb-3 flex-grow-1 d-flex flex-column">
-                        <label for="eobTextInput" class="form-label fw-bold">Full EOB Text:</label>
+                        <label for="eobTextInput" class="form-label fw-bold">EOB:</label>
                         <textarea class="form-control h-100" id="eobTextInput" 
-                                  placeholder="Patient Information
-Patient: ROMERO, ELVIRA
-Patient Account Number: TKT12345
-..."></textarea>
+                                  placeholder="Paste Your
+EOB Details Here"></textarea>
                     </div>
                 </div>
             </div>
             
             <!-- Column 2: EOB Output Area 1 -->
             <div class="col-3">
-                <!-- EOB Output Card 1 -->
+                 <!-- EOB Output Card 1 (Glass UI) -->
                 <div class="card p-4 h-100">
-                    <h5 class="text-success fw-bold">EOB Results (1)</h5>
-                    <hr>
+                    <h5 class="text-success fw-bold">EOB Results</h5>
+                    <!--<hr style="border-color: var(--bs-border-color);">-->
                     <div id="eob-results-list-1" class="result-list">
                         <p><strong>Ticket #:</strong> <span id="eob_Ticket" class="output-value text-dark">--</span></p>
                         <p><strong>Patient:</strong> <span id="eob_Patient" class="output-value text-dark">--</span></p>
@@ -403,49 +567,48 @@ Patient Account Number: TKT12345
             
             <!-- Column 3: EOB Output Area 2 -->
             <div class="col-3">
-                 <!-- EOB Output Card 2 -->
+                 <!-- EOB Output Card 2 (Glass UI) -->
                 <div class="card p-4 h-100">
-                     <h5 class="text-success fw-bold">EOB Results (2)</h5>
-                     <hr>
+                     <!--<h5 class="text-success fw-bold">EOB Results (2)</h5>-->
+                     <!--<hr style="border-color: var(--bs-border-color);">-->
                     <div id="eob-results-list-2" class="result-list">
                         <p><strong>Paid:</strong> <span id="eob_Paid" class="output-value">--</span></p>
-                        <!-- NEW: Field swap -->
-                        <p><strong>PT Responsibility:</strong> <span id="eob_PtResp_Sum" class="output-value">--</span></p>
-                        <p><strong>Provider:</strong> <span id="eob_Provider" class="output-value text-dark">--</span></p>
+                        <p><strong>PT Resp:</strong> <span id="eob_PtResp_Sum" class="output-value">--</span></p>
+                        <p><strong>Facility:</strong> <span id="eob_Provider" class="output-value text-dark">--</span></p>
                         <p><strong>Addl. Paid:</strong> <span id="eob_AddlPaid" class="output-value">--</span></p>
                     </div>
                 </div>
             </div>
 
             <!-- Column 4: Buttons -->
-            <div class="col-3">
-                <!-- Button Card -->
-                <div class="card p-3 h-100 d-flex flex-column justify-content-center">
-                     <div class="d-grid gap-2">
+            <div class="col-1">
+              
+            </div>
+            <div class="col-2">
+                <!-- Button Card (Glass UI) -->
+                <div class=" p-1 h-100 d-flex flex-column justify-content-center">
+                     <div class="d-grid gap-4">
                         <button type="button" class="btn btn-primary btn-lg w-100 rounded-pill" id="processButton">
                             <i class="bi bi-magic"></i> Extract
                         </button>
                         <button type="button" class="btn btn-outline-danger btn-lg w-100 rounded-pill" id="clearButton">
-                           Clear
+                            <i class="bi bi-x-lg"></i> Clear
                         </button>
-                        <a href="index.html" ><button type="button" class="btn btn-dark btn-sm rounded-lg shadow-md w-100">
-                           <i class="bi bi-check2-circle"></i> Back to Main Page
-                        </button></a>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- NEW: IDR Section Rows, reduced gap (g-3 mt-3) -->
+        <!-- IDR Section Rows (Glass UI) -->
         <div class="row g-3 mt-3">
-            <!-- IDR Input Accordion -->
+            <!-- IDR Input Accordion (Glass UI) -->
             <div class="col-12">
                 <div class="accordion" id="idrInputAccordion">
                     <!-- IDR 2024+ -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingIdr2024">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIdr2024" aria-expanded="true" aria-controls="collapseIdr2024">
-                                <span class="h5 mb-0 fw-bold text-primary">IDR Inputs (2024+)</span>
+                                <span class="h5 mb-0 fw-bold">IDR Inputs (2024+)</span>
                             </button>
                         </h2>
                         <div id="collapseIdr2024" class="accordion-collapse collapse show" aria-labelledby="headingIdr2024">
@@ -472,10 +635,10 @@ Patient Account Number: TKT12345
                         </div>
                     </div>
                     <!-- IDR 2022-23 -->
-                    <div class="accordion-item">
+                    <div class="accordion-item mt-3"> <!-- গ্যাপের জন্য mt-3 যোগ করা হলো -->
                         <h2 class="accordion-header" id="headingIdr2022">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIdr2022" aria-expanded="false" aria-controls="collapseIdr2022">
-                                <span class="h5 mb-0 fw-bold text-primary">IDR Inputs (2022-23)</span>
+                                <span class="h5 mb-0 fw-bold">IDR Inputs (2022-23)</span>
                             </button>
                         </h2>
                         <div id="collapseIdr2022" class="accordion-collapse collapse" aria-labelledby="headingIdr2022">
@@ -504,16 +667,16 @@ Patient Account Number: TKT12345
                 </div>
             </div>
             
-            <!-- IDR Output Card -->
+            <!-- IDR Output Card (Glass UI) -->
             <div class="col-12">
                  <div class="card p-4">
                      <h5 class="text-primary fw-bold">IDR Results</h5>
-                     <hr>
+                     <hr style="border-color: var(--bs-border-color);">
                      <div class="table-responsive">
-                        <table class="table table-striped table-bordered result-table" id="idrResultTable">
+                        <!-- টেবিলকে ডার্ক মোডের সাথে মানানসই করা হয়েছে -->
+                        <table class="table table-borderless result-table" id="idrResultTable">
                             <thead id="idrDataTableHeader">
-                                <!-- Header generated by JS -->
-                                <tr class="table-primary">
+                                <tr class="">
                                     <th scope="col" class="sticky-col" style="left: 0;">Result #</th>
                                     <th scope="col" class="sticky-col" style="left: 100px;">Ticket #</th>
                                     <th scope="col" class="sticky-col" style="left: 220px;">IDR #</th>
@@ -522,13 +685,11 @@ Patient Account Number: TKT12345
                                     <th scope="col">Initial Pmt</th>
                                     <th scope="col">Mediator</th>
                                     <th scope="col">Determ. Date</th>
-                                    <th scope="col">Determ. W/L</th> <!-- Renamed -->
+                                    <th scope="col">Determ. W/L</th> 
                                     <th scope="col">Addl. Pmt</th>
                                     <th scope="col">Pmt Date</th>
                                     <th scope="col">Fee Refund</th>
                                     <th scope="col">Fee Refund Date</th>
-                                    <!-- Status and Status Date Removed -->
-                                    <!-- NEW Summary Columns -->
                                     <th scope="col">W/L (Manual)</th>
                                     <th scope="col">Additional</th>
                                     <th scope="col">Refund</th>
@@ -542,7 +703,7 @@ Patient Account Number: TKT12345
                  </div>
             </div>
 
-            <!-- NEW: Final Note Section (Accordion) -->
+            <!-- Final Note Section (Glass UI) -->
             <div class="col-12">
                 <div class="accordion" id="noteAccordion">
                     <div class="accordion-item">
@@ -559,13 +720,13 @@ Patient Account Number: TKT12345
                                         <input type="text" class="form-control" id="note_Name" value="PRANTO R">
                                         <label for="note_Initial" class="form-label fw-bold mt-2">Initial:</label>
                                         <input type="text" class="form-control" id="note_Initial">
-                                        <!-- NEW: Final Review Adjustment Lines -->
+                                        
                                         <div id="finalReviewAdjustments" class="mt-2" style="display: none;">
                                             <h6 class="text-decoration-underline" style="font-size: 0.9rem;">Adjustments:</h6>
                                             <p class="mb-1 result-list" style="font-size: 0.85rem;"><strong>Adjust with PT:</strong> <span id="adjustWithPt" class="output-value">--</span></p>
                                             <p class="mb-0 result-list" style="font-size: 0.85rem;"><strong>Adjust Without PT:</strong> <span id="adjustWithoutPt" class="output-value">--</span></p>
                                         </div>
-                                        <!-- NEW: Note Warnings -->
+                                        
                                         <div id="note_Warning_NoEOB" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">No EOB Found.</div>
                                         <div id="note_Warning_ClaimMismatch" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">IDR Claim numbers Didn't Match..</div>
                                     </div>
@@ -574,11 +735,9 @@ Patient Account Number: TKT12345
                                         <textarea class="form-control copyable" id="note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Note')"></textarea>
                                     </div>
                                     <div class="col-2 d-flex flex-column justify-content-end">
-                                         <!-- NEW: Generate Note Button -->
                                          <button class="btn btn-info rounded-pill w-100 mb-2" id="note_GenerateBtn">
                                              <i class="bi bi-pencil-square"></i> Generate Note
                                          </button>
-                                         <!-- Removed Copy Button -->
                                          <span id="copy_Confirmation_Note" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
                                          <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="note_ClearBtn">
                                              <i class="bi bi-x-circle"></i> Clear Note
@@ -591,10 +750,10 @@ Patient Account Number: TKT12345
                 </div>
             </div>
 
-             <!-- NEW: Mail Generator Section -->
+             <!-- Mail Generator Section (Glass UI) -->
             <div class="col-12">
                 <div class="accordion" id="mailAccordion">
-                    <div class="accordion-item">
+                    <div class="accordion-item mt-3"> <!-- গ্যাপের জন্য mt-3 যোগ করা হলো -->
                         <h2 class="accordion-header" id="headingMail">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMail" aria-expanded="false" aria-controls="collapseMail">
                                 <span class="h5 mb-0 fw-bold">Auto Email Generator</span>
@@ -620,7 +779,6 @@ Patient Account Number: TKT12345
                                         <label for="note_Mail_Subject" class="form-label fw-bold">Subject: (Click to Copy)</label>
                                         <input type="text" class="form-control copyable" id="note_Mail_Subject" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')">
                                         
-                                        <!-- NEW: Determination Date -->
                                         <label for="note_Mail_Determ_Date" class="form-label fw-bold mt-2">Determination Date:</label>
                                         <input type="text" class="form-control" id="note_Mail_Determ_Date" placeholder="Auto-fills from IDR Result 1">
                                     </div>
@@ -669,11 +827,12 @@ Patient Account Number: TKT12345
 
     </div>
     
-    <!-- NEW: Email Edit Modal -->
+    <!-- Email Edit Modal (Glass UI) -->
     <div class="modal fade" id="emailTemplateModal" tabindex="-1" aria-labelledby="emailTemplateModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
+            <!-- Glass Modal Content -->
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
                     <h5 class="modal-title" id="emailTemplateModalLabel">Edit Email Template</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -681,7 +840,7 @@ Patient Account Number: TKT12345
                     <p class="small text-muted">Edit the template below. The placeholders like [CLAIM_NUMBER] will be filled automatically.</p>
                     <textarea id="email_Template_Text" class="form-control" rows="20"></textarea>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Template</button>
                 </div>
@@ -689,26 +848,146 @@ Patient Account Number: TKT12345
         </div>
     </div>
 
-    
+    <!--Footer Section-->
+    <!-- NEW: Added .fade-in-section -->
+            <footer id="main-footer" class="fade-in-section">
+                <div class="container-fluid">
+                    <div class="row g-4">
+                        <!-- Column 1: About -->
+                        <div class="col-4">
+                            <h5><i class="bi bi-bar-chart-line-fill me-2 text-primary"></i>My Portfolio</h5>
+                            <p class="small">
+                                Your personal dashboard for tracking monthly performance, attendance, and career milestones.
+                            </p>
+                            <div class="mt-3 social-links">
+                                <a href="https://www.linkedin.com/in/pranto-rodrix-90463615b/" target="blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                <a href="https://github.com/prantorodrix/Attendance-Tracker" target="blank" title="GitHub"><i class="bi bi-github"></i></a>
+                                <a href="https://x.com/pranto83945" target="blank" title="Twitter"><i class="bi bi-twitter-x"></i></a>
+                            </div>
+                        </div>
+                        
+                        <!-- Column 2: Quick Links -->
+                        <div class="col-2">
+                            <h5>Quick Links</h5>
+                            <ul class="footer-links">
+                                <li><a href="#profile-section">Profile</a></li>
+                                <li><a href="#performance-section">Performance</a></li>
+                                <li><a href="#dashboard-section">Dashboard</a></li>
+                                <li><a href="#attendance-section">Attendance</a></li>
+                                <li><a href="#idr-notes-section">IDR Notes</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Column 3: Help & Support -->
+                        <div class="col-3">
+                            <h5>Help & Support</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">FAQs</a></li>
+                                <li><a href="#">Report an Issue</a></li>
+                                <li><a href="#">Documentation</a></li>
+                                <li><a href="#">Contact Support</a></li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Column 4: Contact Info -->
+                        <div class="col-3">
+                            <h5>Contact</h5>
+                            <ul class="footer-links">
+                                <li class="d-flex align-items-center">
+                                    <i class="bi bi-telephone-fill me-2"></i>
+                                    <a href="tel:+8801700000000">+8801318138951</a>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <i class="bi bi-envelope-fill me-2"></i>
+                                    <a href="mailto:prantorodrix@example.com">prantorodrix9@gmail.com</a>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill me-2"></i>
+                                    <span>Dhaka, Bangladesh</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="text-center small">
+                        <p class="mb-0">Made by <span class="fw-semibold text-primary"><a href="https://www.facebook.com/pranto.anthony1/" target="black" title="Facebook">@PrantoRodrix</a></span></p>
+                        <p class="mb-0">&copy; <span id="footer-year">2025</span> My Portfolio. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Page Navigation & EOB Logic Script -->
     <script>
-        // --- 1. Page Navigation Logic (REMOVED) ---
+        // --- DOM Elements ---
+        const htmlEl = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+
+        // --- index.html থেকে আনা Theme Toggle Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+            updateAnimatedBackground(); // ইনিশিয়াল ব্যাকগ্রাউন্ড সেট
+        });
+
+        themeToggle.addEventListener('click', () => {
+            const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        function setTheme(theme) {
+            htmlEl.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+                themeText.textContent = '';
+            } else {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+                themeText.textContent = '';
+            }
+            updateAnimatedBackground(); // থিম চেঞ্জ হলে ব্যাকগ্রাউন্ড আপডেট
+        }
+
+        // --- index.html থেকে আনা Animated Background Logic ---
+        // একটিভ ব্যাকগ্রাউন্ড ইমেজ ট্র্যাক করার জন্য
+        let currentImageIndex = 0;
+
+        function updateAnimatedBackground() {
+            const theme = htmlEl.getAttribute('data-bs-theme');
+            const bgImages = document.querySelectorAll(`.bg-image-${theme}`);
+            if (bgImages.length === 0) return;
+
+            // সব ইমেজ থেকে 'active' ক্লাস রিমুভ করা
+            bgImages.forEach(img => img.classList.remove('active'));
+            
+            // পরবর্তী ইমেজ ইনডেক্স সেট করা
+            currentImageIndex = (currentImageIndex + 1) % bgImages.length;
+            
+            // নতুন ইমেজকে 'active' করা
+            bgImages[currentImageIndex].classList.add('active');
+        }
+
+        // প্রতি 5 সেকেন্ডে ব্যাকগ্রাউন্ড পরিবর্তন
+        setInterval(updateAnimatedBackground, 5000);
+
+
+        // --- notes-content.txt থেকে আনা Data Extraction Logic ---
         
-        // --- 2. Data Extraction Logic ---
-        
-        // NEW: Formats a number into currency (e.g., 1500.5 => $1,500.50)
         function formatCurrency(num) {
             if (isNaN(num)) {
                 num = 0;
             }
-            // Ensure commas are added
             return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
-        // NEW: Helper function to find a value by label, skipping empty lines
         function extractValueSkippingLines(text, labelRegex) {
             const match = text.match(labelRegex);
             if (!match) return null;
@@ -727,7 +1006,7 @@ Patient Account Number: TKT12345
                     return trimmedLine; 
                 }
             }
-            return null; // No value found
+            return null; 
         }
         
         function parseCurrency(value) {
@@ -743,21 +1022,14 @@ Patient Account Number: TKT12345
             return "--";
         }
         
-        // NEW: Date formatting function
         function getFormattedDate() {
-            // REMOVED Timezone Toggle
-            // Force BD Time (UTC+6)
             const now = new Date();
-            // Simulating BD time by adding 6 hours to UTC. 
-            // This is a simple approximation. A library like 'moment-timezone' is needed for perfect accuracy.
-            // For now, we'll use the client's local date but format it as mm/dd/yy
             const bdTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
             
             const mm = String(bdTime.getMonth() + 1).padStart(2, '0');
             const dd = String(bdTime.getDate()).padStart(2, '0');
             const yy = String(bdTime.getFullYear()).slice(-2);
             
-            // Force mm/dd/yy format
             return `${mm}/${dd}/${yy}`;
         }
 
@@ -765,35 +1037,34 @@ Patient Account Number: TKT12345
         const eobTicketCell = document.getElementById('eob_Ticket');
         const eobAddlPaidCell = document.getElementById('eob_AddlPaid');
         
-        // --- NEW: Note Generation Elements ---
+        // --- Note Generation Elements ---
         const noteNameInput = document.getElementById('note_Name');
         const noteInitialInput = document.getElementById('note_Initial');
         const noteTextInput = document.getElementById('note_Text');
         const noteGenerateBtn = document.getElementById('note_GenerateBtn'); 
         const noteClearBtn = document.getElementById('note_ClearBtn');
-        const copyConfirmationNote = document.getElementById('copy_Confirmation_Note'); // Renamed
+        const copyConfirmationNote = document.getElementById('copy_Confirmation_Note'); 
         const finalReviewAdjustments = document.getElementById('finalReviewAdjustments'); 
         const adjustWithPt = document.getElementById('adjustWithPt');
         const adjustWithoutPt = document.getElementById('adjustWithoutPt');
         const noteWarningNoEOB = document.getElementById('note_Warning_NoEOB'); 
         const noteWarningClaimMismatch = document.getElementById('note_Warning_ClaimMismatch'); 
         
-        // --- NEW: Mail Generation Elements ---
+        // --- Mail Generation Elements ---
         const mailNameInput = document.getElementById('note_Mail_Name');
-        const mailInitialInput = document.getElementById('note_Mail_Initial'); // NEW
+        const mailInitialInput = document.getElementById('note_Mail_Initial'); 
         const mailToInput = document.getElementById('note_Mail_To');
         const mailCcInput = document.getElementById('note_Mail_CC');
         const mailTypeInput = document.getElementById('note_Mail_Type');
         const mailSubjectInput = document.getElementById('note_Mail_Subject');
-        const mailDetermDateInput = document.getElementById('note_Mail_Determ_Date'); // NEW
+        const mailDetermDateInput = document.getElementById('note_Mail_Determ_Date'); 
         const mailGenerateBtn = document.getElementById('note_Mail_GenerateBtn');
         const mailClearBtn = document.getElementById('note_Mail_ClearBtn');
         const mailTextInput = document.getElementById('note_Mail_Text');
-        const mailNoteTextInput = document.getElementById('mail_Note_Text'); // NEW
-        const copyConfirmationMail = document.getElementById('copy_Confirmation_Mail'); // NEW
+        const mailNoteTextInput = document.getElementById('mail_Note_Text'); 
+        const copyConfirmationMail = document.getElementById('copy_Confirmation_Mail'); 
         const emailTemplateText = document.getElementById('email_Template_Text');
 
-        // NEW: Default Email Template
         const defaultEmailTemplate = `Dear BCBS,
 
 We are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).
@@ -821,22 +1092,18 @@ Regards
 ---------------
 [MY_NAME]`;
         
-        // Load default template into modal
         emailTemplateText.value = defaultEmailTemplate;
 
         
-        // --- EOB Result Clear Function ---
         function clearEobResults() {
              const eobCells = document.querySelectorAll('#eob-results-list-1 .output-value, #eob-results-list-2 .output-value');
             eobCells.forEach(cell => {
                 cell.textContent = '--';
-                cell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid'); // Clear styles
+                cell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid'); 
             });
-            // Specifically clear the sum field
             document.getElementById('eob_PtResp_Sum').textContent = '--';
         }
 
-        // Function to reset comparison styles
         function clearComparisonStyles() {
             eobTicketCell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
             eobAddlPaidCell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
@@ -847,12 +1114,11 @@ Regards
                 const input = cell.querySelector('input');
                 if(input) {
                     input.classList.remove('is-invalid');
-                    input.closest('td').classList.remove('bg-mismatch'); // Clear red bg on cell
+                    input.closest('td').classList.remove('bg-mismatch'); 
                 }
             });
         }
         
-        // --- Clear Button Logic ---
         document.getElementById('clearButton').addEventListener('click', function() {
             document.getElementById('eobTextInput').value = '';
             document.getElementById('idrTextInput1').value = '';
@@ -868,16 +1134,11 @@ Regards
             
             document.getElementById('idrDataTableBody').innerHTML = ''; 
             
-            // Clear Note section
             noteClearBtn.click();
-
             clearComparisonStyles();
-            
-            // Clear mail
             mailClearBtn.click();
         });
         
-        // --- Note Section Button Logic ---
         noteTextInput.addEventListener('click', function() {
             copyToClipboard(noteTextInput, 'copy_Confirmation_Note');
         });
@@ -890,20 +1151,18 @@ Regards
              noteWarningClaimMismatch.style.display = 'none'; 
         });
         
-        // --- NEW: Generate Note Button Logic ---
         noteGenerateBtn.addEventListener('click', function() {
             validateAndGenerateNote();
         });
         
-        // --- NEW: Mail Section Button Logic ---
         mailClearBtn.addEventListener('click', function() {
             mailSubjectInput.value = '';
             mailTextInput.value = '';
-            mailNoteTextInput.value = ''; // Clear new note
+            mailNoteTextInput.value = ''; 
             mailCcInput.value = 'mislam@roundtmc.com, razo@leverngear.com';
             mailToInput.value = 'nsa.disputes@bcbstx.com';
             mailTypeInput.value = '';
-            mailDetermDateInput.value = ''; // Clear new date
+            mailDetermDateInput.value = ''; 
             mailTypeInput.classList.remove('is-invalid');
             mailDetermDateInput.classList.remove('is-invalid');
         });
@@ -922,7 +1181,6 @@ Regards
              copyToClipboard(mailSubjectInput, 'copy_Confirmation_Mail');
         });
 
-        // --- NEW: Click to Copy for Mail ---
         function copyToClipboard(input, confirmationId) {
             input.select();
             document.execCommand('copy');
@@ -934,15 +1192,13 @@ Regards
             }
         }
 
-
-        // --- Main "Extract All Data" Button ---
         document.getElementById('processButton').addEventListener('click', function() {
             
             clearComparisonStyles();
-            noteClearBtn.click(); // Clear note section
-            mailClearBtn.click(); // Clear mail section
+            noteClearBtn.click(); 
+            mailClearBtn.click(); 
 
-            // --- 2. Run EOB Tool Logic ---
+            // --- EOB Tool Logic ---
             const eobText = document.getElementById('eobTextInput').value;
             let ticketNo = 'Not Found', addlPaidAmt = 0; 
 
@@ -954,9 +1210,8 @@ Regards
                 const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
                 const billingProviderMatch = eobText.match(/(Billing Provider|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
                 
-                // FIXED: Use helper function for multi-line gaps for ALL money fields
                 const billedStr = extractValueSkippingLines(eobText, /Billed( Amount)?\s*:?/i) || '$0.00';
-                const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; // FIXED Regex
+                const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; 
                 const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Copay|Deductible|Responsibility)\s*:?/i) || '$0.00';
                 const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance|Co-insurance)\s*:?/i) || '$0.00';
                 const addlPaidStr = extractValueSkippingLines(eobText, /Additional Paid( Amount)?\s*:?/i) || '$0.00';
@@ -969,7 +1224,7 @@ Regards
                 const billedAmt = parseCurrency(billedStr); 
                 const paidAmt = parseCurrency(paidStr); 
                 const coinsuranceAmt = parseCurrency(coinsuranceStr);
-                const ptRespAmt = parseCurrency(ptRespStr); // Parse PtResp
+                const ptRespAmt = parseCurrency(ptRespStr); 
                 addlPaidAmt = parseCurrency(addlPaidStr); 
 
                 eobTicketCell.textContent = ticketNo; 
@@ -985,7 +1240,7 @@ Regards
                 eobAddlPaidCell.textContent = formatCurrency(addlPaidAmt);
             }
             
-            // --- 3. Run IDR Tool Logic ---
+            // --- IDR Tool Logic ---
             const idrTextInputs = [
                 { year: '2024+', text: document.getElementById('idrTextInput1').value, map: '2024+' },
                 { year: '2024+', text: document.getElementById('idrTextInput2').value, map: '2024+' },
@@ -997,15 +1252,13 @@ Regards
                 { year: '2022-23', text: document.getElementById('idr2022TextInput4').value, map: '2022-23' }
             ];
             
-            // FIXED: Added Claim # to fields and maps
             const idrFields = [
                 "Ticket #", "IDR #", "Claim #", "CPT", "Initial Pmt", "Mediator", 
                 "Determ. Date", "Determ. W/L", "Addl. Pmt", "Pmt Date", 
                 "Fee Refund", "Fee Refund Date",
-                "W/L (Manual)", "Additional", "Refund" // Summary Fields
+                "W/L (Manual)", "Additional", "Refund" 
             ];
             
-            // Map for 2024+
             const idrFieldIndexMap_2024 = {
                 "Ticket #": 2, "IDR #": 1, "Claim #": 3, "CPT": 4, "Initial Pmt": 7, "Mediator": 8,
                 "Determ. Date": 16, "Determ. W/L": 17, "Addl. Pmt": 18, "Pmt Date": 19,
@@ -1013,7 +1266,6 @@ Regards
                 "W/L (Manual)": null, "Additional": null, "Refund": null
             };
             
-            // NEW: Map for 2022-23
             const idrFieldIndexMap_2022 = {
                 "Ticket #": 1, "IDR #": 5, "Claim #": 2, "CPT": 3, "Initial Pmt": 7, "Mediator": 8,
                 "Determ. Date": 18, "Determ. W/L": 19, "Addl. Pmt": 20, "Pmt Date": 21,
@@ -1031,7 +1283,7 @@ Regards
             
             let allIdrAddlPmts = []; 
             let resultCounter = 1;
-            let firstIdrDetermDate = null; // NEW: For email
+            let firstIdrDetermDate = null; 
 
             idrTextInputs.forEach((input, index) => {
                 if (input.text.trim() === "") {
@@ -1050,7 +1302,6 @@ Regards
                     }
                 });
                 
-                // NEW: Store first determ date
                 if (resultCounter === 1) {
                     firstIdrDetermDate = rowResult["Determ. Date"];
                 }
@@ -1071,12 +1322,12 @@ Regards
                     if (isAmount && displayValue !== '--' && displayValue !== 'Not Found') {
                          displayValue = formatCurrency(parseCurrency(displayValue));
                     } else if (isAmount) {
-                        displayValue = '$0.00'; // Default for empty amounts
+                        displayValue = '$0.00'; 
                     }
 
                     if (field === "W/L (Manual)") {
                         let winLoseValue = rowResult["Determ. W/L"];
-                        rowResult[field] = winLoseValue; // Store determined value
+                        rowResult[field] = winLoseValue; 
                         if (winLoseValue === "--" || winLoseValue === "Not Found") {
                             cellHtml = `<td ${cellId} class="${stickyClass}"><input type="text" class="form-control form-control-sm editable-input win-lose-input" data-row-index="${index}"></td>`;
                         } else {
@@ -1085,7 +1336,7 @@ Regards
                     } else if (field === "Additional") {
                         const paymentDate = rowResult["Pmt Date"];
                         displayValue = (paymentDate !== "--" && paymentDate !== "Not Found") ? "Received" : "Waiting";
-                        rowResult[field] = displayValue; // Store derived value
+                        rowResult[field] = displayValue; 
                         cellHtml = `<td ${cellId} class="${stickyClass}">${displayValue}</td>`;
                     } else if (field === "Refund") {
                         const winLoseValue = rowResult["Determ. W/L"] ? rowResult["Determ. W/L"].toLowerCase() : '';
@@ -1117,13 +1368,12 @@ Regards
                 idrTableBody.innerHTML += rowHtml;
                 
                 allIdrAddlPmts.push(parseCurrency(rowResult["Addl. Pmt"]));
-                resultCounter++; // Increment result number
+                resultCounter++; 
             });
             
-            // --- 4. Run Comparison Logic ---
-            
-            const allIdrTicketCells = document.querySelectorAll('#idrDataTableBody td:nth-child(2)'); // Ticket #
-            const allIdrAddlPmtCells = document.querySelectorAll('#idrDataTableBody td:nth-child(10)'); // Addl. Pmt (FIXED from 9)
+            // --- Comparison Logic ---
+            const allIdrTicketCells = document.querySelectorAll('#idrDataTableBody td:nth-child(2)'); 
+            const allIdrAddlPmtCells = document.querySelectorAll('#idrDataTableBody td:nth-child(10)'); 
             
             let eobTicketMatched = false;
             allIdrTicketCells.forEach(cell => {
@@ -1145,31 +1395,22 @@ Regards
                 }
             }
             
-            // REMOVED: Additional Payment Color Logic
-            
-            // NEW: Auto-fill determination date
             if (firstIdrDetermDate) {
                 mailDetermDateInput.value = firstIdrDetermDate;
             }
         });
         
-        // --- 6. Note Generation & Validation Functions ---
+        // --- Note Generation & Validation Functions ---
 
         function validateAndGenerateNote() {
             let validationPassed = true;
             let activeIdrRows = [];
-            finalReviewAdjustments.style.display = 'none'; // Hide adjustments by default
+            finalReviewAdjustments.style.display = 'none'; 
             noteWarningNoEOB.style.display = 'none';
             noteWarningClaimMismatch.style.display = 'none';
             
             const idrRows = document.querySelectorAll('#idrDataTableBody tr');
-            let idrClaimNumbers = []; // For mismatch check
-            
-            // Recall table structure:
-            // 0: Result #, 1: Ticket #, 2: IDR #, 3: Claim #, 4: CPT
-            // 5: Initial Pmt, 6: Mediator, 7: Determ. Date, 8: Determ. W/L
-            // 9: Addl. Pmt, 10: Pmt Date, 11: Fee Refund, 12: Fee Refund Date
-            // 13: W/L (Manual), 14: Additional, 15: Refund
+            let idrClaimNumbers = []; 
             
             idrRows.forEach((row, index) => {
                 const winLoseInput = row.querySelector('.win-lose-input');
@@ -1179,9 +1420,9 @@ Regards
                     idrNum: row.cells[2].textContent,
                     claimNum: row.cells[3].textContent, 
                     cpt: row.cells[4].textContent,
-                    mediator: row.cells[6].textContent, // FIXED: Index 6
-                    addlPmt: row.cells[9].textContent, // FIXED: Index 9
-                    additionalStatus: row.cells[14].textContent, // FIXED: Index 14
+                    mediator: row.cells[6].textContent, 
+                    addlPmt: row.cells[9].textContent, 
+                    additionalStatus: row.cells[14].textContent, 
                     winLoseStatus: '',
                     refundStatus: ''
                 };
@@ -1190,7 +1431,6 @@ Regards
                     idrClaimNumbers.push(rowData.claimNum);
                 }
                 
-                // --- Validation ---
                 let currentWLStatus = '';
                 if (winLoseInput) {
                     if (winLoseInput.value.trim() === '') {
@@ -1199,7 +1439,7 @@ Regards
                     }
                     currentWLStatus = winLoseInput.value.toLowerCase();
                 } else {
-                    currentWLStatus = row.cells[13].textContent.toLowerCase(); // FIXED: Index 13
+                    currentWLStatus = row.cells[13].textContent.toLowerCase(); 
                 }
                 rowData.winLoseStatus = currentWLStatus;
 
@@ -1221,14 +1461,12 @@ Regards
                 return;
             }
             
-            // --- Check for Claim # mismatch ---
             const allSame = idrClaimNumbers.every(c => c === idrClaimNumbers[0]);
             if (!allSame && idrClaimNumbers.length > 0) {
                 noteWarningClaimMismatch.style.display = 'block';
             }
             
-            // --- Calculate Initial ---
-            let initial = "IDR FOLLOW UP"; // Default
+            let initial = "IDR FOLLOW UP"; 
             let allReceived = activeIdrRows.length > 0;
             
             activeIdrRows.forEach(row => {
@@ -1238,7 +1476,6 @@ Regards
                     allReceived = false;
                 }
                 
-                // NEW: If "closed" and refund is "waiting", it's not final
                 if (row.winLoseStatus === 'close' && row.refundStatus.toLowerCase() === 'waiting') {
                     allReceived = false; 
                 }
@@ -1250,23 +1487,22 @@ Regards
                 const status = activeIdrRows[0].winLoseStatus;
                 if (status === 'win') initial = 'IDR WIN';
                 else if (status === 'lose') initial = 'IDR LOSE';
-                else initial = 'IDR FOLLOW UP'; // For "Close" or other
+                else initial = 'IDR FOLLOW UP'; 
             } else if (activeIdrRows.length > 1) {
                 initial = "IDR FOLLOW UP";
             }
             
             noteInitialInput.value = initial;
             
-            // --- Generate Note Text ---
             const eobText = document.getElementById('eobTextInput').value.trim();
             const eobExists = eobText.length > 0 && document.getElementById('eob_Claim').textContent !== '--';
             
             const eobClaimNo = document.getElementById('eob_Claim').textContent;
             const eobBilled = parseCurrency(document.getElementById('eob_Billed').textContent);
             const eobPaid = parseCurrency(document.getElementById('eob_Paid').textContent);
-            const ptRespSum = parseCurrency(document.getElementById('eob_PtResp_Sum').textContent); // Get the calculated sum
+            const ptRespSum = parseCurrency(document.getElementById('eob_PtResp_Sum').textContent); 
 
-            const today = getFormattedDate(); // NEW: Use timezone-aware date
+            const today = getFormattedDate(); 
             const name = noteNameInput.value || 'PRANTO R';
             
             let note = `${today}>${initial}>${name}>WORKING ON TRACKING SHEET. `;
@@ -1303,10 +1539,8 @@ Regards
                 }
             });
             
-            // NEW: Add final sentence
             if (initial === 'FINAL REVIEW') {
                 note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
-                // Calculate and show adjustments
                 const adjustWithPtVal = eobBilled - (eobPaid + ptRespSum);
                 const adjustWithoutPtVal = eobBilled - eobPaid;
                 adjustWithPt.textContent = formatCurrency(adjustWithPtVal);
@@ -1320,17 +1554,16 @@ Regards
             noteTextInput.value = note.trim().toUpperCase();
         }
         
-        // --- NEW: Mail Generation Function ---
+        // --- Mail Generation Function ---
         function generateMail() {
             mailTypeInput.classList.remove('is-invalid');
             mailDetermDateInput.classList.remove('is-invalid');
-            mailTextInput.value = ''; // Clear previous mail
-            mailNoteTextInput.value = ''; // Clear previous note
+            mailTextInput.value = ''; 
+            mailNoteTextInput.value = ''; 
             
             const eobText = document.getElementById('eobTextInput').value.trim();
             const idrRows = document.querySelectorAll('#idrDataTableBody tr');
             
-            // Validation
             if (eobText.length === 0 || document.getElementById('eob_Claim').textContent === '--') {
                 mailTextInput.value = "ERROR: EOB Data is missing. Please paste the EOB text.";
                 return;
@@ -1349,7 +1582,6 @@ Regards
                 mailTextInput.value = "ERROR: Please select an Email Type (1st or 2nd).";
                 return;
             }
-            // NEW: Validate determination date
             const determDate = mailDetermDateInput.value.trim();
             const dateRegex = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
             if (determDate === "" || determDate === "--" || !dateRegex.test(determDate)) {
@@ -1360,41 +1592,34 @@ Regards
             
             const idrRow = idrRows[0];
             
-            // Get EOB data
             const provider = document.getElementById('eob_Provider').textContent;
             let eobClaim = document.getElementById('eob_Claim').textContent;
             
-            // Get IDR data (FIXED INDICES)
             const idrNum = idrRow.cells[2].textContent;
             const idrClaim = idrRow.cells[3].textContent; 
             const cpt = idrRow.cells[4].textContent;
             const initialPmt = idrRow.cells[5].textContent; 
             const mediator = idrRow.cells[6].textContent; 
-            // const determDate = idrRow.cells[7].textContent; // Now from input
-            const addlPmt = idrRow.cells[9].textContent; // FIXED: Index 9
+            const addlPmt = idrRow.cells[9].textContent; 
             
             let finalClaim = (eobClaim !== '--' && eobClaim !== 'Not Found') ? eobClaim : idrClaim;
             
             const myName = mailNameInput.value || 'Pranto Rodrix';
-            const myInitial = mailInitialInput.value || 'PRANTO R'; // NEW
+            const myInitial = mailInitialInput.value || 'PRANTO R'; 
 
-            // Calculate values
             const initialPmtNum = parseCurrency(initialPmt);
             const addlPmtNum = parseCurrency(addlPmt);
-            const oonRateNum = initialPmtNum + addlPmtNum; // This is the IDR-Determined Rate
+            const oonRateNum = initialPmtNum + addlPmtNum; 
 
-            // Generate Subject
             let subject = `Urgent Request for Claim Reprocessing as per IDR Determination - ${idrNum} and Claim Number: ${finalClaim}`;
             if (emailType === '2nd Email') {
                 subject += " (2nd Email)";
             }
             mailSubjectInput.value = subject;
             
-            // Get template from modal textarea
             let mailBody = emailTemplateText.value;
             
-            // Replace placeholders
-            mailBody = mailBody.replace(/\[DETERMINATION_DATE\]/g, determDate); // FIXED
+            mailBody = mailBody.replace(/\[DETERMINATION_DATE\]/g, determDate); 
             mailBody = mailBody.replace(/\[MEDIATOR_NAME\]/g, mediator);
             mailBody = mailBody.replace(/\[PROVIDER_NAME\]/g, provider);
             mailBody = mailBody.replace(/\[OON_RATE\]/g, formatCurrency(oonRateNum));
@@ -1406,8 +1631,7 @@ Regards
             
             mailTextInput.value = mailBody.trim();
 
-            // --- Generate Email Note ---
-            const today = getFormattedDate(); // NEW: Use timezone-aware date
+            const today = getFormattedDate(); 
             let noteType = (emailType === '1st Email') ? "1st FOLLOW UP" : "2nd FOLLOW UP";
             
             let emailNote = `${today}>IDR FOLLOW UP>${myInitial}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${finalClaim}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${formatCurrency(addlPmtNum)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${idrNum}, BY ${mediator} DATED ${determDate}. FOR BCBS ATTENTION, WE SENT ${noteType} EMAIL TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`;
@@ -1416,31 +1640,26 @@ Regards
         }
 
 
-        // --- NEW: Autocomplete and Logic for Summary Table ---
         function autocompleteRefund(input) {
             const value = input.value.toLowerCase();
             if (value === 'r') input.value = 'Received';
             if (value === 'w') input.value = 'Waiting';
             
-            // If user types, remove red warning
             if (input.value !== '') {
                 input.classList.remove('is-invalid');
                 input.closest('td').classList.remove('bg-mismatch');
             }
         }
+        window.autocompleteRefund = autocompleteRefund; // গ্লোবাল করা হলো
         
-        // Add event listener to summary table body for delegation
         document.getElementById('idrDataTableBody').addEventListener('input', function(e) {
             const target = e.target;
             
-            // Autocomplete for Refund
             if (target.classList.contains('refund-input')) {
                 autocompleteRefund(target);
             }
             
-            // Logic for Win/Lose input
             if (target.classList.contains('win-lose-input')) {
-                // NEW: Autocomplete for W/L/C
                 const value = target.value.toLowerCase();
                 if (value === 'w') target.value = 'Win';
                 if (value === 'l') target.value = 'Lose';
@@ -1466,8 +1685,8 @@ Regards
                     refundCell.classList.remove('bg-mismatch');
                     refundInput.classList.remove('is-invalid');
                 } else if (newStatus === 'close') {
-                    refundInput.disabled = false; // Now editable
-                    refundCell.classList.remove('bg-mismatch'); // Not mandatory
+                    refundInput.disabled = false; 
+                    refundCell.classList.remove('bg-mismatch'); 
                     refundInput.classList.remove('is-invalid');
                 } else {
                     refundInput.disabled = false;
@@ -1480,4 +1699,3 @@ Regards
     </script>
 </body>
 </html>
-
