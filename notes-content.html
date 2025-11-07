@@ -159,6 +159,8 @@
             background-color: var(--bs-tertiary-bg);
             color: var(--bs-body-color);
             border: 1px solid var(--bs-border-color);
+            border-radius: 10px;
+            margin-top: 3px;
         }
         .form-control:focus, .form-select:focus {
             background-color: var(--bs-tertiary-bg);
@@ -166,7 +168,53 @@
             border-color: var(--bs-primary);
             box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
         }
-        
+
+        /* === NEW: EOB Result Customization === */
+        .eob-result-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .eob-result-col {
+            flex-basis: 48%;
+            display: flex;
+            flex-direction: column;
+        }
+        .eob-result-col.single {
+            flex-basis: 100%;
+            align-items: flex-end; /* Show on the right */
+        }
+        .eob-result-col .header {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--bs-secondary-color);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .eob-result-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--bs-body-color);
+            margin-bottom: 8px;
+            min-height: 28px; /* Ensure alignment */
+            width: 160px;
+        }
+         .eob-result-value.currency {
+            color: #28a745;
+         }
+        .facility-truncate {
+            max-width: 100%; /* Fill column but not overflow */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .eob-results-card .card-body {
+            padding: 1rem 1.25rem;
+        }
+        /* === END: EOB Result Customization === */
+
+        /* Legacy result-list (for note adjustment section) */
         .result-list {
             font-size: 0.9rem; 
         }
@@ -195,6 +243,7 @@
              color: var(--bs-body-color) !important; /* Updated Text Color */
         }
 
+
         /* টেবিল স্টাইল Glass UI এর সাথে মানানসই করা */
         .result-table {
             font-size: 0.9rem; 
@@ -203,7 +252,7 @@
             vertical-align: middle;
             font-weight: 500;
             padding: 0.5rem 0.75rem;
-            white-space: nowrap; 
+            white-space: normal; /* Changed from nowrap to normal */
             border-color: var(--bs-border-color); /* Updated Border */
             color: var(--bs-body-color); /* Updated Text Color */
         }
@@ -224,24 +273,31 @@
         .result-table .output-value-amount {
             color: #28a745;
         }
+        /* NEW: Truncate Mediator */
+        .truncate-mediator {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
         textarea {
             font-family: monospace;
-            min-height: 200px; 
+            min-height: 150px; /* Reduced default min-height */
         }
         
         .idr-textarea {
-             min-height: 100px; 
+             min-height: 80px; /* Reduced height */
         }
         
         /* Comparison BG Colors (এগুলো ঠিক আছে) */
         .bg-match { 
-            background-color: rgba(212, 237, 218, 0.7) !important; /* light green */
+            background-color: rgb(100 251 137 / 70%) !important; /* light green */
             color: #0f5132 !important;
             border-radius: 5px;
         }
         .bg-mismatch { 
-            background-color: rgba(248, 215, 218, 0.7) !important; /* light red */
+            background-color: rgb(255 114 127 / 70%) !important; /* light red */
             color: #842029 !important;
             border-radius: 5px;
         }
@@ -263,6 +319,24 @@
         [data-bs-theme="dark"] .bg-overpaid { 
             background-color: rgba(36, 28, 10, 0.8) !important;
             color: #ffca2c !important;
+        }
+
+        /* NEW: Green success warning for email */
+        [data-bs-theme="light"] .form-control.bg-match.text-success {
+            background-color: #d1e7dd !important;
+            color: #0f5132 !important;
+        }
+        [data-bs-theme="dark"] .form-control.bg-match.text-success {
+            background-color: #0a2614 !important;
+            color: #34c356 !important;
+        }
+
+        /* NEW: Red error message div */
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 1rem;
         }
 
         .result-list .output-value.bg-match,
@@ -339,36 +413,7 @@
         }
 
         
-        /* Sticky Column CSS (Glass UI) */
-        .result-table th:nth-child(1), .result-table td:nth-child(1), 
-        .result-table th:nth-child(2), .result-table td:nth-child(2), 
-        .result-table th:nth-child(3), .result-table td:nth-child(3), 
-        .result-table th:nth-child(4), .result-table td:nth-child(4), 
-        .result-table th:nth-child(5), .result-table td:nth-child(5)
-        {
-            position: sticky;
-            z-index: 2;
-        }
-        
-        .result-table th:nth-child(1), .result-table td:nth-child(1) { left: 0; min-width: 100px; }
-        .result-table th:nth-child(2), .result-table td:nth-child(2) { left: 100px; min-width: 120px; }
-        .result-table th:nth-child(3), .result-table td:nth-child(3) { left: 220px; min-width: 120px; }
-        .result-table th:nth-child(4), .result-table td:nth-child(4) { left: 340px; min-width: 150px; } 
-        .result-table th:nth-child(5), .result-table td:nth-child(5) { left: 490px; min-width: 80px; } 
-
-        /* Sticky column backgrounds (Glass UI) */
-        .result-table thead th {
-            background-color: var(--bs-secondary-bg); /* Updated */
-        }
-        .result-table tbody th {
-            background-color: var(--bs-tertiary-bg); /* Updated */
-        }
-        .result-table tbody td:nth-child(2),
-        .result-table tbody td:nth-child(3),
-        .result-table tbody td:nth-child(4),
-        .result-table tbody td:nth-child(5) {
-             background-color: var(--bs-card-bg); /* Updated */
-        }
+        /* Sticky Column CSS (Glass UI) - REMOVED */
         
         #note_Text, #note_Mail_Text, #mail_Note_Text {
             min-height: 200px;
@@ -473,211 +518,185 @@
     </div>
 
     <!-- ======== index.html থেকে আনা Theme Toggle Button ======== -->
- <div id="theme-toggle-container" class="col-11" style="
-    /* Main Container Styles */
-    font-family:'Poppins',sans-serif; font-weight:600;
-    padding:8px 80px; /* Daan o Ban dhar theke 30px jaiga chhara holo */
-    border-radius:10px;
-    display:flex; justify-content:space-between; align-items:center;
-    background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
-    border:1px solid rgba(255,255,255,0.1);
-    box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
-    font-size:14px; width: 100%;
-    ">
-    <div style="flex-shrink: 0;">
-        Made by
-        <span style="
-            background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%);
-            -webkit-background-clip:text; background-clip:text; color:transparent;
-            text-shadow:0 0 6px rgba(168,85,247,0.4);
-            font-weight:700;">
-            Pranto Rodrix
-        </span>
+    <!-- NEW: Top Bar -->
+    <div class="container-fluid px-4">
+        <div id="top-bar" class="row sticky-top" style="
+            font-family:'Poppins',sans-serif; font-weight:600;
+            padding: 8px 15px;
+            margin-top: 1rem;
+            border-radius:10px;
+            display:flex; justify-content:space-between; align-items:center;
+            background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
+            border:1px solid rgba(255,255,255,0.1);
+            box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
+            font-size:14px;
+            z-index: 1025;
+            ">
+            <div class="col-auto" style="flex-shrink: 0;">
+                Made by
+                <span style="
+                    background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%);
+                    -webkit-background-clip:text; background-clip:text; color:transparent;
+                    text-shadow:0 0 6px rgba(168,85,247,0.4);
+                    font-weight:700;">
+                    Pranto Rodrix
+                </span>
+            </div>
+
+            <div class="col-auto d-flex align-items-center gap-2">
+                
+                <button type="button" class="btn btn-primary btn-lg rounded-pill" id="processButton" 
+                        style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                    <i class="bi bi-magic"></i> Extract
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-lg rounded-pill" id="clearButton" 
+                        style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                    <i class="bi bi-x-lg"></i> Clear
+                </button>
+
+                <a href="index.html"
+                    onclick="window.open(this.href, '_self'); return false;"
+                    style="
+                    display: inline-flex; align-items: center; text-decoration: none;
+                    padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
+                    white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
+                    background: rgba(255, 255, 255, 0.15);
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    text-shadow: 0 0 2px rgba(0,0,0,0.8);
+                " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'"
+                    onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
+                    
+                    <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span>
+                    Main Page
+                </a>
+
+                <!-- Theme Toggle Button moved inside -->
+                <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-1" style="font-size: 13px;">
+                    <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
+                    <span id="theme-text" class="fw-medium"></span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 10px;">
-        
-        <button type="button" class="btn btn-primary btn-lg rounded-pill" id="processButton" 
-                style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
-            <i class="bi bi-magic"></i> Extract
-        </button>
-        <button type="button" class="btn btn-outline-danger btn-lg rounded-pill" id="clearButton" 
-                style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
-            <i class="bi bi-x-lg"></i> Clear
-        </button>
-
-        <a href="index.html"
-            onclick="window.open(this.href, '_self'); return false;"
-            style="
-            /* Button Styles */
-            display: inline-flex; align-items: center; text-decoration: none;
-            padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
-            white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
-            
-            /* Glass Effect */
-            background: rgba(255, 255, 255, 0.15);
-            /* Color shada kora holo jate Dark Theme e dekha jay */
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            /* Text shadow kalo kora holo jate Light Theme e shada lekha shpoto hoy */
-            text-shadow: 0 0 2px rgba(0,0,0,0.8);
-        " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'"
-            onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
-            
-            <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span>
-            Main Page
-        </a>
-    </div>
-</div>
-
-    <div id="theme-toggle-container" class="" style="margin-top:2px;">
-        <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-2">
-            <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
-            <span id="theme-text" class="fw-medium">Light</span>
-        </button>
-    </div>
 
     <!-- ======== notes-content.txt থেকে আনা Tool Content ======== -->
     <!-- Glass UI এর সাথে মানানসই করার জন্য container-fluid ব্যবহার করা হলো -->
     <div id="dashboard-page" class="container-fluid eob-content my-3 px-4">
 
-<!-- 4-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
-        <div class="row g-3" style="margin-top:60px">
+        <!-- NEW: 3-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
+        <div class="row g-3" style="margin-top:1rem"> <!-- Reduced margin-top -->
             
             <!-- Column 1: Input Area -->
-            <div class="col-4">
+            <div class="col-lg-4">
                 <!-- Section 1: Input Card (Glass UI) -->
-                <div class="card p-4 h-100 d-flex flex-column">
-                    <!-- EOB Input -->
+                <div class="card p-3 h-100 d-flex flex-column">
+                    <!-- Updated EOB Input -->
                     <div class="mb-3 flex-grow-1 d-flex flex-column">
-                        <label for="eobTextInput" class="form-label fw-bold">EOB:</label>
-                        <textarea class="form-control h-100" id="eobTextInput" 
-                                  placeholder="Paste Your
-EOB Details Here"></textarea>
+                        <!--<label for="eobUpdatedInput" class="form-label fw-bold">Updated EOB:</label>-->
+                        <textarea class="form-control h-100" id="eobUpdatedInput" 
+                                  placeholder="Update EOB."></textarea>
+                    </div>
+                    <!-- Old EOB Input -->
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <!--<label for="eobOldInput" class="form-label fw-bold">Old EOB:</label>-->
+                        <textarea class="form-control h-100" id="eobOldInput" 
+                                  placeholder="1st/Old EOB"></textarea>
                     </div>
                 </div>
             </div>
             
             <!-- Column 2: EOB Output Area 1 -->
-            <div class="col-4">
+            <div class="col-lg-4">
                  <!-- EOB Output Card 1 (Glass UI) -->
-                <div class="card p-4 h-100">
-                    <h5 class="text-success fw-bold">EOB Results</h5>
-                    <!--<hr style="border-color: var(--bs-border-color);">-->
-                    <div id="eob-results-list-1" class="result-list">
-                        <p><strong>Ticket #:</strong> <span id="eob_Ticket" class="output-value text-dark">--</span></p>
-                        <p><strong>Patient:</strong> <span id="eob_Patient" class="output-value text-dark">--</span></p>
-                        <p><strong>Claim #:</strong> <span id="eob_Claim" class="output-value text-dark">--</span></p>
-                        <p><strong>Billed:</strong> <span id="eob_Billed" class="output-value">--</span></p>
+                <div class="card p-3 h-100 eob-results-card">
+                    <div class="card-body">
+                        <!--<h5 class="text-success fw-bold">EOB Result 1</h5>-->
+                        <!--<hr style="border-color: var(--bs-border-color);">-->
+                        <div id="eob-results-list-1" class="eob-result-container">
+                            <!-- JS will populate this -->
+                        </div>
+                        <div id="eob-errors-1" class="error-message"></div>
                     </div>
                 </div>
             </div>
             
             <!-- Column 3: EOB Output Area 2 -->
-            <div class="col-4">
+            <div class="col-lg-4">
                  <!-- EOB Output Card 2 (Glass UI) -->
-                <div class="card p-4 h-100">
-                     <!--<h5 class="text-success fw-bold">EOB Results (2)</h5>-->
-                     <!--<hr style="border-color: var(--bs-border-color);">-->
-                    <div id="eob-results-list-2" class="result-list">
-                        <p><strong>Paid:</strong> <span id="eob_Paid" class="output-value">--</span></p>
-                        <p><strong>PT Resp:</strong> <span id="eob_PtResp_Sum" class="output-value">--</span></p>
-                        <p><strong>Facility:</strong> <span id="eob_Provider" class="output-value text-dark">--</span></p>
-                        <p><strong>Addl. Paid:</strong> <span id="eob_AddlPaid" class="output-value">--</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Column 4: Buttons -->
-            <div class="col-1">
-              
-            </div>
-            <div class="col-2">
-                <!-- Button Card (Glass UI) -->
-                <div class=" p-1 h-100 d-flex flex-column justify-content-center">
-                     <div class="d-grid gap-4">
-                        <!--<button type="button" class="btn btn-primary btn-lg w-100 rounded-pill" id="processButton">-->
-                        <!--    <i class="bi bi-magic"></i> Extract-->
-                        <!--</button>-->
-                        <!--<button type="button" class="btn btn-outline-danger btn-lg w-100 rounded-pill" id="clearButton">-->
-                        <!--    <i class="bi bi-x-lg"></i> Clear-->
-                        <!--</button>-->
+                <div class="card p-3 h-100 eob-results-card">
+                    <div class="card-body">
+                        <!--<h5 class="text-success fw-bold">EOB Result 2</h5>-->
+                        <!--<hr style="border-color: var(--bs-border-color);">-->
+                        <div id="eob-results-list-2" class="eob-result-container">
+                            <!-- JS will populate this -->
+                        </div>
+                        <div id="eob-errors-2" class="error-message"></div>
                     </div>
                 </div>
             </div>
         </div>
         
+        <!-- Hidden row for global calculation results (for matching logic) -->
+        <div class="d-none">
+            <span id="eob_Ticket"></span>
+            <span id="eob_AddlPaid"></span>
+        </div>
+        
         <!-- IDR Section Rows (Glass UI) -->
-        <div class="row g-3 mt-3">
-            <!-- IDR Input Accordion (Glass UI) -->
+        <div class="row g-3 mt-2"> <!-- Reduced mt-3 to mt-2 -->
+            
+            <!-- NEW: Single IDR Input Card -->
             <div class="col-12">
-                <div class="accordion" id="idrInputAccordion">
-                    <!-- IDR 2024+ -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingIdr2024">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIdr2024" aria-expanded="true" aria-controls="collapseIdr2024">
-                                <span class="h5 mb-0 fw-bold">IDR Inputs (2024+)</span>
-                            </button>
-                        </h2>
-                        <div id="collapseIdr2024" class="accordion-collapse collapse show" aria-labelledby="headingIdr2024">
-                            <div class="accordion-body">
-                                 <div class="row g-3">
-                                     <div class="col-3">
-                                        <label for="idrTextInput1" class="form-label fw-bold">IDR Text 1:</label>
-                                        <textarea class="form-control idr-textarea" id="idrTextInput1" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idrTextInput2" class="form-label fw-bold">IDR Text 2:</label>
-                                        <textarea class="form-control idr-textarea" id="idrTextInput2" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idrTextInput3" class="form-label fw-bold">IDR Text 3:</label>
-                                        <textarea class="form-control idr-textarea" id="idrTextInput3" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idrTextInput4" class="form-label fw-bold">IDR Text 4:</label>
-                                        <textarea class="form-control idr-textarea" id="idrTextInput4" rows="3"></textarea>
-                                    </div>
-                                 </div>
+                <div class="card">
+                    <div class="card-body p-3"> <!-- Reduced padding -->
+                        <h5 class="text-primary fw-bold mb-2">IDR Inputs</h5>
+                        <div class="row g-2"> <!-- Reduced g-3 to g-2 -->
+                            <!-- Column 1: 2024+ -->
+                            <div class="col-md-6">
+                                <!--<h6 class="text-muted">2024+</h6>-->
+                                <div class="row">
+                                <div class="col-md-6">
+                                  <!--<label for="idrTextInput1" class="form-label fw-bold mb-1">IDR Text 1:</label>-->
+                                  <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ 1"></textarea>
+                                  <!--<label for="idrTextInput2" class="form-label fw-bold mt-2 mb-1">IDR Text 2:</label>-->
+                                  <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ 2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                  <!--<label for="idrTextInput3" class="form-label fw-bold mt-2 mb-1">IDR Text 3:</label>-->
+                                  <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ 3"></textarea>
+                                  <!--<label for="idrTextInput4" class="form-label fw-bold mt-2 mb-1">IDR Text 4:</label>-->
+                                  <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="2024+ 4"></textarea>
+                                </div>
+                                </div>
                             </div>
+                            <!-- Column 2: 2022-23 -->
+                            <div class="col-md-6">
+                                <!--<h6 class="text-muted">2022-23</h6>-->
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <!--<label for="idr2022TextInput1" class="form-label fw-bold mb-1">IDR Text 1 (22-23):</label>-->
+                                      <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 1"></textarea>
+                                      <!--<label for="idr2022TextInput2" class="form-label fw-bold mt-2 mb-1">IDR Text 2 (22-23):</label>-->
+                                      <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 2"></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <!--<label for="idr2022TextInput3" class="form-label fw-bold mt-2 mb-1">IDR Text 3 (22-23):</label>-->
+                                <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 3"></textarea>
+                                      <!--<label for="idr2022TextInput4" class="form-label fw-bold mt-2 mb-1">IDR Text 4 (22-23):</label>-->
+                                      <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23 4"></textarea>
                         </div>
+                      </div>
                     </div>
-                    <!-- IDR 2022-23 -->
-                    <div class="accordion-item mt-3"> <!-- গ্যাপের জন্য mt-3 যোগ করা হলো -->
-                        <h2 class="accordion-header" id="headingIdr2022">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIdr2022" aria-expanded="false" aria-controls="collapseIdr2022">
-                                <span class="h5 mb-0 fw-bold">IDR Inputs (2022-23)</span>
-                            </button>
-                        </h2>
-                        <div id="collapseIdr2022" class="accordion-collapse collapse" aria-labelledby="headingIdr2022">
-                            <div class="accordion-body">
-                                 <div class="row g-3">
-                                     <div class="col-3">
-                                        <label for="idr2022TextInput1" class="form-label fw-bold">IDR Text 1 (22-23):</label>
-                                        <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idr2022TextInput2" class="form-label fw-bold">IDR Text 2 (22-23):</label>
-                                        <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idr2022TextInput3" class="form-label fw-bold">IDR Text 3 (22-23):</label>
-                                        <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="3"></textarea>
-                                    </div>
-                                     <div class="col-3">
-                                        <label for="idr2022TextInput4" class="form-label fw-bold">IDR Text 4 (22-23):</label>
-                                        <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="3"></textarea>
-                                    </div>
-                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
             
             <!-- IDR Output Card (Glass UI) -->
-            <div class="col-12">
+            <div class="col-12 mt-2"> <!-- Added mt-2 for spacing -->
                  <div class="card p-4">
                      <h5 class="text-primary fw-bold">IDR Results</h5>
                      <hr style="border-color: var(--bs-border-color);">
@@ -709,6 +728,7 @@ EOB Details Here"></textarea>
                             </tbody>
                         </table>
                     </div>
+                    <div id="idr-errors" class="error-message"></div>
                  </div>
             </div>
 
@@ -943,6 +963,9 @@ EOB Details Here"></textarea>
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
             updateAnimatedBackground(); // ইনিশিয়াল ব্যাকগ্রাউন্ড সেট
+            
+            // Set footer year
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
         });
 
         themeToggle.addEventListener('click', () => {
@@ -990,6 +1013,12 @@ EOB Details Here"></textarea>
 
         // --- notes-content.txt থেকে আনা Data Extraction Logic ---
         
+        // --- Global Variables ---
+        let globalEobAdditionalPayment = 0;
+        let globalEobTicket = 'Not Found';
+        let globalEobData = { updated: null, old: null };
+
+        // --- Utility Functions ---
         function formatCurrency(num) {
             if (isNaN(num)) {
                 num = 0;
@@ -1041,12 +1070,28 @@ EOB Details Here"></textarea>
             
             return `${mm}/${dd}/${yy}`;
         }
-
-        // --- Get EOB Cell Elements ---
-        const eobTicketCell = document.getElementById('eob_Ticket');
-        const eobAddlPaidCell = document.getElementById('eob_AddlPaid');
         
-        // --- Note Generation Elements ---
+        function copyToClipboard(input, confirmationId) {
+            input.select();
+            document.execCommand('copy');
+            
+            const confirmationEl = document.getElementById(confirmationId);
+            if (confirmationEl) {
+                confirmationEl.style.display = 'block';
+                setTimeout(() => { confirmationEl.style.display = 'none'; }, 2000);
+            }
+        }
+
+        // --- Get EOB Elements ---
+        const eobUpdatedInput = document.getElementById('eobUpdatedInput');
+        const eobOldInput = document.getElementById('eobOldInput');
+        const eobResults1Container = document.getElementById('eob-results-list-1');
+        const eobResults2Container = document.getElementById('eob-results-list-2');
+        const eobErrors1 = document.getElementById('eob-errors-1');
+        const eobErrors2 = document.getElementById('eob-errors-2');
+        const idrErrors = document.getElementById('idr-errors');
+
+        // --- Get Note Generation Elements ---
         const noteNameInput = document.getElementById('note_Name');
         const noteInitialInput = document.getElementById('note_Initial');
         const noteTextInput = document.getElementById('note_Text');
@@ -1059,7 +1104,7 @@ EOB Details Here"></textarea>
         const noteWarningNoEOB = document.getElementById('note_Warning_NoEOB'); 
         const noteWarningClaimMismatch = document.getElementById('note_Warning_ClaimMismatch'); 
         
-        // --- Mail Generation Elements ---
+        // --- Get Mail Generation Elements ---
         const mailNameInput = document.getElementById('note_Mail_Name');
         const mailInitialInput = document.getElementById('note_Mail_Initial'); 
         const mailToInput = document.getElementById('note_Mail_To');
@@ -1074,9 +1119,10 @@ EOB Details Here"></textarea>
         const copyConfirmationMail = document.getElementById('copy_Confirmation_Mail'); 
         const emailTemplateText = document.getElementById('email_Template_Text');
 
+        // --- Default Email Template ---
         const defaultEmailTemplate = `Dear BCBS,
 
-We are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).
+We are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surpresas Act (NSA).
 On [DETERMINATION_DATE], [MEDIATOR_NAME] —the certified IDR entity—issued a final, legally binding determination in favor of , [PROVIDER_NAME] regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of [OON_RATE] for service code [CPT_CODE]. as offered by [PROVIDER_NAME] as the appropriate rate for this claim.
 According to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.
 
@@ -1088,7 +1134,7 @@ Less Initial Payment: [INITIAL_PAYMENT]
 ------------------------
 Total Outstanding Balance: [OUTSTANDING_BALANCE]
 
-This request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance
+This request is made pursuant to the No Surpresas Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance
 If you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.
 
 As per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.
@@ -1103,21 +1149,27 @@ Regards
         
         emailTemplateText.value = defaultEmailTemplate;
 
+        // --- Clear Functions ---
         
         function clearEobResults() {
-             const eobCells = document.querySelectorAll('#eob-results-list-1 .output-value, #eob-results-list-2 .output-value');
-            eobCells.forEach(cell => {
-                cell.textContent = '--';
-                cell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid'); 
-            });
-            document.getElementById('eob_PtResp_Sum').textContent = '--';
+             eobResults1Container.innerHTML = '';
+             eobResults2Container.innerHTML = '';
+             eobErrors1.textContent = '';
+             eobErrors2.textContent = '';
+             idrErrors.textContent = '';
+             globalEobAdditionalPayment = 0;
+             globalEobTicket = 'Not Found';
+             globalEobData = { updated: null, old: null };
         }
 
         function clearComparisonStyles() {
-            eobTicketCell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
-            eobAddlPaidCell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
+            // Clear EOB Result styles
+            document.querySelectorAll('.eob-result-value').forEach(el => {
+                el.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
+            });
             
-            const idrCells = document.querySelectorAll('#idrDataTableBody td');
+            // Clear IDR Table styles
+            const idrCells = document.querySelectorAll('#idrDataTableBody td, #idrDataTableBody th');
             idrCells.forEach(cell => {
                 cell.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
                 const input = cell.querySelector('input');
@@ -1129,7 +1181,8 @@ Regards
         }
         
         document.getElementById('clearButton').addEventListener('click', function() {
-            document.getElementById('eobTextInput').value = '';
+            eobUpdatedInput.value = '';
+            eobOldInput.value = '';
             document.getElementById('idrTextInput1').value = '';
             document.getElementById('idrTextInput2').value = '';
             document.getElementById('idrTextInput3').value = '';
@@ -1140,16 +1193,11 @@ Regards
             document.getElementById('idr2022TextInput4').value = ''; 
 
             clearEobResults();
-            
             document.getElementById('idrDataTableBody').innerHTML = ''; 
             
             noteClearBtn.click();
             clearComparisonStyles();
             mailClearBtn.click();
-        });
-        
-        noteTextInput.addEventListener('click', function() {
-            copyToClipboard(noteTextInput, 'copy_Confirmation_Note');
         });
         
         noteClearBtn.addEventListener('click', function() {
@@ -1158,10 +1206,6 @@ Regards
              finalReviewAdjustments.style.display = 'none'; 
              noteWarningNoEOB.style.display = 'none'; 
              noteWarningClaimMismatch.style.display = 'none'; 
-        });
-        
-        noteGenerateBtn.addEventListener('click', function() {
-            validateAndGenerateNote();
         });
         
         mailClearBtn.addEventListener('click', function() {
@@ -1174,12 +1218,20 @@ Regards
             mailDetermDateInput.value = ''; 
             mailTypeInput.classList.remove('is-invalid');
             mailDetermDateInput.classList.remove('is-invalid');
+            mailTextInput.classList.remove('bg-match', 'text-success');
         });
+
+        // --- Event Listeners ---
         
+        noteTextInput.addEventListener('click', function() {
+            copyToClipboard(noteTextInput, 'copy_Confirmation_Note');
+        });
+        noteGenerateBtn.addEventListener('click', function() {
+            validateAndGenerateNote();
+        });
         mailGenerateBtn.addEventListener('click', function() {
             generateMail();
         });
-        
         mailNoteTextInput.addEventListener('click', function() {
              copyToClipboard(mailNoteTextInput, 'copy_Confirmation_Mail');
         });
@@ -1189,67 +1241,137 @@ Regards
         mailSubjectInput.addEventListener('click', function() {
              copyToClipboard(mailSubjectInput, 'copy_Confirmation_Mail');
         });
+        document.getElementById('processButton').addEventListener('click', processAllData);
 
-        function copyToClipboard(input, confirmationId) {
-            input.select();
-            document.execCommand('copy');
-            
-            const confirmationEl = document.getElementById(confirmationId);
-            if (confirmationEl) {
-                confirmationEl.style.display = 'block';
-                setTimeout(() => { confirmationEl.style.display = 'none'; }, 2000);
+        // --- EOB Parsing and Display Logic ---
+
+        function parseEOB(eobText) {
+            if (!eobText || eobText.trim() === "") {
+                return null;
             }
+            
+            const ticketNoMatch = eobText.match(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i); 
+            const ptNameMatch = eobText.match(/(Patient|Pt Name)(?! Information)\s*:?[\s\r\n]+([^\r\n]+)/i); 
+            const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
+            const billingProviderMatch = eobText.match(/(Billing Provider|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
+            
+            const billedStr = extractValueSkippingLines(eobText, /Billed( Amount)?\s*:?/i) || '$0.00';
+            const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; 
+            const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Copay|Deductible|Responsibility)\s*:?/i) || '$0.00';
+            const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance|Co-insurance)\s*:?/i) || '$0.00';
+            const addlPaidStr = extractValueSkippingLines(eobText, /Additional Paid( Amount)?\s*:?/i) || '$0.00';
+
+            const coinsuranceAmt = parseCurrency(coinsuranceStr);
+            const ptRespAmt = parseCurrency(ptRespStr); 
+
+            return {
+                ticketNo: ticketNoMatch ? ticketNoMatch[2].trim() : 'Not Found',
+                ptName: ptNameMatch ? ptNameMatch[2].trim() : 'Not Found',
+                claimNo: claimNoMatch ? claimNoMatch[2].trim() : 'Not Found',
+                provider: billingProviderMatch ? billingProviderMatch[2].trim() : 'Not Found',
+                billedAmt: parseCurrency(billedStr),
+                paidAmt: parseCurrency(paidStr),
+                ptRespSum: ptRespAmt + coinsuranceAmt,
+                addlPaidAmt: parseCurrency(addlPaidStr)
+            };
         }
 
-        document.getElementById('processButton').addEventListener('click', function() {
-            
-            clearComparisonStyles();
-            noteClearBtn.click(); 
-            mailClearBtn.click(); 
+        function displayEOBResults(updated, old) {
+            eobResults1Container.innerHTML = '';
+            eobResults2Container.innerHTML = '';
+            eobErrors1.textContent = '';
+            globalEobAdditionalPayment = 0;
+            globalEobTicket = 'Not Found';
 
-            // --- EOB Tool Logic ---
-            const eobText = document.getElementById('eobTextInput').value;
-            let ticketNo = 'Not Found', addlPaidAmt = 0; 
-
-            if (eobText.trim() === "") {
-                clearEobResults(); 
-            } else {
-                const ticketNoMatch = eobText.match(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i); 
-                const ptNameMatch = eobText.match(/(Patient|Pt Name)(?! Information)\s*:?[\s\r\n]+([^\r\n]+)/i); 
-                const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
-                const billingProviderMatch = eobText.match(/(Billing Provider|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
-                
-                const billedStr = extractValueSkippingLines(eobText, /Billed( Amount)?\s*:?/i) || '$0.00';
-                const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; 
-                const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Copay|Deductible|Responsibility)\s*:?/i) || '$0.00';
-                const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance|Co-insurance)\s*:?/i) || '$0.00';
-                const addlPaidStr = extractValueSkippingLines(eobText, /Additional Paid( Amount)?\s*:?/i) || '$0.00';
-
-                ticketNo = ticketNoMatch ? ticketNoMatch[2].trim() : 'Not Found'; 
-                const ptName = ptNameMatch ? ptNameMatch[2].trim() : 'Not Found';
-                const eobClaimNo = claimNoMatch ? claimNoMatch[2].trim() : 'Not Found'; 
-                const billingProvider = billingProviderMatch ? billingProviderMatch[2].trim() : 'Not Found';
-                
-                const billedAmt = parseCurrency(billedStr); 
-                const paidAmt = parseCurrency(paidStr); 
-                const coinsuranceAmt = parseCurrency(coinsuranceStr);
-                const ptRespAmt = parseCurrency(ptRespStr); 
-                addlPaidAmt = parseCurrency(addlPaidStr); 
-
-                eobTicketCell.textContent = ticketNo; 
-                document.getElementById('eob_Patient').textContent = ptName;
-                document.getElementById('eob_Claim').textContent = eobClaimNo;
-                document.getElementById('eob_Billed').textContent = formatCurrency(billedAmt);
-                document.getElementById('eob_Paid').textContent = formatCurrency(paidAmt);
-                
-                const ptRespSum = ptRespAmt + coinsuranceAmt;
-                document.getElementById('eob_PtResp_Sum').textContent = formatCurrency(ptRespSum);
-
-                document.getElementById('eob_Provider').textContent = billingProvider;
-                eobAddlPaidCell.textContent = formatCurrency(addlPaidAmt);
+            if (!updated && !old) {
+                eobErrors1.textContent = 'EOB not found.';
+                return;
             }
+
+            // --- Calculate Additional Payment ---
+            let addlPayResult = 0;
+            if (updated && old) {
+                addlPayResult = updated.paidAmt - old.paidAmt;
+            } else if (updated) {
+                addlPayResult = updated.addlPaidAmt || updated.paidAmt; // Use Addl. first, fallback to Paid
+            } else if (old) {
+                addlPayResult = old.addlPaidAmt || old.paidAmt;
+            }
+            globalEobAdditionalPayment = addlPayResult;
             
-            // --- IDR Tool Logic ---
+            // --- Set Global Ticket ---
+            globalEobTicket = updated?.ticketNo || old?.ticketNo || 'Not Found';
+
+            // --- Build Result 1: Ticket, Patient, Claim, Addl. Pay ---
+            let html1 = '';
+            if (updated && old) {
+                html1 = `
+                    <div class="eob-result-col">
+                        <span class="header">Updated</span>
+                        <span class="eob-result-value" id="eob_up_Ticket">${updated.ticketNo}</span>
+                        <span class="eob-result-value" id="eob_up_Patient">${updated.ptName}</span>
+                        <span class="eob-result-value" id="eob_up_Claim">${updated.claimNo}</span>
+                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Updated Paid - Old Paid">${formatCurrency(addlPayResult)}</span>
+                    </div>
+                    <div class="eob-result-col">
+                        <span class="header">Old</span>
+                        <span class="eob-result-value" id="eob_old_Ticket">${old.ticketNo}</span>
+                        <span class="eob-result-value" id="eob_old_Patient">${old.ptName}</span>
+                        <span class="eob-result-value" id="eob_old_Claim">${old.claimNo}</span>
+                        <span class="eob-result-value currency" id="eob_old_AddlPay" title="Old Addl. Paid">${formatCurrency(old.addlPaidAmt)}</span>
+                    </div>
+                `;
+            } else {
+                const data = updated || old;
+                html1 = `
+                    <div class="eob-result-col single">
+                        <span class="header">${updated ? 'Updated' : 'Old'}</span>
+                        <span class="eob-result-value" id="eob_single_Ticket">${data.ticketNo}</span>
+                        <span class="eob-result-value" id="eob_single_Patient">${data.ptName}</span>
+                        <span class="eob-result-value" id="eob_single_Claim">${data.claimNo}</span>
+                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Single EOB Addl. Paid">${formatCurrency(addlPayResult)}</span>
+                    </div>
+                `;
+            }
+            eobResults1Container.innerHTML = html1;
+
+            // --- Build Result 2: Billed, Paid, PT Resp, Facility ---
+            let html2 = '';
+            if (updated && old) {
+                html2 = `
+                    <div class="eob-result-col">
+                        <span class="header">Updated</span>
+                        <span class="eob-result-value currency" id="eob_up_Billed">${formatCurrency(updated.billedAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_up_Paid">${formatCurrency(updated.paidAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_up_PtResp">${formatCurrency(updated.ptRespSum)}</span>
+                        <span class="eob-result-value facility-truncate" id="eob_up_Facility" title="${updated.provider}">${updated.provider}</span>
+                    </div>
+                    <div class="eob-result-col">
+                        <span class="header">Old</span>
+                        <span class="eob-result-value currency" id="eob_old_Billed">${formatCurrency(old.billedAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_old_Paid">${formatCurrency(old.paidAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_old_PtResp">${formatCurrency(old.ptRespSum)}</span>
+                        <span class="eob-result-value facility-truncate" id="eob_old_Facility" title="${old.provider}">${old.provider}</span>
+                    </div>
+                `;
+            } else {
+                const data = updated || old;
+                html2 = `
+                    <div class="eob-result-col single">
+                        <span class="header">${updated ? 'Updated' : 'Old'}</span>
+                        <span class="eob-result-value currency" id="eob_single_Billed">${formatCurrency(data.billedAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_single_Paid">${formatCurrency(data.paidAmt)}</span>
+                        <span class="eob-result-value currency" id="eob_single_PtResp">${formatCurrency(data.ptRespSum)}</span>
+                        <span class="eob-result-value facility-truncate" id="eob_single_Facility" title="${data.provider}">${data.provider}</span>
+                    </div>
+                `;
+            }
+            eobResults2Container.innerHTML = html2;
+        }
+
+        // --- IDR Parsing ---
+        
+        function parseAndDisplayIDR() {
             const idrTextInputs = [
                 { year: '2024+', text: document.getElementById('idrTextInput1').value, map: '2024+' },
                 { year: '2024+', text: document.getElementById('idrTextInput2').value, map: '2024+' },
@@ -1290,7 +1412,6 @@ Regards
             const idrTableBody = document.getElementById('idrDataTableBody');
             idrTableBody.innerHTML = ''; 
             
-            let allIdrAddlPmts = []; 
             let resultCounter = 1;
             let firstIdrDetermDate = null; 
 
@@ -1327,6 +1448,7 @@ Regards
 
                     let isAmount = field === 'Initial Pmt' || field === 'Addl. Pmt' || field === 'Fee Refund';
                     let amountClass = isAmount ? 'output-value-amount' : '';
+                    let mediatorClass = (field === 'Mediator') ? 'truncate-mediator' : '';
                     
                     if (isAmount && displayValue !== '--' && displayValue !== 'Not Found') {
                          displayValue = formatCurrency(parseCurrency(displayValue));
@@ -1352,7 +1474,7 @@ Regards
                         let isDisabled = (winLoseValue === 'lose'); 
                         let isInvalid = (winLoseValue === 'win'); 
                         
-                        if (winLoseValue === 'close') {
+                        if (winLoseValue === 'close' || winLoseValue === 'closed') { // Handle 'closed'
                             isDisabled = false;
                             isInvalid = false;
                         }
@@ -1367,7 +1489,7 @@ Regards
                         rowResult[field] = isDisabled ? 'N/A' : ''; 
                     } else {
                         // Standard cell
-                        cellHtml = `<td id="${cellId}" class="${stickyClass} ${amountClass}">${displayValue}</td>`;
+                        cellHtml = `<td id="${cellId}" class="${stickyClass} ${amountClass} ${mediatorClass}" title="${(field === 'Mediator') ? displayValue : ''}">${displayValue}</td>`;
                     }
                     
                     rowHtml += cellHtml;
@@ -1376,38 +1498,146 @@ Regards
                 rowHtml += '</tr>';
                 idrTableBody.innerHTML += rowHtml;
                 
-                allIdrAddlPmts.push(parseCurrency(rowResult["Addl. Pmt"]));
                 resultCounter++; 
             });
-            
-            // --- Comparison Logic ---
-            const allIdrTicketCells = document.querySelectorAll('#idrDataTableBody td:nth-child(2)'); 
-            const allIdrAddlPmtCells = document.querySelectorAll('#idrDataTableBody td:nth-child(10)'); 
-            
-            let eobTicketMatched = false;
-            allIdrTicketCells.forEach(cell => {
-                if (ticketNo !== 'Not Found' && cell.textContent !== '--') {
-                     if (ticketNo === cell.textContent) {
-                        cell.classList.add('bg-match');
-                        eobTicketMatched = true;
-                    } else {
-                        cell.classList.add('bg-mismatch');
-                    }
-                }
-            });
-            
-            if (eobText.trim().length > 0 && allIdrTicketCells.length > 0) {
-                if (eobTicketMatched) {
-                    eobTicketCell.classList.add('bg-match');
-                } else {
-                    eobTicketCell.classList.add('bg-mismatch');
-                }
-            }
             
             if (firstIdrDetermDate) {
                 mailDetermDateInput.value = firstIdrDetermDate;
             }
-        });
+        }
+        
+        // --- Matching Logic ---
+
+        function performMatching() {
+            // 1. Ticket Number Matching
+            const allIdrTicketCells = document.querySelectorAll('#idrDataTableBody td:nth-child(2)');
+            let eobTicketMatched = false;
+            
+            if (globalEobTicket !== 'Not Found' && allIdrTicketCells.length > 0) {
+                allIdrTicketCells.forEach(cell => {
+                    if (cell.textContent !== '--') {
+                         if (globalEobTicket === cell.textContent) {
+                            cell.classList.add('bg-match');
+                            eobTicketMatched = true;
+                        } else {
+                            cell.classList.add('bg-mismatch');
+                        }
+                    }
+                });
+            }
+            
+            // Highlight EOB Ticket field
+            const eobTicketEl = document.getElementById('eob_up_Ticket') || document.getElementById('eob_single_Ticket');
+            if (eobTicketEl) {
+                if(allIdrTicketCells.length > 0) { // Only style if there are IDRs to compare
+                   eobTicketEl.classList.add(eobTicketMatched ? 'bg-match' : 'bg-mismatch');
+                }
+            } else if (globalEobTicket === 'Not Found' && allIdrTicketCells.length > 0) {
+                eobErrors1.textContent = 'EOB Ticket # not found for comparison.';
+            }
+
+            // 2. Additional Payment Matching
+            const allIdrAddlPmtCells = document.querySelectorAll('#idrDataTableBody td:nth-child(10)');
+            if (allIdrAddlPmtCells.length === 0) {
+                return; // No IDRs to match
+            }
+
+            const idrAmounts = Array.from(allIdrAddlPmtCells).map(cell => ({
+                amount: parseCurrency(cell.textContent),
+                cell: cell
+            }));
+
+            const eobAddlPayEl = document.getElementById('eob_calc_AddlPay');
+            if (globalEobAdditionalPayment === 0) {
+                idrErrors.textContent = 'Calculated EOB Additional Payment is $0.00. Cannot perform match.';
+                return;
+            }
+
+            let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
+
+            if (bestMatch.indices.length > 0) {
+                // Found a match
+                idrAmounts.forEach((item, index) => {
+                    if (bestMatch.indices.includes(index)) {
+                        item.cell.classList.add('bg-match');
+                    } else {
+                        item.cell.classList.add('bg-mismatch');
+                    }
+                });
+                if (eobAddlPayEl) eobAddlPayEl.classList.add('bg-match');
+                idrErrors.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
+                idrErrors.classList.add('text-success');
+                idrErrors.classList.remove('text-danger');
+            } else {
+                // No match
+                idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
+                if (eobAddlPayEl) eobAddlPayEl.classList.add('bg-mismatch');
+                idrErrors.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
+                idrErrors.classList.add('text-danger');
+                idrErrors.classList.remove('text-success');
+            }
+        }
+
+        /**
+         * Finds a subset of IDR amounts that sums exactly to the target.
+         * @param {number} target - The EOB additional payment.
+         * @param {Array<Object>} items - Array of {amount, cell} objects.
+         * @returns {Object} - { indices: Array<number>, sum: number }
+         */
+        function findMatchingSubset(target, items) {
+            let n = items.length;
+            let bestMatch = { indices: [], sum: 0 };
+            
+            // Iterate through all possible subsets (2^n)
+            for (let i = 0; i < (1 << n); i++) {
+                let currentSum = 0;
+                let currentIndices = [];
+                
+                for (let j = 0; j < n; j++) {
+                    // Check if j-th bit is set
+                    if ((i >> j) & 1) {
+                        currentSum += items[j].amount;
+                        currentIndices.push(j);
+                    }
+                }
+                
+                // Check for exact match
+                if (Math.abs(currentSum - target) < 0.001) { // Use epsilon for float comparison
+                    return { indices: currentIndices, sum: currentSum };
+                }
+            }
+            
+            // No exact match found
+            return bestMatch;
+        }
+
+        // --- Main Process Function ---
+
+        function processAllData() {
+            // 1. Clear previous results and styles
+            clearComparisonStyles();
+            noteClearBtn.click(); 
+            mailClearBtn.click(); 
+            eobErrors1.textContent = '';
+            eobErrors2.textContent = '';
+            idrErrors.textContent = '';
+
+            // 2. Process EOBs
+            const eobUpdatedText = eobUpdatedInput.value;
+            const eobOldText = eobOldInput.value;
+            
+            globalEobData.updated = parseEOB(eobUpdatedText);
+            globalEobData.old = parseEOB(eobOldText);
+
+            displayEOBResults(globalEobData.updated, globalEobData.old);
+            
+            // 3. Process IDR
+            parseAndDisplayIDR();
+
+            // 4. Perform Matching
+            performMatching();
+        }
+
         
         // --- Note Generation & Validation Functions ---
 
@@ -1453,12 +1683,12 @@ Regards
                 rowData.winLoseStatus = currentWLStatus;
 
                 if (refundInput) {
+                    rowData.refundStatus = refundInput.value;
                     if (currentWLStatus === 'win' && refundInput.value.trim() === '') {
                         validationPassed = false;
                         refundInput.classList.add('is-invalid');
                         refundInput.closest('td').classList.add('bg-mismatch');
                     }
-                    rowData.refundStatus = refundInput.value;
                 }
                 
                 activeIdrRows.push(rowData);
@@ -1475,41 +1705,56 @@ Regards
                 noteWarningClaimMismatch.style.display = 'block';
             }
             
-            let initial = "IDR FOLLOW UP"; 
-            let allReceived = activeIdrRows.length > 0;
-            
+            // --- Determine Initial ---
+            let initial = "IDR FOLLOW UP"; // Default
+            let allTasksDone = activeIdrRows.length > 0;
+            let closedAndEmptyRefund = false;
+
             activeIdrRows.forEach(row => {
-                if (row.additionalStatus.toLowerCase() !== 'received') allReceived = false;
-                
-                if (row.winLoseStatus === 'win' && row.refundStatus.toLowerCase() !== 'received') {
-                    allReceived = false;
-                }
-                
-                if (row.winLoseStatus === 'close' && row.refundStatus.toLowerCase() === 'waiting') {
-                    allReceived = false; 
+                const wl = row.winLoseStatus;
+                const ad = row.additionalStatus.toLowerCase();
+                const rf = row.refundStatus.toLowerCase();
+
+                if (wl === 'win') {
+                    if (ad !== 'received' || rf !== 'received') allTasksDone = false;
+                } else if (wl === 'lose') {
+                    if (ad !== 'received') allTasksDone = false; // Still check addl even on lose? Assuming yes.
+                } else if (wl === 'closed' || wl === 'close') {
+                    if (rf === 'waiting') allTasksDone = false;
+                    if (rf === '') closedAndEmptyRefund = true;
+                } else {
+                    // Any other status (e.g., pending)
+                    allTasksDone = false;
                 }
             });
 
-            if (allReceived) {
+            if (allTasksDone) {
                 initial = "FINAL REVIEW";
-            } else if (activeIdrRows.length === 1) {
+            }
+            // Check for single dispute override
+            if (activeIdrRows.length === 1 && initial !== "FINAL REVIEW") {
                 const status = activeIdrRows[0].winLoseStatus;
                 if (status === 'win') initial = 'IDR WIN';
                 else if (status === 'lose') initial = 'IDR LOSE';
-                else initial = 'IDR FOLLOW UP'; 
-            } else if (activeIdrRows.length > 1) {
-                initial = "IDR FOLLOW UP";
+                else if (status === 'closed' || status === 'close') {
+                    if (activeIdrRows[0].refundStatus.toLowerCase() === 'waiting') {
+                        initial = 'IDR FOLLOW UP';
+                    } else {
+                        initial = 'FINAL REVIEW';
+                    }
+                }
             }
             
             noteInitialInput.value = initial;
             
-            const eobText = document.getElementById('eobTextInput').value.trim();
-            const eobExists = eobText.length > 0 && document.getElementById('eob_Claim').textContent !== '--';
+            // --- EOB Data ---
+            const eobExists = globalEobData.updated || globalEobData.old;
+            const eobData = globalEobData.updated || globalEobData.old; // Prefer updated
             
-            const eobClaimNo = document.getElementById('eob_Claim').textContent;
-            const eobBilled = parseCurrency(document.getElementById('eob_Billed').textContent);
-            const eobPaid = parseCurrency(document.getElementById('eob_Paid').textContent);
-            const ptRespSum = parseCurrency(document.getElementById('eob_PtResp_Sum').textContent); 
+            const eobClaimNo = eobData?.claimNo || 'N/A';
+            const eobBilled = eobData?.billedAmt || 0;
+            const eobPaid = eobData?.paidAmt || 0;
+            const ptRespSum = eobData?.ptRespSum || 0; 
 
             const today = getFormattedDate(); 
             const name = noteNameInput.value || 'PRANTO R';
@@ -1524,37 +1769,54 @@ Regards
                 note += `CLAIM: ${claimForNote}. NEGOTIATION AND IDR DONE. `;
             }
 
+            // --- IDR Details ---
             activeIdrRows.forEach(row => {
                 let wlStatus = (row.winLoseStatus === '--' || row.winLoseStatus === 'not found' || row.winLoseStatus === '') ? 'N/A' : row.winLoseStatus.toUpperCase();
                 
-                note += `${row.idrNum}: IDR SUBMITTED ON CPT ${row.cpt} TO MEDIATOR ${row.mediator}. STATUS IS ${wlStatus} WITH ADDITIONAL ${row.addlPmt}. `;
-                
-                if (row.additionalStatus.toLowerCase() === 'received') {
-                    note += "WE RECEIVED ADDITIONAL PAYMENT. ";
-                } else {
-                    note += "WE ARE WAITING FOR ADDITIONAL PAYMENT. ";
-                }
-                
-                if (row.winLoseStatus === 'win') {
+                if (wlStatus === 'CLOSED' || wlStatus === 'CLOSE') {
+                    note += `${row.idrNum}: STATUS IS CLOSED. `;
                     if (row.refundStatus.toLowerCase() === 'received') {
                         note += "WE RECEIVED FEE REFUND. ";
-                    } else {
+                    } else if (row.refundStatus.toLowerCase() === 'waiting') {
                         note += "WE ARE WAITING FOR FEE REFUND. ";
                     }
-                }
-                
-                if (row.winLoseStatus === 'close' && row.refundStatus.toLowerCase() === 'received') {
-                     note += "STATUS CLOSED AND WE RECEIVED FEE REFUND. ";
+                    // If refund is empty, per request, we say nothing about it.
+                } else {
+                    // Standard Win/Lose logic
+                    note += `${row.idrNum}: IDR SUBMITTED ON CPT ${row.cpt} TO MEDIATOR ${row.mediator}. STATUS IS ${wlStatus} WITH ADDITIONAL ${row.addlPmt}. `;
+                    
+                    if (row.additionalStatus.toLowerCase() === 'received') {
+                        note += "WE RECEIVED ADDITIONAL PAYMENT. ";
+                    } else {
+                        note += "WE ARE WAITING FOR ADDITIONAL PAYMENT. ";
+                    }
+                    
+                    if (row.winLoseStatus === 'win') {
+                        if (row.refundStatus.toLowerCase() === 'received') {
+                            note += "WE RECEIVED FEE REFUND. ";
+                        } else {
+                            note += "WE ARE WAITING FOR FEE REFUND. ";
+                        }
+                    }
                 }
             });
             
+            // --- Final Action ---
             if (initial === 'FINAL REVIEW') {
-                note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
-                const adjustWithPtVal = eobBilled - (eobPaid + ptRespSum);
-                const adjustWithoutPtVal = eobBilled - eobPaid;
-                adjustWithPt.textContent = formatCurrency(adjustWithPtVal);
-                adjustWithoutPt.textContent = formatCurrency(adjustWithoutPtVal);
-                finalReviewAdjustments.style.display = 'block';
+                if (closedAndEmptyRefund && activeIdrRows.length > 0) {
+                     note += "STATUS IS CLOSED, NO FURTHER ACTION NEEDED, AND BALANCE TO BE ADJUSTED.";
+                } else {
+                    note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
+                }
+                
+                // Show adjustments only if EOB data exists
+                if(eobExists) {
+                    const adjustWithPtVal = eobBilled - (eobPaid + ptRespSum);
+                    const adjustWithoutPtVal = eobBilled - eobPaid;
+                    adjustWithPt.textContent = formatCurrency(adjustWithPtVal);
+                    adjustWithoutPt.textContent = formatCurrency(adjustWithoutPtVal);
+                    finalReviewAdjustments.style.display = 'block';
+                }
             } else {
                 note += "WAITING TO COMPLETE THE IDR PROCESS BEFORE ADJUSTMENT.";
                 finalReviewAdjustments.style.display = 'none';
@@ -1569,22 +1831,27 @@ Regards
             mailDetermDateInput.classList.remove('is-invalid');
             mailTextInput.value = ''; 
             mailNoteTextInput.value = ''; 
-            
-            const eobText = document.getElementById('eobTextInput').value.trim();
+            mailTextInput.classList.remove('bg-match', 'text-success');
+
+            const eobExists = globalEobData.updated || globalEobData.old;
             const idrRows = document.querySelectorAll('#idrDataTableBody tr');
             
-            if (eobText.length === 0 || document.getElementById('eob_Claim').textContent === '--') {
+            if (!eobExists) {
                 mailTextInput.value = "ERROR: EOB Data is missing. Please paste the EOB text.";
+                mailTextInput.classList.add('is-invalid');
                 return;
             }
             if (idrRows.length === 0) {
                 mailTextInput.value = "ERROR: No IDR results found. Please extract IDR data first.";
+                mailTextInput.classList.add('is-invalid');
                 return;
             }
             if (idrRows.length > 1) {
                 mailTextInput.value = "ERROR: Mail Generation only works for a single IDR result. Please process only one IDR entry.";
+                mailTextInput.classList.add('is-invalid');
                 return;
             }
+            
             const emailType = mailTypeInput.value;
             if (emailType === "") {
                 mailTypeInput.classList.add('is-invalid');
@@ -1600,9 +1867,17 @@ Regards
             }
             
             const idrRow = idrRows[0];
+            const additionalStatus = idrRow.cells[14].textContent; 
+
+            // --- NEW: Check if payment already received ---
+            if (additionalStatus.toLowerCase() === 'received') {
+                mailTextInput.value = "WARNING: Additional Payment is already marked as 'Received'. Email is not required.";
+                mailTextInput.classList.add('bg-match', 'text-success');
+                return;
+            }
             
-            const provider = document.getElementById('eob_Provider').textContent;
-            let eobClaim = document.getElementById('eob_Claim').textContent;
+            const provider = globalEobData.updated?.provider || globalEobData.old?.provider || 'Not Found';
+            let eobClaim = globalEobData.updated?.claimNo || globalEobData.old?.claimNo || 'Not Found';
             
             const idrNum = idrRow.cells[2].textContent;
             const idrClaim = idrRow.cells[3].textContent; 
@@ -1648,6 +1923,7 @@ Regards
             mailNoteTextInput.value = emailNote.trim().toUpperCase();
         }
 
+        // --- Table Input Autocomplete ---
 
         function autocompleteRefund(input) {
             const value = input.value.toLowerCase();
@@ -1693,7 +1969,7 @@ Regards
                     refundInput.value = '';
                     refundCell.classList.remove('bg-mismatch');
                     refundInput.classList.remove('is-invalid');
-                } else if (newStatus === 'close') {
+                } else if (newStatus === 'closed' || newStatus === 'close') {
                     refundInput.disabled = false; 
                     refundCell.classList.remove('bg-mismatch'); 
                     refundInput.classList.remove('is-invalid');
