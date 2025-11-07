@@ -500,6 +500,139 @@
             color: #000;
             box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb-dark), 0.3);
         }
+        
+        /* --- NEW: Sticky Scroll Animation Styles --- */
+        
+        /* Main container for the whole tool */
+        #idr-notes-section {
+            position: relative;
+        }
+
+        /* Top Bar (Buttons) */
+        #top-bar {
+            /* This is already sticky, which is good. */
+            top: 1rem; 
+            z-index: 1030; 
+        }
+
+        /* EOB Input Row */
+        #eob-input-row {
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out, height 0.3s ease-out, margin 0.3s ease-out, padding 0.3s ease-out;
+            opacity: 1;
+            transform: translateY(0);
+            height: auto; /* Or specific height */
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        /* Sticky EOB Header (Initially Hidden) */
+        #sticky-eob-header {
+            visibility: hidden;
+            opacity: 0;
+            height: 0;
+            position: sticky;
+            /* Top value = top-bar height + its margin-top */
+            top: calc(58px + 1rem); 
+            z-index: 1020;
+            transition: all 0.3s ease-out;
+            
+            /* Glass UI */
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-card-border);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            padding: 0 1.5rem; /* Padding set to 0 top/bottom */
+            margin-top: 0; /* No margin when hidden */
+            
+            /* Gradient Animation */
+            background-image: linear-gradient(120deg, var(--bs-tertiary-bg), var(--bs-secondary-bg), var(--bs-tertiary-bg));
+            background-size: 200% 200%;
+            animation: gradient-flow 8s ease infinite;
+        }
+        [data-bs-theme="dark"] #sticky-eob-header {
+            animation: gradient-flow-dark 8s ease infinite;
+             background-image: linear-gradient(120deg, var(--bs-tertiary-bg-dark), #1c222b, var(--bs-tertiary-bg-dark));
+        }
+
+        /* Sticky IDR Table Container - REMOVED STICKY */
+        #idr-table-container {
+            position: relative; /* No longer sticky */
+            z-index: 1019;
+            transition: all 0.3s ease-out;
+        }
+        
+        /* IDR Table Gradient BG */
+        #idr-table-container .card {
+             background-image: linear-gradient(120deg, var(--bs-card-bg), var(--bs-tertiary-bg), var(--bs-card-bg));
+             background-size: 200% 200%;
+             animation: gradient-flow 10s ease infinite;
+        }
+        [data-bs-theme="dark"] #idr-table-container .card {
+            animation: gradient-flow-dark 10s ease infinite;
+             background-image: linear-gradient(120deg, var(--bs-card-bg-dark), #1a2029, var(--bs-card-bg-dark));
+        }
+        
+        /* Gradient Animation Keyframes */
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes gradient-flow-dark {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+        /* The "Active" state, triggered by JS */
+        body.sticky-active #eob-input-row {
+            opacity: 0;
+            height: 0;
+            transform: translateY(-20px);
+            margin: 0 !important; /* Force no margin */
+            padding: 0;
+            visibility: hidden;
+        }
+        
+        body.sticky-active #sticky-eob-header {
+            visibility: visible;
+            opacity: 1;
+            height: auto; /* Auto height based on content */
+            padding: 0.75rem 1.5rem; /* Add padding back */
+            margin-top: 0.75rem; /* Add margin back */
+        }
+        
+        /* Sticky EOB Header Content Styling */
+        .sticky-eob-row {
+            border-bottom: 1px solid var(--bs-border-color);
+            padding: 0.5rem 0;
+        }
+        .sticky-eob-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .sticky-eob-row:first-child {
+            padding-top: 0;
+        }
+        .sticky-eob-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--bs-secondary-color);
+            text-transform: uppercase;
+        }
+        .sticky-eob-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--bs-body-color);
+            white-space: nowrap;
+        }
+        .sticky-eob-value.currency {
+            color: #28a745;
+        }
+
 
     </style>
 </head>
@@ -530,8 +663,11 @@
             border:1px solid rgba(255,255,255,0.1);
             box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
             font-size:14px;
-            z-index: 1025;
+            z-index: 1030;
             ">
+            <!-- This div is the trigger for the intersection observer -->
+            <div id="scroll-trigger" style="position: absolute; top: 0; left: 0; height: 1px; width: 1px;"></div>
+            
             <div class="col-auto" style="flex-shrink: 0;">
                 Made by
                 <span style="
@@ -557,7 +693,7 @@
                 <a href="index.html"
                     onclick="window.open(this.href, '_self'); return false;"
                     style="
-                    display: inline-flex; align-items: center; text-decoration: none;
+                    display: inline-flex; align-items-center; text-decoration: none;
                     padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
                     white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
                     background: rgba(255, 255, 255, 0.15);
@@ -585,9 +721,17 @@
     <!-- ======== notes-content.txt থেকে আনা Tool Content ======== -->
     <!-- Glass UI এর সাথে মানানসই করার জন্য container-fluid ব্যবহার করা হলো -->
     <div id="dashboard-page" class="container-fluid eob-content my-3 px-4">
+        
+        <!-- ======== NEW: Sticky EOB Header (Initially Hidden) ======== -->
+        <div id="sticky-eob-header">
+            <!-- Content will be added by JS -->
+            <div id="sticky-eob-content"></div>
+        </div>
+        <!-- ======== End Sticky EOB Header ======== -->
+
 
         <!-- NEW: 3-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
-        <div class="row g-3" style="margin-top:1rem"> <!-- Reduced margin-top -->
+        <div class="row g-3" id="eob-input-row"> <!-- ID added for animation -->
             
             <!-- Column 1: Input Area -->
             <div class="col-lg-4">
@@ -696,7 +840,8 @@
             </div>
             
             <!-- IDR Output Card (Glass UI) -->
-            <div class="col-12 mt-2"> <!-- Added mt-2 for spacing -->
+            <!-- ======== NEW: IDR Table Container (for sticky) ======== -->
+            <div class="col-12 mt-2" id="idr-table-container"> <!-- IDR Table NOT sticky anymore -->
                  <div class="card p-4">
                      <h5 class="text-primary fw-bold">IDR Results</h5>
                      <hr style="border-color: var(--bs-border-color);">
@@ -704,23 +849,24 @@
                         <!-- টেবিলকে ডার্ক মোডের সাথে মানানসই করা হয়েছে -->
                         <table class="table table-borderless result-table" id="idrResultTable">
                             <thead id="idrDataTableHeader">
+                                <!-- NEW: Column widths set via CSS -->
                                 <tr class="">
-                                    <th scope="col" class="sticky-col" style="left: 0;">Result #</th>
-                                    <th scope="col" class="sticky-col" style="left: 100px;">Ticket #</th>
-                                    <th scope="col" class="sticky-col" style="left: 220px;">IDR #</th>
-                                    <th scope="col" class="sticky-col" style="left: 340px;">Claim #</th>
-                                    <th scope="col" class="sticky-col" style="left: 490px;">CPT</th>
-                                    <th scope="col">Initial Pmt</th>
-                                    <th scope="col">Mediator</th>
-                                    <th scope="col">Determ. Date</th>
-                                    <th scope="col">Determ. W/L</th> 
-                                    <th scope="col">Addl. Pmt</th>
-                                    <th scope="col">Pmt Date</th>
-                                    <th scope="col">Fee Refund</th>
-                                    <th scope="col">Fee Refund Date</th>
-                                    <th scope="col">W/L (Manual)</th>
-                                    <th scope="col">Additional</th>
-                                    <th scope="col">Refund</th>
+                                    <th scope="col" style="min-width: 80px;">Result #</th>
+                                    <th scope="col" style="min-width: 110px;">Ticket #</th>
+                                    <th scope="col" style="min-width: 110px;">IDR #</th>
+                                    <th scope="col" style="min-width: 120px;">Claim #</th>
+                                    <th scope="col" style="min-width: 70px;">CPT</th>
+                                    <th scope="col" style="min-width: 100px;">Initial Pmt</th>
+                                    <th scope="col" style="min-width: 120px;">Mediator</th>
+                                    <th scope="col" style="min-width: 110px;">Determ. Date</th>
+                                    <th scope="col" style="min-width: 100px;">Determ. W/L</th> 
+                                    <th scope="col" style="min-width: 100px;">Addl. Pmt</th>
+                                    <th scope="col" style="min-width: 110px;">Pmt Date</th>
+                                    <th scope="col" style="min-width: 100px;">Fee Refund</th>
+                                    <th scope="col" style="min-width: 120px;">Fee Refund Date</th>
+                                    <th scope="col" style="min-width: 110px;">W/L (Manual)</th>
+                                    <th scope="col" style="min-width: 100px;">Additional</th>
+                                    <th scope="col" style="min-width: 100px;">Refund</th>
                                 </tr>
                             </thead>
                             <tbody id="idrDataTableBody">
@@ -767,6 +913,10 @@
                                          <button class="btn btn-info rounded-pill w-100 mb-2" id="note_GenerateBtn">
                                              <i class="bi bi-pencil-square"></i> Generate Note
                                          </button>
+                                         <!-- ======== NEW: Edit Note Button ======== -->
+                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#noteTemplateModal">
+                                            <i class="bi bi-pencil"></i> Edit Note
+                                        </button>
                                          <span id="copy_Confirmation_Note" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
                                          <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="note_ClearBtn">
                                              <i class="bi bi-x-circle"></i> Clear Note
@@ -871,11 +1021,34 @@
                 </div>
                 <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Template</button>
+                    <button type="button" class="btn btn-primary" id="saveEmailTemplateBtn">Save Template</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ======== NEW: Correspondence Note Edit Modal ======== -->
+    <div class="modal fade" id="noteTemplateModal" tabindex="-1" aria-labelledby="noteTemplateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="noteTemplateModalLabel">Edit Correspondence Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated note below. The original note will be updated when you save.</p>
+                    <textarea id="note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteTemplateBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======== End Note Edit Modal ======== -->
+
 
     <!--Footer Section-->
     <!-- NEW: Added .fade-in-section -->
@@ -966,6 +1139,12 @@
             
             // Set footer year
             document.getElementById('footer-year').textContent = new Date().getFullYear();
+            
+            // NEW: Setup Sticky Scroll
+            setupStickyScroll();
+            
+            // NEW: Setup Note Edit Modal
+            setupNoteEditModal();
         });
 
         themeToggle.addEventListener('click', () => {
@@ -1009,6 +1188,77 @@
 
         // প্রতি 5 সেকেন্ডে ব্যাকগ্রাউন্ড পরিবর্তন
         setInterval(updateAnimatedBackground, 5000);
+
+        // --- NEW: Sticky Scroll Logic (MODIFIED) ---
+        function setupStickyScroll() {
+            const scrollTrigger = document.getElementById('scroll-trigger');
+            // const idrTableContainer = document.getElementById('idr-table-container'); // REMOVED
+            const stickyEobHeader = document.getElementById('sticky-eob-header');
+            const topBar = document.getElementById('top-bar');
+
+            if (!scrollTrigger) return;
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    // entry.isIntersecting = true when top of viewport hits the trigger
+                    // We want to activate sticky when the trigger is *above* the viewport
+                    document.body.classList.toggle('sticky-active', !entry.isIntersecting);
+                    
+                    /* --- REMOVED IDR STICKY LOGIC ---
+                    if (!entry.isIntersecting) {
+                        // Calculate sticky top for IDR table
+                        const topBarHeight = topBar.offsetHeight + 16; // 1rem margin
+                        const eobHeaderHeight = stickyEobHeader.offsetHeight + 12; // 0.75rem margin
+                        idrTableContainer.style.position = 'sticky';
+                        idrTableContainer.style.top = `${topBarHeight + eobHeaderHeight}px`;
+                    } else {
+                        idrTableContainer.style.position = 'relative';
+                        idrTableContainer.style.top = '0';
+                    }
+                    */
+                },
+                { 
+                    root: null, // observes intersections in the viewport
+                    threshold: 0,
+                    // Trigger when the element is 1px *above* the top bar
+                    rootMargin: `-${topBar.offsetHeight + 16}px 0px 0px 0px` 
+                }
+            );
+
+            observer.observe(scrollTrigger);
+        }
+
+
+        // --- NEW: Note Edit Modal Logic ---
+        function setupNoteEditModal() {
+            const noteTemplateModal = new bootstrap.Modal(document.getElementById('noteTemplateModal'));
+            const noteEditText = document.getElementById('note_Edit_Text');
+            const mainNoteText = document.getElementById('note_Text');
+            const saveNoteBtn = document.getElementById('saveNoteTemplateBtn');
+            const copyNoteBtn = document.getElementById('copyEditedNoteBtn');
+
+            // Open modal -> Load text
+            document.getElementById('noteTemplateModal').addEventListener('show.bs.modal', () => {
+                noteEditText.value = mainNoteText.value;
+            });
+            
+            // Save button -> Update main textarea
+            saveNoteBtn.addEventListener('click', () => {
+                mainNoteText.value = noteEditText.value;
+                noteTemplateModal.hide();
+            });
+            
+            // Copy button -> Copy and close
+            copyNoteBtn.addEventListener('click', () => {
+                noteEditText.select();
+                document.execCommand('copy');
+                noteTemplateModal.hide();
+                
+                // Show temporary "Copied!" confirmation on main page
+                copyConfirmationNote.style.display = 'block';
+                setTimeout(() => { copyConfirmationNote.style.display = 'none'; }, 2000);
+            });
+        }
 
 
         // --- notes-content.txt থেকে আনা Data Extraction Logic ---
@@ -1090,6 +1340,9 @@
         const eobErrors1 = document.getElementById('eob-errors-1');
         const eobErrors2 = document.getElementById('eob-errors-2');
         const idrErrors = document.getElementById('idr-errors');
+        
+        // NEW: Sticky Header EOB Content
+        const stickyEobContent = document.getElementById('sticky-eob-content');
 
         // --- Get Note Generation Elements ---
         const noteNameInput = document.getElementById('note_Name');
@@ -1118,9 +1371,10 @@
         const mailNoteTextInput = document.getElementById('mail_Note_Text'); 
         const copyConfirmationMail = document.getElementById('copy_Confirmation_Mail'); 
         const emailTemplateText = document.getElementById('email_Template_Text');
+        const saveEmailTemplateBtn = document.getElementById('saveEmailTemplateBtn');
 
         // --- Default Email Template ---
-        const defaultEmailTemplate = `Dear BCBS,
+        let currentEmailTemplate = `Dear BCBS,
 
 We are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surpresas Act (NSA).
 On [DETERMINATION_DATE], [MEDIATOR_NAME] —the certified IDR entity—issued a final, legally binding determination in favor of , [PROVIDER_NAME] regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of [OON_RATE] for service code [CPT_CODE]. as offered by [PROVIDER_NAME] as the appropriate rate for this claim.
@@ -1147,13 +1401,19 @@ Regards
 ---------------
 [MY_NAME]`;
         
-        emailTemplateText.value = defaultEmailTemplate;
+        emailTemplateText.value = currentEmailTemplate;
+        
+        saveEmailTemplateBtn.addEventListener('click', () => {
+            currentEmailTemplate = emailTemplateText.value;
+            // Optionally save to localStorage
+        });
 
         // --- Clear Functions ---
         
         function clearEobResults() {
              eobResults1Container.innerHTML = '';
              eobResults2Container.innerHTML = '';
+             stickyEobContent.innerHTML = ''; // NEW: Clear sticky header
              eobErrors1.textContent = '';
              eobErrors2.textContent = '';
              idrErrors.textContent = '';
@@ -1164,7 +1424,7 @@ Regards
 
         function clearComparisonStyles() {
             // Clear EOB Result styles
-            document.querySelectorAll('.eob-result-value').forEach(el => {
+            document.querySelectorAll('.eob-result-value, .sticky-eob-value').forEach(el => {
                 el.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
             });
             
@@ -1276,9 +1536,15 @@ Regards
             };
         }
 
+        /**
+         * NEW: Populates both original cards AND the sticky header
+         * MODIFIED: Sticky header only shows 5 columns
+         */
         function displayEOBResults(updated, old) {
+            // Clear all containers
             eobResults1Container.innerHTML = '';
             eobResults2Container.innerHTML = '';
+            stickyEobContent.innerHTML = ''; 
             eobErrors1.textContent = '';
             globalEobAdditionalPayment = 0;
             globalEobTicket = 'Not Found';
@@ -1293,19 +1559,20 @@ Regards
             if (updated && old) {
                 addlPayResult = updated.paidAmt - old.paidAmt;
             } else if (updated) {
-                addlPayResult = updated.addlPaidAmt || updated.paidAmt; // Use Addl. first, fallback to Paid
+                addlPayResult = updated.addlPaidAmt || updated.paidAmt;
             } else if (old) {
                 addlPayResult = old.addlPaidAmt || old.paidAmt;
             }
             globalEobAdditionalPayment = addlPayResult;
             
-            // --- Set Global Ticket ---
             globalEobTicket = updated?.ticketNo || old?.ticketNo || 'Not Found';
 
-            // --- Build Result 1: Ticket, Patient, Claim, Addl. Pay ---
-            let html1 = '';
+            // --- Build HTML for Original Cards ---
+            let html1_card = '', html2_card = '', html_sticky = '';
+
             if (updated && old) {
-                html1 = `
+                // --- CARD 1 (Ticket, Patient, Claim, Addl) ---
+                html1_card = `
                     <div class="eob-result-col">
                         <span class="header">Updated</span>
                         <span class="eob-result-value" id="eob_up_Ticket">${updated.ticketNo}</span>
@@ -1319,26 +1586,10 @@ Regards
                         <span class="eob-result-value" id="eob_old_Patient">${old.ptName}</span>
                         <span class="eob-result-value" id="eob_old_Claim">${old.claimNo}</span>
                         <span class="eob-result-value currency" id="eob_old_AddlPay" title="Old Addl. Paid">${formatCurrency(old.addlPaidAmt)}</span>
-                    </div>
-                `;
-            } else {
-                const data = updated || old;
-                html1 = `
-                    <div class="eob-result-col single">
-                        <span class="header">${updated ? 'Updated' : 'Old'}</span>
-                        <span class="eob-result-value" id="eob_single_Ticket">${data.ticketNo}</span>
-                        <span class="eob-result-value" id="eob_single_Patient">${data.ptName}</span>
-                        <span class="eob-result-value" id="eob_single_Claim">${data.claimNo}</span>
-                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Single EOB Addl. Paid">${formatCurrency(addlPayResult)}</span>
-                    </div>
-                `;
-            }
-            eobResults1Container.innerHTML = html1;
-
-            // --- Build Result 2: Billed, Paid, PT Resp, Facility ---
-            let html2 = '';
-            if (updated && old) {
-                html2 = `
+                    </div>`;
+                
+                // --- CARD 2 (Billed, Paid, Resp, Facility) ---
+                html2_card = `
                     <div class="eob-result-col">
                         <span class="header">Updated</span>
                         <span class="eob-result-value currency" id="eob_up_Billed">${formatCurrency(updated.billedAmt)}</span>
@@ -1352,22 +1603,70 @@ Regards
                         <span class="eob-result-value currency" id="eob_old_Paid">${formatCurrency(old.paidAmt)}</span>
                         <span class="eob-result-value currency" id="eob_old_PtResp">${formatCurrency(old.ptRespSum)}</span>
                         <span class="eob-result-value facility-truncate" id="eob_old_Facility" title="${old.provider}">${old.provider}</span>
+                    </div>`;
+
+                // --- STICKY HEADER (Two rows, 5 columns) ---
+                html_sticky = `
+                    <div class="row sticky-eob-row">
+                        <div class="col-auto"><span class="sticky-eob-label">Updated:</span></div>
+                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_up_Ticket">${updated.ticketNo}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_up_Billed">${formatCurrency(updated.billedAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_up_Paid">${formatCurrency(updated.paidAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_up_PtResp">${formatCurrency(updated.ptRespSum)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency bg-match" id="sticky_calc_AddlPay">${formatCurrency(addlPayResult)}</span></div>
                     </div>
-                `;
+                    <div class="row sticky-eob-row">
+                        <div class="col-auto"><span class="sticky-eob-label">Old:</span></div>
+                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_old_Ticket">${old.ticketNo}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_old_Billed">${formatCurrency(old.billedAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_old_Paid">${formatCurrency(old.paidAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_old_PtResp">${formatCurrency(old.ptRespSum)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency" id="sticky_old_AddlPay">${formatCurrency(old.addlPaidAmt)}</span></div>
+                    </div>`;
+
             } else {
+                // --- SINGLE EOB ---
                 const data = updated || old;
-                html2 = `
+                const eobType = updated ? 'Updated' : 'Old';
+                
+                // --- CARD 1 (Ticket, Patient, Claim, Addl) ---
+                html1_card = `
                     <div class="eob-result-col single">
-                        <span class="header">${updated ? 'Updated' : 'Old'}</span>
+                        <span class="header">${eobType}</span>
+                        <span class="eob-result-value" id="eob_single_Ticket">${data.ticketNo}</span>
+                        <span class="eob-result-value" id="eob_single_Patient">${data.ptName}</span>
+                        <span class="eob-result-value" id="eob_single_Claim">${data.claimNo}</span>
+                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Single EOB Addl. Paid">${formatCurrency(addlPayResult)}</span>
+                    </div>`;
+
+                // --- CARD 2 (Billed, Paid, Resp, Facility) ---
+                html2_card = `
+                    <div class="eob-result-col single">
+                        <span class="header">${eobType}</span>
                         <span class="eob-result-value currency" id="eob_single_Billed">${formatCurrency(data.billedAmt)}</span>
                         <span class="eob-result-value currency" id="eob_single_Paid">${formatCurrency(data.paidAmt)}</span>
                         <span class="eob-result-value currency" id="eob_single_PtResp">${formatCurrency(data.ptRespSum)}</span>
                         <span class="eob-result-value facility-truncate" id="eob_single_Facility" title="${data.provider}">${data.provider}</span>
-                    </div>
-                `;
+                    </div>`;
+                
+                // --- STICKY HEADER (One row, 5 columns) ---
+                 html_sticky = `
+                    <div class="row sticky-eob-row">
+                        <div class="col-auto"><span class="sticky-eob-label">${eobType}:</span></div>
+                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_single_Ticket">${data.ticketNo}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_single_Billed">${formatCurrency(data.billedAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_single_Paid">${formatCurrency(data.paidAmt)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_single_PtResp">${formatCurrency(data.ptRespSum)}</span></div>
+                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency bg-match" id="sticky_calc_AddlPay">${formatCurrency(addlPayResult)}</span></div>
+                    </div>`;
             }
-            eobResults2Container.innerHTML = html2;
+            
+            // Populate all containers
+            eobResults1Container.innerHTML = html1_card;
+            eobResults2Container.innerHTML = html2_card;
+            stickyEobContent.innerHTML = html_sticky;
         }
+
 
         // --- IDR Parsing ---
         
@@ -1423,7 +1722,7 @@ Regards
                 const currentMap = mapDictionary[input.map];
                 
                 const columns = input.text.split(/\t|\s{2,}/);
-                let rowHtml = `<tr><th scope="row" class="sticky-col">Result ${resultCounter} (${input.year})</th>`;
+                let rowHtml = `<tr><th scope="row">Res ${resultCounter} (${input.year})</th>`; // No sticky class
                 let rowResult = {}; 
 
                 idrFields.forEach(field => {
@@ -1440,12 +1739,8 @@ Regards
                     let displayValue = rowResult[field];
                     let cellHtml = '';
                     let cellId = `idr_${field.replace(/[^A-Za-z0-9]/g, '_')}_${index+1}`; 
-                    let stickyClass = '';
+                    let stickyClass = ''; // No sticky class
                     
-                    if(field === 'Ticket #' || field === 'IDR #' || field === 'Claim #' || field === 'CPT') {
-                        stickyClass = 'sticky-col';
-                    }
-
                     let isAmount = field === 'Initial Pmt' || field === 'Addl. Pmt' || field === 'Fee Refund';
                     let amountClass = isAmount ? 'output-value-amount' : '';
                     let mediatorClass = (field === 'Mediator') ? 'truncate-mediator' : '';
@@ -1526,11 +1821,11 @@ Regards
                 });
             }
             
-            // Highlight EOB Ticket field
-            const eobTicketEl = document.getElementById('eob_up_Ticket') || document.getElementById('eob_single_Ticket');
-            if (eobTicketEl) {
-                if(allIdrTicketCells.length > 0) { // Only style if there are IDRs to compare
-                   eobTicketEl.classList.add(eobTicketMatched ? 'bg-match' : 'bg-mismatch');
+            // Highlight EOB Ticket field (both original and sticky)
+            const eobTicketEls = document.querySelectorAll('#eob_up_Ticket, #eob_single_Ticket, #sticky_up_Ticket, #sticky_single_Ticket');
+            if (eobTicketEls.length > 0) {
+                if(allIdrTicketCells.length > 0) { 
+                   eobTicketEls.forEach(el => el.classList.add(eobTicketMatched ? 'bg-match' : 'bg-mismatch'));
                 }
             } else if (globalEobTicket === 'Not Found' && allIdrTicketCells.length > 0) {
                 eobErrors1.textContent = 'EOB Ticket # not found for comparison.';
@@ -1547,7 +1842,7 @@ Regards
                 cell: cell
             }));
 
-            const eobAddlPayEl = document.getElementById('eob_calc_AddlPay');
+            const eobAddlPayEls = document.querySelectorAll('#eob_calc_AddlPay, #sticky_calc_AddlPay');
             if (globalEobAdditionalPayment === 0) {
                 idrErrors.textContent = 'Calculated EOB Additional Payment is $0.00. Cannot perform match.';
                 return;
@@ -1564,14 +1859,14 @@ Regards
                         item.cell.classList.add('bg-mismatch');
                     }
                 });
-                if (eobAddlPayEl) eobAddlPayEl.classList.add('bg-match');
+                if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-match'));
                 idrErrors.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
                 idrErrors.classList.add('text-success');
                 idrErrors.classList.remove('text-danger');
             } else {
                 // No match
                 idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
-                if (eobAddlPayEl) eobAddlPayEl.classList.add('bg-mismatch');
+                if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-mismatch'));
                 idrErrors.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
                 idrErrors.classList.add('text-danger');
                 idrErrors.classList.remove('text-success');
@@ -1580,34 +1875,27 @@ Regards
 
         /**
          * Finds a subset of IDR amounts that sums exactly to the target.
-         * @param {number} target - The EOB additional payment.
-         * @param {Array<Object>} items - Array of {amount, cell} objects.
-         * @returns {Object} - { indices: Array<number>, sum: number }
          */
         function findMatchingSubset(target, items) {
             let n = items.length;
             let bestMatch = { indices: [], sum: 0 };
             
-            // Iterate through all possible subsets (2^n)
             for (let i = 0; i < (1 << n); i++) {
                 let currentSum = 0;
                 let currentIndices = [];
                 
                 for (let j = 0; j < n; j++) {
-                    // Check if j-th bit is set
                     if ((i >> j) & 1) {
                         currentSum += items[j].amount;
                         currentIndices.push(j);
                     }
                 }
                 
-                // Check for exact match
-                if (Math.abs(currentSum - target) < 0.001) { // Use epsilon for float comparison
+                if (Math.abs(currentSum - target) < 0.001) { 
                     return { indices: currentIndices, sum: currentSum };
                 }
             }
             
-            // No exact match found
             return bestMatch;
         }
 
@@ -1621,6 +1909,7 @@ Regards
             eobErrors1.textContent = '';
             eobErrors2.textContent = '';
             idrErrors.textContent = '';
+            idrErrors.classList.remove('text-success', 'text-danger');
 
             // 2. Process EOBs
             const eobUpdatedText = eobUpdatedInput.value;
@@ -1705,7 +1994,7 @@ Regards
                 noteWarningClaimMismatch.style.display = 'block';
             }
             
-            // --- Determine Initial ---
+            // --- Determine Initial (NEW LOGIC) ---
             let initial = "IDR FOLLOW UP"; // Default
             let allTasksDone = activeIdrRows.length > 0;
             let closedAndEmptyRefund = false;
@@ -1718,12 +2007,11 @@ Regards
                 if (wl === 'win') {
                     if (ad !== 'received' || rf !== 'received') allTasksDone = false;
                 } else if (wl === 'lose') {
-                    if (ad !== 'received') allTasksDone = false; // Still check addl even on lose? Assuming yes.
+                    if (ad !== 'received') allTasksDone = false; 
                 } else if (wl === 'closed' || wl === 'close') {
-                    if (rf === 'waiting') allTasksDone = false;
-                    if (rf === '') closedAndEmptyRefund = true;
+                    if (rf === 'waiting') allTasksDone = false; // NEW: If waiting, not done.
+                    if (rf === '') closedAndEmptyRefund = true; // NEW: If closed and empty, it's done.
                 } else {
-                    // Any other status (e.g., pending)
                     allTasksDone = false;
                 }
             });
@@ -1731,16 +2019,17 @@ Regards
             if (allTasksDone) {
                 initial = "FINAL REVIEW";
             }
-            // Check for single dispute override
+            
             if (activeIdrRows.length === 1 && initial !== "FINAL REVIEW") {
                 const status = activeIdrRows[0].winLoseStatus;
                 if (status === 'win') initial = 'IDR WIN';
                 else if (status === 'lose') initial = 'IDR LOSE';
                 else if (status === 'closed' || status === 'close') {
+                    // NEW: "Closed" logic
                     if (activeIdrRows[0].refundStatus.toLowerCase() === 'waiting') {
                         initial = 'IDR FOLLOW UP';
                     } else {
-                        initial = 'FINAL REVIEW';
+                        initial = 'FINAL REVIEW'; // If "Received" or empty
                     }
                 }
             }
@@ -1769,18 +2058,19 @@ Regards
                 note += `CLAIM: ${claimForNote}. NEGOTIATION AND IDR DONE. `;
             }
 
-            // --- IDR Details ---
+            // --- IDR Details (NEW LOGIC) ---
             activeIdrRows.forEach(row => {
                 let wlStatus = (row.winLoseStatus === '--' || row.winLoseStatus === 'not found' || row.winLoseStatus === '') ? 'N/A' : row.winLoseStatus.toUpperCase();
                 
+                // NEW: Handle "CLOSED" status
                 if (wlStatus === 'CLOSED' || wlStatus === 'CLOSE') {
-                    note += `${row.idrNum}: STATUS IS CLOSED. `;
+                    note += `${row.idrNum}: STATUS IS ${wlStatus}. `;
+                    // Only mention refund
                     if (row.refundStatus.toLowerCase() === 'received') {
                         note += "WE RECEIVED FEE REFUND. ";
                     } else if (row.refundStatus.toLowerCase() === 'waiting') {
                         note += "WE ARE WAITING FOR FEE REFUND. ";
                     }
-                    // If refund is empty, per request, we say nothing about it.
                 } else {
                     // Standard Win/Lose logic
                     note += `${row.idrNum}: IDR SUBMITTED ON CPT ${row.cpt} TO MEDIATOR ${row.mediator}. STATUS IS ${wlStatus} WITH ADDITIONAL ${row.addlPmt}. `;
@@ -1803,13 +2093,8 @@ Regards
             
             // --- Final Action ---
             if (initial === 'FINAL REVIEW') {
-                if (closedAndEmptyRefund && activeIdrRows.length > 0) {
-                     note += "STATUS IS CLOSED, NO FURTHER ACTION NEEDED, AND BALANCE TO BE ADJUSTED.";
-                } else {
-                    note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
-                }
+                note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
                 
-                // Show adjustments only if EOB data exists
                 if(eobExists) {
                     const adjustWithPtVal = eobBilled - (eobPaid + ptRespSum);
                     const adjustWithoutPtVal = eobBilled - eobPaid;
@@ -1831,7 +2116,7 @@ Regards
             mailDetermDateInput.classList.remove('is-invalid');
             mailTextInput.value = ''; 
             mailNoteTextInput.value = ''; 
-            mailTextInput.classList.remove('bg-match', 'text-success');
+            mailTextInput.classList.remove('bg-match', 'text-success', 'is-invalid');
 
             const eobExists = globalEobData.updated || globalEobData.old;
             const idrRows = document.querySelectorAll('#idrDataTableBody tr');
@@ -1869,7 +2154,6 @@ Regards
             const idrRow = idrRows[0];
             const additionalStatus = idrRow.cells[14].textContent; 
 
-            // --- NEW: Check if payment already received ---
             if (additionalStatus.toLowerCase() === 'received') {
                 mailTextInput.value = "WARNING: Additional Payment is already marked as 'Received'. Email is not required.";
                 mailTextInput.classList.add('bg-match', 'text-success');
@@ -1901,7 +2185,7 @@ Regards
             }
             mailSubjectInput.value = subject;
             
-            let mailBody = emailTemplateText.value;
+            let mailBody = currentEmailTemplate; // Use the potentially edited template
             
             mailBody = mailBody.replace(/\[DETERMINATION_DATE\]/g, determDate); 
             mailBody = mailBody.replace(/\[MEDIATOR_NAME\]/g, mediator);
