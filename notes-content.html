@@ -679,8 +679,7 @@
             font-size:14px;
             z-index: 1030;
             ">
-            <!-- This div is the trigger for the intersection observer -->
-            <div id="scroll-trigger" style="position: absolute; top: 0; left: 0; height: 1px; width: 1px;"></div>
+            <!-- This div is the trigger for the intersection observer (MOVED) -->
             
             <div class="col-auto" style="flex-shrink: 0;">
                 Made by
@@ -743,6 +742,9 @@
         </div>
         <!-- ======== End Sticky EOB Header ======== -->
 
+        <!-- ======== NEW: Scroll Trigger (MOVED) ======== -->
+        <!-- This div is the trigger for the intersection observer -->
+        <div id="scroll-trigger" style="position: relative; height: 1px; top: 0;"></div>
 
         <!-- NEW: 3-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
         <div class="row g-3" id="eob-input-row"> <!-- ID added for animation -->
@@ -1091,20 +1093,47 @@
             // Set footer year
             document.getElementById('footer-year').textContent = new Date().getFullYear();
             
-            // NEW: Setup Sticky Scroll
-            // MODIFIED: Run on window.onload
-            window.onload = () => {
-                setupStickyScroll();
-            };
-            
             // NEW: Setup Note Edit Modal
             setupNoteEditModal();
         });
+        
+        // --- NEW: Sticky Scroll Logic (MODIFIED) ---
+        // MOVED to top level, outside DOMContentLoaded
+        window.onload = () => {
+            setupStickyScroll();
+        };
 
-        themeToggle.addEventListener('click', () => {
-            const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
-        });
+        function setupStickyScroll() {
+            const scrollTrigger = document.getElementById('scroll-trigger');
+            const topBar = document.getElementById('top-bar');
+
+            if (!scrollTrigger || !topBar) {
+                console.error("Sticky scroll elements not found!");
+                return;
+            }
+            
+            // Calculate the correct top margin for the observer
+            // topBar.offsetHeight is the height, 16 is 1rem margin-top
+            // Adding 1px buffer to ensure it triggers correctly
+            const topBarTotalHeight = topBar.offsetHeight + 16 + 1; 
+
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    // entry.isIntersecting = true when top of viewport hits the trigger
+                    // We want to activate sticky when the trigger is *above* the viewport
+                    document.body.classList.toggle('sticky-active', !entry.isIntersecting);
+                },
+                { 
+                    root: null, // observes intersections in the viewport
+                    threshold: 0,
+                    // Trigger when the element is 1px *above* the top bar
+                    rootMargin: `-${topBarTotalHeight}px 0px 0px 0px` 
+                }
+            );
+
+            observer.observe(scrollTrigger);
+        }
+
 
         function setTheme(theme) {
             htmlEl.setAttribute('data-bs-theme', theme);
@@ -1142,38 +1171,6 @@
 
         // প্রতি 5 সেকেন্ডে ব্যাকগ্রাউন্ড পরিবর্তন
         setInterval(updateAnimatedBackground, 5000);
-
-        // --- NEW: Sticky Scroll Logic (MODIFIED) ---
-        function setupStickyScroll() {
-            const scrollTrigger = document.getElementById('scroll-trigger');
-            const topBar = document.getElementById('top-bar');
-
-            if (!scrollTrigger || !topBar) {
-                console.error("Sticky scroll elements not found!");
-                return;
-            }
-            
-            // Calculate the correct top margin for the observer
-            // topBar.offsetHeight is the height, 16 is 1rem margin-top
-            // Adding 1px buffer to ensure it triggers correctly
-            const topBarTotalHeight = topBar.offsetHeight + 16 + 1; 
-
-            const observer = new IntersectionObserver(
-                ([entry]) => {
-                    // entry.isIntersecting = true when top of viewport hits the trigger
-                    // We want to activate sticky when the trigger is *above* the viewport
-                    document.body.classList.toggle('sticky-active', !entry.isIntersecting);
-                },
-                { 
-                    root: null, // observes intersections in the viewport
-                    threshold: 0,
-                    // Trigger when the element is 1px *above* the top bar
-                    rootMargin: `-${topBarTotalHeight}px 0px 0px 0px` 
-                }
-            );
-
-            observer.observe(scrollTrigger);
-        }
 
 
         // --- NEW: Note Edit Modal Logic ---
