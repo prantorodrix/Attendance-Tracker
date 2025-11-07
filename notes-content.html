@@ -49,6 +49,12 @@
 
             --bs-primary-dark: #00f0b5;
             --bs-primary-rgb-dark: 0, 240, 181;
+            
+            /* NEW: Sticky Header BG Colors */
+            --sticky-bg-light: rgba(255, 255, 255, 0.85);
+            --sticky-bg-dark: rgba(10, 12, 16, 0.85);
+            --sticky-border-light: rgba(0, 0, 0, 0.1);
+            --sticky-border-dark: rgba(255, 255, 255, 0.1);
         }
 
         [data-bs-theme="light"] {
@@ -63,6 +69,9 @@
             --bs-glass-border: var(--bs-glass-border-light);
             --bs-card-bg: var(--bs-card-bg-light);
             --bs-card-border: var(--bs-card-border-light);
+            
+            --sticky-bg: var(--sticky-bg-light);
+            --sticky-border: var(--sticky-border-light);
         }
 
         [data-bs-theme="dark"] {
@@ -83,6 +92,9 @@
             --bs-link-color: var(--bs-primary-dark);
             --bs-link-color-rgb: var(--bs-primary-rgb-dark);
             --bs-link-hover-color: #33ffc7;
+            
+            --sticky-bg: var(--sticky-bg-dark);
+            --sticky-border: var(--sticky-border-dark);
         }
 
         body {
@@ -400,7 +412,7 @@
         
         /* Sticky Column CSS (REMOVED) */
         
-        #note_Text, #note_Mail_Text, #mail_Note_Text {
+        #note_Text, #note_Mail_Text, #mail_Note_Text, #refund_Note_Text {
             min-height: 200px;
             font-family: monospace;
             font-size: 0.9rem;
@@ -463,6 +475,19 @@
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
             padding: 1.5rem;
+        }
+        
+        /* NEW: Tab Pane Animation */
+        .tab-pane {
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        .tab-pane:not(.active) {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .tab-pane.active {
+            opacity: 1;
+            transform: translateY(0);
         }
         /* --- END: Tab Navigation Styles --- */
 
@@ -549,24 +574,25 @@
             z-index: 1020;
             transition: all 0.3s ease-out;
             
-            /* Glass UI */
-            background-color: var(--bs-card-bg);
-            border: 1px solid var(--bs-card-border);
+            /* NEW: Highlighted Glass UI */
+            background-color: var(--sticky-bg);
+            border: 1px solid var(--sticky-border);
+            
             border-radius: 1.5rem;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            backdrop-filter: blur(15px); /* Stronger blur */
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 0 1.5rem; /* Padding set to 0 top/bottom */
             margin-top: 0; /* No margin when hidden */
             
             /* Gradient Animation */
-            background-image: linear-gradient(120deg, var(--bs-tertiary-bg), var(--bs-secondary-bg), var(--bs-tertiary-bg));
+            background-image: linear-gradient(120deg, var(--sticky-bg), var(--bs-secondary-bg), var(--sticky-bg));
             background-size: 200% 200%;
             animation: gradient-flow 8s ease infinite;
         }
         [data-bs-theme="dark"] #sticky-eob-header {
             animation: gradient-flow-dark 8s ease infinite;
-             background-image: linear-gradient(120deg, var(--bs-tertiary-bg-dark), #1c222b, var(--bs-tertiary-bg-dark));
+             background-image: linear-gradient(120deg, var(--sticky-bg), #1c222b, var(--sticky-bg));
         }
 
         /* IDR Table Container - MODIFIED */
@@ -679,7 +705,6 @@
             font-size:14px;
             z-index: 1030;
             ">
-            <!-- This div is the trigger for the intersection observer (MOVED) -->
             
             <div class="col-auto" style="flex-shrink: 0;">
                 Made by
@@ -706,7 +731,7 @@
                 <a href="index.html"
                     onclick="window.open(this.href, '_self'); return false;"
                     style="
-                    display: inline-flex; align-items: center; text-decoration: none;
+                    display: inline-flex; align-items-center; text-decoration: none;
                     padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
                     white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
                     background: rgba(255, 255, 255, 0.15);
@@ -908,6 +933,12 @@
                             <i class="bi bi-envelope-at me-2"></i>Email
                         </button>
                     </li>
+                    <!-- ======== NEW: Refund Tab ======== -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="refund-tab" data-bs-toggle="tab" data-bs-target="#refund-pane" type="button" role="tab" aria-controls="refund-pane" aria-selected="false">
+                            <i class="bi bi-cash-coin me-2"></i>Refund
+                        </button>
+                    </li>
                 </ul>
 
                 <!-- Tab Content -->
@@ -1014,6 +1045,42 @@
                             </div>
                         </div>
                     </div>
+                    <!-- ======== NEW: Refund Pane ======== -->
+                    <div class="tab-pane fade" id="refund-pane" role="tabpanel" aria-labelledby="refund-tab" tabindex="0">
+                        <div class="tab-content-glass">
+                            <div class="row g-3">
+                                <!-- Inputs -->
+                                <div class="col-3">
+                                    <label for="refund_Name" class="form-label fw-bold">Initial Name:</label>
+                                    <input type="text" class="form-control" id="refund_Name" value="PRANTO R">
+                                    <label for="refund_Amount" class="form-label fw-bold mt-2">Refund Amount:</label>
+                                    <input type="text" class="form-control" id="refund_Amount" placeholder="$550.00">
+                                    <label for="refund_Date" class="form-label fw-bold mt-2">Refund Date:</label>
+                                    <input type="text" class="form-control" id="refund_Date" placeholder="08/19/2025">
+                                    <label for="refund_Dispute" class="form-label fw-bold mt-2">Dispute:</label>
+                                    <input type="text" class="form-control" id="refund_Dispute" placeholder="DISP-918517">
+                                </div>
+                                <!-- Note Box -->
+                                <div class="col-7">
+                                    <label for="refund_Note_Text" class="form-label fw-bold">Refund Note: (Click to Copy)</label>
+                                    <textarea class="form-control copyable" id="refund_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Refund')"></textarea>
+                                </div>
+                                <!-- Buttons -->
+                                <div class="col-2 d-flex flex-column justify-content-end">
+                                     <button class="btn btn-info rounded-pill w-100 mb-2" id="refund_GenerateBtn">
+                                         <i class="bi bi-pencil-square"></i> Generate Note
+                                     </button>
+                                     <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#refundNoteEditModal">
+                                        <i class="bi bi-pencil"></i> Edit Note
+                                    </button>
+                                     <span id="copy_Confirmation_Refund" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                     <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="refund_ClearBtn">
+                                         <i class="bi bi-x-circle"></i> Clear Note
+                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- ======== END: Tab Navigation Section ======== -->
@@ -1065,6 +1132,28 @@
     </div>
     <!-- ======== End Note Edit Modal ======== -->
 
+    <!-- ======== NEW: Refund Note Edit Modal ======== -->
+    <div class="modal fade" id="refundNoteEditModal" tabindex="-1" aria-labelledby="refundNoteEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="refundNoteEditModalLabel">Edit Refund Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated refund note below.</p>
+                    <textarea id="refund_Note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedRefundNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveRefundNoteBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======== End Refund Note Edit Modal ======== -->
+
 
     <!--Footer Section-->
     <!-- NEW: Minimized Footer -->
@@ -1095,10 +1184,16 @@
             
             // NEW: Setup Note Edit Modal
             setupNoteEditModal();
+            
+            // NEW: Setup Refund Note Logic
+            setupRefundNoteLogic();
+
+            // NEW: Delay sticky setup slightly to ensure layout is complete
+            // This setup is moved to window.onload for better reliability
         });
         
-        // --- NEW: Sticky Scroll Logic (MODIFIED) ---
-        // MOVED to top level, outside DOMContentLoaded
+        // --- NEW: Sticky Scroll Logic (FIXED) ---
+        // window.onload ensures all assets (images, fonts) are loaded and layout is stable
         window.onload = () => {
             setupStickyScroll();
         };
@@ -1114,19 +1209,18 @@
             
             // Calculate the correct top margin for the observer
             // topBar.offsetHeight is the height, 16 is 1rem margin-top
-            // Adding 1px buffer to ensure it triggers correctly
-            const topBarTotalHeight = topBar.offsetHeight + 16 + 1; 
+            const topBarTotalHeight = topBar.offsetHeight + 16; 
 
             const observer = new IntersectionObserver(
                 ([entry]) => {
-                    // entry.isIntersecting = true when top of viewport hits the trigger
-                    // We want to activate sticky when the trigger is *above* the viewport
+                    // entry.isIntersecting = true when the trigger is visible in the margin-adjusted viewport
+                    // We want sticky-active = true when it's NOT intersecting (i.e., scrolled up)
                     document.body.classList.toggle('sticky-active', !entry.isIntersecting);
                 },
                 { 
                     root: null, // observes intersections in the viewport
                     threshold: 0,
-                    // Trigger when the element is 1px *above* the top bar
+                    // Triggers when the top of scrollTrigger hits the bottom of the topBar
                     rootMargin: `-${topBarTotalHeight}px 0px 0px 0px` 
                 }
             );
@@ -1201,6 +1295,65 @@
                 // Show temporary "Copied!" confirmation on main page
                 copyConfirmationNote.style.display = 'block';
                 setTimeout(() => { copyConfirmationNote.style.display = 'none'; }, 2000);
+            });
+        }
+        
+        // --- NEW: Refund Note Logic ---
+        function setupRefundNoteLogic() {
+            const refundGenerateBtn = document.getElementById('refund_GenerateBtn');
+            const refundClearBtn = document.getElementById('refund_ClearBtn');
+            const refundNoteText = document.getElementById('refund_Note_Text');
+            const refundName = document.getElementById('refund_Name');
+            const refundAmount = document.getElementById('refund_Amount');
+            const refundDate = document.getElementById('refund_Date');
+            const refundDispute = document.getElementById('refund_Dispute');
+            const copyConfirm = document.getElementById('copy_Confirmation_Refund');
+            
+            // Edit Modal elements
+            const refundEditModal = new bootstrap.Modal(document.getElementById('refundNoteEditModal'));
+            const refundEditText = document.getElementById('refund_Note_Edit_Text');
+            const saveRefundBtn = document.getElementById('saveRefundNoteBtn');
+            const copyRefundBtn = document.getElementById('copyEditedRefundNoteBtn');
+
+            refundGenerateBtn.addEventListener('click', () => {
+                const today = getFormattedDate();
+                const name = refundName.value || 'PRANTO R';
+                const amount = refundAmount.value || '$0.00';
+                const date = refundDate.value || 'N/A';
+                const dispute = refundDispute.value || 'N/A';
+                
+                // Format: 11/07/25>IDR WIN>PRANTO R>...
+                let note = `${today}>IDR WIN>${name}>WORKING ON MEDIATION FEE REFUND'S WORKLIST. WE WERE SUCCESSFUL AND PREVAILED IN THE IDR DETERMINATION. WE RECEIVED MEDIATOR FEE REFUND OF ${amount} DATED ${date}. ${dispute}. WE ARE WAITING FOR ADDITIONAL PAYMENT. PLEASE DO NOT CLOSE THE TICKET BEFORE ALL PAYMENTS ARE RECEIVED.`;
+                
+                refundNoteText.value = note.trim().toUpperCase();
+            });
+            
+            refundClearBtn.addEventListener('click', () => {
+                refundNoteText.value = '';
+                refundAmount.value = '';
+                refundDate.value = '';
+                refundDispute.value = '';
+            });
+            
+            // Open edit modal
+            document.getElementById('refundNoteEditModal').addEventListener('show.bs.modal', () => {
+                refundEditText.value = refundNoteText.value;
+            });
+            
+            // Save from edit modal
+            saveRefundBtn.addEventListener('click', () => {
+                refundNoteText.value = refundEditText.value;
+                refundEditModal.hide();
+            });
+            
+            // Copy from edit modal
+            copyRefundBtn.addEventListener('click', () => {
+                refundEditText.select();
+                document.execCommand('copy');
+                refundEditModal.hide();
+                
+                copyConfirm.style.display = 'block';
+                setTimeout(() => { copyConfirm.style.display = 'none'; }, 2000);
             });
         }
 
