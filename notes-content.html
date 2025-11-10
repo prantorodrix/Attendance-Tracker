@@ -181,42 +181,43 @@
             box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
         }
 
-        /* === NEW: EOB Result Customization === */
+        /* === NEW: EOB Result Customization (Simplified) === */
         .eob-result-container {
-            display: flex;
-            justify-content: space-between;
             font-size: 0.95rem;
             line-height: 1.6;
         }
-        .eob-result-col {
-            flex-basis: 48%;
+        .eob-result-item {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.45rem 0.25rem;
+            border-bottom: 1px solid var(--bs-border-color);
         }
-        .eob-result-col.single {
-            flex-basis: 100%;
-            align-items: flex-end; /* Show on the right */
+        .eob-result-item:last-child { 
+            border-bottom: none; 
+            padding-bottom: 0;
         }
-        .eob-result-col .header {
-            font-size: 0.8rem;
-            font-weight: bold;
+        .eob-result-item:first-child {
+            padding-top: 0;
+        }
+        .eob-result-label {
+            font-size: 0.9rem;
             color: var(--bs-secondary-color);
-            text-transform: uppercase;
-            margin-bottom: 4px;
+            font-weight: 600;
+            margin-right: 10px;
         }
-        .eob-result-value {
-            font-weight: bold;
-            font-size: 1.1rem;
+        .eob-result-data {
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--bs-body-color);
-            margin-bottom: 8px;
-            min-height: 28px; /* Ensure alignment */
-            width: 160px;
+            text-align: right;
         }
-         .eob-result-value.currency {
-            color: #28a745;
-         }
+        .eob-result-data.currency { 
+            color: #28a745; 
+        }
+        
         .facility-truncate {
-            max-width: 100%; /* Fill column but not overflow */
+            max-width: 180px; /* Adjust as needed */
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -360,6 +361,13 @@
              padding: 2px 6px;
         }
         
+        /* Simple .eob-result-data highlight */
+        .eob-result-data.bg-match,
+        .eob-result-data.bg-mismatch,
+        .eob-result-data.bg-overpaid {
+             padding: 2px 6px;
+        }
+
         .editable-input {
             width: 100px;
             background-color: var(--bs-tertiary-bg); /* Updated */
@@ -731,7 +739,7 @@
                 <a href="index.html"
                     onclick="window.open(this.href, '_self'); return false;"
                     style="
-                    display: inline-flex; align-items-center; text-decoration: none;
+                    display: inline-flex; align-items: center; text-decoration: none;
                     padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
                     white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
                     background: rgba(255, 255, 255, 0.15);
@@ -771,57 +779,39 @@
         <!-- This div is the trigger for the intersection observer -->
         <div id="scroll-trigger" style="position: relative; height: 1px; top: 0;"></div>
 
-        <!-- NEW: 3-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
+        <!-- NEW: 2-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
         <div class="row g-3" id="eob-input-row"> <!-- ID added for animation -->
             
-            <!-- Column 1: Input Area -->
-            <div class="col-lg-4">
+            <!-- Column 1: Input Area (UPDATED) -->
+            <div class="col-lg-6">
                 <!-- Section 1: Input Card (Glass UI) -->
                 <div class="card p-3 h-100 d-flex flex-column">
                     <!-- Updated EOB Input -->
-                    <div class="mb-3 flex-grow-1 d-flex flex-column">
-                        <!--<label for="eobUpdatedInput" class="form-label fw-bold">Updated EOB:</label>-->
+                    <div class="mb-0 flex-grow-1 d-flex flex-column">
+                        <label for="eobUpdatedInput" class="form-label fw-bold">Paste EOB:</label>
                         <textarea class="form-control h-100" id="eobUpdatedInput" 
-                                  placeholder="Update EOB."></textarea>
+                                  placeholder="Ekhana EOB text paste korun..."></textarea>
                     </div>
-                    <!-- Old EOB Input -->
-                    <div class="flex-grow-1 d-flex flex-column">
-                        <!--<label for="eobOldInput" class="form-label fw-bold">Old EOB:</label>-->
-                        <textarea class="form-control h-100" id="eobOldInput" 
-                                  placeholder="1st/Old EOB"></textarea>
-                    </div>
+                    <!-- Old EOB Input (REMOVED) -->
                 </div>
             </div>
             
-            <!-- Column 2: EOB Output Area 1 -->
-            <div class="col-lg-4">
+            <!-- Column 2: EOB Output Area 1 (UPDATED) -->
+            <div class="col-lg-6">
                  <!-- EOB Output Card 1 (Glass UI) -->
                 <div class="card p-3 h-100 eob-results-card">
                     <div class="card-body">
-                        <!--<h5 class="text-success fw-bold">EOB Result 1</h5>-->
-                        <!--<hr style="border-color: var(--bs-border-color);">-->
+                        <h5 class="text-success fw-bold">EOB Result</h5>
+                        <hr style="border-color: var(--bs-border-color);">
                         <div id="eob-results-list-1" class="eob-result-container">
-                            <!-- JS will populate this -->
+                            <!-- JS will populate this with new labeled format -->
                         </div>
                         <div id="eob-errors-1" class="error-message"></div>
                     </div>
                 </div>
             </div>
             
-            <!-- Column 3: EOB Output Area 2 -->
-            <div class="col-lg-4">
-                 <!-- EOB Output Card 2 (Glass UI) -->
-                <div class="card p-3 h-100 eob-results-card">
-                    <div class="card-body">
-                        <!--<h5 class="text-success fw-bold">EOB Result 2</h5>-->
-                        <!--<hr style="border-color: var(--bs-border-color);">-->
-                        <div id="eob-results-list-2" class="eob-result-container">
-                            <!-- JS will populate this -->
-                        </div>
-                        <div id="eob-errors-2" class="error-message"></div>
-                    </div>
-                </div>
-            </div>
+            <!-- Column 3: EOB Output Area 2 (REMOVED) -->
         </div>
         
         <!-- Hidden row for global calculation results (for matching logic) -->
@@ -1360,10 +1350,10 @@
 
         // --- notes-content.txt থেকে আনা Data Extraction Logic ---
         
-        // --- Global Variables ---
+        // --- Global Variables (Simplified) ---
         let globalEobAdditionalPayment = 0;
         let globalEobTicket = 'Not Found';
-        let globalEobData = { updated: null, old: null };
+        let globalEobData = { updated: null }; // Shudhu 'updated' rakha holo
 
         // --- Utility Functions ---
         function formatCurrency(num) {
@@ -1429,13 +1419,13 @@
             }
         }
 
-        // --- Get EOB Elements ---
+        // --- Get EOB Elements (Simplified) ---
         const eobUpdatedInput = document.getElementById('eobUpdatedInput');
-        const eobOldInput = document.getElementById('eobOldInput');
+        // const eobOldInput = document.getElementById('eobOldInput'); // REMOVED
         const eobResults1Container = document.getElementById('eob-results-list-1');
-        const eobResults2Container = document.getElementById('eob-results-list-2');
+        // const eobResults2Container = document.getElementById('eob-results-list-2'); // REMOVED
         const eobErrors1 = document.getElementById('eob-errors-1');
-        const eobErrors2 = document.getElementById('eob-errors-2');
+        // const eobErrors2 = document.getElementById('eob-errors-2'); // REMOVED
         const idrErrors = document.getElementById('idr-errors');
         
         // NEW: Sticky Header EOB Content
@@ -1505,23 +1495,23 @@ Regards
             // Optionally save to localStorage
         });
 
-        // --- Clear Functions ---
+        // --- Clear Functions (Simplified) ---
         
         function clearEobResults() {
              eobResults1Container.innerHTML = '';
-             eobResults2Container.innerHTML = '';
+             // eobResults2Container.innerHTML = ''; // REMOVED
              stickyEobContent.innerHTML = ''; // NEW: Clear sticky header
              eobErrors1.textContent = '';
-             eobErrors2.textContent = '';
+             // eobErrors2.textContent = ''; // REMOVED
              idrErrors.textContent = '';
              globalEobAdditionalPayment = 0;
              globalEobTicket = 'Not Found';
-             globalEobData = { updated: null, old: null };
+             globalEobData = { updated: null }; // Simplified
         }
 
         function clearComparisonStyles() {
             // Clear EOB Result styles
-            document.querySelectorAll('.eob-result-value, .sticky-eob-value').forEach(el => {
+            document.querySelectorAll('.eob-result-data, .sticky-eob-value').forEach(el => {
                 el.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
             });
             
@@ -1539,7 +1529,7 @@ Regards
         
         document.getElementById('clearButton').addEventListener('click', function() {
             eobUpdatedInput.value = '';
-            eobOldInput.value = '';
+            // eobOldInput.value = ''; // REMOVED
             document.getElementById('idrTextInput1').value = '';
             document.getElementById('idrTextInput2').value = '';
             document.getElementById('idrTextInput3').value = '';
@@ -1616,7 +1606,8 @@ Regards
             const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; 
             const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Copay|Deductible|Responsibility)\s*:?/i) || '$0.00';
             const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance|Co-insurance)\s*:?/i) || '$0.00';
-            const addlPaidStr = extractValueSkippingLines(eobText, /Additional Paid( Amount)?\s*:?/i) || '$0.00';
+            // Regex'ta aro flexible kora holo "Addl. Paid" capture korar jonno
+            const addlPaidStr = extractValueSkippingLines(eobText, /(Add(itiona)?l\.? Paid( Amount)?)\s*:?/i) || '$0.00';
 
             const coinsuranceAmt = parseCurrency(coinsuranceStr);
             const ptRespAmt = parseCurrency(ptRespStr); 
@@ -1634,133 +1625,84 @@ Regards
         }
 
         /**
-         * NEW: Populates both original cards AND the sticky header
-         * MODIFIED: Sticky header only shows 5 columns
+         * NEW: Simplified display function for one EOB with labels
          */
-        function displayEOBResults(updated, old) {
+        function displayEOBResults(updated) {
             // Clear all containers
             eobResults1Container.innerHTML = '';
-            eobResults2Container.innerHTML = '';
             stickyEobContent.innerHTML = ''; 
             eobErrors1.textContent = '';
             globalEobAdditionalPayment = 0;
             globalEobTicket = 'Not Found';
 
-            if (!updated && !old) {
+            if (!updated) {
                 eobErrors1.textContent = 'EOB not found.';
                 return;
             }
 
-            // --- Calculate Additional Payment ---
+            // --- Calculate Additional Payment (Simplified Logic) ---
             let addlPayResult = 0;
-            if (updated && old) {
-                addlPayResult = updated.paidAmt - old.paidAmt;
-            } else if (updated) {
-                addlPayResult = updated.addlPaidAmt || updated.paidAmt;
-            } else if (old) {
-                addlPayResult = old.addlPaidAmt || old.paidAmt;
+            if (updated) {
+                // Shudhu "Additional Paid" field theke data nebe
+                addlPayResult = updated.addlPaidAmt; 
             }
-            globalEobAdditionalPayment = addlPayResult;
+            // --- End of Updated Logic ---
             
-            globalEobTicket = updated?.ticketNo || old?.ticketNo || 'Not Found';
+            globalEobAdditionalPayment = addlPayResult;
+            globalEobTicket = updated?.ticketNo || 'Not Found';
 
-            // --- Build HTML for Original Cards ---
-            let html1_card = '', html2_card = '', html_sticky = '';
-
-            if (updated && old) {
-                // --- CARD 1 (Ticket, Patient, Claim, Addl) ---
-                html1_card = `
-                    <div class="eob-result-col">
-                        <span class="header">Updated</span>
-                        <span class="eob-result-value" id="eob_up_Ticket">${updated.ticketNo}</span>
-                        <span class="eob-result-value" id="eob_up_Patient">${updated.ptName}</span>
-                        <span class="eob-result-value" id="eob_up_Claim">${updated.claimNo}</span>
-                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Updated Paid - Old Paid">${formatCurrency(addlPayResult)}</span>
-                    </div>
-                    <div class="eob-result-col">
-                        <span class="header">Old</span>
-                        <span class="eob-result-value" id="eob_old_Ticket">${old.ticketNo}</span>
-                        <span class="eob-result-value" id="eob_old_Patient">${old.ptName}</span>
-                        <span class="eob-result-value" id="eob_old_Claim">${old.claimNo}</span>
-                        <span class="eob-result-value currency" id="eob_old_AddlPay" title="Old Addl. Paid">${formatCurrency(old.addlPaidAmt)}</span>
-                    </div>`;
+            // --- Build HTML for Original Card (NEW FORMAT) ---
+            let html1_card = '', html_sticky = '';
+            const data = updated;
                 
-                // --- CARD 2 (Billed, Paid, Resp, Facility) ---
-                html2_card = `
-                    <div class="eob-result-col">
-                        <span class="header">Updated</span>
-                        <span class="eob-result-value currency" id="eob_up_Billed">${formatCurrency(updated.billedAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_up_Paid">${formatCurrency(updated.paidAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_up_PtResp">${formatCurrency(updated.ptRespSum)}</span>
-                        <span class="eob-result-value facility-truncate" id="eob_up_Facility" title="${updated.provider}">${updated.provider}</span>
-                    </div>
-                    <div class="eob-result-col">
-                        <span class="header">Old</span>
-                        <span class="eob-result-value currency" id="eob_old_Billed">${formatCurrency(old.billedAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_old_Paid">${formatCurrency(old.paidAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_old_PtResp">${formatCurrency(old.ptRespSum)}</span>
-                        <span class="eob-result-value facility-truncate" id="eob_old_Facility" title="${old.provider}">${old.provider}</span>
-                    </div>`;
-
-                // --- STICKY HEADER (Two rows, 5 columns) ---
-                html_sticky = `
-                    <div class="row sticky-eob-row">
-                        <div class="col-auto"><span class="sticky-eob-label">Updated:</span></div>
-                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_up_Ticket">${updated.ticketNo}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_up_Billed">${formatCurrency(updated.billedAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_up_Paid">${formatCurrency(updated.paidAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_up_PtResp">${formatCurrency(updated.ptRespSum)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency bg-match" id="sticky_calc_AddlPay">${formatCurrency(addlPayResult)}</span></div>
-                    </div>
-                    <div class="row sticky-eob-row">
-                        <div class="col-auto"><span class="sticky-eob-label">Old:</span></div>
-                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_old_Ticket">${old.ticketNo}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_old_Billed">${formatCurrency(old.billedAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_old_Paid">${formatCurrency(old.paidAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_old_PtResp">${formatCurrency(old.ptRespSum)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency" id="sticky_old_AddlPay">${formatCurrency(old.addlPaidAmt)}</span></div>
-                    </div>`;
-
-            } else {
-                // --- SINGLE EOB ---
-                const data = updated || old;
-                const eobType = updated ? 'Updated' : 'Old';
-                
-                // --- CARD 1 (Ticket, Patient, Claim, Addl) ---
-                html1_card = `
-                    <div class="eob-result-col single">
-                        <span class="header">${eobType}</span>
-                        <span class="eob-result-value" id="eob_single_Ticket">${data.ticketNo}</span>
-                        <span class="eob-result-value" id="eob_single_Patient">${data.ptName}</span>
-                        <span class="eob-result-value" id="eob_single_Claim">${data.claimNo}</span>
-                        <span class="eob-result-value currency bg-match" id="eob_calc_AddlPay" title="Single EOB Addl. Paid">${formatCurrency(addlPayResult)}</span>
-                    </div>`;
-
-                // --- CARD 2 (Billed, Paid, Resp, Facility) ---
-                html2_card = `
-                    <div class="eob-result-col single">
-                        <span class="header">${eobType}</span>
-                        <span class="eob-result-value currency" id="eob_single_Billed">${formatCurrency(data.billedAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_single_Paid">${formatCurrency(data.paidAmt)}</span>
-                        <span class="eob-result-value currency" id="eob_single_PtResp">${formatCurrency(data.ptRespSum)}</span>
-                        <span class="eob-result-value facility-truncate" id="eob_single_Facility" title="${data.provider}">${data.provider}</span>
-                    </div>`;
-                
-                // --- STICKY HEADER (One row, 5 columns) ---
-                 html_sticky = `
-                    <div class="row sticky-eob-row">
-                        <div class="col-auto"><span class="sticky-eob-label">${eobType}:</span></div>
-                        <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_single_Ticket">${data.ticketNo}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_single_Billed">${formatCurrency(data.billedAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_single_Paid">${formatCurrency(data.paidAmt)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_single_PtResp">${formatCurrency(data.ptRespSum)}</span></div>
-                        <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency bg-match" id="sticky_calc_AddlPay">${formatCurrency(addlPayResult)}</span></div>
-                    </div>`;
-            }
+            html1_card = `
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Ticket #</span>
+                    <span class="eob-result-data" id="eob_single_Ticket">${data.ticketNo}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Patient Name</span>
+                    <span class="eob-result-data" id="eob_single_Patient">${data.ptName}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Claim #</span>
+                    <span class="eob-result-data" id="eob_single_Claim">${data.claimNo}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Billed Amt</span>
+                    <span class="eob-result-data currency" id="eob_single_Billed">${formatCurrency(data.billedAmt)}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Paid Amt</span>
+                    <span class="eob-result-data currency" id="eob_single_Paid">${formatCurrency(data.paidAmt)}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Patient Resp</span>
+                    <span class="eob-result-data currency" id="eob_single_PtResp">${formatCurrency(data.ptRespSum)}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Additional Paid</span>
+                    <span class="eob-result-data currency bg-match" id="eob_calc_AddlPay">${formatCurrency(addlPayResult)}</span>
+                </div>
+                <div class="eob-result-item">
+                    <span class="eob-result-label">Facility</span>
+                    <span class="eob-result-data facility-truncate" id="eob_single_Facility" title="${data.provider}">${data.provider}</span>
+                </div>
+            `;
+            
+            // --- STICKY HEADER (One row, 5 columns) ---
+             html_sticky = `
+                <div class="row sticky-eob-row">
+                    <div class="col-auto"><span class="sticky-eob-label">EOB:</span></div>
+                    <div class="col"><span class="sticky-eob-label">Ticket:</span> <span class="sticky-eob-value" id="sticky_single_Ticket">${data.ticketNo}</span></div>
+                    <div class="col"><span class="sticky-eob-label">Total Bill:</span> <span class="sticky-eob-value currency" id="sticky_single_Billed">${formatCurrency(data.billedAmt)}</span></div>
+                    <div class="col"><span class="sticky-eob-label">Paid:</span> <span class="sticky-eob-value currency" id="sticky_single_Paid">${formatCurrency(data.paidAmt)}</span></div>
+                    <div class="col"><span class="sticky-eob-label">PT Resp:</span> <span class="sticky-eob-value currency" id="sticky_single_PtResp">${formatCurrency(data.ptRespSum)}</span></div>
+                    <div class="col"><span class="sticky-eob-label">Additional:</span> <span class="sticky-eob-value currency bg-match" id="sticky_calc_AddlPay">${formatCurrency(addlPayResult)}</span></div>
+                </div>`;
             
             // Populate all containers
             eobResults1Container.innerHTML = html1_card;
-            eobResults2Container.innerHTML = html2_card;
             stickyEobContent.innerHTML = html_sticky;
         }
 
@@ -1919,7 +1861,7 @@ Regards
             }
             
             // Highlight EOB Ticket field (both original and sticky)
-            const eobTicketEls = document.querySelectorAll('#eob_up_Ticket, #eob_single_Ticket, #sticky_up_Ticket, #sticky_single_Ticket');
+            const eobTicketEls = document.querySelectorAll('#eob_single_Ticket, #sticky_single_Ticket');
             if (eobTicketEls.length > 0) {
                 if(allIdrTicketCells.length > 0) { 
                    eobTicketEls.forEach(el => el.classList.add(eobTicketMatched ? 'bg-match' : 'bg-mismatch'));
@@ -1941,32 +1883,40 @@ Regards
 
             const eobAddlPayEls = document.querySelectorAll('#eob_calc_AddlPay, #sticky_calc_AddlPay');
             if (globalEobAdditionalPayment === 0) {
-                idrErrors.textContent = 'Calculated EOB Additional Payment is $0.00. Cannot perform match.';
-                return;
+                // Check if it's a single EOB with 0 additional, which is valid
+                if (globalEobData.updated && globalEobData.updated.addlPaidAmt === 0) {
+                     idrErrors.textContent = 'Calculated EOB Additional Payment is $0.00 (from EOB field).';
+                     idrErrors.classList.add('text-success'); // Not an error
+                     idrErrors.classList.remove('text-danger');
+                }
+                // Don't return if it's 0, just skip matching logic below
             }
 
-            let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
+            // Only attempt match if EOB payment is not zero
+            if (globalEobAdditionalPayment !== 0) {
+                let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
 
-            if (bestMatch.indices.length > 0) {
-                // Found a match
-                idrAmounts.forEach((item, index) => {
-                    if (bestMatch.indices.includes(index)) {
-                        item.cell.classList.add('bg-match');
-                    } else {
-                        item.cell.classList.add('bg-mismatch');
-                    }
-                });
-                if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-match'));
-                idrErrors.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
-                idrErrors.classList.add('text-success');
-                idrErrors.classList.remove('text-danger');
-            } else {
-                // No match
-                idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
-                if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-mismatch'));
-                idrErrors.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
-                idrErrors.classList.add('text-danger');
-                idrErrors.classList.remove('text-success');
+                if (bestMatch.indices.length > 0) {
+                    // Found a match
+                    idrAmounts.forEach((item, index) => {
+                        if (bestMatch.indices.includes(index)) {
+                            item.cell.classList.add('bg-match');
+                        } else {
+                            item.cell.classList.add('bg-mismatch');
+                        }
+                    });
+                    if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-match'));
+                    idrErrors.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
+                    idrErrors.classList.add('text-success');
+                    idrErrors.classList.remove('text-danger');
+                } else {
+                    // No match
+                    idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
+                    if (eobAddlPayEls.length > 0) eobAddlPayEls.forEach(el => el.classList.add('bg-mismatch'));
+                    idrErrors.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
+                    idrErrors.classList.add('text-danger');
+                    idrErrors.classList.remove('text-success');
+                }
             }
         }
 
@@ -1996,7 +1946,7 @@ Regards
             return bestMatch;
         }
 
-        // --- Main Process Function ---
+        // --- Main Process Function (Simplified) ---
 
         function processAllData() {
             // 1. Clear previous results and styles
@@ -2004,18 +1954,18 @@ Regards
             noteClearBtn.click(); 
             mailClearBtn.click(); 
             eobErrors1.textContent = '';
-            eobErrors2.textContent = '';
+            // eobErrors2.textContent = ''; // REMOVED
             idrErrors.textContent = '';
             idrErrors.classList.remove('text-success', 'text-danger');
 
             // 2. Process EOBs
             const eobUpdatedText = eobUpdatedInput.value;
-            const eobOldText = eobOldInput.value;
+            // const eobOldText = eobOldInput.value; // REMOVED
             
             globalEobData.updated = parseEOB(eobUpdatedText);
-            globalEobData.old = parseEOB(eobOldText);
+            // globalEobData.old = parseEOB(eobOldText); // REMOVED
 
-            displayEOBResults(globalEobData.updated, globalEobData.old);
+            displayEOBResults(globalEobData.updated); // Shudhu 'updated' pathano holo
             
             // 3. Process IDR
             parseAndDisplayIDR();
@@ -2025,7 +1975,7 @@ Regards
         }
 
         
-        // --- Note Generation & Validation Functions ---
+        // --- Note Generation & Validation Functions (Simplified) ---
 
         function validateAndGenerateNote() {
             let validationPassed = true;
@@ -2133,9 +2083,9 @@ Regards
             
             noteInitialInput.value = initial;
             
-            // --- EOB Data ---
-            const eobExists = globalEobData.updated || globalEobData.old;
-            const eobData = globalEobData.updated || globalEobData.old; // Prefer updated
+            // --- EOB Data (Simplified) ---
+            const eobExists = globalEobData.updated;
+            const eobData = globalEobData.updated; // Shudhu 'updated' data
             
             const eobClaimNo = eobData?.claimNo || 'N/A';
             const eobBilled = eobData?.billedAmt || 0;
@@ -2207,7 +2157,7 @@ Regards
             noteTextInput.value = note.trim().toUpperCase();
         }
         
-        // --- Mail Generation Function ---
+        // --- Mail Generation Function (Simplified) ---
         function generateMail() {
             mailTypeInput.classList.remove('is-invalid');
             mailDetermDateInput.classList.remove('is-invalid');
@@ -2215,7 +2165,7 @@ Regards
             mailNoteTextInput.value = ''; 
             mailTextInput.classList.remove('bg-match', 'text-success', 'is-invalid');
 
-            const eobExists = globalEobData.updated || globalEobData.old;
+            const eobExists = globalEobData.updated;
             const idrRows = document.querySelectorAll('#idrDataTableBody tr');
             
             if (!eobExists) {
@@ -2257,8 +2207,8 @@ Regards
                 return;
             }
             
-            const provider = globalEobData.updated?.provider || globalEobData.old?.provider || 'Not Found';
-            let eobClaim = globalEobData.updated?.claimNo || globalEobData.old?.claimNo || 'Not Found';
+            const provider = globalEobData.updated?.provider || 'Not Found';
+            let eobClaim = globalEobData.updated?.claimNo || 'Not Found';
             
             const idrNum = idrRow.cells[2].textContent;
             const idrClaim = idrRow.cells[3].textContent; 
