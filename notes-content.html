@@ -72,6 +72,14 @@
             
             --sticky-bg: var(--sticky-bg-light);
             --sticky-border: var(--sticky-border-light);
+            
+            /* --- NEW: Fixed Top Bar Style --- */
+            #top-bar-container {
+                 background: rgba(243, 231, 255, 0.6); /* Light theme match */
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-light);
+            }
         }
 
         [data-bs-theme="dark"] {
@@ -95,6 +103,14 @@
             
             --sticky-bg: var(--sticky-bg-dark);
             --sticky-border: var(--sticky-border-dark);
+            
+             /* --- NEW: Fixed Top Bar Style --- */
+            #top-bar-container {
+                 background: rgba(10, 12, 16, 0.6); /* Dark theme match */
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-dark);
+            }
         }
 
         body {
@@ -181,10 +197,11 @@
             box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
         }
 
-        /* === NEW: EOB Result Customization (Simplified) === */
+        /* === EOB Result Customization (Labeled List) === */
         .eob-result-container {
             font-size: 0.95rem;
             line-height: 1.6;
+            padding-top: 0.25rem;
         }
         .eob-result-item {
             display: flex;
@@ -197,9 +214,8 @@
             border-bottom: none; 
             padding-bottom: 0;
         }
-        .eob-result-item:first-child {
-            padding-top: 0;
-        }
+        /* First item's padding is handled by container padding-top */
+        
         .eob-result-label {
             font-size: 0.9rem;
             color: var(--bs-secondary-color);
@@ -300,6 +316,11 @@
         textarea {
             font-family: monospace;
             min-height: 150px; /* Reduced default min-height */
+        }
+        
+        /* EOB Input Textarea Height */
+        #eobUpdatedInput {
+            min-height: 250px;
         }
         
         .idr-textarea {
@@ -420,7 +441,7 @@
         
         /* Sticky Column CSS (REMOVED) */
         
-        #note_Text, #note_Mail_Text, #mail_Note_Text, #refund_Note_Text {
+        #note_Text, #note_Mail_Text, #mail_Note_Text, #refund_Note_Text, #ineligible_Note_Text {
             min-height: 200px;
             font-family: monospace;
             font-size: 0.9rem;
@@ -554,11 +575,16 @@
             position: relative;
         }
 
-        /* Top Bar (Buttons) */
-        #top-bar {
-            /* This is already sticky, which is good. */
-            top: 1rem; 
-            z-index: 1030; 
+        /* --- NEW: Fixed Top Bar Container --- */
+        #top-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1035; /* Above sticky header (1020) */
+            padding: 0.75rem 1.5rem; /* Replaces px-4 and margin-top */
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         /* EOB Input Row */
@@ -577,8 +603,7 @@
             opacity: 0;
             height: 0;
             position: sticky;
-            /* Top value = top-bar height + its margin-top */
-            top: calc(58px + 1rem); /* 58px approx height + 1rem margin */
+            /* top: calc(58px + 1rem); MODIFIED: This is now set by JS */
             z-index: 1020;
             transition: all 0.3s ease-out;
             
@@ -698,18 +723,15 @@
         <div class="bg-image bg-image-dark bg-3"></div>
     </div>
 
-    <!-- ======== index.html থেকে আনা Theme Toggle Button ======== -->
-    <!-- NEW: Top Bar -->
-    <div class="container-fluid px-4">
-        <div id="top-bar" class="row sticky-top" style="
+    <!-- ======== NEW: Fixed Top Bar ======== -->
+    <div id="top-bar-container" class="container-fluid">
+        <div id="top-bar" class="row" style="
             font-family:'Poppins',sans-serif; font-weight:600;
-            padding: 8px 15px;
-            margin-top: 1rem;
+            padding: 8px 0px; /* Padding already in parent */
             border-radius:10px;
             display:flex; justify-content:space-between; align-items:center;
-            background:rgba(255,255,255,0.05); backdrop-filter:blur(8px);
-            border:1px solid rgba(255,255,255,0.1);
-            box-shadow:0 4px 15px rgba(0,0,0,0.1); color:#fff;
+            /* Removed background/shadow styles, now in #top-bar-container CSS */
+            color: var(--bs-body-color); /* Use theme color */
             font-size:14px;
             z-index: 1030;
             ">
@@ -742,20 +764,20 @@
                     display: inline-flex; align-items: center; text-decoration: none;
                     padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
                     white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
-                    background: rgba(255, 255, 255, 0.15);
-                    color: #fff;
-                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    background: rgba(128, 128, 128, 0.15);
+                    color: var(--bs-body-color);
+                    border: 1px solid rgba(128, 128, 128, 0.3);
                     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                    text-shadow: 0 0 2px rgba(0,0,0,0.8);
-                " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'; this.style.transform='translateY(-1px)'"
-                    onmouseout="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.transform='translateY(0)'">
+                    /* text-shadow: 0 0 2px rgba(0,0,0,0.8); */
+                " onmouseover="this.style.background='rgba(128, 128, 128, 0.3)'; this.style.transform='translateY(-1px)'"
+                    onmouseout="this.style.background='rgba(128, 128, 128, 0.15)'; this.style.transform='translateY(0)'">
                     
                     <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span>
                     Main Page
                 </a>
 
                 <!-- Theme Toggle Button moved inside -->
-                <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-1" style="font-size: 13px;">
+                <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-1" style="font-size: 13px; background: none; border: none; backdrop-filter: none;">
                     <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
                     <span id="theme-text" class="fw-medium"></span>
                 </button>
@@ -779,11 +801,11 @@
         <!-- This div is the trigger for the intersection observer -->
         <div id="scroll-trigger" style="position: relative; height: 1px; top: 0;"></div>
 
-        <!-- NEW: 2-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
+        <!-- NEW: 3-Column EOB Layout, Glass Card ব্যবহার করা হয়েছে -->
         <div class="row g-3" id="eob-input-row"> <!-- ID added for animation -->
             
             <!-- Column 1: Input Area (UPDATED) -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <!-- Section 1: Input Card (Glass UI) -->
                 <div class="card p-3 h-100 d-flex flex-column">
                     <!-- Updated EOB Input -->
@@ -792,26 +814,38 @@
                         <textarea class="form-control h-100" id="eobUpdatedInput" 
                                   placeholder="Ekhana EOB text paste korun..."></textarea>
                     </div>
-                    <!-- Old EOB Input (REMOVED) -->
                 </div>
             </div>
             
             <!-- Column 2: EOB Output Area 1 (UPDATED) -->
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                  <!-- EOB Output Card 1 (Glass UI) -->
                 <div class="card p-3 h-100 eob-results-card">
                     <div class="card-body">
-                        <h5 class="text-success fw-bold">EOB Result</h5>
+                        <h5 class="text-success fw-bold">EOB Result 1</h5>
                         <hr style="border-color: var(--bs-border-color);">
                         <div id="eob-results-list-1" class="eob-result-container">
-                            <!-- JS will populate this with new labeled format -->
+                            <!-- JS will populate this -->
                         </div>
                         <div id="eob-errors-1" class="error-message"></div>
                     </div>
                 </div>
             </div>
             
-            <!-- Column 3: EOB Output Area 2 (REMOVED) -->
+            <!-- Column 3: EOB Output Area 2 (NEW) -->
+            <div class="col-lg-4">
+                 <!-- EOB Output Card 2 (Glass UI) -->
+                <div class="card p-3 h-100 eob-results-card">
+                    <div class="card-body">
+                        <h5 class="text-success fw-bold">EOB Result 2</h5>
+                        <hr style="border-color: var(--bs-border-color);">
+                        <div id="eob-results-list-2" class="eob-result-container">
+                            <!-- JS will populate this -->
+                        </div>
+                        <div id="eob-errors-2" class="error-message"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Hidden row for global calculation results (for matching logic) -->
@@ -923,10 +957,15 @@
                             <i class="bi bi-envelope-at me-2"></i>Email
                         </button>
                     </li>
-                    <!-- ======== NEW: Refund Tab ======== -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="refund-tab" data-bs-toggle="tab" data-bs-target="#refund-pane" type="button" role="tab" aria-controls="refund-pane" aria-selected="false">
                             <i class="bi bi-cash-coin me-2"></i>Refund
+                        </button>
+                    </li>
+                    <!-- ======== NEW: Ineligible Tab ======== -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="ineligible-tab" data-bs-toggle="tab" data-bs-target="#ineligible-pane" type="button" role="tab" aria-controls="ineligible-pane" aria-selected="false">
+                            <i class="bi bi-x-octagon me-2"></i>Ineligible
                         </button>
                     </li>
                 </ul>
@@ -940,7 +979,7 @@
                             <div class="row g-3">
                                 <div class="col-3">
                                     <label for="note_Name" class="form-label fw-bold">Name:</label>
-                                    <input type="text" class="form-control" id="note_Name" value="PRANTO R">
+                                    <input type="text" class="form-control" id="note_Name">
                                     <label for="note_Initial" class="form-label fw-bold mt-2">Initial:</label>
                                     <input type="text" class="form-control" id="note_Initial">
                                     
@@ -980,9 +1019,9 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-3">
                                     <label for="note_Mail_Name" class="form-label fw-bold">My Name:</label>
-                                    <input type="text" class="form-control" id="note_Mail_Name" value="Pranto Rodrix">
+                                    <input type="text" class="form-control" id="note_Mail_Name">
                                     <label for="note_Mail_Initial" class="form-label fw-bold mt-2">My Initial:</label>
-                                    <input type="text" class="form-control" id="note_Mail_Initial" value="PRANTO R">
+                                    <input type="text" class="form-control" id="note_Mail_Initial">
                                 </div>
                                 <div class="col-3">
                                     <label for="note_Mail_To" class="form-label fw-bold">To: (Click to copy)</label>
@@ -1035,20 +1074,20 @@
                             </div>
                         </div>
                     </div>
-                    <!-- ======== NEW: Refund Pane ======== -->
+                    <!-- Refund Pane -->
                     <div class="tab-pane fade" id="refund-pane" role="tabpanel" aria-labelledby="refund-tab" tabindex="0">
                         <div class="tab-content-glass">
                             <div class="row g-3">
                                 <!-- Inputs -->
                                 <div class="col-3">
                                     <label for="refund_Name" class="form-label fw-bold">Initial Name:</label>
-                                    <input type="text" class="form-control" id="refund_Name" value="PRANTO R">
+                                    <input type="text" class="form-control" id="refund_Name">
                                     <label for="refund_Amount" class="form-label fw-bold mt-2">Refund Amount:</label>
-                                    <input type="text" class="form-control" id="refund_Amount" placeholder="$550.00">
+                                    <input type="text" class="form-control" id="refund_Amount" placeholder="$0.00">
                                     <label for="refund_Date" class="form-label fw-bold mt-2">Refund Date:</label>
-                                    <input type="text" class="form-control" id="refund_Date" placeholder="08/19/2025">
+                                    <input type="text" class="form-control" id="refund_Date" placeholder="MM/DD/YYYY">
                                     <label for="refund_Dispute" class="form-label fw-bold mt-2">Dispute:</label>
-                                    <input type="text" class="form-control" id="refund_Dispute" placeholder="DISP-918517">
+                                    <input type="text" class="form-control" id="refund_Dispute" placeholder="DISP-****">
                                 </div>
                                 <!-- Note Box -->
                                 <div class="col-7">
@@ -1065,6 +1104,40 @@
                                     </button>
                                      <span id="copy_Confirmation_Refund" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
                                      <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="refund_ClearBtn">
+                                         <i class="bi bi-x-circle"></i> Clear Note
+                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======== NEW: Ineligible Pane ======== -->
+                    <div class="tab-pane fade" id="ineligible-pane" role="tabpanel" aria-labelledby="ineligible-tab" tabindex="0">
+                        <div class="tab-content-glass">
+                            <div class="row g-3">
+                                <!-- Inputs -->
+                                <div class="col-3">
+                                    <label for="ineligible_Name" class="form-label fw-bold">Name:</label>
+                                    <input type="text" class="form-control" id="ineligible_Name" placeholder="Name">
+                                    <label for="ineligible_Initial" class="form-label fw-bold mt-2">Initial:</label>
+                                    <input type="text" class="form-control" id="ineligible_Initial" value="FINAL REVIEW" readonly>
+                                    <label for="ineligible_Dispute" class="form-label fw-bold mt-2">Dispute:</label>
+                                    <input type="text" class="form-control" id="ineligible_Dispute" placeholder="DISP-****">
+                                </div>
+                                <!-- Note Box -->
+                                <div class="col-7">
+                                    <label for="ineligible_Note_Text" class="form-label fw-bold">Ineligible Note: (Click to Copy)</label>
+                                    <textarea class="form-control copyable" id="ineligible_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Ineligible')"></textarea>
+                                </div>
+                                <!-- Buttons -->
+                                <div class="col-2 d-flex flex-column justify-content-end">
+                                     <button class="btn btn-info rounded-pill w-100 mb-2" id="ineligible_GenerateBtn">
+                                         <i class="bi bi-pencil-square"></i> Generate Note
+                                     </button>
+                                     <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#ineligibleNoteEditModal">
+                                        <i class="bi bi-pencil"></i> Edit Note
+                                    </button>
+                                     <span id="copy_Confirmation_Ineligible" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                     <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="ineligible_ClearBtn">
                                          <i class="bi bi-x-circle"></i> Clear Note
                                      </button>
                                 </div>
@@ -1143,6 +1216,28 @@
         </div>
     </div>
     <!-- ======== End Refund Note Edit Modal ======== -->
+    
+    <!-- ======== NEW: Ineligible Note Edit Modal ======== -->
+    <div class="modal fade" id="ineligibleNoteEditModal" tabindex="-1" aria-labelledby="ineligibleNoteEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="ineligibleNoteEditModalLabel">Edit Ineligible Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated ineligible note below.</p>
+                    <textarea id="ineligible_Note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedIneligibleNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveIneligibleNoteBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======== End Ineligible Note Edit Modal ======== -->
 
 
     <!--Footer Section-->
@@ -1163,43 +1258,107 @@
         const themeIcon = document.getElementById('theme-icon');
         const themeText = document.getElementById('theme-text');
 
+        // --- Persistent Storage Functions (localStorage) ---
+        function savePersistentValue(id, value) {
+            try {
+                localStorage.setItem(id, value);
+            } catch (e) {
+                console.warn("localStorage is not available. Values will not be saved.", e);
+            }
+        }
+
+        function loadPersistentValue(id, defaultValue) {
+            try {
+                const storedValue = localStorage.getItem(id);
+                return storedValue !== null ? storedValue : defaultValue;
+            } catch (e) {
+                console.warn("localStorage is not available. Loading default value.", e);
+                return defaultValue;
+            }
+        }
+
         // --- index.html থেকে আনা Theme Toggle Logic ---
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
             updateAnimatedBackground(); // ইনিশিয়াল ব্যাকগ্রাউন্ড সেট
+
+            // --- FIX: Add click listener for theme toggle ---
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlEl.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+            // --- End FIX ---
             
             // Set footer year
             document.getElementById('footer-year').textContent = new Date().getFullYear();
             
-            // NEW: Setup Note Edit Modal
-            setupNoteEditModal();
+            // Setup persistent fields
+            setupPersistentFields();
             
-            // NEW: Setup Refund Note Logic
+            // Setup Note Edit Modals
+            setupNoteEditModal();
             setupRefundNoteLogic();
-
-            // NEW: Delay sticky setup slightly to ensure layout is complete
-            // This setup is moved to window.onload for better reliability
+            setupIneligibleNoteLogic(); // NEW
+            
+            // --- NEW: Adjust main content padding for fixed top bar ---
+            const topBarContainer = document.getElementById('top-bar-container');
+            const dashboardPage = document.getElementById('dashboard-page');
+            if (topBarContainer && dashboardPage) {
+                // Use a slight delay to ensure layout is calculated
+                setTimeout(() => {
+                    const topBarHeight = topBarContainer.offsetHeight;
+                    dashboardPage.style.paddingTop = `${topBarHeight + 16}px`; // 16px for 1rem margin
+                }, 100); 
+            }
+            
+            // Setup sticky scroll
+            window.onload = () => {
+                setupStickyScroll();
+            };
         });
         
-        // --- NEW: Sticky Scroll Logic (FIXED) ---
-        // window.onload ensures all assets (images, fonts) are loaded and layout is stable
-        window.onload = () => {
-            setupStickyScroll();
-        };
+        // --- NEW: Setup Persistent Fields (Defaults are now empty) ---
+        function setupPersistentFields() {
+            const persistentInputs = [
+                { id: 'note_Name', defaultValue: '' },
+                { id: 'note_Mail_Name', defaultValue: '' },
+                { id: 'note_Mail_Initial', defaultValue: '' },
+                { id: 'refund_Name', defaultValue: '' },
+                { id: 'ineligible_Name', defaultValue: '' },
+                { id: 'ineligible_Dispute', defaultValue: '' }
+            ];
 
+            persistentInputs.forEach(item => {
+                const inputEl = document.getElementById(item.id);
+                if (inputEl) {
+                    inputEl.value = loadPersistentValue(item.id, item.defaultValue);
+                    inputEl.addEventListener('input', () => {
+                        savePersistentValue(item.id, inputEl.value);
+                    });
+                }
+            });
+        }
+        
+        // --- NEW: Sticky Scroll Logic (FIXED) ---
         function setupStickyScroll() {
             const scrollTrigger = document.getElementById('scroll-trigger');
-            const topBar = document.getElementById('top-bar');
+            const topBarContainer = document.getElementById('top-bar-container'); // Use container
 
-            if (!scrollTrigger || !topBar) {
+            if (!scrollTrigger || !topBarContainer) {
                 console.error("Sticky scroll elements not found!");
                 return;
             }
             
             // Calculate the correct top margin for the observer
-            // topBar.offsetHeight is the height, 16 is 1rem margin-top
-            const topBarTotalHeight = topBar.offsetHeight + 16; 
+            const topBarTotalHeight = topBarContainer.offsetHeight; 
+            
+            // --- NEW: Set sticky-eob-header's top position dynamically ---
+            const stickyHeader = document.getElementById('sticky-eob-header');
+            if(stickyHeader) {
+                stickyHeader.style.top = `${topBarTotalHeight}px`;
+            }
 
             const observer = new IntersectionObserver(
                 ([entry]) => {
@@ -1288,7 +1447,7 @@
             });
         }
         
-        // --- NEW: Refund Note Logic ---
+        // --- NEW: Refund Note Logic (with Validation) ---
         function setupRefundNoteLogic() {
             const refundGenerateBtn = document.getElementById('refund_GenerateBtn');
             const refundClearBtn = document.getElementById('refund_ClearBtn');
@@ -1304,13 +1463,44 @@
             const refundEditText = document.getElementById('refund_Note_Edit_Text');
             const saveRefundBtn = document.getElementById('saveRefundNoteBtn');
             const copyRefundBtn = document.getElementById('copyEditedRefundNoteBtn');
+            
+            const inputsToValidate = [refundAmount, refundDate, refundDispute];
 
             refundGenerateBtn.addEventListener('click', () => {
+                const name = refundName.value.trim(); // Will be loaded from localStorage
+                const amount = refundAmount.value.trim();
+                const date = refundDate.value.trim();
+                const dispute = refundDispute.value.trim();
+                
+                // --- Validation ---
+                let isValid = true;
+                inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
+                refundNoteText.value = '';
+
+                if (amount === '') {
+                    refundAmount.classList.add('is-invalid');
+                    isValid = false;
+                }
+                if (date === '') {
+                    refundDate.classList.add('is-invalid');
+                    isValid = false;
+                }
+                if (dispute === '') {
+                    refundDispute.classList.add('is-invalid');
+                    isValid = false;
+                }
+                if (name === '') {
+                     refundName.classList.add('is-invalid');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    refundNoteText.value = "ERROR: Please fill all Refund fields (Name, Amount, Date, Dispute).";
+                    return;
+                }
+                // --- End Validation ---
+                
                 const today = getFormattedDate();
-                const name = refundName.value || 'PRANTO R';
-                const amount = refundAmount.value || '$0.00';
-                const date = refundDate.value || 'N/A';
-                const dispute = refundDispute.value || 'N/A';
                 
                 // Format: 11/07/25>IDR WIN>PRANTO R>...
                 let note = `${today}>IDR WIN>${name}>WORKING ON MEDIATION FEE REFUND'S WORKLIST. WE WERE SUCCESSFUL AND PREVAILED IN THE IDR DETERMINATION. WE RECEIVED MEDIATOR FEE REFUND OF ${amount} DATED ${date}. ${dispute}. WE ARE WAITING FOR ADDITIONAL PAYMENT. PLEASE DO NOT CLOSE THE TICKET BEFORE ALL PAYMENTS ARE RECEIVED.`;
@@ -1323,6 +1513,13 @@
                 refundAmount.value = '';
                 refundDate.value = '';
                 refundDispute.value = '';
+                // Name field is NOT cleared
+                inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
+            });
+            
+            // Add input listeners to remove error state
+            [...inputsToValidate, refundName].forEach(el => {
+                el.addEventListener('input', () => el.classList.remove('is-invalid'));
             });
             
             // Open edit modal
@@ -1345,6 +1542,105 @@
                 copyConfirm.style.display = 'block';
                 setTimeout(() => { copyConfirm.style.display = 'none'; }, 2000);
             });
+        }
+        
+        // --- NEW: Ineligible Note Logic (with Validation) ---
+        function setupIneligibleNoteLogic() {
+            const generateBtn = document.getElementById('ineligible_GenerateBtn');
+            const clearBtn = document.getElementById('ineligible_ClearBtn');
+            const noteText = document.getElementById('ineligible_Note_Text');
+            const nameEl = document.getElementById('ineligible_Name');
+            const disputeEl = document.getElementById('ineligible_Dispute');
+            const copyConfirm = document.getElementById('copy_Confirmation_Ineligible');
+            
+            // Edit Modal elements
+            const editModal = new bootstrap.Modal(document.getElementById('ineligibleNoteEditModal'));
+            const editText = document.getElementById('ineligible_Note_Edit_Text');
+            const saveBtn = document.getElementById('saveIneligibleNoteBtn');
+            const copyBtn = document.getElementById('copyEditedIneligibleNoteBtn');
+
+            generateBtn.addEventListener('click', generateIneligibleNote);
+            
+            clearBtn.addEventListener('click', () => {
+                noteText.value = '';
+                disputeEl.value = ''; // Clears dispute
+                savePersistentValue(disputeEl.id, ''); // Clears persistent dispute
+                // Name field is NOT cleared
+                disputeEl.classList.remove('is-invalid');
+                nameEl.classList.remove('is-invalid');
+            });
+            
+            // Add input listener
+            [disputeEl, nameEl].forEach(el => {
+                 el.addEventListener('input', () => el.classList.remove('is-invalid'));
+            });
+            
+            // Open edit modal
+            document.getElementById('ineligibleNoteEditModal').addEventListener('show.bs.modal', () => {
+                editText.value = noteText.value;
+            });
+            
+            // Save from edit modal
+            saveBtn.addEventListener('click', () => {
+                noteText.value = editText.value;
+                editModal.hide();
+            });
+            
+            // Copy from edit modal
+            copyBtn.addEventListener('click', () => {
+                editText.select();
+                document.execCommand('copy');
+                editModal.hide();
+                
+                copyConfirm.style.display = 'block';
+                setTimeout(() => { copyConfirm.style.display = 'none'; }, 2000);
+            });
+        }
+        
+        function generateIneligibleNote() {
+            const today = getFormattedDate();
+            const nameEl = document.getElementById('ineligible_Name');
+            const name = nameEl.value.trim(); // From persistent field
+            const initial = document.getElementById('ineligible_Initial').value; // "FINAL REVIEW"
+            const disputeEl = document.getElementById('ineligible_Dispute');
+            const dispute = disputeEl.value.trim(); // From persistent field
+            const noteText = document.getElementById('ineligible_Note_Text');
+            
+            const eobData = globalEobData.updated;
+            
+            // --- Validation ---
+            disputeEl.classList.remove('is-invalid');
+            nameEl.classList.remove('is-invalid');
+            noteText.value = '';
+            
+            if (!eobData) {
+                noteText.value = "ERROR: EOB Data is missing. Please extract EOB data first.";
+                return;
+            }
+            
+            let isValid = true;
+            if (dispute === '') {
+                disputeEl.classList.add('is-invalid');
+                isValid = false;
+            }
+            if (name === '') {
+                nameEl.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                noteText.value = "ERROR: Please fill all Ineligible fields (Name, Dispute).";
+                return;
+            }
+            // --- End Validation ---
+            
+            let note = `${today}>${initial}>${name}>WORKING ON TRACKING SHEET. `;
+            
+            note += `CLAIM: ${eobData.claimNo}; TOTAL BILL ${formatCurrency(eobData.billedAmt)}, INS PAID ${formatCurrency(eobData.paidAmt)}, PT RESPONSIBLITY ${formatCurrency(eobData.ptRespSum)}. NEGOTIATION AND IDR DONE. `;
+            
+            note += `${dispute}: STATUS IS CLOSED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.`;
+            
+            noteText.value = note.trim().toUpperCase();
         }
 
 
@@ -1419,13 +1715,12 @@
             }
         }
 
-        // --- Get EOB Elements (Simplified) ---
+        // --- Get EOB Elements (Re-instated) ---
         const eobUpdatedInput = document.getElementById('eobUpdatedInput');
-        // const eobOldInput = document.getElementById('eobOldInput'); // REMOVED
         const eobResults1Container = document.getElementById('eob-results-list-1');
-        // const eobResults2Container = document.getElementById('eob-results-list-2'); // REMOVED
+        const eobResults2Container = document.getElementById('eob-results-list-2'); // Re-added
         const eobErrors1 = document.getElementById('eob-errors-1');
-        // const eobErrors2 = document.getElementById('eob-errors-2'); // REMOVED
+        const eobErrors2 = document.getElementById('eob-errors-2'); // Re-added
         const idrErrors = document.getElementById('idr-errors');
         
         // NEW: Sticky Header EOB Content
@@ -1499,10 +1794,10 @@ Regards
         
         function clearEobResults() {
              eobResults1Container.innerHTML = '';
-             // eobResults2Container.innerHTML = ''; // REMOVED
+             eobResults2Container.innerHTML = ''; // Re-added
              stickyEobContent.innerHTML = ''; // NEW: Clear sticky header
              eobErrors1.textContent = '';
-             // eobErrors2.textContent = ''; // REMOVED
+             eobErrors2.textContent = ''; // Re-added
              idrErrors.textContent = '';
              globalEobAdditionalPayment = 0;
              globalEobTicket = 'Not Found';
@@ -1529,7 +1824,6 @@ Regards
         
         document.getElementById('clearButton').addEventListener('click', function() {
             eobUpdatedInput.value = '';
-            // eobOldInput.value = ''; // REMOVED
             document.getElementById('idrTextInput1').value = '';
             document.getElementById('idrTextInput2').value = '';
             document.getElementById('idrTextInput3').value = '';
@@ -1545,6 +1839,9 @@ Regards
             noteClearBtn.click();
             clearComparisonStyles();
             mailClearBtn.click();
+            
+            // Also clear Ineligible tab's clearable fields
+            document.getElementById('ineligible_ClearBtn').click();
         });
         
         noteClearBtn.addEventListener('click', function() {
@@ -1553,6 +1850,7 @@ Regards
              finalReviewAdjustments.style.display = 'none'; 
              noteWarningNoEOB.style.display = 'none'; 
              noteWarningClaimMismatch.style.display = 'none'; 
+             // Name field is NOT cleared (handled by persistence)
         });
         
         mailClearBtn.addEventListener('click', function() {
@@ -1566,6 +1864,7 @@ Regards
             mailTypeInput.classList.remove('is-invalid');
             mailDetermDateInput.classList.remove('is-invalid');
             mailTextInput.classList.remove('bg-match', 'text-success');
+            // Name/Initial fields are NOT cleared (handled by persistence)
         });
 
         // --- Event Listeners ---
@@ -1625,13 +1924,15 @@ Regards
         }
 
         /**
-         * NEW: Simplified display function for one EOB with labels
+         * NEW: display function for 3-column layout
          */
         function displayEOBResults(updated) {
             // Clear all containers
             eobResults1Container.innerHTML = '';
+            eobResults2Container.innerHTML = '';
             stickyEobContent.innerHTML = ''; 
             eobErrors1.textContent = '';
+            eobErrors2.textContent = '';
             globalEobAdditionalPayment = 0;
             globalEobTicket = 'Not Found';
 
@@ -1651,11 +1952,12 @@ Regards
             globalEobAdditionalPayment = addlPayResult;
             globalEobTicket = updated?.ticketNo || 'Not Found';
 
-            // --- Build HTML for Original Card (NEW FORMAT) ---
-            let html1_card = '', html_sticky = '';
+            // --- Build HTML for Original Cards (NEW FORMAT) ---
+            let html_card_1 = '', html_card_2 = '', html_sticky = '';
             const data = updated;
-                
-            html1_card = `
+            
+            // Result 1: Ticket, Pt name, Claim num & Additional payment
+            html_card_1 = `
                 <div class="eob-result-item">
                     <span class="eob-result-label">Ticket #</span>
                     <span class="eob-result-data" id="eob_single_Ticket">${data.ticketNo}</span>
@@ -1669,6 +1971,14 @@ Regards
                     <span class="eob-result-data" id="eob_single_Claim">${data.claimNo}</span>
                 </div>
                 <div class="eob-result-item">
+                    <span class="eob-result-label">Additional Paid</span>
+                    <span class="eob-result-data currency bg-match" id="eob_calc_AddlPay">${formatCurrency(addlPayResult)}</span>
+                </div>
+            `;
+            
+            // Result 2: Total Bill, Paid, PT & Facility
+             html_card_2 = `
+                <div class="eob-result-item">
                     <span class="eob-result-label">Billed Amt</span>
                     <span class="eob-result-data currency" id="eob_single_Billed">${formatCurrency(data.billedAmt)}</span>
                 </div>
@@ -1679,10 +1989,6 @@ Regards
                 <div class="eob-result-item">
                     <span class="eob-result-label">Patient Resp</span>
                     <span class="eob-result-data currency" id="eob_single_PtResp">${formatCurrency(data.ptRespSum)}</span>
-                </div>
-                <div class="eob-result-item">
-                    <span class="eob-result-label">Additional Paid</span>
-                    <span class="eob-result-data currency bg-match" id="eob_calc_AddlPay">${formatCurrency(addlPayResult)}</span>
                 </div>
                 <div class="eob-result-item">
                     <span class="eob-result-label">Facility</span>
@@ -1702,7 +2008,8 @@ Regards
                 </div>`;
             
             // Populate all containers
-            eobResults1Container.innerHTML = html1_card;
+            eobResults1Container.innerHTML = html_card_1;
+            eobResults2Container.innerHTML = html_card_2;
             stickyEobContent.innerHTML = html_sticky;
         }
 
@@ -1952,18 +2259,18 @@ Regards
             // 1. Clear previous results and styles
             clearComparisonStyles();
             noteClearBtn.click(); 
-            mailClearBtn.click(); 
+            mailClearBtn.click();
+            document.getElementById('ineligible_ClearBtn').click(); // Clear ineligible tab
+            
             eobErrors1.textContent = '';
-            // eobErrors2.textContent = ''; // REMOVED
+            eobErrors2.textContent = ''; // Re-added
             idrErrors.textContent = '';
             idrErrors.classList.remove('text-success', 'text-danger');
 
             // 2. Process EOBs
             const eobUpdatedText = eobUpdatedInput.value;
-            // const eobOldText = eobOldInput.value; // REMOVED
             
             globalEobData.updated = parseEOB(eobUpdatedText);
-            // globalEobData.old = parseEOB(eobOldText); // REMOVED
 
             displayEOBResults(globalEobData.updated); // Shudhu 'updated' pathano holo
             
@@ -2093,7 +2400,7 @@ Regards
             const ptRespSum = eobData?.ptRespSum || 0; 
 
             const today = getFormattedDate(); 
-            const name = noteNameInput.value || 'PRANTO R';
+            const name = noteNameInput.value; // From persistent field
             
             let note = `${today}>${initial}>${name}>WORKING ON TRACKING SHEET. `;
             
@@ -2219,8 +2526,8 @@ Regards
             
             let finalClaim = (eobClaim !== '--' && eobClaim !== 'Not Found') ? eobClaim : idrClaim;
             
-            const myName = mailNameInput.value || 'Pranto Rodrix';
-            const myInitial = mailInitialInput.value || 'PRANTO R'; 
+            const myName = mailNameInput.value; // From persistent field
+            const myInitial = mailInitialInput.value; // From persistent field
 
             const initialPmtNum = parseCurrency(initialPmt);
             const addlPmtNum = parseCurrency(addlPmt);
