@@ -145,7 +145,7 @@
         }
 
         /* Light Theme Images (Only one) */
-        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/11/03/21/44/nature-6766923_1280.jpg'); }
         
         /* Dark Theme Images (Only one) */
         [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
@@ -161,17 +161,64 @@
 
         /* --- Glass Card Style (NEW GRADIENT) --- */
         .card {
-            background-color: var(--bs-card-bg);
-            border: 1px solid var(--bs-card-border);
-            border-radius: 1.5rem; 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            /* background-color: var(--bs-card-bg); */ /* Replaced by user's style */
+            background: rgba(255, 255, 255, 0.24);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 0 6px 3px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
             
-            /* NEW: Gradient BG for all cards */
-             background-image: linear-gradient(120deg, var(--bs-card-bg), var(--bs-tertiary-bg), var(--bs-card-bg));
-             background-size: 200% 200%;
-             animation: gradient-flow 10s ease infinite;
+            /* REMOVED Gradient BG animation */
+        }
+        
+        /* NEW: Shiny border pseudo-elements from user */
+        .card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent
+          );
+        }
+
+        .card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.8),
+            transparent,
+            rgba(255, 255, 255, 0.3)
+          );
+        }
+        
+        [data-bs-theme="dark"] .card {
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 0 6px 3px rgba(255, 255, 255, 0.3); /* User's shadow works well in dark */
+             border-radius: 20px; /* Match light mode */
+             background: rgba(22, 27, 34, 0.24); /* Dark bg, user's transparency */
+             border: 1px solid rgba(255, 255, 255, 0.2); /* Dark-mode friendly light border */
+             backdrop-filter: blur(7px);
+             -webkit-backdrop-filter: blur(7px);
+             /* REMOVED Gradient BG animation */
         }
         
         [data-bs-theme="dark"] .card {
@@ -277,17 +324,14 @@
             white-space: nowrap; 
         }
         
-        /* NEW: IDR Paste Box Styling */
+        /* NEW: IDR Paste Box Styling (REMOVED - now uses .card) */
         .Idr_Paste_Box{
           border-radius: 12px;
           padding: 0.5rem;
-          background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.6), rgba(230, 215, 255, 0.9));
-          border: 1px solid var(--bs-border-color-light);
-          transition: all 0.3s ease;
+          /* Styles removed, will get from .card class */
         }
         [data-bs-theme="dark"] .Idr_Paste_Box {
-          background-image: linear-gradient(140deg, rgba(22, 27, 34, 0.7), rgba(0, 240, 181, 0.1));
-          border: 1px solid var(--bs-border-color-dark);
+          /* Styles removed, will get from .card class */
         }
          
          .result-list p:last-child {
@@ -551,14 +595,11 @@
              color: var(--bs-primary-dark);
         }
 
+        /* Tab Content (MODIFIED - now uses .card class) */
         .tab-content-glass {
-            background-color: var(--bs-card-bg);
-            border: 1px solid var(--bs-card-border);
-            border-radius: 1.5rem;
+            /* Styles removed, will get from .card class */
+            /* Keep only the properties that override .card */
             border-top-left-radius: 0; 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
             padding: 1.5rem;
         }
         
@@ -910,7 +951,7 @@
             </div>
             
             <!-- Column 4: IDR Input 2024+ -->
-            <div class="col-lg-2 Idr_Paste_Box">
+            <div class="col-lg-2 Idr_Paste_Box card">
                 <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ IDR 1"></textarea>
                 <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ IDR 2"></textarea>
                 <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ IDR 3"></textarea>
@@ -918,7 +959,7 @@
             </div>
             
             <!-- Column 5: IDR Input 2022-23 -->
-            <div class="col-lg-2 Idr_Paste_Box">
+            <div class="col-lg-2 Idr_Paste_Box card">
                 <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 IDR 1"></textarea>
                 <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 IDR 2"></textarea>
                 <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 IDR 3"></textarea>
@@ -998,7 +1039,7 @@
             <div class="tab-content" id="noteTabContent">
                 <!-- Correspondence Pane -->
                 <div class="tab-pane fade show active" id="correspondence-pane" role="tabpanel" aria-labelledby="correspondence-tab" tabindex="0">
-                    <div class="tab-content-glass">
+                    <div class="tab-content-glass card">
                         <div class="row g-3">
                             <div class="col-3">
                                 <label for="note_Name" class="form-label fw-bold">Name:</label>
@@ -1036,7 +1077,7 @@
                 </div>
                 <!-- Email Pane -->
                 <div class="tab-pane fade" id="email-pane" role="tabpanel" aria-labelledby="email-tab" tabindex="0">
-                    <div class="tab-content-glass">
+                    <div class="tab-content-glass card">
                         <div class="row g-3 mb-3">
                             <div class="col-3">
                                 <label for="note_Mail_Name" class="form-label fw-bold">My Name:</label>
@@ -1093,7 +1134,7 @@
                 </div>
                 <!-- Refund Pane -->
                 <div class="tab-pane fade" id="refund-pane" role="tabpanel" aria-labelledby="refund-tab" tabindex="0">
-                    <div class="tab-content-glass">
+                    <div class="tab-content-glass card">
                         <div class="row g-3">
                             <div class="col-3">
                                 <label for="refund_Name" class="form-label fw-bold">Initial Name:</label>
@@ -1126,7 +1167,7 @@
                 </div>
                 <!-- Ineligible Pane -->
                 <div class="tab-pane fade" id="ineligible-pane" role="tabpanel" aria-labelledby="ineligible-tab" tabindex="0">
-                    <div class="tab-content-glass">
+                    <div class="tab-content-glass card">
                         <div class="row g-3">
                             <div class="col-3">
                                 <label for="ineligible_Name" class="form-label fw-bold">Name:</label>
