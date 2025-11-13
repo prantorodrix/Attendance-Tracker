@@ -6,10 +6,10 @@
     <title>Pranto's Note</title>
     <link rel="icon" type="image/png" href="note.png"> 
     
-    <!-- Google Font: Roboto -->
+    <!-- Google Font: Poppins (NEW) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
-        /* --- Base & Typography --- */
+        /* --- Base & Typography (NEW FONT) --- */
         :root {
-            --bs-body-font-family: 'Roboto', sans-serif;
-            --bs-heading-font-family: 'Roboto', sans-serif;
+            --bs-body-font-family: 'Poppins', sans-serif;
+            --bs-heading-font-family: 'Poppins', sans-serif;
             
             /* --- Light Mode --- */
             --bs-body-bg-light: #f3e7ff; 
@@ -119,7 +119,7 @@
             transition: background-color 0.3s ease;
         }
         
-        /* --- Animated Background --- */
+        /* --- Animated Background (STATIC) --- */
         #animated-bg-container {
             position: fixed;
             top: 0;
@@ -137,35 +137,29 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            filter: blur(20px); 
-            -webkit-filter: blur(20px);
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out; 
+            /* NEW: Reduced blur */
+            filter: blur(10px); 
+            -webkit-filter: blur(10px);
+            opacity: 1; /* Always visible */
             transform: scale(1.1); 
         }
-        .bg-image.active {
-            opacity: 1;
-        }
 
-        /* Light Theme Images */
+        /* Light Theme Images (Only one) */
         [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
-        [data-bs-theme="light"] .bg-image-light.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
-        [data-bs-theme="light"] .bg-image-light.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
         
-        /* Dark Theme Images */
+        /* Dark Theme Images (Only one) */
         [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
-        [data-bs-theme="dark"] .bg-image-dark.bg-2 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
-        [data-bs-theme="dark"] .bg-image-dark.bg-3 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
 
+        /* CSS handles visibility, no JS blink */
         [data-bs-theme="light"] .bg-image-dark { display: none; }
         [data-bs-theme="dark"] .bg-image-light { display: none; }
         
         h1, h2, h3, h4, h5, h6, .fw-bold {
             font-family: var(--bs-heading-font-family);
-            font-weight: 700;
+            font-weight: 600; /* Slightly lighter for Poppins */
         }
 
-        /* --- Glass Card Style --- */
+        /* --- Glass Card Style (NEW GRADIENT) --- */
         .card {
             background-color: var(--bs-card-bg);
             border: 1px solid var(--bs-card-border);
@@ -173,11 +167,18 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            
+            /* NEW: Gradient BG for all cards */
+             background-image: linear-gradient(120deg, var(--bs-card-bg), var(--bs-tertiary-bg), var(--bs-card-bg));
+             background-size: 200% 200%;
+             animation: gradient-flow 10s ease infinite;
         }
         
         [data-bs-theme="dark"] .card {
              box-shadow: none;
              border-radius: 0.75rem;
+             animation: gradient-flow-dark 10s ease infinite;
+             background-image: linear-gradient(120deg, var(--bs-card-bg-dark), #1a2029, var(--bs-card-bg-dark));
         }
 
         /* --- Tool Styles (UI Kit) --- */
@@ -188,6 +189,7 @@
             border: 1px solid var(--bs-border-color);
             border-radius: 10px;
             margin-top: 3px;
+            transition: all 0.2s ease-out;
         }
         .form-control:focus, .form-select:focus {
             background-color: var(--bs-tertiary-bg);
@@ -195,6 +197,32 @@
             border-color: var(--bs-primary);
             box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
         }
+        
+        /* NEW: Data Paste Indicator */
+        .form-control:not(:placeholder-shown) {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.15);
+        }
+        
+        /* NEW: Placeholder Styling */
+        .form-control::placeholder {
+            color: var(--bs-secondary-color);
+            opacity: 0.6;
+            font-weight: 500;
+            font-family: var(--bs-heading-font-family);
+            text-align: center;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .idr-textarea::placeholder {
+             font-size: 0.85rem;
+             line-height: 1.2;
+             font-weight: 400;
+        }
+        .form-control:focus::placeholder {
+            opacity: 0.3;
+        }
+
 
         /* EOB Result Customization (Labeled List) */
         .eob-result-container {
@@ -216,12 +244,12 @@
         .eob-result-label {
             font-size: 0.9rem;
             color: var(--bs-secondary-color);
-            font-weight: 600;
+            font-weight: 500;
             margin-right: 10px;
         }
         .eob-result-data {
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--bs-body-color);
             text-align: right;
         }
@@ -248,10 +276,20 @@
             justify-content: space-between;
             white-space: nowrap; 
         }
+        
+        /* NEW: IDR Paste Box Styling */
         .Idr_Paste_Box{
-          background-color:#236a66cc;
           border-radius: 12px;
+          padding: 0.5rem;
+          background-image: linear-gradient(140deg, rgba(255, 255, 255, 0.6), rgba(230, 215, 255, 0.9));
+          border: 1px solid var(--bs-border-color-light);
+          transition: all 0.3s ease;
         }
+        [data-bs-theme="dark"] .Idr_Paste_Box {
+          background-image: linear-gradient(140deg, rgba(22, 27, 34, 0.7), rgba(0, 240, 181, 0.1));
+          border: 1px solid var(--bs-border-color-dark);
+        }
+         
          .result-list p:last-child {
             border-bottom: none;
             margin-bottom: 0;
@@ -277,7 +315,7 @@
         .result-table th, .result-table td {
             vertical-align: middle;
             font-weight: 500;
-            border-left: 1px solid red;
+            border-left: 1px solid rgba(128, 128, 128, 0.2); /* Softer border */
             white-space: normal;
             border-color: var(--bs-border-color);
             color: var(--bs-body-color);
@@ -290,17 +328,18 @@
             z-index: 10;
         }
          .result-table tbody th {
-            font-weight: bold;
+            font-weight: 600;
             color: var(--bs-body-color);
             text-align: left;
          }
          .result-table td {
-            font-weight: bold;
+            font-weight: 500;
             color: var(--bs-body-color);
             text-align: left; 
          }
         .result-table .output-value-amount {
             color: #28a745;
+            font-weight: 600;
         }
         .truncate-mediator {
             max-width: 150px;
@@ -314,7 +353,6 @@
             min-height: 150px;
         }
         
-        /* EOB Input Textarea Height */
         #eobUpdatedInput {
             min-height: 200px;
         }
@@ -340,7 +378,6 @@
             border-radius: 5px;
         }
         
-        /* Dark Mode Comparison Colors */
         [data-bs-theme="dark"] .bg-match { 
             background-color: rgba(13, 26, 18, 0.8) !important;
             color: #34c356 !important;
@@ -407,7 +444,7 @@
              animation: shake-red 0.5s ease-out;
         }
         
-        /* --- Footer (NEW Detailed Footer) --- */
+        /* --- Footer (Detailed) --- */
         #main-footer {
             background-color: var(--bs-glass-bg);
             border-top: 1px solid var(--bs-glass-border);
@@ -419,7 +456,7 @@
             font-size: 0.9rem;
         }
         #main-footer h5 {
-            font-weight: 700;
+            font-weight: 600;
             color: var(--bs-body-color);
             margin-bottom: 1rem;
             font-size: 1.1rem;
@@ -482,7 +519,7 @@
         }
         .nav-tabs-glass .nav-link {
             font-family: var(--bs-heading-font-family);
-            font-weight: 700;
+            font-weight: 600;
             font-size: 1.1rem;
             color: var(--bs-secondary-color);
             border: none;
@@ -610,6 +647,7 @@
             margin-top: 1rem;
         }
 
+        /* NEW: Sticky EOB Header BG */
         #sticky-eob-header {
             visibility: hidden;
             opacity: 0;
@@ -626,14 +664,36 @@
             padding: 0 1.5rem;
             margin-top: 0;
             
-            background-image: linear-gradient(120deg, var(--sticky-bg), var(--bs-secondary-bg), var(--sticky-bg));
-            background-size: 200% 200%;
-            animation: gradient-flow 8s ease infinite;
+            /* NEW Light Mode BG */
+            background-image: linear-gradient(90deg, #d946ef, #a855f7);
+            color: #ffffff;
         }
         [data-bs-theme="dark"] #sticky-eob-header {
-            animation: gradient-flow-dark 8s ease infinite;
-             background-image: linear-gradient(120deg, var(--sticky-bg), #1c222b, var(--sticky-bg));
+             /* NEW Dark Mode BG */
+            background-image: linear-gradient(90deg, #00f0b5, #06b6d4);
+            color: #000000;
         }
+        
+        /* NEW: Sticky Header Text Color Override */
+        #sticky-eob-header .sticky-eob-label,
+        #sticky-eob-header .sticky-eob-value {
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        [data-bs-theme="dark"] #sticky-eob-header .sticky-eob-label,
+        [data-bs-theme="dark"] #sticky-eob-header .sticky-eob-value {
+            color: #000;
+            text-shadow: none;
+        }
+        #sticky-eob-header .sticky-eob-value.currency {
+            color: #fff;
+            font-weight: 700;
+        }
+        [data-bs-theme="dark"] #sticky-eob-header .sticky-eob-value.currency {
+            color: #000;
+            font-weight: 700;
+        }
+
 
         #idr-table-container {
             position: relative;
@@ -642,15 +702,7 @@
             margin-top: 0.75rem;
         }
         
-        #idr-table-container .card {
-             background-image: linear-gradient(120deg, var(--bs-card-bg), var(--bs-tertiary-bg), var(--bs-card-bg));
-             background-size: 200% 200%;
-             animation: gradient-flow 10s ease infinite;
-        }
-        [data-bs-theme="dark"] #idr-table-container .card {
-            animation: gradient-flow-dark 10s ease infinite;
-             background-image: linear-gradient(120deg, var(--bs-card-bg-dark), #1a2029, var(--bs-card-bg-dark));
-        }
+        /* Card gradient is now global */
         
         @keyframes gradient-flow {
             0% { background-position: 0% 50%; }
@@ -707,20 +759,45 @@
         .sticky-eob-value.currency {
             color: #28a745;
         }
+        
+        /* --- NEW: Button Loader --- */
+        .btn.loading {
+            position: relative;
+            color: transparent !important; /* Hide text */
+            pointer-events: none;
+        }
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -8px; /* half of 16px */
+            margin-left: -8px; /* half of 16px */
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: var(--bs-primary); /* Spinner color */
+            border-radius: 50%;
+            animation: btn-spin 0.6s linear infinite;
+        }
+        [data-bs-theme="dark"] .btn.loading::after {
+             border: 2px solid #333;
+             border-top-color: var(--bs-primary-dark);
+        }
+        @keyframes btn-spin {
+            to { transform: rotate(360deg); }
+        }
+        
     </style>
 </head>
 <body>
 
     <!-- --- Animated BG Container --- -->
     <div id="animated-bg-container">
-        <!-- Light Theme Images -->
+        <!-- Light Theme Image -->
         <div class="bg-image bg-image-light bg-1 active"></div>
-        <div class="bg-image bg-image-light bg-2"></div>
-        <div class="bg-image bg-image-light bg-3"></div>
-        <!-- Dark Theme Images -->
-        <div class="bg-image bg-image-dark bg-1"></div>
-        <div class="bg-image bg-image-dark bg-2"></div>
-        <div class="bg-image bg-image-dark bg-3"></div>
+        <!-- Dark Theme Image -->
+        <div class="bg-image bg-image-dark bg-1 active"></div>
     </div>
 
     <!-- --- Fixed Top Bar --- -->
@@ -803,7 +880,7 @@
                 <div class="card p-2 h-100 d-flex flex-column">
                     <div class="mb-0 flex-grow-1 d-flex flex-column">
                         <textarea class="form-control h-100" id="eobUpdatedInput" 
-                                  placeholder="Ekhana EOB text paste korun..."></textarea>
+                                  placeholder="Paste EOB Here..."></textarea>
                     </div>
                 </div>
             </div>
@@ -834,18 +911,18 @@
             
             <!-- Column 4: IDR Input 2024+ -->
             <div class="col-lg-2 Idr_Paste_Box">
-                <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="New"></textarea>
-                <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="New"></textarea>
-                <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="New"></textarea>
-                <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="New"></textarea>
+                <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ IDR 1"></textarea>
+                <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ IDR 2"></textarea>
+                <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ IDR 3"></textarea>
+                <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="2024+ IDR 4"></textarea>
             </div>
             
             <!-- Column 5: IDR Input 2022-23 -->
             <div class="col-lg-2 Idr_Paste_Box">
-                <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23"></textarea>
-                <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23"></textarea>
-                <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23"></textarea>
-                <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23"></textarea>
+                <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 IDR 1"></textarea>
+                <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 IDR 2"></textarea>
+                <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 IDR 3"></textarea>
+                <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23 IDR 4"></textarea>
             </div>
         </div>
         
@@ -1168,7 +1245,7 @@
         </div>
     </div>
 
-    <!-- --- NEW Detailed Footer --- -->
+    <!-- --- Detailed Footer --- -->
     <footer id="main-footer">
         <div class="container-fluid">
             <div class="row g-4">
@@ -1254,22 +1331,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
-            updateAnimatedBackground();
+            // updateAnimatedBackground(); // Removed redundant call
 
-            // LOGIC FIX: Theme toggle button click listener
             themeToggle.addEventListener('click', () => {
                 const currentTheme = htmlEl.getAttribute('data-bs-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 setTheme(newTheme);
             });
             
-            // Set footer year
             document.getElementById('footer-year').textContent = new Date().getFullYear();
             
-            // Setup persistent fields
             setupPersistentFields();
             
-            // Setup Note Edit Modals
             setupNoteEditModal();
             setupRefundNoteLogic();
             setupIneligibleNoteLogic();
@@ -1284,13 +1357,12 @@
                 }, 100); 
             }
             
-            // Setup sticky scroll
             window.onload = () => {
                 setupStickyScroll();
             };
         });
         
-        // Setup Persistent Fields (Defaults are now empty)
+        // Setup Persistent Fields
         function setupPersistentFields() {
             const persistentInputs = [
                 { id: 'note_Name', defaultValue: '' },
@@ -1324,7 +1396,6 @@
             
             const topBarTotalHeight = topBarContainer.offsetHeight; 
             
-            // Set sticky-eob-header's top position dynamically
             const stickyHeader = document.getElementById('sticky-eob-header');
             if(stickyHeader) {
                 stickyHeader.style.top = `${topBarTotalHeight}px`;
@@ -1356,24 +1427,8 @@
                 themeIcon.classList.add('bi-sun-fill');
                 themeText.textContent = '';
             }
-            updateAnimatedBackground();
+            // No background update call needed, CSS handles it
         }
-
-        // --- Animated Background Logic ---
-        let currentImageIndex = 0;
-
-        function updateAnimatedBackground() {
-            const theme = htmlEl.getAttribute('data-bs-theme');
-            const bgImages = document.querySelectorAll(`.bg-image-${theme}`);
-            if (bgImages.length === 0) return;
-
-            bgImages.forEach(img => img.classList.remove('active'));
-            currentImageIndex = (currentImageIndex + 1) % bgImages.length;
-            bgImages[currentImageIndex].classList.add('active');
-        }
-
-        setInterval(updateAnimatedBackground, 5000);
-
 
         // --- Note Edit Modal Logic ---
         function setupNoteEditModal() {
@@ -1420,43 +1475,44 @@
             
             const inputsToValidate = [refundAmount, refundDate, refundDispute];
 
+            // NEW: Use Button Loader
             refundGenerateBtn.addEventListener('click', () => {
-                const name = refundName.value.trim();
-                const amount = refundAmount.value.trim();
-                const date = refundDate.value.trim();
-                const dispute = refundDispute.value.trim();
-                
-                let isValid = true;
-                inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
-                refundNoteText.value = '';
+                withButtonLoader('refund_GenerateBtn', () => {
+                    const name = refundName.value.trim();
+                    const amount = refundAmount.value.trim();
+                    const date = refundDate.value.trim();
+                    const dispute = refundDispute.value.trim();
+                    
+                    let isValid = true;
+                    inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
+                    refundNoteText.value = '';
 
-                if (amount === '') {
-                    refundAmount.classList.add('is-invalid');
-                    isValid = false;
-                }
-                if (date === '') {
-                    refundDate.classList.add('is-invalid');
-                    isValid = false;
-                }
-                if (dispute === '') {
-                    refundDispute.classList.add('is-invalid');
-                    isValid = false;
-                }
-                if (name === '') {
-                     refundName.classList.add('is-invalid');
-                    isValid = false;
-                }
+                    if (amount === '') {
+                        refundAmount.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (date === '') {
+                        refundDate.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (dispute === '') {
+                        refundDispute.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (name === '') {
+                         refundName.classList.add('is-invalid');
+                        isValid = false;
+                    }
 
-                if (!isValid) {
-                    refundNoteText.value = "ERROR: Please fill all Refund fields (Name, Amount, Date, Dispute).";
-                    return;
-                }
-                
-                const today = getFormattedDate();
-                
-                let note = `${today}>IDR WIN>${name}>WORKING ON MEDIATION FEE REFUND'S WORKLIST. WE WERE SUCCESSFUL AND PREVAILED IN THE IDR DETERMINATION. WE RECEIVED MEDIATOR FEE REFUND OF ${amount} DATED ${date}. ${dispute}. WE ARE WAITING FOR ADDITIONAL PAYMENT. PLEASE DO NOT CLOSE THE TICKET BEFORE ALL PAYMENTS ARE RECEIVED.`;
-                
-                refundNoteText.value = note.trim().toUpperCase();
+                    if (!isValid) {
+                        refundNoteText.value = "ERROR: Please fill all Refund fields (Name, Amount, Date, Dispute).";
+                        return; // Stop execution inside the loader
+                    }
+                    
+                    const today = getFormattedDate();
+                    let note = `${today}>IDR WIN>${name}>WORKING ON MEDIATION FEE REFUND'S WORKLIST. WE WERE SUCCESSFUL AND PREVAILED IN THE IDR DETERMINATION. WE RECEIVED MEDIATOR FEE REFUND OF ${amount} DATED ${date}. ${dispute}. WE ARE WAITING FOR ADDITIONAL PAYMENT. PLEASE DO NOT CLOSE THE TICKET BEFORE ALL PAYMENTS ARE RECEIVED.`;
+                    refundNoteText.value = note.trim().toUpperCase();
+                });
             });
             
             refundClearBtn.addEventListener('click', () => {
@@ -1504,7 +1560,10 @@
             const saveBtn = document.getElementById('saveIneligibleNoteBtn');
             const copyBtn = document.getElementById('copyEditedIneligibleNoteBtn');
 
-            generateBtn.addEventListener('click', generateIneligibleNote);
+            // NEW: Use Button Loader
+            generateBtn.addEventListener('click', () => {
+                withButtonLoader('ineligible_GenerateBtn', generateIneligibleNote);
+            });
             
             clearBtn.addEventListener('click', () => {
                 noteText.value = '';
@@ -1573,17 +1632,13 @@
             }
             
             let note = `${today}>${initial}>${name}>WORKING ON TRACKING SHEET. `;
-            
             note += `CLAIM: ${eobData.claimNo}; TOTAL BILL ${formatCurrency(eobData.billedAmt)}, INS PAID ${formatCurrency(eobData.paidAmt)}, PT RESPONSIBLITY ${formatCurrency(eobData.ptRespSum)}. NEGOTIATION AND IDR DONE. `;
-            
             note += `${dispute}: STATUS IS CLOSED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.`;
-            
             noteText.value = note.trim().toUpperCase();
         }
 
         // --- Data Extraction Logic ---
         
-        // Global Variables
         let globalEobAdditionalPayment = 0;
         let globalEobTicket = 'Not Found';
         let globalEobData = { updated: null };
@@ -1647,6 +1702,26 @@
                 confirmationEl.style.display = 'block';
                 setTimeout(() => { confirmationEl.style.display = 'none'; }, 2000);
             }
+        }
+        
+        // --- NEW: Button Loader Helper ---
+        function withButtonLoader(buttonId, actionFn) {
+            const btn = document.getElementById(buttonId);
+            if (!btn) return;
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            setTimeout(() => {
+                try {
+                    actionFn(); // Run the actual function
+                } catch (e) {
+                    console.error("Error during button action:", e);
+                }
+                
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }, 300); // 300ms delay
         }
 
         // --- Get DOM Elements ---
@@ -1720,7 +1795,6 @@ Regards
         });
 
         // --- Clear Functions ---
-        
         function clearEobResults() {
              eobResults1Container.innerHTML = '';
              eobResults2Container.innerHTML = '';
@@ -1791,14 +1865,21 @@ Regards
             mailTextInput.classList.remove('bg-match', 'text-success');
         });
 
-        // --- Event Listeners ---
+        // --- Event Listeners (Using Loader) ---
         noteTextInput.addEventListener('click', () => copyToClipboard(noteTextInput, 'copy_Confirmation_Note'));
-        noteGenerateBtn.addEventListener('click', () => validateAndGenerateNote());
-        mailGenerateBtn.addEventListener('click', () => generateMail());
         mailNoteTextInput.addEventListener('click', () => copyToClipboard(mailNoteTextInput, 'copy_Confirmation_Mail'));
         mailTextInput.addEventListener('click', () => copyToClipboard(mailTextInput, 'copy_Confirmation_Mail'));
         mailSubjectInput.addEventListener('click', () => copyToClipboard(mailSubjectInput, 'copy_Confirmation_Mail'));
-        document.getElementById('processButton').addEventListener('click', processAllData);
+
+        document.getElementById('processButton').addEventListener('click', () => {
+            withButtonLoader('processButton', processAllData);
+        });
+        noteGenerateBtn.addEventListener('click', () => {
+            withButtonLoader('note_GenerateBtn', validateAndGenerateNote);
+        });
+        mailGenerateBtn.addEventListener('click', () => {
+            withButtonLoader('note_Mail_GenerateBtn', generateMail);
+        });
 
         // --- EOB Parsing ---
         function parseEOB(eobText) {
@@ -1854,7 +1935,6 @@ Regards
 
             const data = updated;
             
-            // Result 1: Ticket, Pt name, Claim num & Additional payment
             let html_card_1 = `
                 <div class="eob-result-item">
                     <span class="eob-result-label">Ticket #</span>
@@ -1874,7 +1954,6 @@ Regards
                 </div>
             `;
             
-            // Result 2: Total Bill, Paid, PT & Facility
              let html_card_2 = `
                 <div class="eob-result-item">
                     <span class="eob-result-label">Billed Amt</span>
@@ -1894,7 +1973,6 @@ Regards
                 </div>
             `;
             
-            // Sticky Header
              let html_sticky = `
                 <div class="row sticky-eob-row">
                     <div class="col-auto"><span class="sticky-eob-label">EOB:</span></div>
