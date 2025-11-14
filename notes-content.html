@@ -456,7 +456,8 @@
         }
         
         .idr-textarea {
-             min-height: 80px;
+             height: 80px;
+             margin-top: 5px;
         }
 
         /* --- NEW: Remove scrollbar/resize from paste boxes --- */
@@ -867,7 +868,7 @@
         
     </style>
 </head>
-<body>
+  <body>
 
     <!-- --- Animated BG Container --- -->
     <div id="animated-bg-container">
@@ -971,33 +972,33 @@
                         <div class="card p-2 h-100 d-flex flex-column">
                             <div class="mb-0 flex-grow-1 d-flex flex-column">
                                 <textarea class="form-control h-100" id="eobUpdatedInput" 
-                                          placeholder="Paste EOB Here..."></textarea>
+                                          placeholder="Paste Your EOB"></textarea>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Column 2: IDR Input 2024+ (1, 2) -->
                     <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ IDR 1"></textarea>
-                        <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ IDR 2"></textarea>
+                        <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="New"></textarea>
+                        <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="New"></textarea>
                     </div>
                     
                     <!-- Column 3: IDR Input 2024+ (3, 4) -->
                     <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ IDR 3"></textarea>
-                        <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="2024+ IDR 4"></textarea>
+                        <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="New"></textarea>
+                        <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="New"></textarea>
                     </div>
 
                     <!-- Column 4: IDR Input 2022-23 (1, 2) -->
                     <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 IDR 1"></textarea>
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 IDR 2"></textarea>
+                        <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="Old"></textarea>
+                        <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="Old"></textarea>
                     </div>
                     
                     <!-- Column 5: IDR Input 2022-23 (3, 4) -->
                     <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 IDR 3"></textarea>
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23 IDR 4"></textarea>
+                        <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="Old"></textarea>
+                        <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="Old"></textarea>
                     </div>
                     
                     <!-- EOB Output (Hidden) -->
@@ -2744,6 +2745,5 @@ Regards
         });
 
     </script>
-</body>
+  </body>
 </html>
-}
