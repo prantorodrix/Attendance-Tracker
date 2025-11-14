@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Typing Test</title>
-    
+    <!--logo adding-->
+    <link rel="icon" type="image/png" href="typing.png">
     <!-- NEW: Premium Font (Poppins) + Mono for typing -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -473,47 +474,7 @@
         #keyboard.theme-default .key.finger-rr { background-color: var(--finger-rr); color: #000; }
         #keyboard.theme-default .key.finger-rp { background-color: var(--finger-rp); color: #000; }
         
-        /* --- NEW: Hand SVGs (Illustrative Style) --- */
-        .hand-svg {
-            width: 140px; /* Adjusted width */
-            height: 200px; /* Fixed height */
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            margin: 0 1rem; /* Add space */
-        }
-        .hand-svg .finger {
-            fill: #f2d6b3; /* Skin tone */
-            stroke: #a18060; /* Outline */
-            stroke-width: 2;
-            transition: fill 0.1s ease, stroke 0.1s ease;
-            rx: 10; /* Rounded fingers */
-            ry: 10;
-        }
-        .hand-svg .palm {
-            fill: #f2d6b3;
-            stroke: #a18060;
-            stroke-width: 2;
-        }
-        /* Dark mode hands */
-        [data-bs-theme="dark"] .hand-svg .finger,
-        [data-bs-theme="dark"] .hand-svg .palm {
-            fill: #4a3e30;
-            stroke: #a18060;
-        }
-        
-        /* Highlight finger */
-        .hand-svg path.active {
-            fill: var(--bs-primary);
-            stroke: var(--bs-primary);
-        }
-        [data-bs-theme="dark"] .hand-svg path.active {
-            fill: var(--bs-primary-dark);
-            stroke: var(--bs-primary-dark);
-        }
-        body.hands-hidden #left-hand,
-        body.hands-hidden #right-hand {
-            display: none;
-        }
+        /* --- NEW: Hand SVGs (REMOVED) --- */
         
         /* --- NEW: Theme Bar --- */
         #theme-bar {
@@ -681,7 +642,7 @@
                     </li>
                     <!-- NEW: Added requested links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="notes-content.html">Pranto's Note</a>
+                        <a class="nav-link" href="index.html">Pranto's Note</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">Main Page</a>
@@ -749,8 +710,7 @@
                 <div class="card keyboard-area">
                     <!-- NEW: Keyboard + Hands Container -->
                     <div id="keyboard-container">
-                        <!-- NEW: Left Hand SVG -->
-                        
+                        <!-- NEW: Left Hand SVG (REMOVED) -->
 
                         <!-- Virtual Keyboard -->
                         <div id="keyboard" class="theme-default">
@@ -826,8 +786,7 @@
                             </div>
                         </div>
                         
-                        <!-- NEW: Right Hand SVG -->
-                       
+                        <!-- NEW: Right Hand SVG (REMOVED) -->
                     </div>
 
                     <!-- NEW: Theme Bar -->
@@ -838,11 +797,7 @@
                                 <input class="form-check-input" type="checkbox" role="switch" id="theme-toggle-switch">
                                 <label class="form-check-label" for="theme-toggle-switch">Dark Mode</label>
                             </div>
-                            <!-- Hand Guide Toggle -->
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="hand-toggle" checked>
-                                <label class="form-check-label" for="hand-toggle">Hand Guide</label>
-                            </div>
+                            <!-- Hand Guide Toggle (REMOVED) -->
                             <!-- Focus Gradient Toggle -->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="focus-toggle">
@@ -1316,14 +1271,15 @@
                 e.preventDefault();
                 showHistoryView();
             });
-            footerHomeLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showMainView();
-            });
-            footerHistoryLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showHistoryView();
-            });
+            
+            // FIXED: Check if footer links exist before adding listeners
+            if(footerHomeLink) {
+                footerHomeLink.addEventListener('click', (e) => { e.preventDefault(); showMainView(); });
+            }
+            if(footerHistoryLink) {
+                footerHistoryLink.addEventListener('click', (e) => { e.preventDefault(); showHistoryView(); });
+            }
+            
             clearHistoryBtn.addEventListener('click', clearHistory);
 
 
@@ -1336,9 +1292,12 @@
                 const newTheme = e.target.checked ? 'dark' : 'light';
                 setTheme(newTheme);
             });
-            handToggle.addEventListener('change', (e) => {
-                document.body.classList.toggle('hands-hidden', !e.target.checked);
-            });
+            // FIXED: Check if handToggle exists
+            if(handToggle) {
+                handToggle.addEventListener('change', (e) => {
+                    document.body.classList.toggle('hands-hidden', !e.target.checked);
+                });
+            }
             focusToggle.addEventListener('change', (e) => {
                 document.body.classList.toggle('focus-gradient-enabled', e.target.checked);
             });
@@ -1366,8 +1325,12 @@
             const savedTheme = localStorage.getItem('theme') || 'light';
             setTheme(savedTheme);
             updateAnimatedBackground(); 
-            // document.getElementById('footer-year').textContent = new Date().getFullYear(); // FIXED: Removed
-            document.getElementById('footer-year-2').textContent = new Date().getFullYear();
+            
+            // FIXED: Add check for footer element
+            const footerYearEl = document.getElementById('footer-year-2');
+            if (footerYearEl) {
+                footerYearEl.textContent = new Date().getFullYear();
+            }
             
             // --- App Initialization ---
             initializeApp(); // Call initializeApp
