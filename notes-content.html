@@ -400,12 +400,12 @@
 
         /* Adjustment Note List */
         .result-list {
-            font-size: 0.9rem; 
+            font-size: 0.8rem; 
         }
         .result-list p {
-            margin-bottom: 0.5rem; 
-            border-bottom: 1px solid var(--bs-border-color);
-            padding-bottom: 0.5rem;
+            margin-bottom: 0.4rem; 
+            /*border-bottom: 1px solid var(--bs-border-color);*/
+            /*padding-bottom: 0.5rem;*/
             display: flex;
             justify-content: space-between;
             white-space: nowrap; 
@@ -452,7 +452,11 @@
         
         /* EOB Input Textarea Height */
         #eobUpdatedInput {
-            min-height: 170px; /* Adjusted height */
+            min-height: 80px; /* Adjusted height */
+            margin-bottom: 0.5rem; /* Space between */
+        }
+        #eobOldInput {
+            min-height: 80px; /* NEW */
         }
         
         .idr-textarea {
@@ -967,54 +971,66 @@
                 <!-- EOB & IDR Input Row (NEW LAYOUT) -->
                 <div class="row g-3" id="eob-input-row">
                     
-                    <!-- Column 1: EOB Input (col-lg-3) -->
-                    <div class="col-lg-3">
+                    <!-- Column 1: EOB Input (NEW) -->
+                    <div class="col-lg-2">
                         <div class="card p-2 h-100 d-flex flex-column">
-                            <div class="mb-0 flex-grow-1 d-flex flex-column">
+                            <div class="flex-grow-1 d-flex flex-column">
                                 <textarea class="form-control h-100" id="eobUpdatedInput" 
-                                          placeholder="Paste Your EOB"></textarea>
+                                          placeholder="Paste Updated EOB"></textarea>
+                                <textarea class="form-control h-100" id="eobOldInput" 
+                                          placeholder="Paste Old EOB (Optional)"></textarea>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Column 2: IDR Input 2024+ (1, 2) -->
-                    <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="New"></textarea>
-                        <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="New"></textarea>
+                    <!-- Column 2: IDR Inputs (NEW) -->
+                    <div class="col-lg-7">
+                        <div class="card p-2">
+                             <div class="row g-2">
+                                <!-- 2024+ -->
+                                <div class="col-lg-6">
+                                     <div class="row g-2">
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ 1"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ 2"></textarea>
+                                        </div>
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ 3"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="2024+ 4"></textarea>
+                                        </div>
+                                     </div>
+                                </div>
+                                <!-- 2022-23 -->
+                                <div class="col-lg-6">
+                                     <div class="row g-2">
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 1"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 2"></textarea>
+                                        </div>
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 3"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23 4"></textarea>
+                                        </div>
+                                     </div>
+                                </div>
+                             </div>
+                        </div>
                     </div>
-                    
-                    <!-- Column 3: IDR Input 2024+ (3, 4) -->
-                    <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="New"></textarea>
-                        <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="New"></textarea>
+                    <div class="col-lg-3 mt-3" style="padding-right: 0.5rem;">
+                      <div class="card d-none" id="eob-details-card">
+                        <div class="card-body">
+                           <div id="eob-details-list" class="result-list">
+                                <!-- JS will populate this -->
+                             </div>
+                        </div>
                     </div>
-
-                    <!-- Column 4: IDR Input 2022-23 (1, 2) -->
-                    <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="Old"></textarea>
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="Old"></textarea>
-                    </div>
-                    
-                    <!-- Column 5: IDR Input 2022-23 (3, 4) -->
-                    <div class="col-lg-2 Idr_Paste_Box card">
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="Old"></textarea>
-                        <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="Old"></textarea>
-                    </div>
+                </div>
                     
                     <!-- EOB Output (Hidden) -->
                     <div class="col-lg-3 d-none">
                         <div class="card p-3 h-100 eob-results-card">
                             <div class="card-body">
-                                <div id="eob-results-list-1" class="eob-result-container"></div>
                                 <div id="eob-errors-1" class="error-message"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 d-none">
-                        <div class="card p-3 h-100 eob-results-card">
-                            <div class="card-body">
-                                <div id="eob-results-list-2" class="eob-result-container"></div>
-                                <div id="eob-errors-2" class="error-message"></div>
                             </div>
                         </div>
                     </div>
@@ -1028,6 +1044,19 @@
                     
                 <!-- IDR Result Table (Hidden) -->
                 <div class="col-12" id="idr-table-container"></div>
+                
+                <!-- NEW: EOB Details Section -->
+                <div class="col-12 mt-3" style="padding-right: 0.5rem;">
+                    <div class="card d-none" id="eob-details-card">
+                        <div class="card-body">
+                             <h5 class="text-primary fw-bold mb-3">EOB Details (From Updated EOB)</h5>
+                             <div id="eob-details-list" class="result-list">
+                                <!-- JS will populate this -->
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- Tab Navigation Section -->
                 <div class="col-12 mt-3" style="padding-right: 0.5rem;">
@@ -1760,7 +1789,7 @@
         
         let globalEobAdditionalPayment = 0;
         let globalEobTicket = 'Not Found';
-        let globalEobData = { updated: null };
+        let globalEobData = { updated: null, old: null }; // NEW: Added old
         
         // --- Utility Functions ---
         
@@ -1880,10 +1909,15 @@
 
         // --- Get DOM Elements ---
         const eobUpdatedInput = document.getElementById('eobUpdatedInput');
+        const eobOldInput = document.getElementById('eobOldInput'); // NEW
         const eobErrors1 = document.getElementById('eob-errors-1');
         const idrErrors = document.getElementById('idr-errors');
         const eobDisplayBar = document.getElementById('eob-display-bar'); 
         const eobDisplayContent = document.getElementById('eob-display-content'); 
+        
+        // NEW EOB Details Table Elements
+        const eobDetailsCard = document.getElementById('eob-details-card');
+        const eobDetailsList = document.getElementById('eob-details-list');
 
         const noteNameInput = document.getElementById('note_Name');
         const noteInitialInput = document.getElementById('note_Initial');
@@ -1952,13 +1986,15 @@ Regards
              eobDisplayContent.innerHTML = '';
              eobErrors1.textContent = '';
              idrErrors.textContent = '';
+             eobDetailsCard.classList.add('d-none'); // NEW: Hide details table
+             eobDetailsList.innerHTML = ''; // NEW: Clear details table
              globalEobAdditionalPayment = 0;
              globalEobTicket = 'Not Found';
-             globalEobData = { updated: null };
+             globalEobData = { updated: null, old: null }; // NEW: Clear old
         }
 
         function clearComparisonStyles() {
-            document.querySelectorAll('.eob-display-value, .idr-result-value').forEach(el => {
+            document.querySelectorAll('.eob-display-value, .idr-result-value, .eob-details-list .output-value').forEach(el => {
                 el.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
             });
             
@@ -1971,6 +2007,7 @@ Regards
         
         document.getElementById('clearButton').addEventListener('click', function() {
             eobUpdatedInput.value = '';
+            eobOldInput.value = ''; // NEW
             document.getElementById('idrTextInput1').value = '';
             document.getElementById('idrTextInput2').value = '';
             document.getElementById('idrTextInput3').value = '';
@@ -2037,23 +2074,43 @@ Regards
             el.addEventListener('input', () => el.classList.remove('is-invalid'));
         });
 
-        // --- EOB Parsing ---
+        // --- EOB Parsing (CRITICAL UPDATE) ---
         function parseEOB(eobText) {
             if (!eobText || eobText.trim() === "") {
                 return null;
             }
             
+            // Standard Fields
             const ticketNoMatch = eobText.match(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i); 
-            // ptNameMatch REMOVED
             const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
             const billingProviderMatch = eobText.match(/(Billing Provider|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
-            const billedStr = extractValueSkippingLines(eobText, /Billed( Amount)?\s*:?/i) || '$0.00';
-            const paidStr = extractValueSkippingLines(eobText, /(Plan Paid|Paid Amount)\s*:?/i) || '$0.00'; 
-            const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Copay|Deductible|Responsibility)\s*:?/i) || '$0.00';
-            const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance|Co-insurance)\s*:?/i) || '$0.00';
-            const addlPaidStr = extractValueSkippingLines(eobText, /Additional Paid( Amount)?\s*:?/i) || '$0.00';
+            
+            // --- NEW Regex based on user request ---
+            const billedStr = extractValueSkippingLines(eobText, /(Total Bill|Billed Amount)\s*:?/i) || '$0.00';
+            
+            // === FIX: Expanded regex to find more 'Paid' labels ===
+            // === FIX 2: Added (^|[\r\n]) to anchor labels to the start of a line, preventing partial matches ===
+            const paidStr = extractValueSkippingLines(eobText, /(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i) || '$0.00';
+            
+            const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance)\s*:?/i) || '$0.00';
+            const copayStr = extractValueSkippingLines(eobText, /(Copay Amount|Copay)\s*:?/i) || '$0.00';
+            const deductibleStr = extractValueSkippingLines(eobText, /(Deductible Amount|Deductible)\s*:?/i) || '$0.00';
+            
+            // Legacy PT Resp for fallback (if sum is 0)
+            const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Responsibility)\s*:?/i) || '$0.00';
+            
+            const addlPaidStr = extractValueSkippingLines(eobText, /(Insurance Current Paid Amount|Additional Paid)\s*:?/i) || '$0.00';
+
+            // --- NEW Calculations ---
             const coinsuranceAmt = parseCurrency(coinsuranceStr);
-            const ptRespAmt = parseCurrency(ptRespStr); 
+            const copayAmt = parseCurrency(copayStr);
+            const deductibleAmt = parseCurrency(deductibleStr);
+            const legacyPtRespAmt = parseCurrency(ptRespStr);
+
+            let ptRespSum = coinsuranceAmt + copayAmt + deductibleAmt;
+            if (ptRespSum === 0 && legacyPtRespAmt > 0) {
+                ptRespSum = legacyPtRespAmt; // Fallback
+            }
 
             return {
                 ticketNo: ticketNoMatch ? ticketNoMatch[2].trim() : 'Not Found',
@@ -2061,12 +2118,16 @@ Regards
                 provider: billingProviderMatch ? billingProviderMatch[2].trim() : 'Not Found',
                 billedAmt: parseCurrency(billedStr),
                 paidAmt: parseCurrency(paidStr),
-                ptRespSum: ptRespAmt + coinsuranceAmt,
-                addlPaidAmt: parseCurrency(addlPaidStr)
+                ptRespSum: ptRespSum,
+                // Store individual components for new table
+                coinsuranceAmt: coinsuranceAmt,
+                copayAmt: copayAmt,
+                deductibleAmt: deductibleAmt,
+                addlPaidAmt: parseCurrency(addlPaidStr) // This is the new "Additional Payment"
             };
         }
 
-        // --- EOB Display (NEW) ---
+        // --- EOB Display (Top Bar) (UPDATED) ---
         function displayEOBResults(updated) {
             eobDisplayContent.innerHTML = '';
             eobDisplayBar.classList.remove('visible');
@@ -2075,10 +2136,11 @@ Regards
             globalEobTicket = 'Not Found';
 
             if (!updated) {
-                eobErrors1.textContent = 'EOB not found.';
+                eobErrors1.textContent = 'Updated EOB not found.';
                 return;
             }
 
+            // --- NEW LOGIC: Additional Payment comes directly from the field ---
             let addlPayResult = updated.addlPaidAmt || 0;
             
             globalEobAdditionalPayment = addlPayResult;
@@ -2086,7 +2148,7 @@ Regards
 
             const data = updated;
             
-            // T32738 | 3266489928x01 | Bill: $921.00 | Paid: $100.00 | PT: $0.00 | Round Table Physician.
+            // T32738 | 3266489928x01 | Bill: $921.00 | Paid: $100.00 | PT: $0.00 | Addl: $50.00 | Round Table Physician.
             const s = `<span class="eob-display-separator">|</span>`; // Separator
             
             let html_bar = `
@@ -2095,11 +2157,33 @@ Regards
                 <span class="eob-display-label">Bill:</span> <span class="eob-display-value currency" id="eob_bar_Billed">${formatCurrency(data.billedAmt)}</span> ${s}
                 <span class="eob-display-label">Paid:</span> <span class="eob-display-value currency" id="eob_bar_Paid">${formatCurrency(data.paidAmt)}</span> ${s}
                 <span class="eob-display-label">PT:</span> <span class="eob-display-value currency" id="eob_bar_PtResp">${formatCurrency(data.ptRespSum)}</span> ${s}
+                <span class="eob-display-label">Addl:</span> <span class="eob-display-value currency" id="eob_bar_Addl">${formatCurrency(data.addlPaidAmt)}</span> ${s}
                 <span class="eob-display-value" id="eob_bar_Facility" title="${data.provider}">${data.provider}</span>
             `;
             
             eobDisplayContent.innerHTML = html_bar;
             eobDisplayBar.classList.add('visible');
+        }
+
+        // --- NEW: EOB Details Table Display ---
+        function displayEOBDetailsTable(updated) {
+            eobDetailsList.innerHTML = ''; // Clear previous
+            if (!updated) {
+                eobDetailsCard.classList.add('d-none');
+                return;
+            }
+            
+            let html = `
+                <p><strong>Billed:</strong> <span class="output-value" id="eob_detail_Billed">${formatCurrency(updated.billedAmt)}</span></p>
+                <p><strong>Paid:</strong> <span class="output-value" id="eob_detail_Paid">${formatCurrency(updated.paidAmt)}</span></p>
+                <p><strong>Coins:</strong> <span class="output-value" id="eob_detail_Coinsurance">${formatCurrency(updated.coinsuranceAmt)}</span></p>
+                <p><strong>Copay</strong> <span class="output-value" id="eob_detail_Copay">${formatCurrency(updated.copayAmt)}</span></p>
+                <p><strong>Deductible</strong> <span class="output-value" id="eob_detail_Deductible">${formatCurrency(updated.deductibleAmt)}</span></p>
+                <p><strong>Additional:</strong> <span class="output-value" id="eob_detail_Addl">${formatCurrency(updated.addlPaidAmt)}</span></p>
+            `;
+            
+            eobDetailsList.innerHTML = html;
+            eobDetailsCard.classList.remove('d-none'); // Show the card
         }
 
 
@@ -2245,8 +2329,9 @@ Regards
             }
         }
         
-        // --- Matching Logic ---
+        // --- Matching Logic (UPDATED) ---
         function performMatching() {
+            // 1. Ticket Number Matching
             const allIdrTicketCells = document.querySelectorAll('#idr-sidebar-content .idr-result-value[data-field="Ticket #"]');
             let eobTicketMatched = false;
             
@@ -2272,6 +2357,7 @@ Regards
                 eobErrors1.textContent = 'EOB Ticket # not found for comparison.';
             }
 
+            // 2. Additional Payment Matching
             const allIdrAddlPmtCells = document.querySelectorAll('#idr-sidebar-content .idr-result-value[data-field="Addl. Pmt"]');
             if (allIdrAddlPmtCells.length === 0) {
                 return;
@@ -2283,37 +2369,43 @@ Regards
             }));
 
             const idrErrorsSidebar = document.getElementById('idr-errors');
+            const eobAddlPayEl_Bar = document.getElementById('eob_bar_Addl'); // Top Bar
+            const eobAddlPayEl_Detail = document.getElementById('eob_detail_Addl'); // Detail Table
             
+            // globalEobAdditionalPayment is now set from "Insurance Current Paid Amount"
             if (globalEobAdditionalPayment === 0) {
-                if (globalEobData.updated && globalEobData.updated.addlPaidAmt === 0) {
-                     idrErrorsSidebar.textContent = 'Calculated EOB Additional Payment is $0.00 (from EOB field).';
-                     idrErrorsSidebar.classList.add('text-success');
-                     idrErrorsSidebar.classList.remove('text-danger');
-                }
+                 idrErrorsSidebar.textContent = 'EOB Additional Payment is $0.00. No match performed.';
+                 idrErrorsSidebar.classList.add('text-success'); // Not an error, just info
+                 idrErrorsSidebar.classList.remove('text-danger');
+                 return; // Don't match if $0.00
             }
 
-            if (globalEobAdditionalPayment !== 0) {
-                let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
+            let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
 
-                if (bestMatch.indices.length > 0) {
-                    idrAmounts.forEach((item, index) => {
-                        if (bestMatch.indices.includes(index)) {
-                            item.cell.classList.add('bg-match');
-                        } else {
-                            item.cell.classList.add('bg-mismatch');
-                        }
-                    });
-                    // No EOB AddlPayEl to match
-                    idrErrorsSidebar.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
-                    idrErrorsSidebar.classList.add('text-success');
-                    idrErrorsSidebar.classList.remove('text-danger');
-                } else {
-                    idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
-                    // No EOB AddlPayEl to match
-                    idrErrorsSidebar.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
-                    idrErrorsSidebar.classList.add('text-danger');
-                    idrErrorsSidebar.classList.remove('text-success');
-                }
+            if (bestMatch.indices.length > 0) {
+                // Match Found
+                idrAmounts.forEach((item, index) => {
+                    if (bestMatch.indices.includes(index)) {
+                        item.cell.classList.add('bg-match');
+                    } else {
+                        item.cell.classList.add('bg-mismatch');
+                    }
+                });
+                if (eobAddlPayEl_Bar) eobAddlPayEl_Bar.classList.add('bg-match');
+                if (eobAddlPayEl_Detail) eobAddlPayEl_Detail.closest('p').querySelector('.output-value').classList.add('bg-match');
+                
+                idrErrorsSidebar.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
+                idrErrorsSidebar.classList.add('text-success');
+                idrErrorsSidebar.classList.remove('text-danger');
+            } else {
+                // No Match
+                idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
+                if (eobAddlPayEl_Bar) eobAddlPayEl_Bar.classList.add('bg-mismatch');
+                if (eobAddlPayEl_Detail) eobAddlPayEl_Detail.closest('p').querySelector('.output-value').classList.add('bg-mismatch');
+
+                idrErrorsSidebar.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
+                idrErrorsSidebar.classList.add('text-danger');
+                idrErrorsSidebar.classList.remove('text-success');
             }
         }
 
@@ -2339,7 +2431,7 @@ Regards
             return bestMatch;
         }
 
-        // --- Main Process Function ---
+        // --- Main Process Function (UPDATED) ---
         function processAllData(isSilent = false) {
             clearComparisonStyles();
             if (!isSilent) {
@@ -2351,8 +2443,14 @@ Regards
             eobErrors1.textContent = '';
             
             const eobUpdatedText = eobUpdatedInput.value;
+            const eobOldText = eobOldInput.value; // Get old EOB text
+            
             globalEobData.updated = parseEOB(eobUpdatedText);
+            globalEobData.old = parseEOB(eobOldText); // Parse old EOB
+            
+            // --- NEW: All logic now flows from 'updated' EOB only ---
             displayEOBResults(globalEobData.updated);
+            displayEOBDetailsTable(globalEobData.updated); // NEW
             
             parseAndDisplayIDR();
             performMatching();
@@ -2378,7 +2476,7 @@ Regards
             const idrGroups = document.querySelectorAll('#idr-sidebar-content .idr-result-group');
             let idrClaimNumbers = []; 
             
-            const getData = (group, field) => group.querySelector(`.idr-result-value[data-field="${field}"]`)?.textContent || '--';
+            const getData = (group, field) => group.querySelector(`[data-field="${field}"]`)?.textContent || group.querySelector(`[data-field="${field}"]`)?.value || '--';
 
             idrGroups.forEach((group, index) => {
                 const winLoseInput = group.querySelector('.win-lose-input');
