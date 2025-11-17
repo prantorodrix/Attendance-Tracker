@@ -2083,7 +2083,7 @@ Regards
             // Standard Fields
             const ticketNoMatch = eobText.match(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i); 
             const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
-            const billingProviderMatch = eobText.match(/(Billing Provider|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
+            const billingProviderMatch = eobText.match(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
             
             // --- NEW Regex based on user request ---
             const billedStr = extractValueSkippingLines(eobText, /(Total Bill|Billed Amount)\s*:?/i) || '$0.00';
@@ -2845,3 +2845,4 @@ Regards
     </script>
   </body>
 </html>
+
