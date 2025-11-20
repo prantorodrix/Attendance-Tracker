@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<!-- data-bs-theme="light" default -->
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranto's Appeal Tool</title>
+    <link rel="icon" type="image/png" href="appeal.png"> 
+    
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* --- Base & Typography (Original Glass Style) --- */
+        :root {
+            --bs-body-font-family: 'Poppins', sans-serif;
+            --bs-heading-font-family: 'Poppins', sans-serif;
+            
+            /* --- Light Mode --- */
+            --bs-body-bg-light: #f3e7ff; 
+            --bs-body-color-light: #212529;
+            --bs-tertiary-bg-light: rgba(255, 255, 255, 0.7); 
+            --bs-secondary-bg-light: #f8f9fa; 
+            --bs-border-color-light: rgba(0, 0, 0, 0.1); 
+            
+            --bs-glass-bg-light: rgba(255, 255, 255, 0.6); 
+            --bs-glass-border-light: var(--bs-border-color-light);
+            --bs-card-bg-light: var(--bs-tertiary-bg-light);
+            --bs-card-border-light: var(--bs-border-color-light);
+
+            /* --- Dark Mode --- */
+            --bs-body-bg-dark: #0a0c10; 
+            --bs-body-color-dark: #e0e0e0;
+            --bs-tertiary-bg-dark: rgba(22, 27, 34, 0.7); 
+            --bs-secondary-bg-dark: #2a2a2a;
+            --bs-border-color-dark: rgba(255, 255, 255, 0.1); 
+            --bs-light-bg-subtle-dark: #161b22;
+
+            --bs-glass-bg-dark: rgba(10, 12, 16, 0.6); 
+            --bs-glass-border-dark: var(--bs-border-color-dark);
+            --bs-card-bg-dark: var(--bs-tertiary-bg-dark);
+            --bs-card-border-dark: var(--bs-border-color-dark);
+
+            --bs-primary-dark: #00f0b5;
+            --bs-primary-rgb-dark: 0, 240, 181;
+            
+            --sidebar-width: 280px;
+            --top-bar-height: 65px;
+        }
+
+        [data-bs-theme="light"] {
+            --bs-body-bg: var(--bs-body-bg-light);
+            --bs-body-color: var(--bs-body-color-light);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-light);
+            --bs-secondary-bg: var(--bs-secondary-bg-light);
+            --bs-border-color: var(--bs-border-color-light);
+            --bs-glass-bg: var(--bs-glass-bg-light);
+            --bs-glass-border: var(--bs-glass-border-light);
+            --bs-card-bg: var(--bs-card-bg-light);
+            --bs-card-border: var(--bs-card-border-light);
+            
+            #top-bar-container {
+                 background: rgba(243, 231, 255, 0.6);
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-light);
+            }
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--bs-body-bg-dark);
+            --bs-body-color: var(--bs-body-color-dark);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-dark);
+            --bs-secondary-bg: var(--bs-secondary-bg-dark);
+            --bs-border-color: var(--bs-border-color-dark);
+            --bs-glass-bg: var(--bs-glass-bg-dark);
+            --bs-glass-border: var(--bs-glass-border-dark);
+            --bs-card-bg: var(--bs-card-bg-dark);
+            --bs-card-border: var(--bs-card-border-dark);
+            --bs-primary: var(--bs-primary-dark);
+            --bs-primary-rgb: var(--bs-primary-rgb-dark);
+            
+            #top-bar-container {
+                 background: rgba(10, 12, 16, 0.6);
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-dark);
+            }
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+            overflow: hidden;
+        }
+        
+        /* --- Animated Background (STATIC) --- */
+        #animated-bg-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -10; overflow: hidden;
+        }
+        .bg-image {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            filter: blur(10px); -webkit-filter: blur(10px); opacity: 1; transform: scale(1.1); 
+        }
+        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-dark { display: none; }
+        [data-bs-theme="dark"] .bg-image-light { display: none; }
+        
+        /* --- Glass Card Style --- */
+        .card {
+            background: rgba(255, 255, 255, 0.24);
+            backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        }
+        [data-bs-theme="dark"] .card {
+             background: rgba(22, 27, 34, 0.24);
+             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Top Bar Fixed */
+        #top-bar-container {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--top-bar-height); z-index: 1030;
+            display: flex; align-items: center; padding: 0 1.5rem;
+        }
+
+        /* Main Wrapper */
+        #main-wrapper { 
+            display: flex; 
+            height: calc(100vh - var(--top-bar-height)); 
+            margin-top: var(--top-bar-height); 
+        }
+        
+        #sidebar {
+            width: var(--sidebar-width); min-width: 240px; height: 100%; flex-shrink: 0;
+            display: flex; flex-direction: column; border-right: 1px solid var(--bs-border-color);
+            font-size: 0.85rem; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px);
+        }
+        
+        #sidebar-content { flex-grow: 1; overflow-y: auto; padding: 0.5rem; }
+        
+        #main-content { flex-grow: 1; height: 100%; overflow-y: auto; padding: 0.5rem; }
+        
+        /* Sidebar Results */
+        .result-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 4px 0; border-bottom: 1px solid var(--bs-border-color);
+        }
+        .result-item:last-child { border-bottom: none; }
+        .result-label { font-size: 0.8rem; font-weight: 500; color: var(--bs-secondary-color); white-space: nowrap; }
+        .result-value { 
+            font-size: 0.85rem; font-weight: 600; color: var(--bs-body-color); text-align: right; 
+            word-break: break-word; max-width: 140px;
+        }
+        
+        /* Inputs (Glassy) */
+        .form-control, .form-select {
+            background-color: var(--bs-tertiary-bg); color: var(--bs-body-color);
+            border: 1px solid var(--bs-border-color); border-radius: 10px;
+            font-size: 0.9rem; padding: 0.4rem 0.6rem;
+            transition: all 0.2s ease-out;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bs-tertiary-bg); border-color: var(--bs-primary);
+            box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
+        }
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: #dc3545 !important;
+            animation: shake-red 0.5s ease-out;
+        }
+        @keyframes shake-red {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        
+        textarea { font-family: monospace; resize: none; }
+        #eobInput { overflow: hidden; } 
+        
+        /* Navigation (Original) */
+        .nav-link-custom {
+            color: var(--bs-body-color); font-weight: 600; padding: 0.5rem 1rem;
+            text-decoration: none; border-radius: 8px; transition: all 0.2s; font-size: 1rem;
+        }
+        .nav-link-custom:hover { background: rgba(128,128,128,0.1); }
+        .nav-link-custom.active { background: var(--bs-primary); color: white; }
+        [data-bs-theme="dark"] .nav-link-custom.active { color: black; }
+
+        /* Premium Buttons */
+        .btn-premium {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            border: none; color: white;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-premium:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4); color: white; }
+        .btn-premium:active { transform: translateY(0); }
+
+        /* Tabs */
+        .nav-tabs-glass { border-bottom: 1px solid var(--bs-border-color); display: flex; margin-bottom: 0; }
+        .nav-tabs-glass .nav-link {
+            font-family: var(--bs-heading-font-family); font-weight: 600; font-size: 0.9rem;
+            color: var(--bs-secondary-color); border: none; border-radius: 0.75rem 0.75rem 0 0;
+            padding: 0.75rem 1.5rem; margin-right: 0.2rem; transition: all 0.2s; background: transparent;
+        }
+        .nav-tabs-glass .nav-link:hover:not(.active) { color: var(--bs-body-color); background: rgba(128, 128, 128, 0.1); }
+        .nav-tabs-glass .nav-link.active {
+            color: var(--bs-body-color); background: var(--bs-card-bg);
+            border: 1px solid var(--bs-card-border); border-bottom: 1px solid var(--bs-card-bg);
+            backdrop-filter: blur(10px); box-shadow: 0 -5px 15px rgba(0,0,0,0.05); position: relative; top: 1px;
+        }
+        [data-bs-theme="dark"] .nav-tabs-glass .nav-link.active { color: var(--bs-primary-dark); }
+
+        /* Data Boxes */
+        .data-box-label { 
+            font-size: 0.75rem; color: var(--bs-secondary-color); margin-bottom: 0; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .data-box-value { 
+            font-size: 0.95rem; font-weight: 700; color: var(--bs-primary); text-align: right;
+        }
+        [data-bs-theme="dark"] .data-box-value { color: var(--bs-primary-dark); }
+
+        .highlight-alert {
+            background-color: rgba(255, 193, 7, 0.25) !important; 
+            border-radius: 6px; padding: 0px 4px;
+            border: 1px solid rgba(255, 193, 7, 0.5);
+        }
+        [data-bs-theme="dark"] .highlight-alert {
+            background-color: rgba(255, 193, 7, 0.15) !important; color: #ffca2c !important;
+        }
+        
+        .highlight-process {
+            background-color: rgba(13, 202, 240, 0.2) !important;
+            color: #0dcaf0 !important;
+            border-radius: 6px; padding: 1px 5px;
+        }
+        [data-bs-theme="dark"] .highlight-process { color: #0dcaf0 !important; }
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeInUp 0.3s ease-out forwards; }
+
+        /* Summary Box */
+        #summary-box {
+            font-family: 'Calibri', sans-serif; font-size: 11pt;
+            background: #fff; color: #000; padding: 15px;
+            border: 1px solid #ccc; border-radius: 10px; margin-top: 10px;
+            overflow-x: auto; white-space: pre-wrap; cursor: pointer;
+        }
+        [data-bs-theme="dark"] #summary-box { filter: invert(0.9); } 
+
+        .btn.loading { position: relative; color: transparent !important; pointer-events: none; }
+        .btn.loading::after {
+            content: ''; position: absolute; top: 50%; left: 50%; margin-top: -8px; margin-left: -8px;
+            width: 16px; height: 16px; border: 2px solid #fff; border-top-color: var(--bs-primary);
+            border-radius: 50%; animation: btn-spin 0.6s linear infinite;
+        }
+        @keyframes btn-spin { to { transform: rotate(360deg); } }
+
+        /* --- Detailed Footer --- */
+        #main-footer {
+            background-color: var(--bs-glass-bg); border-top: 1px solid var(--bs-glass-border);
+            backdrop-filter: blur(10px); color: var(--bs-secondary-color);
+            padding: 3rem 1.5rem 1.5rem 1.5rem; margin-top: 1.5rem; font-size: 0.9rem;
+        }
+        #main-footer h5 { font-weight: 600; color: var(--bs-body-color); margin-bottom: 1rem; font-size: 1.1rem; }
+        #main-footer .footer-links { list-style: none; padding-left: 0; }
+        #main-footer .footer-links li { margin-bottom: 0.5rem; }
+        #main-footer .footer-links a { color: var(--bs-secondary-color); text-decoration: none; transition: color 0.2s ease; }
+        #main-footer .footer-links a:hover { color: var(--bs-primary); text-decoration: underline; }
+        #main-footer .social-links a { font-size: 1.5rem; color: var(--bs-secondary-color); margin-right: 1rem; transition: color 0.2s ease; }
+        #main-footer .social-links a:hover { color: var(--bs-primary); }
+        #main-footer .footer-bottom { border-top: 1px solid var(--bs-border-color); padding-top: 1.5rem; margin-top: 1.5rem; text-align: center; }
+        #main-footer .footer-bottom a { color: var(--bs-primary); text-decoration: none; font-weight: 600; }
+        #main-footer .footer-bottom a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div id="animated-bg-container">
+        <div class="bg-image bg-image-light bg-1 active"></div>
+        <div class="bg-image bg-image-dark bg-1 active"></div>
+    </div>
+
+    <!-- Top Bar -->
+    <div id="top-bar-container" class="container-fluid">
+        <div class="row w-100 align-items-center m-0">
+            <div class="col-auto p-0">
+                Made by <span style="background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:700;">Pranto Rodrix</span>
+            </div>
+            <div class="col d-flex justify-content-center gap-3">
+                <a href="#" class="nav-link-custom active">Appeal</a>
+                <a href="notes-content.html" class="nav-link-custom">IDR</a>
+                <a href="index.html" class="nav-link-custom">Main Page</a>
+            </div>
+            <div class="col-auto p-0 d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-premium rounded-pill px-3 fw-bold" id="extractBtn"><i class="bi bi-magic"></i> Extract</button>
+                <button type="button" class="btn btn-outline-danger rounded-pill px-3 fw-bold" id="clearBtn"><i class="bi bi-x-lg"></i> Clear</button>
+                <button id="theme-toggle" class="btn btn-light rounded-circle" style="width: 38px; height: 38px;"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar" class="card rounded-0 border-top-0 border-bottom-0 border-start-0">
+            <div class="p-3 border-bottom border-color-subtle">
+                <h6 class="text-primary m-0 fw-bold"><i class="bi bi-list-check me-2"></i>Claim Details</h6>
+            </div>
+            <div id="sidebar-content">
+                <div class="text-center text-muted mt-5 small">Extract data to see details here</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content">
+            <div class="container-fluid px-0">
+                
+                <div class="row g-3 mb-3"> 
+                    
+                    <!-- LEFT COLUMN: Inputs & Financials -->
+                    <div class="col-lg-4 col-md-12">
+                        <!-- EOB Paste Box -->
+                        <div class="card p-3 h-100 d-flex flex-column">
+                            <label class="form-label fw-bold text-primary small mb-1"><i class="bi bi-clipboard-data me-1"></i>Paste EOB</label>
+                            <textarea id="eobInput" class="form-control flex-grow-1" style="border: 2px dashed var(--bs-border-color);" placeholder="Paste EOB text here..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Financial Box 1 -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6 class="fw-bold border-bottom pb-1 mb-2 text-success small">Financial Breakdown</h6>
+                            <div class="d-flex flex-column gap-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="data-box-label">Total Bill</div>
+                                    <div class="data-box-value" id="res_billed">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="data-box-label">Paid Amount</div>
+                                    <div class="data-box-value" id="res_paid">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="data-box-label">Coinsurance</div>
+                                    <div class="data-box-value" id="res_coins">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="data-box-label">Copay/Deductible</div>
+                                    <div class="data-box-value" id="res_ded">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="data-box-label">Additional</div>
+                                    <div class="data-box-value" id="res_addl">$0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Box 2 -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card p-3 h-100">
+                            <h6 class="fw-bold border-bottom pb-1 mb-2 text-warning small">Other Information</h6>
+                            <div class="d-flex flex-column gap-1">
+                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_oon_coins">
+                                    <div class="data-box-label" style="max-width: 65%;">OON Coinsurance</div>
+                                    <div class="data-box-value text-secondary" id="res_oon_coins">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_oon_ded">
+                                    <div class="data-box-label" style="max-width: 65%;">OON Deductible</div>
+                                    <div class="data-box-value text-secondary" id="res_oon_ded">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_prior_coins">
+                                    <div class="data-box-label" style="max-width: 65%;">Prior Notif. Coins</div>
+                                    <div class="data-box-value text-secondary" id="res_prior_coins">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_prior_ded">
+                                    <div class="data-box-label" style="max-width: 65%;">Prior Notif. Ded</div>
+                                    <div class="data-box-value text-secondary" id="res_prior_ded">$0.00</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_medicare">
+                                    <div class="data-box-label" style="max-width: 65%;">Medicare Paid</div>
+                                    <div class="data-box-value text-secondary" id="res_medicare">$0.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Note Section (Below) -->
+                <div class="card p-0 overflow-hidden mb-3">
+                    <div class="p-0 border-bottom bg-opacity-10 bg-primary">
+                        <ul class="nav nav-tabs-glass px-2 pt-1" id="noteTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="appeal-tab" data-bs-toggle="tab" data-bs-target="#appeal-pane" type="button">Appeal</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="cr-tab" data-bs-toggle="tab" data-bs-target="#cr-pane" type="button">CR</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="final-tab" data-bs-toggle="tab" data-bs-target="#final-pane" type="button">Final Review</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="accepted-tab" data-bs-toggle="tab" data-bs-target="#accepted-pane" type="button">Accepted</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body p-3">
+                        
+                        <!-- Common Name Input -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-transparent border-end-0 fw-bold">Name</span>
+                                    <input type="text" class="form-control border-start-0" id="note_Name" placeholder="Enter Your Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="noteTabsContent">
+                            <!-- Tab 1: Appeal -->
+                            <div class="tab-pane fade show active" id="appeal-pane" role="tabpanel">
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <select class="form-select form-select-sm" id="note_Initial_Appeal">
+                                            <option value="" selected disabled>Select Appeal Level...</option>
+                                            <option value="1ST APPEAL">1st Appeal</option>
+                                            <option value="2ND APPEAL">2nd Appeal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <textarea id="note_Output_Appeal" class="form-control" rows="6" readonly placeholder="Select Appeal Level and Click Extract..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
+                            </div>
+
+                            <!-- Tab 2: CR (Claim Review) -->
+                            <div class="tab-pane fade" id="cr-pane" role="tabpanel">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control form-control-sm" value="CLAIM REVIEW" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select form-select-sm" id="note_Status_CR">
+                                            <option value="" selected disabled>Select CR Type...</option>
+                                            <option value="Dispute Claim">Dispute Claim</option>
+                                            <option value="Message This Payer">Message This Payer</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control form-control-sm" id="input_CR_Number" placeholder="Ref / CR Number">
+                                    </div>
+                                </div>
+                                <textarea id="note_Output_CR" class="form-control" rows="6" readonly placeholder="Select Status..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
+                            </div>
+
+                            <!-- Tab 3: Final Review -->
+                            <div class="tab-pane fade" id="final-pane" role="tabpanel">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control form-control-sm" value="FINAL REVIEW" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select form-select-sm" id="note_Status_Final">
+                                            <option value="" selected disabled>Select Status...</option>
+                                            <option value="Process Correctly">Process Correctly</option>
+                                            <option value="ALL ACTION DONE">ALL ACTION DONE</option>
+                                            <option value="SUTURE REMOVAL">SUTURE REMOVAL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <textarea id="note_Output_Final" class="form-control" rows="6" readonly placeholder="Select Status..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
+                            </div>
+
+                            <!-- Tab 4: Accepted -->
+                            <div class="tab-pane fade" id="accepted-pane" role="tabpanel">
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control form-control-sm" value="FINAL REVIEW" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select form-select-sm" id="note_Status_Accepted">
+                                            <option value="" selected disabled>Select Outcome...</option>
+                                            <option value="Got Payment">Got Payment</option>
+                                            <option value="Neg Done">Neg Done (No IDR)</option>
+                                            <option value="Pre Neg Accepted">Pre Neg Accepted</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 animate-fade" id="div_Additional" style="display:none;">
+                                        <input type="text" class="form-control form-control-sm" id="input_Additional" placeholder="Addl Paid">
+                                    </div>
+                                    <div class="col-md-3 animate-fade" id="div_PriceOffer" style="display:none;">
+                                        <input type="text" class="form-control form-control-sm" id="input_PriceOffer" placeholder="Offer Amount">
+                                    </div>
+                                </div>
+                                <textarea id="note_Output_Accepted" class="form-control" rows="6" readonly placeholder="Select Status..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
+                            </div>
+                        </div>
+                        <div id="copyMsg" class="text-success fw-bold mt-1 small text-end" style="opacity: 0; transition: opacity 0.3s;">Copied!</div>
+                    </div>
+                </div>
+
+                <!-- Summary Box -->
+                <div class="card p-2 mb-3">
+                    <h6 class="fw-bold small text-muted text-uppercase mb-1">Summary for Word</h6>
+                    <div id="summary-box">
+<table style="width:100%; border-collapse:collapse; font-family:'Calibri',sans-serif; font-size:11pt;">
+    <tr>
+        <td style="padding-bottom:5px;">RE: <span id="sum_patient">PATIENT NAME</span></td>
+        <td style="text-align:right; padding-bottom:5px;">NPI: <span id="sum_npi">0000000000</span></td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:5px;">Plan ID: <span id="sum_member">MEMBER ID</span></td>
+        <td style="text-align:right; padding-bottom:5px;">Group #: <span id="sum_group">GROUP NUM</span></td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:5px;">Claim #: <span id="sum_claim">CLAIM NUM</span></td>
+        <td style="text-align:right; padding-bottom:5px;">Date of Service: <span id="sum_dos">MM/DD/YYYY</span></td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:5px;">Total Charges: <span id="sum_billed">$0.00</span></td>
+        <td style="text-align:right; padding-bottom:5px;">Paid: <span id="sum_paid">$0.00</span></td>
+    </tr>
+    <tr>
+        <td>TICKET# <span id="sum_ticket">TICKET NUM</span></td>
+        <td style="text-align:right;">Expected Reimbursement: <span id="sum_expected">$0.00</span></td>
+    </tr>
+</table>
+                    </div>
+                     <div id="copyMsgSummary" class="text-success fw-bold mt-1 text-center small" style="opacity: 0; transition: opacity 0.3s;">Summary Copied!</div>
+                </div>
+
+                <!-- Detailed Footer -->
+                <footer id="main-footer">
+                    <div class="container-fluid">
+                        <div class="row g-4">
+                            <div class="col-lg-4 col-md-6">
+                                <h5>About Pranto's Appeal Tool</h5>
+                                <p>This tool is designed to streamline the process of 1st Level Appeal note generation. It automates data extraction from EOBs to minimize errors and save time.</p>
+                            </div>
+                            <div class="col-lg-2 col-md-6">
+                                <h5>Quick Links</h5>
+                                <ul class="footer-links">
+                                    <li><a href="index.html">Main Page</a></li>
+                                    <li><a href="#">Features</a></li>
+                                    <li><a href="#">About Me</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <h5>Resources</h5>
+                                <ul class="footer-links">
+                                    <li><a href="#">IDR Process Guide</a></li>
+                                    <li><a href="#">NSA Guidelines</a></li>
+                                    <li><a href="#">Internal SOP</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <h5>Connect</h5>
+                                <p>Get in touch for feedback or support.</p>
+                                <div class="social-links">
+                                    <a href="#" target="_blank"><i class="bi bi-facebook"></i></a>
+                                    <a href="#" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                    <a href="#" target="_blank"><i class="bi bi-github"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-bottom">
+                            <p class="mb-0">Made by <a href="#" target="black">@PrantoRodrix</a></p>
+                            <p class="mb-0">&copy; <span id="year"></span> My Portfolio. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- State Management ---
+        let globalData = {};
+        let globalVals = {};
+        let processedAmt = 0;
+        let processPct = 0;
+
+        // --- Theme ---
+        const htmlEl = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const storedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(storedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
+
+        function setTheme(theme) {
+            htmlEl.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = document.querySelector('#theme-toggle i');
+            icon.className = theme === 'dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Persistence ---
+        const noteName = document.getElementById('note_Name');
+        noteName.value = localStorage.getItem('appeal_name') || '';
+        noteName.addEventListener('input', () => {
+            localStorage.setItem('appeal_name', noteName.value);
+            generateCurrentNote();
+        });
+
+        // --- Copy Logic ---
+        function flashMsg(msgId) {
+            const msg = document.getElementById(msgId);
+            msg.style.opacity = 1;
+            setTimeout(() => msg.style.opacity = 0, 2000);
+        }
+
+        function setupCopy(id, msgId) {
+             document.getElementById(id).addEventListener('click', function() {
+                if(this.value && (this.value.trim() === "" || this.value.includes("ERROR"))) return;
+                if(this.tagName === 'TEXTAREA') this.select();
+                document.execCommand('copy');
+                flashMsg(msgId);
+            });
+        }
+        setupCopy('note_Output_Appeal', 'copyMsg');
+        setupCopy('note_Output_CR', 'copyMsg');
+        setupCopy('note_Output_Final', 'copyMsg');
+        setupCopy('note_Output_Accepted', 'copyMsg');
+
+        document.getElementById('summary-box').addEventListener('click', function() {
+            const range = document.createRange();
+            range.selectNode(this);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            flashMsg('copyMsgSummary');
+        });
+
+        // --- Event Listeners ---
+        document.getElementById('extractBtn').addEventListener('click', () => {
+            const btn = document.getElementById('extractBtn');
+            btn.classList.add('loading');
+            setTimeout(() => { processData(); btn.classList.remove('loading'); }, 300);
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', clearAll);
+
+        // Tab Switching triggers regeneration
+        const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabEls.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', () => generateCurrentNote());
+        });
+
+        // Input Changes trigger regeneration
+        const inputs = [
+            'note_Initial_Appeal', 'note_Status_CR', 'input_CR_Number', 
+            'note_Status_Final', 'note_Status_Accepted', 'input_Additional', 'input_PriceOffer'
+        ];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => {
+                el.classList.remove('is-invalid'); // Clear error on type
+                generateCurrentNote();
+            });
+            if(el.tagName === 'SELECT') el.addEventListener('change', generateCurrentNote);
+        });
+
+        // Show/Hide Accepted Fields
+        document.getElementById('note_Status_Accepted').addEventListener('change', function() {
+            const val = this.value;
+            const addl = document.getElementById('div_Additional');
+            const offer = document.getElementById('div_PriceOffer');
+            addl.style.display = (val === 'Got Payment') ? 'block' : 'none';
+            offer.style.display = (val === 'Pre Neg Accepted') ? 'block' : 'none';
+        });
+
+        // --- Parsing Logic ---
+        function extractValueSkippingLines(text, labelRegex) {
+            const match = text.match(labelRegex);
+            if (!match) return null;
+            const labelEndIndex = match.index + match[0].length;
+            const subsequentText = text.substring(labelEndIndex);
+            const lines = subsequentText.split(/[\r\n]+/);
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (trimmedLine.length > 0) {
+                    if (trimmedLine.match(/^[a-zA-Z\s\.\/()-]+:/)) {
+                         if(!trimmedLine.match(/^[\$0-9]/)) return null;
+                    }
+                    return trimmedLine; 
+                }
+            }
+            return null; 
+        }
+        
+        function extractVal(text, regex) {
+            const match = text.match(regex);
+            return (match && match[2]) ? match[2].trim() : '--';
+        }
+
+        function parseCurrency(str) {
+            if(!str) return 0;
+            return parseFloat(str.replace(/[$,\s]/g, '')) || 0;
+        }
+        function formatCurrency(num) {
+            return '$' + (parseFloat(num) || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // --- Main Process ---
+        function processData() {
+            const text = document.getElementById('eobInput').value;
+            if(!text.trim()) return;
+
+            // 1. Extract Dates
+            let serviceDate = '--';
+            let sdRaw = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Service Dates|Service Date|Date of Service|Dates of Service|DOS)\s*:?/i);
+            if(sdRaw) {
+                let m = sdRaw.match(/(\d{1,2}\/\d{1,2}\/\d{2,4}(\s*-\s*\d{1,2}\/\d{1,2}\/\d{2,4})?)/);
+                if(m) serviceDate = matchFirstDate(m[1]);
+            } else {
+                let m = text.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/);
+                if(m) serviceDate = m[1];
+            }
+
+            let finalizedDate = extractVal(text, /(Finalized Date|Processed Date)\s*[:]?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})/i);
+
+            // 2. Basic Info
+            let memberIdRaw = extractVal(text, /(Member ID|Identification No|ID Number)\s*[:#]?\s*([^\r\n]+)/i);
+            let memberId = memberIdRaw.replace(/^([A-Z]{3})0+/, '$1'); // Clean leading zeros
+
+            let provider = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Billing Provider Name|Billing Provider|Provider Name)\s*:?/i) || '--';
+            let patient = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Patient Name|Patient Name)\s*:?/i) || '--';
+            
+            globalData = {
+                ticket: extractVal(text, /(Patient Account Number|Pt Acct No|Ticket Number)\s*[:#]?\s*([^\r\n]+)/i),
+                claimNo: extractVal(text, /(Claim I?D|Claim No|Claim Number|Control Number)\s*[:#]?\s*([^\r\n]+)/i),
+                groupNo: extractVal(text, /(Group Number|Group No|Group ID)\s*[:#]?\s*([^\r\n]+)/i),
+                npi: extractVal(text, /(Billing NPI|NPI)\s*[:#]?\s*(\d+)/i),
+                serviceDate, finalizedDate, memberId, provider, patient
+            };
+
+            // 3. Financials
+            const billedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Total Bill|Billed Amount)\s*:?/i) || '$0.00';
+            
+            // Strict Paid Amount
+            let paidStr = extractValueSkippingLines(text, /(?:^|[\r\n])\s*(?:Total\s+Paid|Plan\s+Paid|Paid\s+Amount|Total\s+Plan\s+Paid|Total\s+Payment|Net\s+Paid)\s*:?/i);
+            if (!paidStr || parseCurrency(paidStr) === 0) {
+                 let altPaid = extractValueSkippingLines(text, /(?:^|[\r\n])\s*(?:Plan\s+Payment)\s*:?/i);
+                 if (altPaid && parseCurrency(altPaid) > 0) paidStr = altPaid;
+            }
+            if (!paidStr) paidStr = '$0.00';
+
+            const coinsStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Coinsurance Amount|Coinsurance)\s*:?/i) || '$0.00';
+            const dedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Deductible Amount|Deductible)\s*:?/i) || '$0.00';
+            const addlStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Insurance Current Paid Amount|Additional Paid)\s*:?/i) || '$0.00';
+            const copayStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Copay Amount|Copay)\s*:?/i) || '$0.00'; 
+
+            globalVals = {
+                billed: parseCurrency(billedStr),
+                paid: parseCurrency(paidStr),
+                coins: parseCurrency(coinsStr),
+                ded: parseCurrency(dedStr),
+                addl: parseCurrency(addlStr),
+                copay: parseCurrency(copayStr),
+                oonCoins: parseCurrency(extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Out of Network Coinsurance Amount|Out of Network Coinsurance)\s*:?/i)),
+                oonDed: parseCurrency(extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Out of Network Deductible Amount|Out of Network Deductible)\s*:?/i)),
+                priorCoins: parseCurrency(extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Prior Notification Coinsurance Amount)\s*:?/i)),
+                priorDed: parseCurrency(extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Prior Notification Deductible Amount)\s*:?/i)),
+                medicare: parseCurrency(extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Medicare Paid Amount)\s*:?/i))
+            };
+
+            // Calc Process Logic
+            processedAmt = globalVals.paid + globalVals.coins + globalVals.ded;
+            processPct = (globalVals.billed > 0) ? (processedAmt / globalVals.billed * 100).toFixed(0) : 0;
+
+            updateUI();
+            
+            // Auto-fill Additional Input
+            const addlInput = document.getElementById('input_Additional');
+            if(addlInput.value === "") addlInput.value = formatCurrency(globalVals.addl).replace('$','');
+
+            generateCurrentNote();
+        }
+
+        function matchFirstDate(rangeStr) {
+            let match = rangeStr.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/);
+            return match ? match[1] : rangeStr;
+        }
+
+        function updateUI() {
+            // Sidebar
+            const sb = document.getElementById('sidebar-content');
+            const processDisplay = `${formatCurrency(processedAmt)} / ${processPct}%`;
+            
+            sb.innerHTML = `
+                <div class="result-item"><span class="result-label">Ticket</span><span class="result-value">${globalData.ticket}</span></div>
+                <div class="result-item"><span class="result-label">Patient</span><span class="result-value text-truncate" style="max-width: 130px;" title="${globalData.patient}">${globalData.patient}</span></div>
+                <div class="result-item"><span class="result-label">Service Date</span><span class="result-value">${globalData.serviceDate}</span></div>
+                <div class="result-item"><span class="result-label">Received</span><span class="result-value">${globalData.receivedDate}</span></div>
+                <div class="result-item"><span class="result-label">Finalized</span><span class="result-value">${globalData.finalizedDate}</span></div>
+                <div class="result-item"><span class="result-label">Claim #</span><span class="result-value">${globalData.claimNo}</span></div>
+                <div class="result-item"><span class="result-label">Member ID</span><span class="result-value text-truncate" style="max-width: 120px;" title="${globalData.memberId}">${globalData.memberId}</span></div>
+                <div class="result-item"><span class="result-label">Group #</span><span class="result-value">${globalData.groupNo}</span></div>
+                <div class="result-item"><span class="result-label">NPI</span><span class="result-value">${globalData.npi}</span></div>
+                <div class="result-item"><span class="result-label">Provider</span><span class="result-value" style="text-align:right; max-width: 140px;">${globalData.provider}</span></div>
+                <div class="result-item"><span class="result-label text-danger">Copay</span><span class="result-value text-danger fw-bold">${formatCurrency(globalVals.copay)}</span></div>
+                <div class="mt-3 p-2 rounded bg-info-subtle border border-info">
+                    <div class="d-flex justify-content-between">
+                        <span class="small fw-bold text-info-emphasis">Total Process</span>
+                        <span class="small fw-bold text-info-emphasis">${processDisplay}</span>
+                    </div>
+                </div>
+            `;
+
+            // Financials
+            document.getElementById('res_billed').textContent = formatCurrency(globalVals.billed);
+            document.getElementById('res_paid').textContent = formatCurrency(globalVals.paid);
+            document.getElementById('res_coins').textContent = formatCurrency(globalVals.coins);
+            document.getElementById('res_ded').textContent = formatCurrency(globalVals.ded);
+            document.getElementById('res_addl').textContent = formatCurrency(globalVals.addl);
+
+            // Update Others with highlight if > 0
+            const updateRow = (id, val) => {
+                const el = document.getElementById(id);
+                el.textContent = formatCurrency(val);
+                el.className = (val > 0) ? "fw-bold text-warning" : "fw-bold text-secondary";
+                if(val > 0) el.parentElement.classList.add('bg-warning-subtle', 'rounded', 'px-1');
+            };
+            
+            updateRow('res_oon_coins', globalVals.oonCoins);
+            updateRow('res_oon_ded', globalVals.oonDed);
+            updateRow('res_prior_coins', globalVals.priorCoins);
+            updateRow('res_prior_ded', globalVals.priorDed);
+            updateRow('res_medicare', globalVals.medicare);
+
+            // Summary
+            document.getElementById('sum_patient').innerText = globalData.patient;
+            document.getElementById('sum_npi').innerText = globalData.npi;
+            document.getElementById('sum_member').innerText = globalData.memberId;
+            document.getElementById('sum_group').innerText = globalData.groupNo;
+            document.getElementById('sum_claim').innerText = globalData.claimNo;
+            document.getElementById('sum_dos').innerText = globalData.serviceDate;
+            document.getElementById('sum_billed').innerText = formatCurrency(globalVals.billed);
+            document.getElementById('sum_paid').innerText = formatCurrency(globalVals.paid);
+            document.getElementById('sum_ticket').innerText = globalData.ticket;
+            document.getElementById('sum_expected').innerText = formatCurrency(globalVals.billed * 0.9);
+        }
+
+        function clearAll() {
+            document.getElementById('eobInput').value = '';
+            document.getElementById('note_Output_Appeal').value = '';
+            document.getElementById('note_Output_CR').value = '';
+            document.getElementById('note_Output_Final').value = '';
+            document.getElementById('note_Output_Accepted').value = '';
+            
+            // Reset Selects
+            document.querySelectorAll('select').forEach(s => { s.value = ""; s.classList.remove('is-invalid'); });
+            document.querySelectorAll('input[type="text"]').forEach(i => { 
+                if(i.id !== 'note_Name') i.value = ""; 
+                i.classList.remove('is-invalid');
+            });
+            
+            document.getElementById('div_Additional').style.display = 'none';
+            document.getElementById('div_PriceOffer').style.display = 'none';
+            
+            ['res_billed', 'res_paid', 'res_coins', 'res_ded', 'res_addl', 'res_oon_coins', 'res_oon_ded', 'res_prior_coins', 'res_prior_ded', 'res_medicare']
+            .forEach(id => document.getElementById(id).innerText = '$0.00');
+
+            // Reset Summary placeholders
+             ['sum_patient', 'sum_npi', 'sum_member', 'sum_group', 'sum_claim', 'sum_dos', 'sum_billed', 'sum_paid', 'sum_ticket', 'sum_expected'].forEach(id => {
+                document.getElementById(id).innerText = '---';
+            });
+        }
+
+        function generateCurrentNote() {
+            if (!globalData.claimNo) return; // No data extracted
+
+            // Timezone BD
+            const today = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+            const d = new Date(today);
+            const dateStr = `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
+            
+            const nameEl = document.getElementById('note_Name');
+            const name = nameEl.value.trim().toUpperCase();
+            const output = document.getElementById('note_Output');
+            
+            // Active Tab
+            const activePane = document.querySelector('.tab-pane.active');
+            if (!activePane) return;
+            
+            const paneId = activePane.id;
+            
+            // Validation Helper
+            const validate = (el) => {
+                if(!el.value) { el.classList.add('is-invalid'); return false; }
+                el.classList.remove('is-invalid'); return true;
+            }
+            
+            if(!validate(nameEl)) { output.value = "Error: Name Required"; return; }
+
+            let note = "";
+
+            // Logic Per Tab
+            if (paneId === 'appeal-pane') {
+                const levelEl = document.getElementById('note_Initial_Appeal');
+                const outputAppeal = document.getElementById('note_Output_Appeal');
+                if(!validate(levelEl)) { outputAppeal.value = "Error: Select Appeal Level"; return; }
+                
+                const levelText = levelEl.value === "1ST APPEAL" ? "1ST LEVEL APPEAL" : "2ND LEVEL APPEAL";
+                note = `${dateStr}>${levelEl.value}>${name}>CLAIM NO #${globalData.claimNo}; BILLED AMOUNT ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INSURANCE ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. THE CLAIM PROCESS ACCORDING TO THE MEMBERS PLAN AT THE HIGHEST IN NETWORK LEVEL. NO ADDITIONAL PAYMENT WILL BE FORTHCOMING MAILED ${levelText} TO BCBS REQUESTING THE CLAIM TO BE RECONSIDERED AT A HIGHER LEVEL UTILIZING THE UCR RATE ACCORDING THE RENDERING ZIP CODE OR AT 87% OF BILLED CHARGES. LOW ALLOWABLE APPEAL SENT TO BCBS LOCAL PLAN.`;
+                animateText(outputAppeal, note);
+            
+            } else if (paneId === 'cr-pane') {
+                const statusEl = document.getElementById('note_Status_CR');
+                const refEl = document.getElementById('input_CR_Number');
+                const outputCR = document.getElementById('note_Output_CR');
+                if(!validate(statusEl)) { outputCR.value = "Error: Select CR Status"; return; }
+                
+                let refText = refEl.value.trim();
+                let status = statusEl.value;
+                
+                let baseNote = `${dateStr}>CLAIM REVIEW>${name}>CLAIM NO. # ${globalData.claimNo}`;
+                let details = `RECONSIDERATION: RETRIEVED CLAIM STATUS VIA AVAILITY. CLAIM BILLED ${formatCurrency(globalVals.billed)}, `;
+                
+                if (status === "Dispute Claim") {
+                    details += `PAID ${formatCurrency(globalVals.paid)} AND APPLIED ${formatCurrency(globalVals.coins)} CO-INS AND ${formatCurrency(globalVals.ded)} TO DED ON ${globalData.finalizedDate}. CLAIM ALLOWED ${formatCurrency(processedAmt)} AND PROCESSED AT ${processPct}% OF BILLED CHARGES. SENT RECONSIDERATION VIA DISPUTE CLAIM REQUESTING THE CLAIM TO BE REPROCESSED AT A HIGHER ALLOWABLE. ${refText}`;
+                } else {
+                    details += `INS PAID ${formatCurrency(globalVals.paid)}, AND APPLIED ${formatCurrency(globalVals.coins)}, CO-INS AND ${formatCurrency(globalVals.ded)}, TO DED ON ${globalData.finalizedDate}. CLAIM ALLOWED ${formatCurrency(processedAmt)}, AND PROCESSED AT ${processPct}% OF BILLED CHARGES. SENT MESSAGE USING MESSAGE THIS PAYER VIA AVAILITY REQUESTING THE CLAIM TO BE REPROCESSED AT A HIGHER ALLOWABLE. INTERACTION REFERENCE NUMBER IS # ${refText}`;
+                }
+                note = `${baseNote}; ${details}`;
+                animateText(outputCR, note);
+
+            } else if (paneId === 'final-pane') {
+                const statusEl = document.getElementById('note_Status_Final');
+                const outputFinal = document.getElementById('note_Output_Final');
+                if(!validate(statusEl)) { outputFinal.value = "Error: Select Review Status"; return; }
+                
+                let st = statusEl.value;
+                let base = `${dateStr}>FINAL REVIEW>${name}>CLAIM# ${globalData.claimNo}`;
+                
+                if (st === "SUTURE REMOVAL") {
+                    note = `${base}, BILLED AMOUNT ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INSURANCE ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. THIS WAS A SUTURE REMOVAL. WE DO NOT APPEAL FOR THIS. BILL ADJUSTED AS MISC ADJ.`;
+                } else {
+                    let crit = (st === "Process Correctly") ? "DOES MEET" : "DOES NOT MEET";
+                    note = `${base}; CLAIM ${crit} THE CRITERIA OF BEING PROCESSED AT OR ABOVE 80% OF ALLOWABLE CHARGES. CLAIM STATUS IS AS FOLLOWS: TOTAL CHARGE ${formatCurrency(globalVals.billed)}, PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}. ${st === "ALL ACTION DONE" ? "ALL ACTION DONE. " : ""}NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                }
+                animateText(outputFinal, note);
+
+            } else if (paneId === 'accepted-pane') {
+                const statusEl = document.getElementById('note_Status_Accepted');
+                const outputAccepted = document.getElementById('note_Output_Accepted');
+                if(!validate(statusEl)) { outputAccepted.value = "Error: Select Outcome"; return; }
+                
+                let st = statusEl.value;
+                let base = `${dateStr}>FINAL REVIEW>${name}>`;
+                
+                if (st === "Got Payment") {
+                    let addl = document.getElementById('input_Additional').value;
+                    note = `${base}WORKING ON COLLECTOR WORKLIST. NSA NEGOTIATION SUBMITTED FOR THIS ACCOUNT. WE GOT PAYMENT AFTER NEGOTIATION. CLAIM# ${globalData.claimNo}; TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, ADDITIONAL PAID $${addl}. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                } else if (st === "Neg Done") {
+                    note = `${base}WORKING ON COLLECTOR WORKLIST, CLAIM# ${globalData.claimNo}, TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, NSA NEGOTIATION DONE AND NOT ACCEPTED, INELIGIBLE FOR IDR, NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                } else {
+                    let offer = parseCurrency(document.getElementById('input_PriceOffer').value);
+                    let pct = (globalVals.billed > 0) ? ((offer/globalVals.billed)*100).toFixed(0) : 0;
+                    note = `${base}CLAIM# ${globalData.claimNo}, BILLED AMOUNT ${formatCurrency(globalVals.billed)} INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, COPAY/DEDUCTIBLE ${formatCurrency(globalVals.ded)}. PRICE OFFER WAS ${formatCurrency(offer)} @${pct}%. PROCESSED CORRECTLY AS PRE-NEG OFFER ACCEPTED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                }
+                animateText(outputAccepted, note);
+            }
+        }
+
+        function animateText(el, text) {
+            if(el.dataset.interval) clearInterval(el.dataset.interval);
+            if(el.value === text) return;
+            
+            el.value = "";
+            const words = text.split(' ');
+            let i = 0;
+            el.dataset.interval = setInterval(() => {
+                if(i < words.length) {
+                    el.value += (i>0 ? " " : "") + words[i];
+                    el.scrollTop = el.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(el.dataset.interval);
+                }
+            }, 10); // Fast typewriter
+        }
+    </script>
+</body>
+</html>
