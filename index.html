@@ -990,7 +990,117 @@
         
         .progress { height: 10px; }
         #cola-progress-bar { width: 0%; }
+ /* CSS ভেরিয়েবল সেটআপ: ডার্ক মোড (ডিফল্ট - ডার্ক ব্যাকগ্রাউন্ডের জন্য উপযুক্ত) */
+        :root {
+            --text-color: #FFFFFF; /* প্রধান ফন্টের রং: সাদা */
+            --bg-color: rgba(0, 0, 0, 0.4); /* স্বচ্ছ ব্যাকগ্রাউন্ড: কালো-স্বচ্ছ */
+            --hover-bg-color: rgba(0, 0, 0, 0.6);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --accent-color: #00BCD4; /* অ্যাকসেন্ট: সায়ান */
+            --secondary-text: rgba(255, 255, 255, 0.7);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
 
+        /* লাইট মোডের জন্য ওভাররাইড (হালকা ব্যাকগ্রাউন্ডের জন্য উপযুক্ত) */
+        /* এই ক্লাসটি যদি বডিতে যোগ করা হয়, তবে কালার পরিবর্তন হবে */
+        .light-mode {
+            --text-color: #1A1A1A; /* প্রধান ফন্টের রং: কালো */
+            --bg-color: rgba(255, 255, 255, 0.4); /* স্বচ্ছ ব্যাকগ্রাউন্ড: সাদা-স্বচ্ছ */
+            --hover-bg-color: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #1976D2; /* অ্যাকসেন্ট: নীল */
+            --secondary-text: rgba(26, 26, 26, 0.7);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* CSS: স্থির অবস্থান, স্বচ্ছতা (গ্লাসমরফিজম) এবং স্টাইলিং */
+        .fixed-watch {
+            position: fixed;
+            /* অবস্থান: উপরে (Top) স্থির */
+            top: 25px; 
+            bottom: auto; 
+            /* পরিবর্তন: ডানে (Right) স্থির করা হলো */
+            right: 25px; 
+            left: auto; 
+            
+            z-index: 1000;
+            
+            /* গ্লাসমরফিজম ব্যাকগ্রাউন্ড এবং অ্যাডাপ্টিভ কালার */
+            background: var(--bg-color); 
+            border: 1px solid var(--border-color); 
+            backdrop-filter: blur(8px); /* ব্লার এফেক্ট */
+            -webkit-backdrop-filter: blur(8px); 
+            
+            padding: 10px 15px; /* কম্প্যাক্ট বক্স সাইজ */
+            border-radius: 12px;
+            color: var(--text-color);
+            font-family: 'Rajdhani', sans-serif;
+            
+            box-shadow: var(--shadow); 
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* টেক্সট শ্যাডো পঠনযোগ্যতা বাড়াতে */
+            
+            opacity: 0.9;
+            transition: opacity 0.3s, background 0.3s, color 0.3s;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* মাউস নিয়ে গেলে স্বচ্ছতা বাড়বে */
+        .fixed-watch:hover {
+            opacity: 1;
+            background: var(--hover-bg-color);
+        }
+
+        .time-main {
+            font-size: 2.2rem; /* ছোট ফন্ট সাইজ */
+            font-weight: 700;
+            line-height: 1;
+            display: flex;
+            align-items: baseline;
+        }
+        
+        /* সেকেন্ড এরিয়া: স্ক্রলিং এফেক্টের জন্য */
+        .sec-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 8px; /* মার্জিন কমানো হলো */
+            padding-bottom: 0px; 
+        }
+        
+        .sec-wrapper {
+            height: 1rem; /* ছোট উচ্চতা */
+            width: 2rem; /* ছোট প্রস্থ */
+            overflow: hidden;
+            position: relative;
+            color: var(--accent-color); /* অ্যাকসেন্ট কালার ব্যবহার */
+            font-weight: 600;
+            font-size: 1rem; /* ছোট ফন্ট সাইজ */
+            line-height: 1rem;
+        }
+        
+        .sec-digit-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* স্ক্রলিং এর জন্য স্মুথ ট্রানজিশন */
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); 
+            text-align: center;
+        }
+        
+        .sec-digit-container > div {
+            height: 1rem;
+            line-height: 1rem;
+        }
+
+        .ampm-text {
+            font-size: 0.7rem; /* ছোট ফন্ট সাইজ */
+            color: var(--secondary-text); /* সেকেন্ডারি টেক্সট কালার ব্যবহার */
+            line-height: 1;
+            margin-top: 3px; 
+            font-weight: 400;
+        }
     </style>
 </head>
 
@@ -1052,7 +1162,21 @@
     
     <!-- ======== DASHBOARD PAGE ======== -->
     <div id="dashboard-page">
-        
+        <!-- ঘড়ির কম্পোনেন্ট -->
+    <div class="fixed-watch">
+        <div class="time-main">
+            <span id="bdTime">--:--</span>
+            
+            <div class="sec-area">
+                <div class="sec-wrapper">
+                    <div id="scrollingSeconds" class="sec-digit-container">
+                        <!-- JS will inject 00 to 59 here -->
+                    </div>
+                </div>
+                <span id="bdAMPM" class="ampm-text">--</span>
+            </div>
+        </div>
+    </div>
         <!-- ======== SIDEBAR ======== -->
         <div id="sidebar" class="d-flex flex-column p-3">
             <!-- Header -->
@@ -2742,8 +2866,61 @@
         // --------------------------------------------------
 
     </script>
+     <script>
+        const SEC_HEIGHT = 1.0; // CSS এর .sec-wrapper.height অনুযায়ী (rem-এ)
+        
+        // সেকেন্ড নম্বর তৈরি করা (00 থেকে 59)
+        function initializeSeconds() {
+            const container = document.getElementById('scrollingSeconds');
+            if (!container) return;
+            
+            let html = '';
+            // 00 থেকে 59 পর্যন্ত ইনসার্ট করা হচ্ছে
+            for (let i = 0; i <= 59; i++) {
+                html += `<div>${i.toString().padStart(2, '0')}</div>`;
+            }
+            container.innerHTML = html;
+        }
+        
+        // স্ক্রলিং এফেক্ট সহ ঘড়ি আপডেট করা
+        function updateFixedWatch() {
+            // বাংলাদেশ সময় (Asia/Dhaka) অনুযায়ী বর্তমান সময় তৈরি
+            const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
+
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            
+            let h_12 = h % 12;
+            if (h_12 === 0) h_12 = 12;
+
+            // সময় (HH:MM) ফরম্যাটিং
+            const timeHourMin = `${h_12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            
+            // HTML আপডেট করা (HH:MM, AMPM)
+            document.getElementById('bdTime').textContent = timeHourMin;
+            document.getElementById('bdAMPM').textContent = ampm;
+            
+            // স্ক্রলিং সেকেন্ড আপডেট করা
+            const secContainer = document.getElementById('scrollingSeconds');
+            if (secContainer) {
+                // বর্তমান সেকেন্ড অনুযায়ী কতটুকু উপরে সরাতে হবে (rem-এ)
+                const offset = s * SEC_HEIGHT; 
+                secContainer.style.transform = `translateY(-${offset}rem)`;
+            }
+        }
+
+        // প্রথমবার কল করা
+        initializeSeconds();
+        updateFixedWatch();
+        
+        // প্রতি সেকেন্ডে আপডেট করা
+        setInterval(updateFixedWatch, 1000); 
+    </script>
 </body>
 </html>
+
 
 
 
