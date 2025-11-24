@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pranto's Appeal Tool</title>
-    <link rel="icon" type="image/png" href="note.png"> 
+    <link rel="icon" type="image/png" href="appeal.png"> 
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,7 +44,7 @@
             transition: background-color 0.3s;
         }
         
-        /* Backgrounds */
+        /* Animated Background */
         .bg-image {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background-size: cover; background-position: center;
@@ -93,9 +92,45 @@
         .result-label { font-size: 0.8rem; font-weight: 500; opacity: 0.8; }
         .result-value { font-size: 0.85rem; font-weight: 600; text-align: right; max-width: 140px; word-break: break-word; }
         
-        /* Member ID Highlight */
-        .mem-prefix { color: #d946ef; font-weight: 900; font-size: 1rem; }
+        /* Member ID Highlight (Improved) */
+        .mem-prefix { 
+            color: #d946ef; /* Pink */
+            font-weight: 900; 
+            font-family: monospace;
+            font-size: 1rem;
+        }
         [data-bs-theme="dark"] .mem-prefix { color: #f0abfc; }
+
+        /* Live Clock Box */
+        .clock-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .clock-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--primary-gradient);
+        }
+        .live-time {
+            font-family: var(--font-heading);
+            font-size: 1.8rem; font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            text-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+            line-height: 1.2;
+        }
+        .live-date-wrapper {
+            font-size: 0.85rem; font-weight: 600; opacity: 0.8;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .live-date-input {
+            border: none; background: transparent;
+            font-family: var(--font-heading); font-weight: 600;
+            font-size: 0.9rem; color: var(--bs-body-color);
+            text-align: center; cursor: pointer; width: auto;
+        }
+        .live-date-input:focus { outline: none; }
 
         /* Premium Buttons */
         .btn-premium {
@@ -120,13 +155,26 @@
             border-radius: 8px; font-size: 0.9rem;
         }
         .form-control:focus { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); border-color: #6366f1; }
-        .is-invalid { border-color: #dc3545 !important; animation: shake 0.3s; }
+        
+        /* Error State */
+        .is-invalid { 
+            border-color: #ef4444 !important; 
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+            animation: shake 0.4s; 
+        }
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25%, 75% {transform: translateX(4px);} 50% {transform: translateX(-4px);} }
 
         /* Highlights */
         .highlight-alert { background: rgba(255, 193, 7, 0.15); color: #b45309; padding: 0 4px; border-radius: 4px; }
         [data-bs-theme="dark"] .highlight-alert { color: #fbbf24; }
-        .highlight-process { background: #0056b3; color: #ffffff !important; padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        
+        /* Total Process Highlight (Fixed Visibility) */
+        .highlight-process { 
+            background: #0056b3; /* Dark Blue for Contrast */
+            color: #ffffff !important; 
+            padding: 4px 8px; border-radius: 6px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
         [data-bs-theme="dark"] .highlight-process { background: #0ea5e9; color: #000 !important; }
 
         /* Tabs */
@@ -143,15 +191,6 @@
         .summary-table { width: 100%; font-family: 'Calibri', sans-serif; font-size: 11pt; border-collapse: collapse; }
         [data-bs-theme="dark"] #summary-box { filter: invert(0.9); }
 
-        /* Excel Box Styles */
-        .excel-box {
-            background-color: #f0fdf4; border: 1px solid #10b981; cursor: pointer; transition: all 0.2s;
-        }
-        [data-bs-theme="dark"] .excel-box { background-color: rgba(16, 185, 129, 0.15); border-color: #34d399; }
-        .excel-box:hover { background-color: #dcfce7; transform: translateY(-1px); }
-        .excel-text { font-family: monospace; font-size: 0.85rem; color: #047857; font-weight: 700; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        [data-bs-theme="dark"] .excel-text { color: #6ee7b7; }
-
         /* Loader */
         .btn-loading { pointer-events: none; color: transparent !important; position: relative; }
         .btn-loading::after {
@@ -162,8 +201,8 @@
         @keyframes spin { to {transform:rotate(360deg);} }
         
         /* Textarea */
-        textarea { font-family: monospace; resize: none; cursor: pointer; overflow: hidden; } /* No Scrollbar */
-        #eobInput { overflow: auto; cursor: text; } 
+        textarea { font-family: monospace; resize: none; cursor: pointer; }
+        #eobInput { overflow: hidden; cursor: text; } 
         
         /* Footer */
         #main-footer {
@@ -194,24 +233,34 @@
             <div class="col-auto p-0">
                 Made by <span style="background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:700;">Pranto Rodrix</span>
             </div>
-            <div class="col d-flex justify-content-center gap-3">
+            <div class="col d-flex justify-content-center gap-2">
                 <a href="#" class="nav-link-custom active">Appeal</a>
-                <a href="nsa_tool.html" class="nav-link-custom">NSA</a>
+                <a href="notes-content.html" class="nav-link-custom">IDR</a>
                 <a href="index.html" class="nav-link-custom">Main</a>
             </div>
-            <div class="col-auto p-0 d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-primary rounded-pill px-3" id="extractBtn"><i class="bi bi-magic"></i> Extract</button>
-                <button type="button" class="btn btn-outline-danger rounded-pill px-3" id="clearBtn"><i class="bi bi-x-lg"></i> Clear</button>
-                <button id="theme-toggle" class="btn btn-light rounded-circle" style="width: 38px; height: 38px;"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
+            <div class="col-auto p-0 d-flex gap-2">
+                <button class="btn btn-premium btn-sm rounded-pill px-3 fw-bold" id="extractBtn"><i class="bi bi-magic"></i> Extract</button>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" id="clearBtn"><i class="bi bi-trash"></i> Clear</button>
+                <button id="theme-toggle" class="btn btn-light btn-sm rounded-circle"><i class="bi bi-sun-fill"></i></button>
             </div>
         </div>
     </div>
 
     <div id="main-wrapper">
         <!-- Sidebar -->
-        <div id="sidebar" class="card rounded-0 border-top-0 border-bottom-0 border-start-0">
+        <div id="sidebar">
+            <!-- Gorgeous Clock Box -->
+            <div class="clock-box">
+                <div class="live-time" id="liveClock">--:--:--</div>
+                <div class="live-date-wrapper">
+                    <input type="date" id="globalDateInput" class="live-date-input">
+                    <!-- Visual Day Name -->
+                    <span id="liveDayName" style="font-size:0.8rem;"></span>
+                </div>
+            </div>
+
             <div class="p-3 border-bottom border-color-subtle">
-                <h6 class="text-primary m-0 fw-bold"><i class="bi bi-list-check me-2"></i>Claim Details</h6>
+                <h6 class="text-primary m-0 fw-bold small text-uppercase"><i class="bi bi-list-check me-2"></i>Claim Details</h6>
             </div>
             <div id="sidebar-content">
                 <div class="text-center text-muted mt-5 small">Extract data to see details here</div>
@@ -220,719 +269,574 @@
 
         <!-- Main Content -->
         <div id="main-content">
-            <div class="container-fluid px-0">
+            <div class="row g-3 h-100">
                 
-                <div class="row g-1 mb-2"> 
-                    <!-- EOB Paste Box -->
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card p-2 h-100 d-flex flex-column">
-                            <label class="form-label fw-bold text-primary small mb-1"><i class="bi bi-clipboard-data me-1"></i>Paste EOB</label>
-                            <textarea id="eobInput" class="form-control flex-grow-1" style="resize:none; border: 2px dashed var(--glass-border);" placeholder="Paste content here..."></textarea>
+                <!-- LEFT COLUMN: Inputs -->
+                <div class="col-lg-4 d-flex flex-column gap-3">
+                    <!-- Paste Box -->
+                    <div class="card p-3 flex-grow-1">
+                        <label class="form-label fw-bold text-primary small text-uppercase mb-2">Paste EOB Text</label>
+                        <textarea id="eobInput" class="form-control flex-grow-1" style="resize:none; border: 2px dashed var(--glass-border);" placeholder="Paste content here..."></textarea>
+                    </div>
+
+                    <!-- Financials -->
+                    <div class="card p-3">
+                        <h6 class="fw-bold text-success small text-uppercase border-bottom pb-2 mb-3">Financials</h6>
+                        <div class="vstack gap-1">
+                            <div class="result-item"><span class="result-label">Total Bill</span><span class="result-value" id="res_billed">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Paid Amount</span><span class="result-value" id="res_paid">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Coinsurance</span><span class="result-value" id="res_coins">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Copay/Ded</span><span class="result-value" id="res_ded">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Additional</span><span class="result-value" id="res_addl">$0.00</span></div>
                         </div>
                     </div>
 
-                    <!-- Box 1 -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card p-2 h-100">
-                            <h6 class="fw-bold border-bottom pb-1 mb-2 text-success small">Financial Breakdown</h6>
-                            <div class="d-flex flex-column gap-1">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="data-box-label">Total Bill</div>
-                                    <div class="data-box-value" id="res_billed">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="data-box-label">Paid Amount</div>
-                                    <div class="data-box-value" id="res_paid">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="data-box-label">Coinsurance</div>
-                                    <div class="data-box-value" id="res_coins">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="data-box-label">Copay/Deductible</div>
-                                    <div class="data-box-value" id="res_ded">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="data-box-label">Additional</div>
-                                    <div class="data-box-value" id="res_addl">$0.00</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Box 2 -->
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card p-2 h-100">
-                            <h6 class="fw-bold border-bottom pb-1 mb-2 text-warning small">Other Information</h6>
-                            <div class="d-flex flex-column gap-1">
-                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_oon_coins">
-                                    <div class="data-box-label" style="max-width: 65%;">OON Coinsurance</div>
-                                    <div class="data-box-value text-secondary" id="res_oon_coins">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_oon_ded">
-                                    <div class="data-box-label" style="max-width: 65%;">OON Deductible</div>
-                                    <div class="data-box-value text-secondary" id="res_oon_ded">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_prior_coins">
-                                    <div class="data-box-label" style="max-width: 65%;">Prior Notif. Coins</div>
-                                    <div class="data-box-value text-secondary" id="res_prior_coins">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_prior_ded">
-                                    <div class="data-box-label" style="max-width: 65%;">Prior Notif. Ded</div>
-                                    <div class="data-box-value text-secondary" id="res_prior_ded">$0.00</div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center p-0 rounded" id="row_medicare">
-                                    <div class="data-box-label" style="max-width: 65%;">Medicare Paid</div>
-                                    <div class="data-box-value text-secondary" id="res_medicare">$0.00</div>
-                                </div>
-                            </div>
+                    <!-- Analysis -->
+                    <div class="card p-3">
+                        <h6 class="fw-bold text-warning small text-uppercase border-bottom pb-2 mb-3">Analysis</h6>
+                        <div class="vstack gap-1">
+                            <div class="result-item"><span class="result-label">OON Co-ins</span><span class="result-value text-secondary" id="res_oon_coins">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">OON Ded</span><span class="result-value text-secondary" id="res_oon_ded">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Prior Coins</span><span class="result-value text-secondary" id="res_prior_coins">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Prior Ded</span><span class="result-value text-secondary" id="res_prior_ded">$0.00</span></div>
+                            <div class="result-item"><span class="result-label">Medicare</span><span class="result-value text-secondary" id="res_medicare">$0.00</span></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Note Section -->
-                <div class="card p-0 overflow-hidden mb-3">
-                    <div class="p-0 border-bottom bg-opacity-10 bg-primary">
-                        <ul class="nav nav-tabs px-2 pt-1" id="noteTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="appeal-tab" data-bs-toggle="tab" data-bs-target="#appeal-pane" type="button">Appeal</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="final-tab" data-bs-toggle="tab" data-bs-target="#final-pane" type="button">Final Review</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="accepted-tab" data-bs-toggle="tab" data-bs-target="#accepted-pane" type="button">Accepted</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body p-2">
-                        
-                        <!-- Shared Name Input -->
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-transparent border-end-0">Name</span>
-                                    <input type="text" class="form-control border-start-0" id="note_Name" placeholder="Enter Name">
-                                </div>
-                            </div>
+                <!-- RIGHT COLUMN: Notes -->
+                <div class="col-lg-8 d-flex flex-column gap-3">
+                    <div class="card flex-grow-1 overflow-hidden d-flex flex-column">
+                        <div class="bg-light-subtle pt-2">
+                            <ul class="nav nav-tabs-glass" id="noteTabs">
+                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#appeal-pane">Appeal</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cr-pane">CR</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#final-pane">Final Review</button></li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#accepted-pane">Accepted</button></li>
+                            </ul>
                         </div>
-
-                        <div class="tab-content" id="noteTabsContent">
-                            <!-- Tab 1: Appeal -->
-                            <div class="tab-pane fade show active" id="appeal-pane" role="tabpanel">
-                                <div class="row g-2 mb-2">
-                                    <div class="col-md-6">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Initial</span>
-                                            <select class="form-select border-start-0" id="note_Initial_Appeal">
-                                                <option value="" selected disabled>Select Level...</option>
-                                                <option value="1ST APPEAL">1st Appeal</option>
-                                                <option value="2ND APPEAL">2nd Appeal</option>
-                                            </select>
-                                        </div>
+                        
+                        <div class="card-body d-flex flex-column gap-3">
+                            <!-- Name & Date Inputs -->
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-transparent fw-bold text-primary">Name</span>
+                                        <input type="text" class="form-control" id="note_Name" placeholder="Enter Your Name">
                                     </div>
                                 </div>
-                                <textarea id="note_Output_Appeal" class="form-control" rows="8" readonly placeholder="Note will appear here automatically..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
-                            </div>
-
-                            <!-- Tab 2: Final Review -->
-                            <div class="tab-pane fade" id="final-pane" role="tabpanel">
-                                <div class="row g-2 mb-2">
-                                    <div class="col-md-6">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Initial</span>
-                                            <input type="text" class="form-control border-start-0" value="FINAL REVIEW" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Status</span>
-                                            <select class="form-select border-start-0" id="note_Status_Final">
-                                                <option value="" selected disabled>Select Status...</option>
-                                                <option value="In Network FR">In Network FR</option> <!-- NEW -->
-                                                <option value="Process Correctly">Process Correctly</option>
-                                                <option value="ALL ACTION DONE">ALL ACTION DONE</option>
-                                                <option value="SUTURE REMOVAL">SUTURE REMOVAL</option>
-                                            </select>
-                                        </div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-transparent fw-bold text-primary">Date</span>
+                                        <input type="date" class="form-control" id="note_Date" style="cursor:pointer;">
                                     </div>
                                 </div>
-                                <textarea id="note_Output_Final" class="form-control" rows="8" readonly placeholder="Select Status..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
                             </div>
 
-                            <!-- Tab 3: Accepted -->
-                            <div class="tab-pane fade" id="accepted-pane" role="tabpanel">
-                                <div class="row g-2 mb-2">
-                                    <div class="col-md-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Initial</span>
-                                            <input type="text" class="form-control border-start-0" value="FINAL REVIEW" readonly>
+                            <!-- Tab Content -->
+                            <div class="tab-content flex-grow-1 position-relative">
+                                <!-- Appeal Tab -->
+                                <div class="tab-pane fade show active h-100" id="appeal-pane">
+                                    <div class="mb-2">
+                                        <select class="form-select form-select-sm" id="note_Initial_Appeal">
+                                            <option value="" selected disabled>Select Appeal Level...</option>
+                                            <option value="1ST APPEAL">1st Appeal</option>
+                                            <option value="2ND APPEAL">2nd Appeal</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-grid mb-2">
+                                        <button class="btn btn-premium btn-sm fw-bold generate-note-btn">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Generate Note
+                                        </button>
+                                    </div>
+                                    <textarea id="note_Output_Appeal" class="form-control h-75 textarea-note" readonly placeholder="Extract Data & Click Generate..."></textarea>
+                                </div>
+
+                                <!-- CR Tab -->
+                                <div class="tab-pane fade h-100" id="cr-pane">
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-6">
+                                            <select class="form-select form-select-sm" id="note_Status_CR">
+                                                <option value="" selected disabled>Select Type...</option>
+                                                <option value="Dispute Claim">Dispute Claim</option>
+                                                <option value="Message This Payer">Message This Payer</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="text" class="form-control form-control-sm" id="input_CR_Number" placeholder="Ref / CR Number">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Status</span>
-                                            <select class="form-select border-start-0" id="note_Status_Accepted">
-                                                <option value="" selected disabled>Select Status...</option>
+                                    <div class="d-grid mb-2">
+                                        <button class="btn btn-premium btn-sm fw-bold generate-note-btn">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Generate Note
+                                        </button>
+                                    </div>
+                                    <textarea id="note_Output_CR" class="form-control h-75 textarea-note" readonly placeholder="Extract Data & Click Generate..."></textarea>
+                                </div>
+
+                                <!-- Final Review Tab -->
+                                <div class="tab-pane fade h-100" id="final-pane">
+                                    <select class="form-select form-select-sm mb-2" id="note_Status_Final">
+                                        <option value="" selected disabled>Select Status...</option>
+                                        <option value="Process Correctly">Process Correctly</option>
+                                        <option value="ALL ACTION DONE">ALL ACTION DONE</option>
+                                        <option value="SUTURE REMOVAL">SUTURE REMOVAL</option>
+                                    </select>
+                                    <div class="d-grid mb-2">
+                                        <button class="btn btn-premium btn-sm fw-bold generate-note-btn">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Generate Note
+                                        </button>
+                                    </div>
+                                    <textarea id="note_Output_Final" class="form-control h-75 textarea-note" readonly placeholder="Extract Data & Click Generate..."></textarea>
+                                </div>
+
+                                <!-- Accepted Tab -->
+                                <div class="tab-pane fade h-100" id="accepted-pane">
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-6">
+                                            <select class="form-select form-select-sm" id="note_Status_Accepted">
+                                                <option value="" selected disabled>Select Outcome...</option>
                                                 <option value="Got Payment">Got Payment</option>
                                                 <option value="Neg Done">Neg Done (No IDR)</option>
                                                 <option value="Pre Neg Accepted">Pre Neg Accepted</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <!-- Dynamic Inputs -->
-                                    <div class="col-md-4" id="div_Additional" style="display:none;">
-                                         <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Addl</span>
-                                            <input type="text" class="form-control border-start-0" id="input_Additional" placeholder="$0.00">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control form-control-sm" id="input_Additional" placeholder="Addl Paid" style="display:none;">
+                                            <input type="text" class="form-control form-control-sm" id="input_PriceOffer" placeholder="Offer Amount" style="display:none;">
                                         </div>
                                     </div>
-                                    <div class="col-md-4" id="div_PriceOffer" style="display:none;">
-                                         <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-transparent border-end-0">Offer</span>
-                                            <input type="text" class="form-control border-start-0" id="input_PriceOffer" placeholder="$0.00">
-                                        </div>
+                                    <div class="d-grid mb-2">
+                                        <button class="btn btn-premium btn-sm fw-bold generate-note-btn">
+                                            <i class="bi bi-lightning-charge-fill me-1"></i> Generate Note
+                                        </button>
                                     </div>
+                                    <textarea id="note_Output_Accepted" class="form-control h-75 textarea-note" readonly placeholder="Extract Data & Click Generate..."></textarea>
                                 </div>
-                                <textarea id="note_Output_Accepted" class="form-control" rows="8" readonly placeholder="Select Status..." style="cursor: pointer; font-size: 0.85rem;"></textarea>
+                                
+                                <!-- Copy Message -->
+                                <div id="copyMsg" class="position-absolute bottom-0 end-0 m-2 bg-success text-white px-2 py-1 rounded small opacity-0 transition">Copied!</div>
                             </div>
                         </div>
-                        <div id="copyMsg" class="text-success text-center fw-bold mt-1" style="font-size: 0.75rem; opacity: 0; transition: opacity 0.3s;">Copied to Clipboard!</div>
                     </div>
-                </div>
-                
-                <!-- NEW: Excel Tracking Section -->
-                <div class="card p-2 mb-3">
-                    <h6 class="fw-bold small text-muted text-uppercase mb-2 ps-1">One Click Copy (For Excel)</h6>
-                    <div class="d-flex flex-column gap-2">
-                         <!-- Row 1: For Call -->
-                         <div class="card p-2 excel-box" id="excel-box-call" title="Copy For Call Row">
-                             <div class="d-flex justify-content-between align-items-center px-1">
-                                 <div class="d-flex align-items-center">
-                                     <i class="bi bi-telephone-forward me-2 text-primary"></i>
-                                     <span class="excel-text text-truncate" id="excel-text-call">For Call Log</span>
-                                 </div>
-                                 <i class="bi bi-clipboard-check text-success ms-2"></i>
-                             </div>
-                         </div>
-                         
-                         <!-- Row 2: For In Network -->
-                         <div class="card p-2 excel-box" id="excel-box-in-network" title="Copy For In Network Row">
-                             <div class="d-flex justify-content-between align-items-center px-1">
-                                 <div class="d-flex align-items-center">
-                                     <i class="bi bi-hospital me-2 text-info"></i>
-                                     <span class="excel-text text-truncate" id="excel-text-in-network">For In-Network</span>
-                                 </div>
-                                 <i class="bi bi-clipboard-check text-success ms-2"></i>
-                             </div>
-                         </div>
-                     </div>
-                     <div id="copyMsgExcel" class="text-success fw-bold text-center mt-1 small" style="opacity:0;">Copied!</div>
-                </div>
 
-                <!-- Summary Box -->
-                <div class="card p-2 mb-3">
-                    <h6 class="fw-bold small text-muted text-uppercase mb-1">Summary for Word</h6>
-                    <div id="summary-box">
-<table style="width:100%; border-collapse:collapse; font-family:'Calibri',sans-serif; font-size:11pt;">
-    <tr>
-        <td style="padding-bottom:5px;">RE: <span id="sum_patient">PATIENT NAME</span></td>
-        <td style="text-align:right; padding-bottom:5px;">NPI: <span id="sum_npi">0000000000</span></td>
-    </tr>
-    <tr>
-        <td style="padding-bottom:5px;">Plan ID: <span id="sum_member">MEMBER ID</span></td>
-        <td style="text-align:right; padding-bottom:5px;">Group #: <span id="sum_group">GROUP NUM</span></td>
-    </tr>
-    <tr>
-        <td style="padding-bottom:5px;">Claim #: <span id="sum_claim">CLAIM NUM</span></td>
-        <td style="text-align:right; padding-bottom:5px;">Date of Service: <span id="sum_dos">MM/DD/YYYY</span></td>
-    </tr>
-    <tr>
-        <td style="padding-bottom:5px;">Total Charges: <span id="sum_billed">$0.00</span></td>
-        <td style="text-align:right; padding-bottom:5px;">Paid: <span id="sum_paid">$0.00</span></td>
-    </tr>
-    <tr>
-        <td>TICKET# <span id="sum_ticket">TICKET NUM</span></td>
-        <td style="text-align:right;">Expected Reimbursement: <span id="sum_expected">$0.00</span></td>
-    </tr>
-</table>
-                    </div>
-                     <div id="copyMsgSummary" class="text-success fw-bold mt-1 text-center" style="font-size:0.75rem; opacity: 0; transition: opacity 0.3s;">Summary Copied!</div>
-                </div>
-
-                <!-- Detailed Footer -->
-                <footer id="main-footer">
-                    <div class="container-fluid">
-                        <div class="row g-4">
-                            <div class="col-lg-4 col-md-6">
-                                <h5>About Pranto's Appeal Tool</h5>
-                                <p>This tool is designed to streamline the process of 1st Level Appeal note generation. It automates data extraction from EOBs to minimize errors and save time.</p>
-                            </div>
-                            <div class="col-lg-2 col-md-6">
-                                <h5>Quick Links</h5>
-                                <ul class="footer-links">
-                                    <li><a href="index.html">Main Page</a></li>
-                                    <li><a href="#">Features</a></li>
-                                    <li><a href="#">About Me</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <h5>Resources</h5>
-                                <ul class="footer-links">
-                                    <li><a href="#">IDR Process Guide</a></li>
-                                    <li><a href="#">NSA Guidelines</a></li>
-                                    <li><a href="#">Internal SOP</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <h5>Connect</h5>
-                                <p>Get in touch for feedback or support.</p>
-                                <div class="social-links">
-                                    <a href="#" target="_blank"><i class="bi bi-facebook"></i></a>
-                                    <a href="#" target="_blank"><i class="bi bi-linkedin"></i></a>
-                                    <a href="#" target="_blank"><i class="bi bi-github"></i></a>
-                                </div>
-                            </div>
+                    <!-- Summary Box -->
+                    <div class="card p-3">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-2">Summary for Word</h6>
+                        <div id="summary-box" class="bg-white p-3 rounded border" style="cursor:pointer;">
+                            <table class="summary-table">
+                                <tr><td>RE: <span id="sum_patient">PATIENT NAME</span></td><td class="text-end">NPI: <span id="sum_npi">0000000000</span></td></tr>
+                                <tr><td>Plan ID: <span id="sum_member">MEMBER ID</span></td><td class="text-end">Group #: <span id="sum_group">GROUP NUM</span></td></tr>
+                                <tr><td>Claim #: <span id="sum_claim">CLAIM NUM</span></td><td class="text-end">Date of Service: <span id="sum_dos">MM/DD/YYYY</span></td></tr>
+                                <tr><td>Total Charges: <span id="sum_billed">$0.00</span></td><td class="text-end">Paid: <span id="sum_paid">$0.00</span></td></tr>
+                                <tr><td>TICKET# <span id="sum_ticket">TICKET NUM</span></td><td class="text-end">Expected Reimbursement: <span id="sum_expected">$0.00</span></td></tr>
+                            </table>
                         </div>
-                        <div class="footer-bottom">
-                            <p class="mb-0">Made by <a href="#" target="black">@PrantoRodrix</a></p>
-                            <p class="mb-0">&copy; <span id="year"></span> My Portfolio. All rights reserved.</p>
-                        </div>
+                        <div id="copyMsgSummary" class="text-success fw-bold small text-center mt-1 opacity-0 transition">Summary Copied!</div>
                     </div>
-                </footer>
-
+                </div>
             </div>
+
+            <!-- Footer -->
+            <footer id="main-footer">
+                <div class="container-fluid">
+                    <div class="row g-4">
+                        <div class="col-lg-4 col-md-6">
+                            <h5>About Pranto's Appeal Tool</h5>
+                            <p>This tool is designed to streamline the process of 1st Level Appeal note generation.</p>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <h5>Quick Links</h5>
+                            <ul class="footer-links">
+                                <li><a href="index.html">Main Page</a></li>
+                                <li><a href="#">Features</a></li>
+                                <li><a href="#">About Me</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <h5>Resources</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">IDR Process Guide</a></li>
+                                <li><a href="#">NSA Guidelines</a></li>
+                                <li><a href="#">Internal SOP</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <h5>Connect</h5>
+                            <p>Get in touch for feedback or support.</p>
+                            <div class="social-links">
+                                <a href="#" target="_blank"><i class="bi bi-facebook"></i></a>
+                                <a href="#" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" target="_blank"><i class="bi bi-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p class="mb-0">Made by <a href="#" target="black">@PrantoRodrix</a></p>
+                        <p class="mb-0">&copy; <span id="year"></span> My Portfolio. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Global Vars
-        let globalData = null;
+        // --- State ---
+        let globalData = null; // Start Null to enforce extraction
         let globalVals = {};
+        let processedAmt = 0;
+        let processPct = 0;
+        let manualDate = null; 
 
-        const htmlEl = document.documentElement;
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const storedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(storedTheme);
+        // --- Live Clock Logic ---
+        function updateClock() {
+            const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+            const d = new Date(now);
+            const timeStr = d.toLocaleTimeString('en-US', { hour12: true });
+            document.getElementById('liveClock').innerText = timeStr;
+            
+            if (!manualDate) {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                document.getElementById('globalDateInput').value = `${yyyy}-${mm}-${dd}`;
+                const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                document.getElementById('liveDayName').innerText = `(${days[d.getDay()]})`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-        themeToggle.addEventListener('click', () => {
-            const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
+        document.getElementById('globalDateInput').addEventListener('change', function() {
+            manualDate = this.value; 
+            const [y, m, d] = manualDate.split('-');
+            const dateObj = new Date(y, m-1, d);
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            document.getElementById('liveDayName').innerText = `(${days[dateObj.getDay()]})`;
         });
 
-        function setTheme(theme) {
-            htmlEl.setAttribute('data-bs-theme', theme);
-            localStorage.setItem('theme', theme);
-            themeIcon.className = theme === 'dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
-        }
+        // --- Theme ---
+        const htmlEl = document.documentElement;
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const t = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-bs-theme', t);
+            document.querySelector('#theme-toggle i').className = t==='dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+        });
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        // --- Persistence ---
         const noteName = document.getElementById('note_Name');
-        
         noteName.value = localStorage.getItem('appeal_name') || '';
         noteName.addEventListener('input', () => {
             localStorage.setItem('appeal_name', noteName.value);
-            if(globalData) generateAllNotes();
         });
 
-        // Copy Helpers
-        function flashMsg(msgId) {
-            const msg = document.getElementById(msgId);
-            msg.style.opacity = 1;
-            setTimeout(() => msg.style.opacity = 0, 2000);
-        }
-
-        function setupCopy(id, msgId) {
-             document.getElementById(id).addEventListener('click', function() {
-                if(this.value && (this.value.trim() === "" || this.value.includes("ERROR:"))) return;
-                if(this.tagName === 'TEXTAREA') this.select();
-                document.execCommand('copy');
-                flashMsg(msgId);
-            });
-        }
-        setupCopy('note_Output_Appeal', 'copyMsg');
-        setupCopy('note_Output_Final', 'copyMsg');
-        setupCopy('note_Output_Accepted', 'copyMsg');
-
-        document.getElementById('summary-box').addEventListener('click', function() {
-            const range = document.createRange();
-            range.selectNode(this);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            flashMsg('copyMsgSummary');
-        });
-        
-        // --- EXCEL COPY ---
-        function fallbackCopy(text, msgId) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            flashMsg(msgId);
-        }
-
-        document.getElementById('excel-box-call').addEventListener('click', function() {
-            if(!globalData) return;
-            // Date | Request By | Ticket | PT First | PT Last | Claim | Ins ID | Total Bill | DOS
-            const today = new Date().toLocaleDateString('en-US', {timeZone:'Asia/Dhaka'});
-            const name = document.getElementById('note_Name').value.toUpperCase();
-            const ticket = globalData.ticket || '--';
-            
-            const ptName = globalData.patient || '';
-            let ptFirst = '';
-            let ptLast = '';
-            
-            // Name Parsing: Check for comma
-            if(ptName.includes(',')) {
-                const parts = ptName.split(',');
-                ptLast = parts[0].trim();
-                ptFirst = parts[1].trim();
-            } else {
-                // Fallback to space splitting
-                const nameParts = ptName.trim().split(' ');
-                ptFirst = nameParts[0] || '';
-                ptLast = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-            }
-            
-            const claim = globalData.claimNo || '--';
-            const insId = globalData.memberId || '--';
-            const bill = globalVals.billed ? globalVals.billed.toFixed(2) : '0.00';
-            const dos = globalData.serviceDate || '--';
-
-            const data = `${today}\t${name}\t${ticket}\t${ptFirst}\t${ptLast}\t${claim}\t${insId}\t${bill}\t${dos}`;
-            fallbackCopy(data, 'copyMsgExcel');
-        });
-
-        document.getElementById('excel-box-in-network').addEventListener('click', function() {
-             if(!globalData) return;
-             // Ticket | DOS | Policy | CPT
-             const ticket = globalData.ticket || '--';
-             const dos = globalData.serviceDate || '--';
-             const policy = (globalData.memberId && globalData.memberId.length >=3) ? globalData.memberId.substring(0,3) : '--';
-             const cpt = globalData.cpt || '--';
-             
-             const data = `${ticket}\t${dos}\t${policy}\t${cpt}`;
-             fallbackCopy(data, 'copyMsgExcel');
-        });
-
-
-        document.getElementById('extractBtn').addEventListener('click', function() {
-            const btn = this;
-            btn.classList.add('loading');
-            setTimeout(() => {
-                processData();
-                btn.classList.remove('loading');
-            }, 300);
-        });
-        
-        document.getElementById('clearBtn').addEventListener('click', function() {
+        // --- Clear Function (FIXED) ---
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            // 1. Clear Inputs
             document.getElementById('eobInput').value = '';
-            document.querySelectorAll('textarea[readonly]').forEach(t => t.value = '');
-            document.querySelectorAll('select').forEach(s => s.value = "");
+            document.querySelectorAll('.textarea-note').forEach(t => { 
+                t.value = ''; 
+                t.placeholder = "Extract Data first..."; 
+            });
+            document.querySelectorAll('input[type="text"]').forEach(i => { if(i.id !== 'note_Name') i.value = ''; });
+            document.querySelectorAll('select').forEach(s => s.value = '');
             
-            // Clear Global Data
-            globalData = null;
+            // 2. Reset Logic State (CRITICAL)
+            globalData = null; 
             globalVals = {};
-
+            manualDate = null; 
+            
+            // 3. Clear Sidebar
             document.getElementById('sidebar-content').innerHTML = '<div class="text-center text-muted mt-5 small">Extract data to see details here</div>';
             
-            ['sum_patient', 'sum_npi', 'sum_member', 'sum_group', 'sum_claim', 'sum_dos', 'sum_billed', 'sum_paid', 'sum_ticket', 'sum_expected'].forEach(id => {
-                document.getElementById(id).innerText = '--';
-            });
-
-            const resetIds = ['res_billed', 'res_paid', 'res_coins', 'res_ded', 'res_addl', 
-                              'res_oon_coins', 'res_oon_ded', 'res_prior_coins', 'res_prior_ded', 'res_medicare'];
-            
-            resetIds.forEach(id => {
+            // 4. Reset Financials
+            ['res_billed', 'res_paid', 'res_coins', 'res_ded', 'res_addl', 'res_oon_coins', 'res_oon_ded', 'res_prior_coins', 'res_prior_ded', 'res_medicare']
+            .forEach(id => {
                 const el = document.getElementById(id);
-                el.textContent = '$0.00';
-                const row = el.closest('.d-flex.rounded');
-                if(row) {
-                    row.classList.remove('highlight-alert');
-                    el.classList.add('text-secondary');
-                    el.classList.remove('fw-bold');
-                }
+                if(el) { el.innerText = '$0.00'; if(el.parentElement) el.parentElement.className = 'result-item'; }
             });
-        });
-        
-        // Auto Generate Listeners
-        ['note_Initial_Appeal', 'note_Status_Final', 'note_Status_Accepted'].forEach(id => {
-             document.getElementById(id).addEventListener('change', generateAllNotes);
-        });
-        
-        document.getElementById('note_Status_Accepted').addEventListener('change', function() {
-             const val = this.value;
-             document.getElementById('div_Additional').style.display = (val === 'Got Payment') ? 'block' : 'none';
-             document.getElementById('div_PriceOffer').style.display = (val === 'Pre Neg Accepted') ? 'block' : 'none';
+            
+            // 5. Reset Summary
+            ['sum_patient', 'sum_npi', 'sum_member', 'sum_group', 'sum_claim', 'sum_dos', 'sum_billed', 'sum_paid', 'sum_ticket', 'sum_expected']
+            .forEach(id => document.getElementById(id).innerText = '--');
+            
+            // 6. Reset Dynamic Inputs
+            document.getElementById('input_Additional').style.display = 'none';
+            document.getElementById('input_PriceOffer').style.display = 'none';
+            
+            // 7. Remove Errors
+            document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            
+            // 8. Reset Note Date to Today
+            initDate();
         });
 
-        function formatCurrency(num) {
-            return '$' + (parseFloat(num) || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-
-        function parseCurrency(str) {
-            if(!str) return 0;
-            return parseFloat(str.replace(/[$,\s]/g, '')) || 0;
-        }
+        // --- Extraction ---
+        document.getElementById('extractBtn').addEventListener('click', function() {
+            const btn = this; btn.classList.add('btn-loading');
+            setTimeout(() => { processData(); btn.classList.remove('btn-loading'); }, 300);
+        });
         
-        function extractVal(text, regex) {
-            const match = text.match(regex);
-            if (match && match[2]) return match[2].trim();
-            return null;
-        }
-        
-        function extractValueSkippingLines(text, labelRegex) {
-            const match = text.match(labelRegex);
-            if (!match) return null;
-            const labelEndIndex = match.index + match[0].length;
-            const subsequentText = text.substring(labelEndIndex);
-            const lines = subsequentText.split(/[\r\n]+/);
-            for (const line of lines) {
-                const trimmedLine = line.trim();
-                if (trimmedLine.length > 0) {
-                    if (trimmedLine.match(/^[a-zA-Z\s\.\/()-]+:/)) {
-                         if(!trimmedLine.match(/^[\$0-9]/)) return null;
-                    }
-                    return trimmedLine; 
-                }
-            }
-            return null; 
-        }
+        // --- Manual Generate Note Buttons ---
+        document.querySelectorAll('.generate-note-btn').forEach(btn => {
+            btn.addEventListener('click', generateCurrentNote);
+        });
 
         function processData() {
             const text = document.getElementById('eobInput').value;
             if(!text.trim()) return;
 
-            // --- FIX: Service Date (First date of range) ---
-            let serviceDate = '--';
-            let serviceDateRaw = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Service Dates|Service Date|Date of Service|Dates of Service|DOS)\s*:?/i);
+            const getLineVal = (regex) => {
+                const m = text.match(regex);
+                if(!m) return null;
+                const sub = text.substring(m.index + m[0].length);
+                const lines = sub.split(/[\r\n]+/);
+                for(let l of lines) {
+                    let t = l.trim();
+                    if(t && !t.match(/^[a-zA-Z\s\.\/()-]+:/)) return t;
+                }
+                return null;
+            };
+            const getVal = (regex) => (text.match(regex)?.[2] || '--').trim();
+            const parseCurr = (s) => parseFloat((s||'0').replace(/[$,\s]/g,'')) || 0;
+            const fmtCurr = (n) => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            let sd = '--';
+            let sdRaw = getLineVal(/(?:^|[\r\n]+)\s*(?:Service Dates|Service Date|Date of Service|DOS)\s*:?/i);
+            if(sdRaw) { let m = sdRaw.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/); if(m) sd = m[1]; }
+            else { let m = text.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/); if(m) sd = m[1]; }
             
-            if (serviceDateRaw) {
-                 let match = serviceDateRaw.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/);
-                 if (match) serviceDate = match[1];
-            } else {
-                let match = text.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/);
-                if(match) serviceDate = match[1];
-            }
-            
-            // Member ID
-            let memberIdRaw = extractVal(text, /(Member ID|Identification No|ID Number)\s*[:#]?\s*([^\r\n]+)/i) || '--';
-            let memberIdFinal = memberIdRaw;
-            if(memberIdRaw !== '--' && memberIdRaw.length > 3) {
-                const prefix = memberIdRaw.substring(0, 3);
-                const rest = memberIdRaw.substring(3);
-                const restClean = rest.replace(/^0+/, '');
-                memberIdFinal = prefix + restClean;
-            }
-            
-            // Billing Provider
-            let providerName = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Billing Provider Name|Billing Provider|Provider Name)\s*:?/i) || '--';
-            
-            // Patient Name
-            let patientName = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Patient Name|Patient Name)\s*:?/i) || '--';
-            
-            // CPT Code Extraction (Regex for 5 digit codes)
-            let cptMatches = text.match(/\b\d{4,5}[A-Z]?\b/g);
-            let cptCodes = cptMatches ? [...new Set(cptMatches)].slice(0,5).join(', ') : '--';
+            let fd = getVal(/(Finalized Date|Processed Date)\s*[:]?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})/i);
+            let memId = getVal(/(Member ID|Identification No|ID Number)\s*[:#]?\s*([^\r\n]+)/i).replace(/^([A-Z]{3})0+/, '$1');
+            let prov = getLineVal(/(?:^|[\r\n]+)\s*(?:Billing Provider Name|Billing Provider|Provider Name)\s*:?/i) || '--';
+            let pat = getLineVal(/(?:^|[\r\n]+)\s*(?:Patient Name|Patient Name)\s*:?/i) || '--';
 
             globalData = {
-                ticket: extractVal(text, /(Patient Account Number|Pt Acct No|Ticket Number)\s*[:#]?\s*([^\r\n]+)/i) || '--',
-                serviceDate: serviceDate,
-                receivedDate: extractVal(text, /(Received Date|Date Received)\s*[:]?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})/i) || '--',
-                finalizedDate: extractVal(text, /(Finalized Date|Processed Date)\s*[:]?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})/i) || '--',
-                claimNo: extractVal(text, /(Claim I?D|Claim No|Claim Number|Control Number)\s*[:#]?\s*([^\r\n]+)/i) || '--',
-                memberId: memberIdFinal,
-                groupNo: extractVal(text, /(Group Number|Group No|Group ID)\s*[:#]?\s*([^\r\n]+)/i) || '--',
-                npi: extractVal(text, /(Billing NPI|NPI)\s*[:#]?\s*(\d+)/i) || '--',
-                provider: providerName,
-                patient: patientName,
-                cpt: cptCodes
+                ticket: getVal(/(Patient Account Number|Pt Acct No|Ticket Number)\s*[:#]?\s*([^\r\n]+)/i),
+                claimNo: getVal(/(Claim I?D|Claim No|Claim Number|Control Number)\s*[:#]?\s*([^\r\n]+)/i),
+                groupNo: getVal(/(Group Number|Group No|Group ID)\s*[:#]?\s*([^\r\n]+)/i),
+                npi: getVal(/(Billing NPI|NPI)\s*[:#]?\s*(\d+)/i),
+                serviceDate: sd, finalizedDate: fd, memberId: memId, provider: prov, patient: pat
             };
 
-            // --- Financials ---
-            const billedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Total Bill|Billed Amount)\s*:?/i) || '$0.00';
+            let billed = parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Total Bill|Billed Amount)\s*:?/i));
+            let paidStr = getLineVal(/(?:^|[\r\n])\s*(?:Total\s+Paid|Plan\s+Paid|Paid\s+Amount|Total\s+Plan\s+Paid|Total\s+Payment|Net\s+Paid)\s*:?/i);
+            let paid = parseCurr(paidStr);
+            if(paid === 0) paid = parseCurr(getLineVal(/(?:^|[\r\n])\s*(?:Plan\s+Payment)\s*:?/i));
             
-            let paidStr = extractValueSkippingLines(text, /(?:^|[\r\n])\s*(?:Total\s+Paid|Plan\s+Paid|Paid\s+Amount|Total\s+Plan\s+Paid|Total\s+Payment|Net\s+Paid)\s*:?/i);
-            if (!paidStr || parseCurrency(paidStr) === 0) {
-                 let altPaid = extractValueSkippingLines(text, /(?:^|[\r\n])\s*(?:Plan\s+Payment)\s*:?/i);
-                 if (altPaid && parseCurrency(altPaid) > 0) paidStr = altPaid;
-            }
-            if (!paidStr) paidStr = '$0.00';
-
-            const coinsStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Coinsurance Amount|Coinsurance)\s*:?/i) || '$0.00';
-            const dedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Deductible Amount|Deductible)\s*:?/i) || '$0.00';
-            const addlStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Insurance Current Paid Amount|Additional Paid)\s*:?/i) || '$0.00';
-            const copayStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Copay Amount|Copay)\s*:?/i) || '$0.00'; 
-
-            const oonCoinsStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Out of Network Coinsurance Amount|Out of Network Coinsurance)\s*:?/i) || '$0.00';
-            const oonDedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Out of Network Deductible Amount|Out of Network Deductible)\s*:?/i) || '$0.00';
-            const priorCoinsStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Prior Notification Coinsurance Amount)\s*:?/i) || '$0.00';
-            const priorDedStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Prior Notification Deductible Amount)\s*:?/i) || '$0.00';
-            const medicareStr = extractValueSkippingLines(text, /(?:^|[\r\n]+)\s*(?:Medicare Paid Amount)\s*:?/i) || '$0.00';
-
             globalVals = {
-                billed: parseCurrency(billedStr),
-                paid: parseCurrency(paidStr),
-                coins: parseCurrency(coinsStr),
-                ded: parseCurrency(dedStr),
-                addl: parseCurrency(addlStr),
-                copay: parseCurrency(copayStr),
-                oonCoins: parseCurrency(oonCoinsStr),
-                oonDed: parseCurrency(oonDedStr),
-                priorCoins: parseCurrency(priorCoinsStr),
-                priorDed: parseCurrency(priorDedStr),
-                medicare: parseCurrency(medicareStr)
+                billed: billed, paid: paid,
+                coins: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Coinsurance Amount|Coinsurance)\s*:?/i)),
+                ded: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Deductible Amount|Deductible)\s*:?/i)),
+                addl: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Insurance Current Paid Amount|Additional Paid)\s*:?/i)),
+                copay: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Copay Amount|Copay)\s*:?/i)),
+                oonCoins: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Out of Network Coinsurance Amount|Out of Network Coinsurance)\s*:?/i)),
+                oonDed: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Out of Network Deductible Amount|Out of Network Deductible)\s*:?/i)),
+                priorCoins: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Prior Notification Coinsurance Amount)\s*:?/i)),
+                priorDed: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Prior Notification Deductible Amount)\s*:?/i)),
+                medicare: parseCurr(getLineVal(/(?:^|[\r\n]+)\s*(?:Medicare Paid Amount)\s*:?/i))
             };
 
-            // Populate UI
-            const sidebarEl = document.getElementById('sidebar-content');
-            sidebarEl.innerHTML = `
-                <div class="result-item"><span class="result-label">Ticket</span><span class="result-value">${globalData.ticket}</span></div>
-                <div class="result-item"><span class="result-label">Patient</span><span class="result-value text-truncate" style="max-width: 130px;" title="${globalData.patient}">${globalData.patient}</span></div>
-                <div class="result-item"><span class="result-label">Service Date</span><span class="result-value">${globalData.serviceDate}</span></div>
-                <div class="result-item"><span class="result-label">Received Date</span><span class="result-value">${globalData.receivedDate}</span></div>
-                <div class="result-item"><span class="result-label">Finalized Date</span><span class="result-value">${globalData.finalizedDate}</span></div>
-                <div class="result-item"><span class="result-label">Claim Number</span><span class="result-value">${globalData.claimNo}</span></div>
-                <div class="result-item"><span class="result-label">Member ID</span><span class="result-value text-truncate" style="max-width: 120px;" title="${globalData.memberId}">${globalData.memberId}</span></div>
-                <div class="result-item"><span class="result-label">Group Number</span><span class="result-value">${globalData.groupNo}</span></div>
-                <div class="result-item"><span class="result-label">Billing NPI</span><span class="result-value">${globalData.npi}</span></div>
-                <div class="result-item"><span class="result-label">Billing Provider</span><span class="result-value text-truncate" style="max-width: 120px;" title="${globalData.provider}">${globalData.provider}</span></div>
-            `;
+            processedAmt = globalVals.paid + globalVals.coins + globalVals.ded;
+            processPct = (globalVals.billed > 0) ? (processedAmt / globalVals.billed * 100).toFixed(0) : 0;
 
-            document.getElementById('res_billed').textContent = formatCurrency(globalVals.billed);
-            document.getElementById('res_paid').textContent = formatCurrency(globalVals.paid);
-            document.getElementById('res_coins').textContent = formatCurrency(globalVals.coins);
-            document.getElementById('res_ded').textContent = formatCurrency(globalVals.ded); 
-            document.getElementById('res_addl').textContent = formatCurrency(globalVals.addl);
+            const addlInput = document.getElementById('input_Additional');
+            if(!addlInput.value) addlInput.value = fmtCurr(globalVals.addl).replace('$','');
 
-            updateBox2Row('res_oon_coins', 'row_oon_coins', globalVals.oonCoins);
-            updateBox2Row('res_oon_ded', 'row_oon_ded', globalVals.oonDed);
-            updateBox2Row('res_prior_coins', 'row_prior_coins', globalVals.priorCoins);
-            updateBox2Row('res_prior_ded', 'row_prior_ded', globalVals.priorDed);
-            updateBox2Row('res_medicare', 'row_medicare', globalVals.medicare);
+            updateUI();
+            // NOTE: We do NOT call generateCurrentNote() here. User must click "Generate Note".
+        }
 
-            // Update Summary Box
+        function updateUI() {
+            const sb = document.getElementById('sidebar-content');
+            const fmt = (n) => '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const row = (l, v, c='') => `<div class="result-item"><span class="result-label">${l}</span><span class="result-value ${c}">${v}</span></div>`;
+            
+            // Highlight Member ID Prefix (Fixed)
+            let memDisplay = globalData.memberId;
+            if (memDisplay.length > 3) {
+                memDisplay = `<span class="mem-prefix">${memDisplay.substring(0,3)}</span>${memDisplay.substring(3)}`;
+            }
+            
+            sb.innerHTML = 
+                row('Ticket', globalData.ticket) +
+                row('Patient', globalData.patient) +
+                row('Service Date', globalData.serviceDate) +
+                row('Finalized', globalData.finalizedDate) +
+                row('Claim #', globalData.claimNo) +
+                `<div class="result-item"><span class="result-label">Member ID</span><span class="result-value">${memDisplay}</span></div>` +
+                row('Group #', globalData.groupNo) +
+                row('NPI', globalData.npi) +
+                `<div class="result-item"><span class="result-label">Provider</span><span class="result-value" style="text-align:right; white-space:normal;">${globalData.provider}</span></div>` +
+                row('Copay', fmt(globalVals.copay), 'text-danger') +
+                `<div class="mt-3 p-2 rounded highlight-process d-flex justify-content-between"><span class="small fw-bold">Total Process</span><span class="small fw-bold">${fmt(processedAmt)} / ${processPct}%</span></div>`;
+
+            const up = (id, v, hl) => {
+                const el = document.getElementById(id); el.innerText = fmt(v);
+                el.className = (hl && v>0) ? 'result-value fw-bold text-warning' : 'result-value';
+                if(hl && v>0) el.parentElement.classList.add('highlight-alert');
+            };
+            up('res_billed', globalVals.billed); up('res_paid', globalVals.paid);
+            up('res_coins', globalVals.coins); up('res_ded', globalVals.ded); up('res_addl', globalVals.addl);
+            up('res_oon_coins', globalVals.oonCoins, true); up('res_oon_ded', globalVals.oonDed, true);
+            up('res_prior_coins', globalVals.priorCoins, true); up('res_prior_ded', globalVals.priorDed, true);
+            up('res_medicare', globalVals.medicare, true);
+
             document.getElementById('sum_patient').innerText = globalData.patient;
             document.getElementById('sum_npi').innerText = globalData.npi;
             document.getElementById('sum_member').innerText = globalData.memberId;
             document.getElementById('sum_group').innerText = globalData.groupNo;
             document.getElementById('sum_claim').innerText = globalData.claimNo;
             document.getElementById('sum_dos').innerText = globalData.serviceDate;
-            document.getElementById('sum_billed').innerText = formatCurrency(globalVals.billed);
-            document.getElementById('sum_paid').innerText = formatCurrency(globalVals.paid);
+            document.getElementById('sum_billed').innerText = fmt(globalVals.billed);
+            document.getElementById('sum_paid').innerText = fmt(globalVals.paid);
             document.getElementById('sum_ticket').innerText = globalData.ticket;
-            
-            // Calc Expected (90% of Billed)
-            let expected = globalVals.billed * 0.90;
-            document.getElementById('sum_expected').innerText = formatCurrency(expected);
-
-            generateAllNotes();
+            document.getElementById('sum_expected').innerText = fmt(globalVals.billed * 0.9);
         }
-        
-        function updateBox2Row(valueId, rowId, amount) {
-            const el = document.getElementById(valueId);
-            const row = document.getElementById(rowId);
-            el.textContent = formatCurrency(amount);
+
+        function generateCurrentNote() {
+            // CRITICAL: Check if data exists. If not, Alert and Return.
+            if (!globalData || !globalData.claimNo || globalData.claimNo === '--') {
+                 alert("Please Extract Data first!");
+                 return;
+            }
+
+            // DATE LOGIC: MM/DD/YY (Using note_Date Input)
+            const dateInputVal = document.getElementById('note_Date').value;
+            let dateStr = "";
             
-            if (amount > 0) {
-                row.classList.add('highlight-alert');
-                el.classList.remove('text-secondary');
-                el.classList.add('fw-bold');
+            if (dateInputVal) {
+                const [y, m, d] = dateInputVal.split('-');
+                dateStr = `${m}/${d}/${y.slice(-2)}`;
             } else {
-                row.classList.remove('highlight-alert');
-                el.classList.add('text-secondary');
-                el.classList.remove('fw-bold');
-            }
-        }
-
-        function generateAllNotes() {
-            if(!globalData) return;
-            
-            const today = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-            const d = new Date(today);
-            const dateStr = `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${String(d.getFullYear()).slice(-2)}`;
-            
-            const name = document.getElementById('note_Name').value.toUpperCase();
-
-            // Appeal Note
-            const dropdownValue = document.getElementById('note_Initial_Appeal').value;
-            const outputAppeal = document.getElementById('note_Output_Appeal');
-
-            if (dropdownValue) {
-                const appealLevelText = (dropdownValue === "1ST APPEAL") ? "1ST LEVEL APPEAL" : "2ND LEVEL APPEAL";
-                let note = `${dateStr}>${dropdownValue}>${name}>`;
-                note += `CLAIM NO #${globalData.claimNo}; BILLED AMOUNT ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, `;
-                note += `CO-INSURANCE ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. `;
-                note += `THE CLAIM PROCESS ACCORDING TO THE MEMBERS PLAN AT THE HIGHEST IN NETWORK LEVEL. NO ADDITIONAL PAYMENT WILL BE FORTHCOMING MAILED ${appealLevelText} TO BCBS REQUESTING THE CLAIM TO BE RECONSIDERED AT A HIGHER LEVEL UTILIZING THE UCR RATE ACCORDING THE RENDERING ZIP CODE OR AT 87% OF BILLED CHARGES. LOW ALLOWABLE APPEAL SENT TO BCBS LOCAL PLAN.`;
-                animateText(outputAppeal, note);
+                const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+                const dObj = new Date(now);
+                dateStr = `${String(dObj.getMonth()+1).padStart(2,'0')}/${String(dObj.getDate()).padStart(2,'0')}/${String(dObj.getFullYear()).slice(-2)}`;
             }
 
-            // Final Review Note
-            const finalStatus = document.getElementById('note_Status_Final').value;
-            const outputFinal = document.getElementById('note_Output_Final');
-            
-            if(finalStatus) {
-                 let note = "";
-                 if(finalStatus === "In Network FR") {
-                     note = `${dateStr}>FINAL REVIEW>${name}>WORKING ON PHYSICIANS IN-NETWORK PROJECT. CLAIM NO. # ${globalData.claimNo}; BILLED ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO INS ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. DATE OF SERVICE FOR THIS ACCOUNT ${globalData.serviceDate}. ACCORDING TO THE PHYSICIANS IN-NETWORK RULES, EFFECTIVE 11/15/2024, ALL PHYSICIAN ACCOUNTS WILL BE WORKED FOLLOWING THE PHYSICIANS IN-NETWORK RULES. THIS CLAIM WAS REVIEWED AND PROCESSED AT THE HIGHEST IN-NETWORK LEVEL BASED ON THE FEE SCHEDULE RATE. NO FURTHER ACTION IS REQUIRED AT THIS TIME, AND THE REMAINING BALANCE WILL BE ADJUSTED ACCORDINGLY.`;
-                 } else {
-                     note = `${dateStr}>FINAL REVIEW>${name}>CLAIM #${globalData.claimNo}; `;
-                     if(finalStatus === "SUTURE REMOVAL") {
-                          note += `BILLED ${formatCurrency(globalVals.billed)}, INS PD ${formatCurrency(globalVals.paid)}, CO INS ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. THIS WAS A SUTURE REMOVAL. WE DO NOT APPEAL FOR THIS. BILL ADJUSTED AS MISC ADJ.`;
-                     } else {
-                         let crit = (finalStatus === "Process Correctly") ? "DOES MEET" : "DOES NOT MEET";
-                         note += `CLAIM ${crit} THE CRITERIA OF BEING PROCESSED AT OR ABOVE 80% OF ALLOWABLE CHARGES. CLAIM STATUS IS AS FOLLOWS: TOTAL CHARGE ${formatCurrency(globalVals.billed)}, PAID ${formatCurrency(globalVals.paid)}, CO-INSURANCE ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}. `;
-                         if(finalStatus === "ALL ACTION DONE") note += "ALL ACTION DONE. ";
-                         note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.";
-                     }
-                 }
-                 animateText(outputFinal, note);
+            const nameEl = document.getElementById('note_Name');
+            // Relaxed Validation: Name is REQUIRED
+            if(!nameEl.value) {
+                nameEl.classList.add('is-invalid');
+                return; 
+            } else {
+                nameEl.classList.remove('is-invalid');
             }
+            const name = nameEl.value.trim().toUpperCase();
 
-            // Accepted Note
-            const acceptedStatus = document.getElementById('note_Status_Accepted').value;
-            const outputAccepted = document.getElementById('note_Output_Accepted');
+            const activePane = document.querySelector('.tab-pane.active');
+            if(!activePane) return;
+            const out = activePane.querySelector('textarea');
             
-            if(acceptedStatus) {
-                let note = `${dateStr}>FINAL REVIEW>${name}>`;
-                if (acceptedStatus === "Got Payment") {
-                    let addl = document.getElementById('input_Additional').value;
-                    note += `WORKING ON COLLECTOR WORKLIST. NSA NEGOTIATION SUBMITTED FOR THIS ACCOUNT. WE GOT PAYMENT AFTER NEGOTIATION. CLAIM# ${globalData.claimNo}; TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, ADDITIONAL PAID $${addl}. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
-                } else if (acceptedStatus === "Neg Done") {
-                    note += `WORKING ON COLLECTOR WORKLIST, CLAIM# ${globalData.claimNo}, TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, NSA NEGOTIATION DONE AND NOT ACCEPTED, INELIGIBLE FOR IDR, NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
-                } else {
-                    let offer = parseCurrency(document.getElementById('input_PriceOffer').value);
-                    let pct = (globalVals.billed > 0) ? ((offer/globalVals.billed)*100).toFixed(0) : 0;
-                    note = `${base}CLAIM# ${getD('claimNo')}, BILLED AMOUNT ${formatCurrency(globalVals.billed)} INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, COPAY/DEDUCTIBLE ${formatCurrency(globalVals.ded)}. PRICE OFFER WAS ${formatCurrency(offer)} @${pct}%. PROCESSED CORRECTLY AS PRE-NEG OFFER ACCEPTED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+            const fmt = (n) => '$' + (n || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const getD = (key) => globalData[key] || '--';
+            const getV = (key) => fmt(globalVals[key]);
+
+            let note = '';
+
+            if(activePane.id === 'appeal-pane') {
+                const lvl = document.getElementById('note_Initial_Appeal');
+                // Validation: Level required
+                if(!lvl.value) { lvl.classList.add('is-invalid'); return; }
+                else lvl.classList.remove('is-invalid');
+
+                const lvlTxt = lvl.value === "1ST APPEAL" ? "1ST LEVEL APPEAL" : "2ND LEVEL APPEAL";
+                note = `${dateStr}>${lvl.value}>${name}>CLAIM NO #${getD('claimNo')}; BILLED AMOUNT ${getV('billed')}, INS PAID ${getV('paid')}, CO-INSURANCE ${getV('coins')}, CO-PAY/DED ${getV('ded')}. THE CLAIM PROCESS ACCORDING TO THE MEMBERS PLAN AT THE HIGHEST IN NETWORK LEVEL. NO ADDITIONAL PAYMENT WILL BE FORTHCOMING MAILED ${lvlTxt} TO BCBS REQUESTING THE CLAIM TO BE RECONSIDERED AT A HIGHER LEVEL UTILIZING THE UCR RATE ACCORDING THE RENDERING ZIP CODE OR AT 87% OF BILLED CHARGES. LOW ALLOWABLE APPEAL SENT TO BCBS LOCAL PLAN.`;
+            } 
+            else if(activePane.id === 'cr-pane') {
+                const st = document.getElementById('note_Status_CR');
+                // Validation
+                if(!st.value) { st.classList.add('is-invalid'); return; }
+                else st.classList.remove('is-invalid');
+
+                const ref = document.getElementById('input_CR_Number').value || '';
+                let base = `${dateStr}>CLAIM REVIEW>${name}>CLAIM NO. # ${getD('claimNo')}`;
+                if(st.value === "Dispute Claim") note = `${base}; RECONSIDERATION: RETRIEVED CLAIM STATUS VIA AVAILITY. CLAIM BILLED ${getV('billed')}, PAID ${getV('paid')} AND APPLIED ${getV('coins')} CO-INS AND ${getV('ded')} TO DED ON ${getD('finalizedDate')}. CLAIM ALLOWED ${fmt(processedAmt)} AND PROCESSED AT ${processPct}% OF BILLED CHARGES. SENT RECONSIDERATION VIA DISPUTE CLAIM REQUESTING THE CLAIM TO BE REPROCESSED AT A HIGHER ALLOWABLE. ${ref}`;
+                else note = `${base} RECONSIDERATION: RETRIEVED CLAIM STATUS VIA AVAILITY. CLAIM BILLED ${getV('billed')}, INS PAID ${getV('paid')}, AND APPLIED ${getV('coins')}, CO-INS AND ${getV('ded')}, TO DED ON ${getD('finalizedDate')}. CLAIM ALLOWED ${fmt(processedAmt)}, AND PROCESSED AT ${processPct}% OF BILLED CHARGES. SENT MESSAGE USING MESSAGE THIS PAYER VIA AVAILITY REQUESTING THE CLAIM TO BE REPROCESSED AT A HIGHER ALLOWABLE. INTERACTION REFERENCE NUMBER IS # ${ref}`;
+            }
+            else if(activePane.id === 'final-pane') {
+                const st = document.getElementById('note_Status_Final');
+                if(!st.value) { st.classList.add('is-invalid'); return; }
+                else st.classList.remove('is-invalid');
+
+                let base = `${dateStr}>FINAL REVIEW>${name}>CLAIM# ${getD('claimNo')}`;
+                if(st.value === "SUTURE REMOVAL") note = `${base}, BILLED AMOUNT ${getV('billed')}, INS PAID ${getV('paid')}, CO-INSURANCE ${getV('coins')}, CO-PAY/DED ${getV('ded')}. THIS WAS A SUTURE REMOVAL. WE DO NOT APPEAL FOR THIS. BILL ADJUSTED AS MISC ADJ.`;
+                else {
+                    let crit = st.value === "Process Correctly" ? "DOES MEET" : "DOES NOT MEET";
+                    let act = st.value === "ALL ACTION DONE" ? "ALL ACTION DONE. " : "";
+                    note = `${base}; CLAIM ${crit} THE CRITERIA OF BEING PROCESSED AT OR ABOVE 80% OF ALLOWABLE CHARGES. CLAIM STATUS IS AS FOLLOWS: TOTAL CHARGE ${getV('billed')}, PAID ${getV('paid')}, CO-INS ${getV('coins')}, DEDUCTIBLE ${getV('ded')}. ${act}NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
                 }
-                animateText(outputAccepted, note);
             }
+            else if(activePane.id === 'accepted-pane') {
+                const st = document.getElementById('note_Status_Accepted');
+                if(!st.value) { st.classList.add('is-invalid'); return; }
+                else st.classList.remove('is-invalid');
+
+                let base = `${dateStr}>FINAL REVIEW>${name}>`;
+                if(st.value === "Got Payment") {
+                    let ad = document.getElementById('input_Additional').value || '0.00';
+                    note = `${base}WORKING ON COLLECTOR WORKLIST. NSA NEGOTIATION SUBMITTED FOR THIS ACCOUNT. WE GOT PAYMENT AFTER NEGOTIATION. CLAIM# ${getD('claimNo')}; TOTAL CHARGE ${getV('billed')}, INS PAID ${getV('paid')}, CO-INS ${getV('coins')}, DEDUCTIBLE ${getV('ded')}, ADDITIONAL PAID $${ad}. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                } else if(st.value === "Neg Done") {
+                    note = `${base}WORKING ON COLLECTOR WORKLIST, CLAIM# ${getD('claimNo')}, TOTAL CHARGE ${getV('billed')}, INS PAID ${getV('paid')}, CO-INS ${getV('coins')}, DEDUCTIBLE ${getV('ded')}, NSA NEGOTIATION DONE AND NOT ACCEPTED, INELIGIBLE FOR IDR, NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                } else {
+                    let off = parseFloat(document.getElementById('input_PriceOffer').value.replace(/[$,]/g,''))||0;
+                    let pct = globalVals.billed > 0 ? (off/globalVals.billed*100).toFixed(0) : 0;
+                    note = `${base}CLAIM# ${getD('claimNo')}, BILLED AMOUNT ${getV('billed')} INS PAID ${getV('paid')}, CO-INS ${getV('coins')}, COPAY/DEDUCTIBLE ${getV('ded')}. PRICE OFFER WAS ${fmt(off)} @${pct}%. PROCESSED CORRECTLY AS PRE-NEG OFFER ACCEPTED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                }
+            }
+
+            // Trigger Animation
+            animateText(out, note);
         }
 
         function animateText(el, text) {
-            if(el.dataset.interval) clearInterval(el.dataset.interval);
+            if(el.dataset.int) clearInterval(el.dataset.int);
             if(el.value === text) return;
-            
             el.value = "";
             const words = text.split(' ');
             let i = 0;
-            el.dataset.interval = setInterval(() => {
-                if(i < words.length) {
-                    el.value += (i>0 ? " " : "") + words[i];
-                    el.scrollTop = el.scrollHeight;
-                    i++;
-                } else {
-                    clearInterval(el.dataset.interval);
-                }
-            }, 10);
+            el.dataset.int = setInterval(()=>{
+                if(i<words.length) { el.value += (i>0?" ":"") + words[i]; el.scrollTop=el.scrollHeight; i++; }
+                else clearInterval(el.dataset.int);
+            }, 15); // Typewriter effect
         }
+
+        // Listeners
+        const inputs = ['note_Initial_Appeal', 'note_Status_CR', 'input_CR_Number', 'note_Status_Final', 'note_Status_Accepted', 'input_Additional', 'input_PriceOffer', 'note_Name', 'note_Date'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => el.classList.remove('is-invalid'));
+            if(el.tagName === 'SELECT') el.addEventListener('change', () => el.classList.remove('is-invalid'));
+        });
+
+        // Show/Hide Accepted Fields
+        document.getElementById('note_Status_Accepted').addEventListener('change', function() {
+            const v = this.value;
+            document.getElementById('input_Additional').style.display = v === 'Got Payment' ? 'block' : 'none';
+            document.getElementById('input_PriceOffer').style.display = v === 'Pre Neg Accepted' ? 'block' : 'none';
+        });
+
+        // Copy
+        const copy = (id) => {
+            const el = document.getElementById(id);
+            el.addEventListener('click', () => {
+                if(!el.value || el.value.includes('Extract')) return;
+                el.select(); document.execCommand('copy');
+                const m = document.getElementById('copyMsg'); m.style.opacity=1; setTimeout(()=>m.style.opacity=0, 2000);
+            });
+        };
+        ['note_Output_Appeal','note_Output_CR','note_Output_Final','note_Output_Accepted'].forEach(copy);
+        
+        document.getElementById('summary-box').addEventListener('click', function() {
+            const r = document.createRange(); r.selectNode(this);
+            window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+            document.execCommand('copy'); window.getSelection().removeAllRanges();
+            const m = document.getElementById('copyMsgSummary'); m.style.opacity=1; setTimeout(()=>m.style.opacity=0, 2000);
+        });
     </script>
 </body>
 </html>
