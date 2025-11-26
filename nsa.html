@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,8 +42,10 @@
             font-family: var(--font-body);
             background-color: var(--bs-body-bg);
             height: 100vh;
-            overflow: hidden;
+            overflow: hidden; /* Main Layout is fixed height */
             transition: background-color 0.3s;
+            display: block; 
+            margin: 0;
         }
         
         .bg-image {
@@ -73,16 +76,37 @@
         }
 
         /* Layout */
-        #main-wrapper { display: flex; margin-top: var(--top-bar-height); height: calc(100vh - var(--top-bar-height)); }
+        #main-wrapper { 
+            display: flex; 
+            margin-top: var(--top-bar-height); 
+            height: calc(100vh - var(--top-bar-height));
+            width: 100%;
+        }
         
         #sidebar {
             width: var(--sidebar-width); min-width: 280px;
             display: flex; flex-direction: column;
             border-right: 1px solid var(--glass-border);
             background: rgba(255,255,255,0.05);
+            flex-shrink: 0; /* Prevent shrinking */
         }
         #sidebar-content { overflow-y: auto; flex: 1; padding: 0.5rem; }
-        #main-content { flex: 1; overflow-y: auto; padding: 1rem; }
+        
+        #main-content { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Content Wrapper inside Main Content */
+        .content-area {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
         /* Premium Buttons */
         .btn-premium {
@@ -175,165 +199,6 @@
         [data-bs-theme="dark"] #excel_Copy_Input { color: #6ee7b7; }
         #excel_Copy_Input:focus { outline: none; }
 
-        /* CSS ভেরিয়েবল সেটআপ: ডার্ক মোড (ডিফল্ট) */
-        :root {
-            --bg-main: linear-gradient(135deg, #101010 0%, #050505 100%);
-            --shadow-main: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-            --text-primary: #FFFFFF;
-            --text-secondary: #777;
-            --circle-bg-color: #333;
-            --dot-fill: #FFFFFF;
-        }
-
-        /* লাইট মোডের জন্য স্টাইল ওভাররাইড (যদি বডিতে data-bs-theme="light" থাকে) */
-        body[data-bs-theme="light"] {
-            --bg-main: linear-gradient(135deg, #F0F0F0 0%, #FFFFFF 100%);
-            --shadow-main: 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
-            --text-primary: #1A1A1A;
-            --text-secondary: #888;
-            --circle-bg-color: #E0E0E0;
-            --dot-fill: #1A1A1A;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            /* পেজের ডিফল্ট ব্যাকগ্রাউন্ড কালার ব্যবহার করার জন্য 'background' প্রপার্টি সরানো হলো */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .time-card {
-            position: relative;
-            background: var(--bg-main); /* অ্যাডাপ্টিভ ব্যাকগ্রাউন্ড */
-            border-radius: 15px; 
-            box-shadow: var(--shadow-main); /* অ্যাডাপ্টিভ শ্যাডো */
-            width: 100%;
-            max-width: 380px; 
-            padding: 20px; 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        .date-info {
-            flex: 1;
-            text-align: left;
-            padding-right: 15px;
-        }
-        
-        /* দেশের লেবেল */
-        .country-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-secondary); /* অ্যাডাপ্টিভ কালার */
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .date-display {
-            font-size: 0.9rem; 
-            font-weight: 600;
-            color: var(--text-secondary); /* অ্যাডাপ্টিভ কালার */
-            margin-bottom: 3px;
-        }
-
-        .month-day {
-            font-size: 1.5rem; 
-            font-weight: 700;
-            color: var(--text-primary); /* অ্যাডাপ্টিভ কালার */
-            letter-spacing: 1px;
-            line-height: 1.2;
-        }
-
-        .time-area {
-            position: relative;
-            width: 130px; 
-            height: 130px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .time-text {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2.0rem; 
-            font-weight: 700;
-            color: var(--text-primary); /* অ্যাডাপ্টিভ কালার */
-            letter-spacing: -1px;
-            position: absolute;
-            z-index: 20;
-        }
-        
-        .time-text span { /* AM/PM এর জন্য */
-            font-size: 0.35em;
-            vertical-align: super;
-            margin-left: 3px;
-            font-weight: 400;
-        }
-        
-        /* বাংলাদেশ (BD) স্টাইল (অ্যাকসেন্ট কালার অপরিবর্তিত থাকবে) */
-        .time-card-bd .time-text span, .time-card-bd .dot-accent, .time-card-bd .circle-progress {
-            color: #00BCD4; /* সায়ান অ্যাকসেন্ট */
-            stroke: #00BCD4; 
-        }
-
-        /* USA (US) স্টাইল (অ্যাকসেন্ট কালার অপরিবর্তিত থাকবে) */
-        .time-card-us .time-text span, .time-card-us .dot-accent, .time-card-us .circle-progress {
-            color: #FF7043; /* কমলা/লাল অ্যাকসেন্ট */
-            stroke: #FF7043; 
-        }
-
-        .timer-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .circle-bg {
-            stroke: var(--circle-bg-color); /* অ্যাডাপ্টিভ কালার */
-            stroke-width: 6; 
-            fill: none;
-        }
-
-        .circle-progress {
-            stroke-width: 6; 
-            fill: none;
-            stroke-linecap: round;
-            transform-origin: 50% 50%;
-            transform: rotate(-90deg);
-            transition: stroke-dashoffset 0.1s linear; 
-        }
-
-        .dot {
-            fill: var(--dot-fill); /* অ্যাডাপ্টিভ কালার */
-            animation: pulse 1.5s infinite alternate; 
-        }
-
-        .dot-accent {
-            animation: pulse-accent 1.5s infinite alternate 0.5s; 
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.6; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
-        }
-
-        @keyframes pulse-accent {
-            from { opacity: 0.4; transform: scale(0.8); }
-            to { opacity: 0.9; transform: scale(1.0); }
-        }
-
         /* Loader */
         .btn-loading { pointer-events: none; color: transparent !important; position: relative; }
         .btn-loading::after {
@@ -352,7 +217,8 @@
         #main-footer {
             background-color: var(--bs-glass-bg); border-top: 1px solid var(--bs-glass-border);
             backdrop-filter: blur(10px); color: var(--bs-secondary-color);
-            padding: 3rem 1.5rem 1.5rem 1.5rem; margin-top: 1.5rem; font-size: 0.9rem;
+            padding: 2rem 1rem; margin-top: 2rem; font-size: 0.9rem;
+            flex-shrink: 0; /* Footer should not shrink */
         }
         #main-footer h5 { font-weight: 700; color: var(--bs-body-color); margin-bottom: 1rem; font-size: 1.1rem; }
         #main-footer .footer-links { list-style: none; padding-left: 0; }
@@ -379,7 +245,6 @@
             </div>
             <div class="col d-flex justify-content-center gap-2">
                 <a href="#" class="nav-link-custom active">NSA</a>
-                <!--<a href="appeal_tool.html" class="nav-link-custom">Appeal</a>-->
                 <a href="index.html" class="nav-link-custom">Main Page</a>
             </div>
             <div class="col-auto p-0 d-flex gap-2">
@@ -403,127 +268,84 @@
                         <textarea id="eobInput" class="form-control border-0 rounded-0" style="min-height: 120px; font-size:0.75rem; white-space: pre; background: rgba(255,255,255,0.5);" placeholder="Paste NSA Table Data here..."></textarea>
                     </div>
 
-                    <!-- Time Boxes -->
-                      <!-- বাংলাদেশ টাইম কার্ড -->
-    <div class="time-card time-card-bd" id="bdWatch">
-        <div class="date-info">
-            <div class="country-label">Bd</div>
-            <div class="date-display" id="bdFullDate">--</div>
-            <div class="month-day" id="bdMonthDay">--</div>
-        </div>
-        
-        <div class="time-area">
-            <div class="time-text" id="bdDigitalTime">--:--<span>PM</span></div>
-            
-            <svg class="timer-svg" viewBox="0 0 100 100">
-                <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                <circle class="circle-progress" id="bdSecondProgress" cx="50" cy="50" r="45"></circle>
-                
-                <circle class="dot" cx="50" cy="5" r="2"></circle> 
-                <circle class="dot-accent" cx="95" cy="50" r="2"></circle>
-            </svg>
-        </div>
-    </div>
-
-    <!-- USA (CST) টাইম কার্ড -->
-    <div class="time-card time-card-us" id="usWatch">
-        <div class="date-info">
-            <div class="country-label">USA (CST)</div>
-            <div class="date-display" id="usFullDate">--</div>
-            <div class="month-day" id="usMonthDay">--</div>
-        </div>
-        
-        <div class="time-area">
-            <div class="time-text" id="usDigitalTime">--:--<span>PM</span></div>
-            
-            <svg class="timer-svg" viewBox="0 0 100 100">
-                <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                <circle class="circle-progress" id="usSecondProgress" cx="50" cy="50" r="45"></circle>
-                
-                <circle class="dot" cx="50" cy="5" r="2"></circle> 
-                <circle class="dot-accent" cx="95" cy="50" r="2"></circle>
-            </svg>
-        </div>
-    </div>
+                    <!-- Time Boxes Removed as requested -->
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Main Content (Flex Column) -->
         <div id="main-content">
-            <div class="row g-3 h-100">
-                
+            
+            <div class="content-area">
                 <!-- TOP: Results Table -->
-                <div class="col-lg-12 d-flex flex-column gap-3">
-                    <div class="card p-0 overflow-hidden flex-shrink-0" style="max-height: 45%;">
-                        <div class="p-2 border-bottom bg-light-subtle d-flex justify-content-between align-items-center">
-                            <h6 class="fw-bold text-primary m-0 small text-uppercase">Extracted Table View</h6>
-                            <div class="d-flex gap-2">
-                                <div id="disputeIdBadge" class="small fw-bold text-secondary" style="display:none;">Dispute ID: --</div>
-                                <div id="totalProcessBadge" class="highlight-process small" style="display:none;">Process: $0.00 / 0%</div>
-                                <div id="lonsterBadge" class="highlight-lonster small" style="display:none;">Lonster: $0.00 (80%)</div>
-                            </div>
-                        </div>
-                        <div class="card-body p-0 overflow-auto" id="table-output-container">
-                            <div class="text-center text-muted p-5 small">
-                                No data extracted yet.<br>Paste table content in sidebar and click Extract.
-                            </div>
+                <div class="card p-0 overflow-hidden flex-shrink-0" style="max-height: 50vh;">
+                    <div class="p-2 border-bottom bg-light-subtle d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold text-primary m-0 small text-uppercase">Extracted Table View</h6>
+                        <div class="d-flex gap-2">
+                            <div id="disputeIdBadge" class="small fw-bold text-secondary" style="display:none;">Dispute ID: --</div>
+                            <div id="totalProcessBadge" class="highlight-process small" style="display:none;">Process: $0.00 / 0%</div>
+                            <div id="lonsterBadge" class="highlight-lonster small" style="display:none;">Lonster: $0.00 (80%)</div>
                         </div>
                     </div>
-
-                    <!-- MIDDLE: Excel Copy Box -->
-                    <div class="card p-2 excel-box" title="Click to copy">
-                        <div class="d-flex justify-content-between align-items-center px-2">
-                            <span class="small fw-bold text-success me-2" style="white-space: nowrap;"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Excel:</span>
-                            <input type="text" id="excel_Copy_Input" readonly value="Date | Your Offer | Counter | Status | Date" onclick="copyExcelData()">
-                            <i class="bi bi-clipboard-check text-success ms-2"></i>
+                    <div class="card-body p-0 overflow-auto" id="table-output-container">
+                        <div class="text-center text-muted p-5 small">
+                            No data extracted yet.<br>Paste table content in sidebar and click Extract.
                         </div>
                     </div>
+                </div>
 
-                    <!-- BOTTOM: Notes -->
-                    <div class="card flex-grow-1 overflow-hidden d-flex flex-column">
-                        <div class="bg-light-subtle pt-2">
-                            <ul class="nav nav-tabs-glass" id="noteTabs">
-                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nsa-pane">NSA Note</button></li>
-                            </ul>
+                <!-- MIDDLE: Excel Copy Box -->
+                <div class="card p-2 excel-box" title="Click to copy">
+                    <div class="d-flex justify-content-between align-items-center px-2">
+                        <span class="small fw-bold text-success me-2" style="white-space: nowrap;"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Excel:</span>
+                        <input type="text" id="excel_Copy_Input" readonly value="Date | Your Offer | Counter | Status | Date" onclick="copyExcelData()">
+                        <i class="bi bi-clipboard-check text-success ms-2"></i>
+                    </div>
+                </div>
+
+                <!-- BOTTOM: Notes -->
+                <div class="card flex-grow-1 overflow-hidden d-flex flex-column" style="min-height: 350px;">
+                    <div class="bg-light-subtle pt-2">
+                        <ul class="nav nav-tabs-glass" id="noteTabs">
+                            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nsa-pane">NSA Note</button></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-body d-flex flex-column gap-3">
+                        <!-- Name & Date Inputs -->
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-transparent fw-bold text-primary">Name</span>
+                                    <input type="text" class="form-control" id="note_Name" placeholder="Enter Name">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-transparent fw-bold text-primary">Date</span>
+                                    <input type="date" class="form-control" id="note_Date" style="cursor:pointer;">
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="card-body d-flex flex-column gap-3">
-                            <!-- Name & Date Inputs -->
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text bg-transparent fw-bold text-primary">Name</span>
-                                        <input type="text" class="form-control" id="note_Name" placeholder="Enter Name">
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text bg-transparent fw-bold text-primary">Date</span>
-                                        <input type="date" class="form-control" id="note_Date" style="cursor:pointer;">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Tab Content -->
-                            <div class="tab-content flex-grow-1 position-relative h-100">
-                                <div class="tab-pane fade show active h-100 d-flex flex-column" id="nsa-pane">
-                                    <div class="mb-2">
-                                        <label class="form-label small fw-bold text-muted">Status (Auto-Selected)</label>
-                                        <select class="form-select form-select-sm" id="note_Status_NSA">
-                                            <option value="" selected disabled>Auto-Selected...</option>
-                                            <option value="In Review Plan">In Review Plan</option>
-                                            <option value="System Rejected">System Rejected</option>
-                                            <option value="Offer Rejected">Offer Rejected</option>
-                                            <option value="Accepted">Accepted</option>
-                                        </select>
-                                    </div>
-                                    <!-- Auto Generate on Extract/Change -->
-                                    <textarea id="note_Output_NSA" class="form-control flex-grow-1" style="font-family:monospace; font-size:0.85rem;" readonly placeholder="Note will appear here automatically..."></textarea>
+                        <!-- Tab Content -->
+                        <div class="tab-content flex-grow-1 position-relative h-100 d-flex flex-column">
+                            <div class="tab-pane fade show active h-100 d-flex flex-column flex-grow-1" id="nsa-pane">
+                                <div class="mb-2">
+                                    <label class="form-label small fw-bold text-muted">Status (Auto-Selected)</label>
+                                    <select class="form-select form-select-sm" id="note_Status_NSA">
+                                        <option value="" selected disabled>Auto-Selected...</option>
+                                        <option value="In Review Plan">In Review Plan</option>
+                                        <option value="System Rejected">System Rejected</option>
+                                        <option value="Offer Rejected">Offer Rejected</option>
+                                        <option value="Accepted">Accepted</option>
+                                    </select>
                                 </div>
-                                
-                                <div id="copyMsg" class="position-absolute bottom-0 end-0 m-3 bg-success text-white px-2 py-1 rounded small opacity-0 transition">Copied!</div>
+                                <!-- Auto Generate on Extract/Change -->
+                                <textarea id="note_Output_NSA" class="form-control flex-grow-1" style="font-family:monospace; font-size:0.85rem;" readonly placeholder="Note will appear here automatically..."></textarea>
                             </div>
+                            
+                            <div id="copyMsg" class="position-absolute bottom-0 end-0 m-3 bg-success text-white px-2 py-1 rounded small opacity-0 transition">Copied!</div>
                         </div>
                     </div>
                 </div>
@@ -567,19 +389,22 @@
         // --- Global State ---
         let globalData = null;
         let globalVals = {};
-        let manualDate = null; 
 
-        // --- Initialize Date Function ---
+        // --- Initialize Date Function (Auto US Date) ---
         function initDate() {
-            const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+            // Updated to America/Chicago (CST) as per user request
+            const now = new Date().toLocaleString("en-US", {timeZone: "America/Chicago"});
             const d = new Date(now);
             const y = d.getFullYear();
             const m = String(d.getMonth() + 1).padStart(2, '0');
             const dd = String(d.getDate()).padStart(2, '0');
+            
             const noteDateEl = document.getElementById('note_Date');
+            // Only set if value is empty (on load) or we force it.
+            // On page refresh, value might be preserved by browser, but usually we want auto date.
             if(noteDateEl) noteDateEl.value = `${y}-${m}-${dd}`;
         }
-        initDate(); 
+        initDate(); // Run on load
 
         // --- Theme ---
         const htmlEl = document.documentElement;
@@ -608,7 +433,10 @@
             globalData = null; 
             globalVals = {};
             document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-            initDate();
+            
+            // REMOVED initDate() call here.
+            // This ensures manual date remains if user changed it.
+            // If they didn't change it, it stays as the auto US date.
         });
 
         // --- Extraction ---
@@ -701,21 +529,15 @@
             const row3Block = text.substring(text.indexOf("Patient Share"), text.indexOf("Plan Decision"));
             if(row3Block) {
                  let monies = row3Block.match(/\$[\d,.]+/g) || [];
-                 // Logic: PT, Paid, ... Offer
-                 // Offer is the LAST money
                  if(monies.length >= 1) offerStr = monies[monies.length - 1];
                  
-                 // CPT Logic: Between DOS and Offer
-                 // Find DOS location and Offer location
                  const dosMatch = row3Block.match(/(\d{2}\/\d{2}\/\d{4})/);
                  if(dosMatch && offerStr !== '--') {
                      const dosIdx = row3Block.indexOf(dosMatch[0]);
                      const offIdx = row3Block.lastIndexOf(offerStr);
                      if(dosIdx !== -1 && offIdx !== -1) {
                          let rawCpt = row3Block.substring(dosIdx + 10, offIdx).trim();
-                         // Clean up
                          rawCpt = rawCpt.replace(/Service Code\(s\)/i, '').replace(/Your Offer/i, '').trim();
-                         // Filter only codes
                          let codes = rawCpt.match(/[0-9A-Z]{5}/g);
                          if(codes) cpt = codes.join(', ');
                      }
@@ -778,10 +600,11 @@
                 const [y, m, d] = dateInputVal.split('-');
                 return new Date(y, m-1, d);
             } else {
-                return new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+                return new Date(new Date().toLocaleString("en-US", {timeZone: "America/Chicago"}));
             }
         }
 
+        // Updated Excel Copy Logic
         function updateExcelBox() {
             if(!globalData) return;
             const dObj = getDateObj();
@@ -791,8 +614,20 @@
             const counter = globalVals.counter > 0 ? formatCurrency(globalVals.counter) : "";
             const status = document.getElementById('note_Status_NSA').value || "";
             
+            let finalStatus = status;
+            let finalDate = dateStr;
+
+            // Logic: All UPPERCASE except "In Review Plan"
+            // Logic: If "In Review Plan", last date is empty
+            if (status === "In Review Plan") {
+                finalStatus = "In Review Plan"; // Keep mixed case
+                finalDate = ""; // Last date empty
+            } else {
+                finalStatus = status.toUpperCase(); // Force uppercase for others
+            }
+            
             // TAB separated for Excel rows
-            const val = `${dateStr}\t${offer}\t${counter}\t${status}\t${dateStr}`;
+            const val = `${dateStr}\t${offer}\t${counter}\t${finalStatus}\t${finalDate}`;
             document.getElementById('excel_Copy_Input').value = val;
         }
 
@@ -868,7 +703,7 @@
                 const [y, m, d] = dateInputVal.split('-');
                 dObj = new Date(y, m-1, d);
             } else {
-                dObj = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+                dObj = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Chicago"}));
             }
             const dateStr = `${String(dObj.getMonth()+1).padStart(2,'0')}/${String(dObj.getDate()).padStart(2,'0')}/${String(dObj.getFullYear()).slice(-2)}`;
 
@@ -916,88 +751,7 @@
             this.classList.remove('is-invalid'); 
             if(globalData) generateCurrentNote();
         });
-        
-        // Initialize Date
-        function initDate() {
-            const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-            const d = new Date(now);
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const dd = String(d.getDate()).padStart(2, '0');
-            const noteDateEl = document.getElementById('note_Date');
-            if(noteDateEl) noteDateEl.value = `${y}-${m}-${dd}`;
-        }
-        initDate();
-// সার্কুলার প্রোগ্রেস বারের জন্য কনস্ট্যান্ট
-        const radius = 45;
-        const circumference = 2 * Math.PI * radius;
 
-        // প্রোগ্রেস সেট করার ফাংশন
-        function setProgress(progressElement, percent) {
-            progressElement.style.strokeDasharray = `${circumference} ${circumference}`;
-            const offset = circumference - percent / 100 * circumference;
-            progressElement.style.strokeDashoffset = offset;
-        }
-        
-        // ঘড়ি আপডেট করার প্রধান ফাংশন
-        function updateWatch(prefix, timeZone) {
-            const timeElement = document.getElementById(prefix + 'DigitalTime');
-            const fullDateElement = document.getElementById(prefix + 'FullDate');
-            const monthDayElement = document.getElementById(prefix + 'MonthDay');
-            const progressElement = document.getElementById(prefix + 'SecondProgress');
-
-            if (!timeElement || !progressElement) return;
-
-            const now = new Date();
-
-            // তারিখের জন্য
-            const optionsDate = { weekday: 'long', timeZone: timeZone };
-            const optionsMonthDay = { month: 'short', day: 'numeric', timeZone: timeZone };
-            
-            fullDateElement.textContent = now.toLocaleDateString('en-US', optionsDate);
-            monthDayElement.textContent = now.toLocaleDateString('en-US', optionsMonthDay);
-
-            // সময়ের জন্য (12-ঘন্টা AM/PM)
-            const optionsTime = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-                timeZone: timeZone
-            };
-            let timeString = now.toLocaleTimeString('en-US', optionsTime);
-            
-            // সেকেন্ড আলাদা করা
-            const timeParts = timeString.split(':');
-            const seconds = parseInt(timeParts[2].substring(0, 2)); 
-
-            const timeWithoutSeconds = timeParts[0] + ':' + timeParts[1];
-            const ampm = timeParts[2].substring(2);
-
-            timeElement.innerHTML = `${timeWithoutSeconds}<span>${ampm}</span>`;
-
-            // সেকেন্ড প্রোগ্রেস বার আপডেট করা
-            const percent = (seconds / 60) * 100;
-            setProgress(progressElement, percent);
-        }
-
-        // বাংলাদেশ সময় আপডেট
-        function updateBangladeshTime() {
-            updateWatch('bd', 'Asia/Dhaka');
-        }
-
-        // USA সময় আপডেট
-        function updateUSATime() {
-            updateWatch('us', 'America/Chicago');
-        }
-
-        // প্রথমবার কল করা
-        updateBangladeshTime();
-        updateUSATime();
-        
-        // প্রতি সেকেন্ডে আপডেট করার জন্য ইন্টারভাল সেট করা 
-        setInterval(updateBangladeshTime, 1000);
-        setInterval(updateUSATime, 1000);
     </script>
 </body>
 </html>
