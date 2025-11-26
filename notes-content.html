@@ -975,6 +975,86 @@
             margin-top: 3px; 
             font-weight: 400;
         }
+        /* Ensuring the body has a nice soft background */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Neumorphic base color - light gray/off-white */
+            background-color: #e0e5ec;
+        }
+
+        /* --- NEUMORPHIC BUTTON BASE STYLE --- */
+        #processButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 25px;
+    padding: 5px 19px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    box-shadow: 2px 2px 4px #b8b8b8, -2px -2px 4px #ffffff;
+    background: var(--bs-card-bg);
+    transition: all 0.2s 
+ease-in-out;
+}
+        
+        /* --- NEUMORPHIC ACTIVE (PRESSED) STATE --- */
+        /* Simulate pressing the button by reversing the shadows (inset) */
+        #processButton:hover {
+          transition: all 0.2s 
+ease-in-out;
+            box-shadow: 
+                inset 4px 4px 8px #c8ced6, /* Inset darker */
+                inset -4px -4px 8px #ffffff; /* Inset lighter */
+            background: #e0e5ec;
+            color: #6b21a8; /* Change text color slightly on press */
+        }
+
+        /* --- CLEAR BUTTON STYLING --- */
+        #clearButton {
+            margin-left: 20px;
+            gap: 5px;
+    border-radius: 25px;
+    padding: 5px 19px;
+            border: none;
+            outline: none;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1)); /* Deep Violet text */
+            background-color: var(--bs-card-bg);
+            /* Neumorphic base background */
+            box-shadow: 
+                2px 2px 4px #b8b8b8, 
+                -2px -2px 4px #ffffff;
+            transition: all 0.3s ease-in-out; /* Slower transition for gradient effect */
+        }
+
+        /* --- CLEAR BUTTON HOVER EFFECT (RED GRADIENT) --- */
+        #clearButton:hover {
+            color: white; /* White text on hover for contrast */
+            background: linear-gradient(90deg, #dc2626 0%, #ea580c 100%); /* Red to Orange Gradient */
+            box-shadow: 
+                0 4px 10px rgba(220, 38, 38, 0.4), /* Subtle red glow shadow */
+                0 2px 4px rgba(0, 0, 0, 0.1); /* General dark shadow */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        #clearButton:active {
+            box-shadow: 
+                inset 3px 3px 6px #c8ced6, 
+                inset -3px -3px 6px #ffffff;
+            color: white; /* Keep white text when active */
+            background: linear-gradient(90deg, #b91c1c 0%, #c2410c 100%); /* Slightly darker gradient on active */
+            transform: translateY(0); /* Reset lift on active */
+        }
     </style>
 </head>
   <body>
@@ -1009,32 +1089,20 @@
             </div>
 
             <div class="col-auto d-flex align-itemsC-center gap-2">
-                
-                <button type="button" class="btn btn-primary btn-lg rounded-pill" id="processButton" 
-                        style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                <nav style="padding: 10px; display: flex; gap: 15px;">
+                  <a href="typing.html" style="text-decoration: none; font-size: 14px;">Typing</a>
+                  <a href="nsa.html" style=" text-decoration: none; font-size: 14px;">NSA</a>
+                  <a href="appeal.html" style=" text-decoration: none; font-size: 14px;">Appeal</a>
+                  <a href="index.html" style=" text-decoration: none; font-size: 14px;">Main Page</a>
+                </nav>
+                <!-- THE NEUMORPHIC EXTRACT BUTTON -->
+                  <button type="button" id="processButton">
                     <i class="bi bi-magic"></i> Extract
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-lg rounded-pill" id="clearButton" 
-                        style="padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                  </button>
+                <!-- THE CLEAR BUTTON WITH RED GRADIENT HOVER -->
+                  <button type="button" id="clearButton">
                     <i class="bi bi-x-lg"></i> Clear
-                </button>
-
-                <a href="index.html"
-                    onclick="window.open(this.href, '_self'); return false;"
-                    style="
-                    display: inline-flex; align-items: center; text-decoration: none;
-                    padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 13px;
-                    white-space: nowrap; cursor: pointer; transition: all 0.2s ease;
-                    background: rgba(128, 128, 128, 0.15);
-                    color: var(--bs-body-color);
-                    border: 1px solid rgba(128, 128, 128, 0.3);
-                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                " onmouseover="this.style.background='rgba(128, 128, 128, 0.3)'; this.style.transform='translateY(-1px)'"
-                    onmouseout="this.style.background='rgba(128, 128, 128, 0.15)'; this.style.transform='translateY(0)'">
-                    
-                    <span style="margin-right: 4px; font-size: 16px;">&#x2190;</span>
-                    Main Page
-                </a>
+                  </button>
 
                 <!-- Theme Toggle Button -->
                 <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-1" style="font-size: 13px; background: none; border: none; backdrop-filter: none;">
