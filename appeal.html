@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pranto's Appeal Tool</title>
-    <link rel="icon" type="image/png" href="appeal.png">
+    <link rel="icon" type="image/png" href="index.png">
     
     <!-- Fonts & CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
-        /* --- CORE VARIABLES (Matching Notes Tool) --- */
+        /* --- CORE VARIABLES --- */
         :root {
             --f: 'Outfit', sans-serif; --mono: 'Rajdhani', monospace; --nav-h: 70px;
             --pri: #6366f1; --sec: #0ea5e9; --txt: #334155; --txt-l: #64748b;
@@ -25,6 +25,7 @@
             --card-bg: #ffffff;
             --nav-bg: rgba(255, 255, 255, 0.95);
             --input-bg: #ffffff;
+            --adj-bg: #f8fafc; --adj-txt: #334155;
         }
         [data-bs-theme="dark"] {
             --txt: #f1f5f9; --txt-l: #94a3b8; 
@@ -35,6 +36,7 @@
             --card-bg: rgba(30, 41, 59, 0.7);
             --nav-bg: rgba(15, 23, 42, 0.9);
             --input-bg: rgba(0, 0, 0, 0.2);
+            --adj-bg: rgba(255,255,255,0.05); --adj-txt: #e2e8f0;
         }
 
         body {
@@ -43,7 +45,7 @@
             transition: background 0.3s ease;
         }
 
-        /* --- FLOATING PILL NAVBAR (FIXED) --- */
+        /* --- NAVBAR --- */
         #nav {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             width: 95%; max-width: 1250px; height: 65px;
@@ -58,8 +60,8 @@
         .n-lnk { text-decoration: none; color: var(--txt); font-weight: 600; font-size: 0.9rem; opacity: 0.7; transition: .3s; position: relative; white-space: nowrap; }
         .n-lnk:hover, .n-lnk.active { opacity: 1; color: var(--pri); }
         .n-lnk.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--pri); border-radius: 2px; }
-
-        /* Dropdown */
+        
+        /* Dropdowns */
         .drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
         .drop-menu {
             position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
@@ -105,7 +107,7 @@
         .form-control.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important; } 
         textarea.form-control { resize: none; overflow: hidden; }
 
-        /* Input Group Rounding Fix */
+        /* Input Group Fixes */
         .input-group > .input-group-text { border-radius: 10px 0 0 10px; background: var(--bg-body); border: 1px solid rgba(0,0,0,0.1); color: var(--txt-l); font-size: 0.85rem; font-weight: 600; }
         [data-bs-theme="dark"] .input-group > .input-group-text { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
         .input-group > .form-control { border-radius: 0 10px 10px 0; }
@@ -120,6 +122,10 @@
         .result-label { font-weight: 500; opacity: 0.7; }
         .result-value { font-weight: 700; color: var(--pri); text-align: right; }
         .highlight-alert { background: rgba(245,158,11,0.1); color: #d97706; padding: 2px 5px; border-radius: 4px; }
+        
+        /* NEW: Adjustment Highlights */
+        .hl-adj-pt { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 2px 6px; border-radius: 4px; }
+        .hl-adj-wo { background: rgba(249, 115, 22, 0.1); color: #f97316; padding: 2px 6px; border-radius: 4px; }
 
         /* Excel Box */
         .excel-box { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); cursor: pointer; transition: .2s; border-radius: 10px; }
@@ -134,7 +140,20 @@
         .f-lnk:hover { color: var(--pri); transform: translateX(3px); }
         .s-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.1); color: var(--pri); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; transition: .2s; }
         .s-ico:hover { background: var(--pri); color: white; transform: translateY(-2px); }
+        
+        /* Loading & Helpers */
         .loading { pointer-events: none; opacity: 0.7; }
+        .btn-neu {
+            background: var(--card-bg); border: var(--bor); color: var(--pri);
+            padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;
+            transition: .2s; display: flex; align-items: center; gap: 6px;
+        }
+        .btn-neu:hover { transform: translateY(-1px); }
+        
+        /* Single Line Fix */
+        .single-line-row { display: flex; align-items: flex-end; gap: 10px; }
+        .single-line-row .input-group { margin-bottom: 0 !important; flex: 1; }
+        .single-line-row button { height: 38px; margin-bottom: 1px; white-space: nowrap; }
     </style>
 </head>
 <body>
@@ -143,11 +162,11 @@
     <div class="brand">Pranto's Workspace</div>
     <div class="menu d-none d-lg-flex">
         <a href="index.html" class="n-lnk">Home</a>
-        <a href="typing.html" class="n-lnk">Typing</a>
+        
         <div class="drop-box">
             <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
             <div class="drop-menu">
-                <a href="notes-content.html" class="d-item"><i class="bi bi-file-text"></i> IDR Tool</a>
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
                 <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
                 <a href="#" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
             </div>
@@ -155,6 +174,7 @@
         <div class="drop-box">
             <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
             <div class="drop-menu">
+              <a href="typing.html" class="d-item"><i class="bi bi-keyboard-fill"></i> Typing</a>
                 <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
             </div>
         </div>
@@ -336,7 +356,6 @@
     function formatCurrency(n){return '$'+(parseFloat(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
     function parseCurrency(s){return parseFloat(s?.replace(/[$,\s]/g,''))||0}
     function extractVal(t,r){const m=t.match(r);return(m&&m[2])?m[2].trim():null}
-    
     function extractLine(t,r){
         const m=t.match(r); if(!m)return null;
         const sub=t.substring(m.index+m[0].length).split(/[\r\n]+/);
@@ -387,20 +406,44 @@
     function updateUI(){
         const sb=document.getElementById('sidebar-content');
         let mD=globalData.memberId; if(mD.length>3) mD=`<span style="color:#d946ef;font-weight:900">${mD.substring(0,3)}</span>${mD.substring(3)}`;
-        sb.innerHTML=`<div class="result-item"><span class="result-label">Ticket</span><span class="result-value">${globalData.ticket}</span></div><div class="result-item"><span class="result-label">Patient</span><span class="result-value">${globalData.patient}</span></div><div class="result-item"><span class="result-label">DOS</span><span class="result-value">${globalData.serviceDate}</span></div><div class="result-item"><span class="result-label">Received</span><span class="result-value">${globalData.receivedDate}</span></div><div class="result-item"><span class="result-label">Finalized</span><span class="result-value">${globalData.finalizedDate}</span></div><div class="result-item"><span class="result-label">Claim #</span><span class="result-value">${globalData.claimNo}</span></div><div class="result-item"><span class="result-label">Member ID</span><span class="result-value">${mD}</span></div><div class="result-item"><span class="result-label">Group #</span><span class="result-value">${globalData.groupNo}</span></div><div class="result-item"><span class="result-label">NPI</span><span class="result-value">${globalData.npi}</span></div><div class="mt-2 small text-muted text-end">${globalData.provider}</div>`;
+        
+        // NEW: Calculations
+        const totAllowed = globalVals.paid + globalVals.coins + globalVals.ded;
+        const adjPT = globalVals.billed - totAllowed;
+        const adjWO = globalVals.billed - globalVals.paid;
+        
+        sb.innerHTML=`
+            <div class="result-item"><span class="result-label">Ticket</span><span class="result-value">${globalData.ticket}</span></div>
+            <div class="result-item"><span class="result-label">Patient</span><span class="result-value">${globalData.patient}</span></div>
+            <div class="result-item"><span class="result-label">DOS</span><span class="result-value">${globalData.serviceDate}</span></div>
+            <div class="result-item"><span class="result-label">Received</span><span class="result-value">${globalData.receivedDate}</span></div>
+            <div class="result-item"><span class="result-label">Finalized</span><span class="result-value">${globalData.finalizedDate}</span></div>
+            <div class="result-item"><span class="result-label">Claim #</span><span class="result-value">${globalData.claimNo}</span></div>
+            <div class="result-item"><span class="result-label">Member ID</span><span class="result-value">${mD}</span></div>
+            <div class="result-item"><span class="result-label">Group #</span><span class="result-value">${globalData.groupNo}</span></div>
+            <div class="result-item"><span class="result-label">NPI</span><span class="result-value">${globalData.npi}</span></div>
+            
+            <div class="mt-3 pt-2 border-top">
+                <div class="result-item"><span class="result-label text-primary">Total Allowed</span><span class="result-value">${formatCurrency(totAllowed)}</span></div>
+                <div class="result-item"><span class="result-label">Adj (with PT)</span><span class="result-value hl-adj-pt">${formatCurrency(adjPT)}</span></div>
+                <div class="result-item"><span class="result-label">Adj (w/o PT)</span><span class="result-value hl-adj-wo">${formatCurrency(adjWO)}</span></div>
+            </div>
+
+            <div class="mt-2 small text-muted text-end">${globalData.provider}</div>
+        `;
         ['billed','paid','coins','ded','addl','oon_coins','oon_ded','prior_coins','medicare'].forEach(k=>{const el=document.getElementById(`res_${k}`);el.textContent=formatCurrency(globalVals[k.replace('_','')]);if(globalVals[k.replace('_','')] > 0 && k.includes('oon')) el.classList.add('text-danger');});
         document.getElementById('sum_patient').innerText=globalData.patient; document.getElementById('sum_npi').innerText=globalData.npi; document.getElementById('sum_member').innerText=globalData.memberId; document.getElementById('sum_group').innerText=globalData.groupNo; document.getElementById('sum_claim').innerText=globalData.claimNo; document.getElementById('sum_dos').innerText=globalData.serviceDate; document.getElementById('sum_billed').innerText=formatCurrency(globalVals.billed); document.getElementById('sum_paid').innerText=formatCurrency(globalVals.paid); document.getElementById('sum_ticket').innerText=globalData.ticket; document.getElementById('sum_expected').innerText=formatCurrency(globalVals.billed*0.9);
     }
 
     function generateAllNotes(){
+        if(!globalData)return;
         const nmIn=document.getElementById('note_Name'); nmIn.classList.remove('is-invalid');
         const nm=nmIn.value.toUpperCase(); 
-        // Validation
-        if(!globalData) return;
         if(!nm) { nmIn.classList.add('is-invalid'); return; }
 
         const dVal=document.getElementById('note_Date').value.split('-');
         const dateStr=dVal.length===3?`${dVal[1]}/${dVal[2]}/${dVal[0].slice(-2)}`:'--';
+        const fmt=n=>'$'+(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','), gV=k=>fmt(globalVals[k]);
 
         // Appeal
         const appLvl = document.getElementById('note_Initial_Appeal').value;
@@ -428,10 +471,10 @@
         if(finSt) {
             let note = "";
             if(finSt === "In Network FR") {
-                note = `${dateStr}>FINAL REVIEW>${nm}>WORKING ON PHYSICIANS IN-NETWORK PROJECT. CLAIM NO. # ${globalData.claimNo}; BILLED ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO INS ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. DATE OF SERVICE FOR THIS ACCOUNT ${globalData.serviceDate}. ACCORDING TO THE PHYSICIANS IN-NETWORK RULES, EFFECTIVE 11/15/2024, ALL PHYSICIAN ACCOUNTS WILL BE WORKED FOLLOWING THE PHYSICIANS IN-NETWORK RULES. THIS CLAIM WAS REVIEWED AND PROCESSED AT THE HIGHEST IN-NETWORK LEVEL BASED ON THE FEE SCHEDULE RATE. NO FURTHER ACTION IS REQUIRED AT THIS TIME, AND THE REMAINING BALANCE WILL BE ADJUSTED ACCORDINGLY.`;
+                note = `${dateStr}>FINAL REVIEW>${nm}>WORKING ON PHYSICIANS IN-NETWORK PROJECT. CLAIM NO. # ${globalData.claimNo}; BILLED ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO INS ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. DATE OF SERVICE FOR THIS ACCOUNT 11/15/2024 . ACCORDING TO THE PHYSICIANS IN-NETWORK RULES, EFFECTIVE 11/15/2024, ALL PHYSICIAN ACCOUNTS WILL BE WORKED FOLLOWING THE PHYSICIANS IN-NETWORK RULES. THIS CLAIM WAS REVIEWED AND PROCESSED AT THE HIGHEST IN-NETWORK LEVEL BASED ON THE FEE SCHEDULE RATE. NO FURTHER ACTION IS REQUIRED AT THIS TIME, AND THE REMAINING BALANCE WILL BE ADJUSTED ACCORDINGLY.`;
             } else {
-                note = `${dateStr}>FINAL REVIEW>${nm}>CLAIM# ${globalData.claimNo}, `;
-                if(finSt === "SUTURE REMOVAL") note += `BILLED ${formatCurrency(globalVals.billed)}, INS PD ${formatCurrency(globalVals.paid)}, CO INS ${formatCurrency(globalVals.coins)}, CO-PAY/DED ${formatCurrency(globalVals.ded)}. THIS WAS A SUTURE REMOVAL. WE DO NOT APPEAL FOR THIS. BILL ADJUSTED AS MISC ADJ.`;
+                note = `${dateStr}>FINAL REVIEW>${nm}>CLAIM# ${globalData.claimNo}; `;
+                if(finSt === "SUTURE REMOVAL") note += `BILLED ${gV('billed')}, INS PD ${gV('paid')}, CO INS ${gV('coins')}, CO-PAY/DED ${gV('ded')}. THIS WAS A SUTURE REMOVAL. WE DO NOT APPEAL FOR THIS. BILL ADJUSTED AS MISC ADJ.`;
                 else {
                     note += `${finSt === "Process Correctly" ? "CLAIM DOES MEET" : "CLAIM DOES NOT MEET"} THE CRITERIA OF BEING PROCESSED AT OR ABOVE 80% OF ALLOWABLE CHARGES. CLAIM STATUS IS AS FOLLOWS: TOTAL CHARGE ${formatCurrency(globalVals.billed)}, PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}. `;
                     if(finSt === "ALL ACTION DONE") note += "ALL ACTION DONE. ";
@@ -450,7 +493,7 @@
                 let addl = document.getElementById('input_Additional').value;
                 note = `${dateStr}>FINAL REVIEW>${nm}>WORKING ON COLLECTOR WORKLIST. NSA NEGOTIATION SUBMITTED FOR THIS ACCOUNT. WE GOT PAYMENT AFTER NEGOTIATION. CLAIM# ${globalData.claimNo}; TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, ADDITIONAL PAID $${addl}. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
             } else if(accSt === "Neg Done") {
-                note = `${dateStr}>FINAL REVIEW>${nm}>WORKING ON COLLECTOR WORKLIST, CLAIM# ${globalData.claimNo}, TOTAL CHARGE ${formatCurrency(globalVals.billed)}, INS PAID ${formatCurrency(globalVals.paid)}, CO-INS ${formatCurrency(globalVals.coins)}, DEDUCTIBLE ${formatCurrency(globalVals.ded)}, NSA NEGOTIATION DONE AND NOT ACCEPTED, INELIGIBLE FOR IDR, NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
+                note = `${dateStr}>FINAL REVIEW>${nm}>WORKING ON COLLECTOR WORKLIST, CLAIM# ${globalData.claimNo}, TOTAL CHARGE ${gV('billed')}, INS PAID ${gV('paid')}, CO-INS ${gV('coins')}, DEDUCTIBLE ${gV('ded')}, NSA NEGOTIATION DONE AND NOT ACCEPTED, INELIGIBLE FOR IDR, NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED ACCORDINGLY.`;
             } else {
                 let offer = document.getElementById('input_PriceOffer').value;
                 let pct = (globalVals.billed > 0) ? (parseCurrency(offer)/globalVals.billed*100).toFixed(0) : 0;
