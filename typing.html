@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Pranto's Typing Master</title>
+<link rel="icon" type="image/png" href="index.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+/* --- CORE VARIABLES (MATCHING SUITE) --- */
+:root {
+ --f:'Outfit',sans-serif; --mono:'Rajdhani',monospace; --type-font: 'Roboto Mono', monospace;
+ --nav-h:75px; 
+ --pri:#6366f1; --sec:#0ea5e9; --txt:#334155; --txt-l:#64748b;
+ /* Soft Backgrounds */
+ --bg-grad: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+ --glass: rgba(255, 255, 255, 0.9); --blur: 20px; 
+ --bor: 1px solid rgba(255, 255, 255, 0.6); 
+ --sh: 0 10px 30px rgba(0,0,0,0.04);
+ --card-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95);
+ /* Typing Colors */
+ --corr:#10b981; --err:#ef4444; --curr:#6366f1; --pend:#94a3b8;
+}
+[data-bs-theme="dark"] {
+ --txt:#f1f5f9; --txt-l:#94a3b8; 
+ --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+ --glass: rgba(30, 41, 59, 0.9); 
+ --bor: 1px solid rgba(255, 255, 255, 0.1);
+ --card-bg: rgba(30, 41, 59, 0.7); --nav-bg: rgba(15, 23, 42, 0.9);
+ --curr:#818cf8;
+}
+
+body {
+    font-family: var(--f); background: var(--bg-grad);
+    margin: 0; display: flex; flex-direction: column; min-height: 100vh; color: var(--txt);
+    transition: background 0.3s ease; overflow-x: hidden;
+}
+
+/* --- FLOATING PILL NAVBAR --- */
+#nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    width: 95%; max-width: 1250px; height: 65px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.5rem; z-index: 1100;
+    background: var(--nav-bg); backdrop-filter: blur(var(--blur));
+    border: var(--bor); border-radius: 50px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+.brand { font-size: 1.3rem; font-weight: 700; background: linear-gradient(90deg, var(--pri), var(--sec)); -webkit-background-clip: text; color: transparent; white-space: nowrap; }
+.menu { display: flex; gap: 1.5rem; align-items: center; }
+.n-lnk { text-decoration: none; color: var(--txt); font-weight: 600; font-size: 0.9rem; opacity: 0.7; transition: .3s; position: relative; white-space: nowrap; }
+.n-lnk:hover, .n-lnk.active { opacity: 1; color: var(--pri); }
+.n-lnk.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--pri); border-radius: 2px; }
+
+/* Dropdowns */
+.drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
+.drop-menu {
+    position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
+    background: var(--nav-bg); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px;
+    opacity: 0; visibility: hidden; transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px;
+}
+.drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
+.d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.d-item:hover { background: rgba(99, 102, 241, 0.1); color: var(--pri); }
+
+/* Right Section */
+.n-rt { display: flex; align-items: center; gap: 10px; }
+.made { font-size: 0.75rem; opacity: 0.8; font-weight: 500; text-align: right; margin-right: 10px; }
+.made span { font-weight: 800; background: linear-gradient(90deg, var(--pri), #ec4899); -webkit-background-clip: text; color: transparent; }
+
+.t-btn { width: 34px; height: 34px; border-radius: 50%; border: var(--bor); background: transparent; color: var(--txt); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: .3s; }
+.t-btn:hover { background: var(--pri); color: #fff; transform: rotate(20deg); }
+.p-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid transparent; background: linear-gradient(var(--nav-bg), var(--nav-bg)) padding-box, linear-gradient(45deg, var(--pri), var(--sec)) border-box; cursor: pointer; }
+
+/* --- TYPING CONTENT --- */
+#main { margin-top: 110px; padding: 0 1.5rem 2rem; flex: 1; width: 100%; max-width: 1000px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; gap: 2rem; }
+
+.card { background: var(--card-bg); border: var(--bor); border-radius: 1.5rem; box-shadow: var(--sh); overflow: hidden; }
+
+/* Controls Bar */
+.controls-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.tabs-group { display:flex; gap: 5px; background: rgba(0,0,0,0.03); padding: 4px; border-radius: 12px; }
+.t-tab { 
+    border:none; background:transparent; padding: 6px 14px; border-radius: 8px; 
+    font-size: 0.85rem; font-weight: 600; color: var(--txt-l); transition: 0.3s;
+}
+.t-tab.active { background: var(--card-bg); color: var(--pri); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.t-tab:hover:not(.active) { color: var(--txt); }
+
+/* Stats */
+.stats-con { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-box { text-align: center; padding: 1rem; border-radius: 16px; background: var(--bg-grad); border: var(--bor); }
+.stat-val { font-size: 2rem; font-weight: 800; color: var(--pri); font-family: var(--mono); line-height: 1; }
+.stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--txt-l); margin-top: 5px; font-weight: 600; }
+
+/* Progress Bar */
+.progress-container { width: 100%; height: 4px; background: rgba(0,0,0,0.05); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: var(--pri); transition: width 0.2s ease; border-radius: 2px; }
+
+/* Typing Area */
+.typing-area { 
+    position: relative; min-height: 300px; max-height: 500px; 
+    font-family: var(--type-font); font-size: 1.3rem; line-height: 1.8; 
+    color: var(--pend); user-select: none; outline: none; 
+    padding: 0; background: transparent;
+    overflow: hidden; cursor: text; margin-bottom: 20px;
+}
+.blur-overlay {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    background: rgba(255,255,255, 0.1); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--txt); font-weight: 600; z-index: 10;
+    cursor: pointer; opacity: 0; pointer-events: none; transition: 0.3s; border-radius: 12px;
+}
+.typing-area:not(.focused) .blur-overlay { opacity: 1; pointer-events: auto; }
+[data-bs-theme="dark"] .blur-overlay { background: rgba(0,0,0, 0.3); }
+
+/* Characters Highlighting */
+char { border-bottom: 2px solid transparent; transition: color 0.1s; padding: 0 1px; border-radius: 2px; }
+char.correct { color: var(--corr); }
+char.incorrect { color: var(--err); background: rgba(239,68,68,0.15); }
+char.active { 
+    color: var(--pri); background: rgba(99,102,241,0.15); 
+    border-bottom: 2px solid var(--pri); 
+    animation: blink 1s infinite; 
+}
+@keyframes blink { 50% { border-color: transparent; } }
+
+/* Hidden Input */
+#hidden-inp { position:absolute; opacity:0; top: -1000px; }
+
+/* Reset Button */
+.reset-btn { 
+    width: 45px; height: 45px; border-radius: 50%; border: none; 
+    background: var(--card-bg); color: var(--txt); font-size: 1.2rem; 
+    display: flex; align-items: center; justify-content: center; 
+    margin: 0 auto; box-shadow: var(--sh); border: var(--bor);
+    transition: 0.3s; cursor: pointer;
+}
+.reset-btn:hover { transform: rotate(180deg); color: var(--pri); box-shadow: 0 5px 15px rgba(99,102,241,0.2); }
+
+/* History Table */
+.hist-tbl { width: 100%; font-size: 0.9rem; border-collapse: collapse; }
+.hist-tbl th { text-align: left; padding: 12px; color: var(--txt-l); font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(0,0,0,0.02); }
+.hist-tbl td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.05); font-weight: 500; }
+.hist-tbl tr:last-child td { border-bottom: none; }
+
+/* Footer */
+footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var(--bor); padding: 3rem 0 1.5rem; margin-top: auto; border-radius: 20px 20px 0 0; }
+.f-brand { font-size: 1.3rem; font-weight: 700; color: var(--txt); margin-bottom: 1rem; display: block; }
+.f-lnk { display: block; color: var(--txt-l); text-decoration: none; font-size: .85rem; margin-bottom: .6rem; transition: .2s; }
+.f-lnk:hover { color: var(--pri); transform: translateX(3px); }
+.s-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.1); color: var(--pri); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; transition: .2s; }
+.s-ico:hover { background: var(--pri); color: white; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="nav">
+    <div class="brand">Pranto's Workspace</div>
+    <div class="menu d-none d-lg-flex">
+        <a href="home.html" class="n-lnk">Home</a>
+        <div class="drop-box">
+            <span class="n-lnk">BCBS <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
+                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
+            </div>
+        </div>
+        <div class="drop-box">
+            <span class="n-lnk active">Others <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="#" class="d-item"><i class="bi bi-keyboard"></i> Typing</a>
+                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
+            </div>
+        </div>
+        <a href="#" class="n-lnk">Contact Us</a>
+    </div>
+    
+    <div class="n-rt">
+        <div class="made d-none d-md-block">MadeBy<br><span>PrantoRodrix</span></div>
+        <div style="width:1px; height:20px; background:var(--txt); opacity:0.2; margin:0 5px;"></div>
+        <button id="theme-toggle" class="t-btn"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
+        <div class="dropdown">
+            <img src="https://ui-avatars.com/api/?name=Pranto+Rodrix&background=6366f1&color=fff&bold=true" class="p-pic" data-bs-toggle="dropdown">
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow" style="background:var(--nav-bg); backdrop-filter:blur(10px)">
+                <li><a class="dropdown-item text-danger fw-bold" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+    
+    <!-- Typing Card -->
+    <div class="card p-4 p-md-5 border-0">
+        
+        <div class="controls-bar">
+            <h4 class="m-0 fw-bold" style="color:var(--txt)">Typing Test</h4>
+            <div class="d-flex gap-3">
+                <div class="tabs-group time-tabs">
+                    <button class="t-tab active" onclick="setTime(1)">1m</button>
+                    <button class="t-tab" onclick="setTime(2)">2m</button>
+                    <button class="t-tab" onclick="setTime(3)">3m</button>
+                    <button class="t-tab" onclick="setTime(5)">5m</button>
+                </div>
+                <div class="tabs-group mode-tabs">
+                    <button class="t-tab active" onclick="setMode('Easy')">Easy</button>
+                    <button class="t-tab" onclick="setMode('Medium')">Medium</button>
+                    <button class="t-tab" onclick="setMode('Hard')">Hard</button>
+                    <button class="t-tab" onclick="setMode('Num')">123</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-con">
+            <div class="stat-box">
+                <div id="wpm" class="stat-val">0</div>
+                <div class="stat-lbl">WPM</div>
+            </div>
+            <div class="stat-box">
+                <div id="acc" class="stat-val">100%</div>
+                <div class="stat-lbl">Accuracy</div>
+            </div>
+            <div class="stat-box">
+                <div id="time" class="stat-val">60s</div>
+                <div class="stat-lbl">Time</div>
+            </div>
+            <div class="stat-box">
+                <div id="err" class="stat-val text-danger">0</div>
+                <div class="stat-lbl">Errors</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div id="prog-bar" class="progress-fill"></div>
+        </div>
+
+        <div class="typing-area" id="typing-box" onclick="focusInput()">
+            <div class="blur-overlay"><i class="bi bi-mouse me-2"></i> Click to Focus</div>
+            <div id="text-display"></div>
+        </div>
+        
+        <input type="text" id="hidden-inp" autocomplete="off">
+        
+        <button class="reset-btn" onclick="resetGame()" title="Restart (Enter)">
+            <i class="bi bi-arrow-clockwise"></i>
+        </button>
+
+    </div>
+
+    <!-- History -->
+    <div class="card p-0 overflow-hidden border-0">
+        <div class="p-3 border-bottom bg-light-subtle">
+            <h6 class="m-0 fw-bold text-primary small text-uppercase">Recent History</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="hist-tbl">
+                <thead><tr><th>Date</th><th>Duration</th><th>WPM</th><th>Accuracy</th><th>Errors</th></tr></thead>
+                <tbody id="hist-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Result Modal -->
+<div class="modal fade" id="saveModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Result</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="display-1 fw-bold text-primary mb-0" id="modal-wpm">0</div>
+                <p class="text-muted small text-uppercase letter-spacing-1">Words Per Minute</p>
+                <div class="row mt-4 g-2">
+                    <div class="col-6"><div class="p-3 rounded bg-light"><h4 id="modal-acc" class="mb-0 fw-bold">0%</h4><small class="text-muted">Accuracy</small></div></div>
+                    <div class="col-6"><div class="p-3 rounded bg-light"><h4 id="modal-err" class="mb-0 fw-bold text-danger">0</h4><small class="text-muted">Errors</small></div></div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold" onclick="saveResult()">Save & Retry</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container px-4">
+        <div class="row g-5">
+            <div class="col-lg-4"><a href="#" class="f-brand text-decoration-none" style="font-size:1.4rem;font-weight:700;color:var(--txt)">Pranto's <span style="color:var(--pri)">Workspace</span></a><p class="small text-muted">Improve your typing speed and accuracy.</p><div class="mt-3"><a href="#" class="s-ico"><i class="bi bi-facebook"></i></a><a href="#" class="s-ico"><i class="bi bi-github"></i></a></div></div>
+            <div class="col-lg-2 col-6"><h6>Navigation</h6><a href="home.html" class="f-lnk">Home</a><a href="#" class="f-lnk">Typing</a></div>
+            <div class="col-lg-2 col-6"><h6>Tools</h6><a href="index.html" class="f-lnk">IDR</a><a href="nsa.html" class="f-lnk">NSA</a></div>
+            <div class="col-lg-4"><h6>Contact</h6><p class="small text-muted mb-1"><i class="bi bi-envelope me-2"></i>prantorodrix9@gmail.com</p></div>
+        </div>
+        <div class="text-center mt-4 pt-3 border-top small text-muted">&copy; 2025 Designed by <span style="font-weight:700;background:linear-gradient(90deg,#6366f1,#ec4899);-webkit-background-clip:text;color:transparent">PrantoRodrix</span></div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* LARGE PARAGRAPHS */
+const db = {
+    Easy: [
+        "The sun was setting over the horizon, painting the sky in vibrant shades of orange, pink, and purple. Birds chirped softly as they returned to their nests, signaling the end of another beautiful day. A gentle breeze rustled through the leaves of the tall oak trees, creating a soothing melody that calmed the mind. People walked leisurely along the park paths, enjoying the cool evening air. Some sat on benches reading books, while others chatted quietly with friends. The lake reflected the colorful sky like a giant mirror, its surface disturbed only by the occasional ripple from a jumping fish. It was a perfect moment of peace and tranquility, a brief escape from the busy world. As darkness slowly crept in, the first stars began to twinkle above, promising a clear and starry night. Nature has a way of reminding us to slow down and appreciate the simple beauty that surrounds us every day.",
+        "Reading books is one of the most enriching habits one can develop. It opens doors to new worlds, ideas, and perspectives that we might never encounter in our daily lives. Whether it is a thrilling mystery, a heartwarming romance, or an insightful biography, every book has something unique to offer. When you read, you exercise your brain, improving your concentration and vocabulary. It is a form of mental travel, allowing you to visit distant lands and past eras without leaving your chair. Moreover, reading reduces stress and helps you relax after a long day. In a world dominated by screens and quick information, taking the time to read a book is a refreshing change of pace. It encourages deep thinking and empathy, as you step into the shoes of characters from different backgrounds. So, pick up a book today and let your imagination soar.",
+        "Friendship is a special bond that brings joy and support into our lives. True friends are there to celebrate our successes and comfort us during difficult times. They listen without judgment and offer advice when we are lost. A good friend is like a rare gem, precious and hard to find. Building a strong friendship takes time, trust, and effort from both sides. It involves sharing experiences, secrets, and laughter. Even when miles apart, true friends remain connected by heart. They understand our silence and can make us smile even when we feel down. Life is a journey, and having friends to share it with makes the ride much more enjoyable. Cherish your friends, for they are the family we choose for ourselves."
+    ],
+    Medium: [
+        "Artificial intelligence has become a driving force in modern technology, reshaping industries and daily life in unprecedented ways. From voice assistants like Siri and Alexa to self-driving cars and advanced medical diagnostics, AI is everywhere. It has the potential to solve complex problems that were once thought impossible, such as predicting weather patterns with high accuracy or developing new drugs for diseases. However, the rapid advancement of AI also raises ethical questions about privacy, job displacement, and decision-making transparency. As machines become smarter, it is crucial to ensure that they are designed to benefit humanity as a whole. We must strike a balance between innovation and responsibility. The future of AI is bright, but it requires careful navigation to avoid unintended consequences. Education and regulation will play key roles in shaping a world where humans and intelligent machines coexist harmoniously.",
+        "Climate change is one of the most critical challenges facing our planet today. Rising global temperatures are leading to melting ice caps, rising sea levels, and more frequent extreme weather events like hurricanes and droughts. The primary cause is the increase in greenhouse gases, such as carbon dioxide, released by burning fossil fuels and deforestation. To combat this crisis, nations around the world must work together to reduce carbon emissions and transition to renewable energy sources like solar and wind power. Individuals can also make a difference by conserving energy, reducing waste, and supporting sustainable practices. Protecting our environment is not just about saving nature; it is about ensuring a livable future for generations to come. Every small action counts, and collective effort is the only way to secure the health of our planet.",
+        "The internet has revolutionized the way we communicate, work, and access information. It has turned the world into a global village, connecting people from different continents in milliseconds. We can now work remotely, shop online, and learn new skills from the comfort of our homes. Social media platforms allow us to share our lives and stay in touch with friends and family. However, this digital age also brings challenges such as cyberbullying, misinformation, and screen addiction. It is important to use the internet wisely and maintain a balance between our online and offline lives. Critical thinking is essential to navigate the vast ocean of information available at our fingertips. As technology continues to evolve, adapting to these changes while preserving our mental well-being is a skill we all must master."
+    ],
+    Hard: [
+        "Quantum mechanics is a fundamental theory in physics that provides a description of the physical properties of nature at the scale of atoms and subatomic particles. It introduces concepts that challenge our intuitive understanding of reality, such as wave-particle duality and the uncertainty principle. Unlike classical physics, where objects have definite positions and velocities, quantum mechanics deals with probabilities. An electron, for example, does not orbit the nucleus in a precise path but exists in a cloud of probability. This theory has led to the development of technologies like transistors, lasers, and magnetic resonance imaging (MRI). Despite its success, quantum mechanics remains one of the most mysterious and debated subjects in science. The famous thought experiment 'Schrödinger's cat' illustrates the paradox of superposition, where a system can exist in multiple states simultaneously until observed. Understanding the quantum world requires a shift in perspective, embracing the strange and counterintuitive nature of the universe.",
+        " The history of human civilization is a tapestry woven with stories of triumph, tragedy, innovation, and resilience. From the early hunter-gatherer societies to the complex empires of Mesopotamia, Egypt, and Rome, humans have constantly strived to improve their circumstances. The invention of agriculture marked a turning point, allowing for settled communities and the growth of populations. This led to the development of writing, law, and governance. However, history is also marked by conflict and war, as civilizations clashed over resources and power. The Renaissance sparked a revival of art and science, paving the way for the Industrial Revolution, which transformed society through mechanization. Today, we stand on the shoulders of giants, benefiting from the knowledge and discoveries of those who came before us. Studying history helps us understand our roots and learn from past mistakes, guiding us toward a better future.",
+        "Neuroplasticity is the brain's remarkable ability to reorganize itself by forming new neural connections throughout life. This adaptability allows the neurons (nerve cells) in the brain to compensate for injury and disease and to adjust their activities in response to new situations or changes in the environment. For a long time, it was believed that the adult brain was fixed and unchangeable, but research has shown that it remains plastic even into old age. Learning a new language, playing a musical instrument, or recovering from a stroke all involve neuroplasticity. It implies that we have the power to shape our brains through our actions and experiences. Positive habits like exercise, meditation, and continuous learning can strengthen neural pathways, improving cognitive function and emotional resilience. Conversely, chronic stress and negative thinking can weaken these connections. Understanding neuroplasticity empowers us to take charge of our mental health and personal growth."
+    ],
+    Num: [
+        "123 456 789 012 345 678 901 234 567 890 112 223 334 445 556 667 778 889 990 101 202 303 404 505 606 707 808 909 000 111 222 333 444 555 666 777 888 999 1234 5678 9012 3456 7890 2468 1357 9753 8642 1029 3847 5610 2938 4756 1928 3746 5019 2837 4650 9182 7364 5091 8273 6450 1928 3746 5566 7788 9900 1122 3344 5566 7788 9911 2233 4455 6677 8899 0011 2233 4455 6677 8899 1212 3434 5656 7878 9090 1010 2020 3030 4040 5050 6060 7070 8080 9090 12345 67890 11223 33445 56677 88990 09876 54321 13579 24680",
+        "Date: 12/05/2024 Price: $450.50 ID: #99012 Qty: 500 Ref: 44-55-66 Phone: +88017 Invoice: #INV-2023-001 Order: #ORD-9988-77 Total: $1,299.99 Tax: 15% Discount: 10% Net: $1,169.99 IP: 192.168.0.1 MAC: 00:1A:2B:3C:4D:5E ISBN: 978-3-16-148410-0 Coordinates: 34.0522° N, 118.2437° W Temp: 98.6°F / 37°C Speed: 120 km/h Height: 5'11\" Weight: 180 lbs Pi: 3.1415926535 Euler: 2.71828 Avogadro: 6.022e23 Planck: 6.626e-34 Binary: 101101001 Hex: #FF5733 Year: 2025 Month: 12 Day: 31 Time: 23:59:59",
+        "55% of 200 is 110. 3.14159 is Pi. 10^2 = 100. 2025 is the year. $1,000,000. 1/2 + 1/4 = 3/4. 0.005 * 1000 = 5. -10 + 20 = 10. 50 / 2 = 25. 7 * 8 = 56. 99.9% accuracy. 1st place. 2nd chance. 3rd degree. 4th dimension. 5th element. 1001 nights. 20000 leagues. 1984 by Orwell. 451 Fahrenheit. 300 Spartans. 101 Dalmatians. 7 Wonders. 12 Apostles. 50 States. 365 Days. 24 Hours. 60 Minutes. 60 Seconds. 1000 Milliseconds. 100 Centimeters. 1000 Meters. 1 Kilometer. 1000 Grams. 1 Kilogram. 1000 Milliliters. 1 Liter."
+    ]
+};
+
+/* VARS */
+let timeLeft=60, maxTime=60, timeElapsed=0, timer=null, isTyping=false;
+let charIndex=0, mistakes=0;
+let currentMode='Easy';
+let historyData = JSON.parse(localStorage.getItem('typeHist')) || [];
+const inp = document.getElementById('hidden-inp');
+const txtDisplay = document.getElementById('text-display');
+const box = document.getElementById('typing-box');
+const wpmTag = document.getElementById('wpm');
+const accTag = document.getElementById('acc');
+const timeTag = document.getElementById('time');
+const errTag = document.getElementById('err');
+const progBar = document.getElementById('prog-bar');
+const histBody = document.getElementById('hist-body');
+const htmlEl=document.documentElement;
+const themeToggle=document.getElementById('theme-toggle');
+const themeIcon=document.getElementById('theme-icon');
+
+/* INIT */
+document.addEventListener('DOMContentLoaded', () => {
+    const st=localStorage.getItem('theme')||'light'; 
+    setTheme(st);
+    
+    if(histBody) renderHist();
+    if(txtDisplay) resetGame();
+    
+    if(themeToggle){
+        themeToggle.addEventListener('click',()=>{
+            const current = htmlEl.getAttribute('data-bs-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        });
+    }
+    
+    if(inp){
+        inp.addEventListener('input', initTyping);
+        document.addEventListener('keydown', e => {
+            if(e.key === 'Enter' && !document.getElementById('saveModal').classList.contains('show')) resetGame();
+            else inp.focus();
+        });
+    }
+});
+
+function setTheme(t){
+    htmlEl.setAttribute('data-bs-theme',t);
+    localStorage.setItem('theme',t);
+    if(themeIcon) themeIcon.className=t==='dark'?'bi bi-moon-fill':'bi bi-sun-fill';
+}
+
+function setMode(m){
+    currentMode=m; 
+    const tabs = document.querySelectorAll('.mode-tabs .t-tab');
+    tabs.forEach(t => {
+        t.classList.remove('active');
+        if(t.innerText.includes(m) || (m==='Num' && t.innerText==='123')) t.classList.add('active');
+    });
+    resetGame();
+}
+
+function setTime(m){
+    maxTime=m*60; 
+    const tabs = document.querySelectorAll('.time-tabs .t-tab');
+    tabs.forEach(t => {
+        t.classList.remove('active');
+        if(t.innerText.includes(m+'m')) t.classList.add('active');
+    });
+    resetGame();
+}
+
+function loadParagraph(){
+    if(!txtDisplay) return;
+    const arr = db[currentMode];
+    const randIndex = Math.floor(Math.random() * arr.length);
+    txtDisplay.innerHTML = "";
+    arr[randIndex].split("").forEach(char => {
+        let span = `<char>${char}</char>`;
+        txtDisplay.innerHTML += span;
+    });
+    const firstChar = txtDisplay.querySelectorAll("char")[0];
+    if(firstChar) firstChar.classList.add("active");
+    
+    timeLeft = maxTime;
+    if(timeTag) timeTag.innerText = timeLeft + 's';
+    if(progBar) progBar.style.width = "0%";
+}
+
+function initTyping(){
+    const chars = txtDisplay.querySelectorAll("char");
+    let typedChar = inp.value.split("")[charIndex];
+    
+    if(charIndex < chars.length && timeLeft > 0){
+        if(!isTyping){ timer = setInterval(initTimer, 1000); isTyping = true; box.classList.add('focused'); }
+        
+        if(typedChar == null){ // Backspace
+            if(charIndex > 0){
+                charIndex--;
+                if(chars[charIndex].classList.contains("incorrect")) mistakes--;
+                chars[charIndex].className = "";
+            }
+        } else {
+            if(chars[charIndex].innerText === typedChar){
+                chars[charIndex].classList.add("correct");
+            } else {
+                mistakes++;
+                chars[charIndex].classList.add("incorrect");
+            }
+            charIndex++;
+        }
+        
+        chars.forEach(span => span.classList.remove("active"));
+        if(charIndex < chars.length) chars[charIndex].classList.add("active");
+        
+        // Auto Scroll
+        if(charIndex > 1 && chars[charIndex]) {
+             chars[charIndex].scrollIntoView({behavior: "smooth", block: "center"});
+        }
+
+        if(charIndex === chars.length) finishGame();
+
+        // Stats Update
+        let wpm = Math.round(((charIndex - mistakes) / 5) / (timeElapsed > 0 ? timeElapsed/60 : 1));
+        wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
+        let acc = Math.round(((charIndex - mistakes) / charIndex) * 100);
+        acc = acc < 0 || !acc || acc === Infinity ? 100 : acc;
+        
+        if(wpmTag) wpmTag.innerText = wpm;
+        if(errTag) errTag.innerText = mistakes;
+        if(accTag) accTag.innerText = acc + "%";
+        
+        let prog = (charIndex / chars.length) * 100;
+        if(progBar) progBar.style.width = prog + "%";
+        
+    } else {
+        finishGame();
+    }
+}
+
+function initTimer(){
+    if(timeLeft > 0){
+        timeLeft--;
+        timeElapsed++;
+        if(timeTag) timeTag.innerText = timeLeft + 's';
+        let wpm = Math.round(((charIndex - mistakes) / 5) / (timeElapsed / 60));
+        if(wpmTag) wpmTag.innerText = wpm;
+    } else {
+        finishGame();
+    }
+}
+
+function finishGame() {
+    clearInterval(timer);
+    if(inp) inp.value = "";
+    if(box) box.classList.remove('focused');
+    
+    const mw = document.getElementById('modal-wpm');
+    const ma = document.getElementById('modal-acc');
+    const me = document.getElementById('modal-err');
+    
+    if(mw && wpmTag) mw.innerText = wpmTag.innerText;
+    if(ma && accTag) ma.innerText = accTag.innerText;
+    if(me) me.innerText = mistakes;
+    
+    const mEl = document.getElementById('saveModal');
+    if(mEl) new bootstrap.Modal(mEl).show();
+}
+
+function saveResult() {
+    const res = {
+        date: new Date().toLocaleDateString(),
+        dur: (maxTime/60) + 'm',
+        wpm: document.getElementById('wpm').innerText,
+        acc: document.getElementById('acc').innerText,
+        err: mistakes
+    };
+    historyData.unshift(res);
+    if(historyData.length > 10) historyData.pop();
+    localStorage.setItem('typeHist', JSON.stringify(historyData));
+    renderHist();
+    const mEl = document.getElementById('saveModal');
+    if(mEl) bootstrap.Modal.getInstance(mEl).hide();
+    resetGame();
+}
+
+function renderHist() {
+    const hb = document.getElementById('hist-body');
+    if(!hb) return;
+    hb.innerHTML = "";
+    if(historyData.length === 0) {
+        hb.innerHTML = `<tr><td colspan="5" class="text-center text-muted p-4">No history yet</td></tr>`;
+        return;
+    }
+    historyData.forEach(h => {
+        hb.innerHTML += `<tr><td>${h.date}</td><td>${h.dur}</td><td class="fw-bold text-primary">${h.wpm}</td><td>${h.acc}</td><td class="text-danger">${h.err}</td></tr>`;
+    });
+}
+
+function resetGame(){
+    loadParagraph();
+    clearInterval(timer);
+    timeElapsed = 0;
+    charIndex = mistakes = isTyping = 0;
+    if(inp) inp.value = "";
+    if(timeTag) timeTag.innerText = maxTime + 's';
+    if(wpmTag) wpmTag.innerText = 0;
+    if(errTag) errTag.innerText = 0;
+    if(accTag) accTag.innerText = '100%';
+    if(box) box.classList.remove('focused');
+    if(progBar) progBar.style.width = "0%";
+}
+
+function focusInput(){ if(inp) { inp.focus(); box.classList.add('focused'); } }
+</script>
+</body>
+</html>
