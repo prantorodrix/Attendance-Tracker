@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8"><title>Pranto's Workspace</title>
+<link rel="icon" type="image/png" href="index.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+/* --- CORE VARIABLES --- */
+:root {
+ --f:'Outfit',sans-serif; --mono:'Rajdhani',monospace; --nav-h:75px; --nav-s:60px;
+ --pri:#6366f1; --sec:#0ea5e9; --txt:#334155; --txt-l:#64748b;
+ --glass:rgba(255,255,255,0.85); --blur:12px; --bor:1px solid rgba(255,255,255,0.3); --sh:0 4px 30px rgba(0,0,0,0.05);
+ --card:rgba(255,255,255,0.9); --w-bg:rgba(255,255,255,0.7);
+}
+[data-bs-theme="dark"] {
+ --txt:#f1f5f9; --txt-l:#94a3b8; --glass:rgba(15,23,42,0.85); --bor:1px solid rgba(255,255,255,0.05);
+ --card:rgba(22,27,34,0.7); --w-bg:rgba(15,23,42,0.7); --pri:#818cf8;
+}
+body{font-family:var(--f);background:transparent;margin:0;display:flex;flex-direction:column;min-height:100vh;color:var(--txt)}
+html{scroll-behavior:smooth}
+
+/* --- ANIMATED BG --- */
+#bg-con{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:-10;overflow:hidden}
+.bg-img{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;filter:blur(20px);opacity:0;transition:opacity 1.5s;transform:scale(1.1)}
+.bg-img.active{opacity:1}
+[data-bs-theme="light"] .bg-l.b1{background-image:url('https://cdn.pixabay.com/photo/2014/09/21/14/39/surface-455124_1280.jpg')}
+[data-bs-theme="light"] .bg-l.b2{background-image:url('https://cdn.pixabay.com/photo/2015/10/24/11/09/drop-1004250_1280.jpg')}
+[data-bs-theme="dark"] .bg-d.b1{background-image:url('https://cdn.pixabay.com/photo/2022/08/02/02/28/cherry-7359319_1280.jpg')}
+[data-bs-theme="dark"] .bg-d.b2{background-image:url('https://cdn.pixabay.com/photo/2020/04/20/20/47/red-5069808_1280.jpg')}
+[data-bs-theme="light"] .bg-d,[data-bs-theme="dark"] .bg-l{display:none}
+
+/* --- NAVBAR WITH COMPRESS ANIMATION --- */
+#nav{position:fixed;top:0;width:100%;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;z-index:1100;background:var(--glass);backdrop-filter:blur(var(--blur));border-bottom:var(--bor);transition:.4s cubic-bezier(0.2,0.8,0.2,1)}
+/* Scrolled State: Floating Pill Bar */
+#nav.scr{
+    top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px;
+    height: var(--nav-s); border-radius: 50px; 
+    background: var(--card); border: 1px solid rgba(var(--pri),0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 0 2rem;
+}
+.brand{font-size:1.4rem;font-weight:700;background:linear-gradient(90deg,var(--pri),var(--sec));-webkit-background-clip:text;color:transparent}
+.menu{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:2rem}
+.n-link{text-decoration:none;color:var(--txt);font-weight:500;opacity:.7;transition:.3s;position:relative;padding:5px 0}
+.n-link:hover,.n-link.active{opacity:1;color:var(--pri)}
+.drop-box{position:relative;display:flex;align-items:center;cursor:pointer}
+.drop-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(20px);background:var(--glass);border:var(--bor);border-radius:12px;padding:8px;min-width:160px;opacity:0;visibility:hidden;transition:.3s;box-shadow:var(--sh);display:flex;flex-direction:column}
+.drop-box:hover .drop-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(10px)}
+.d-item{text-decoration:none;color:var(--txt);font-size:.85rem;padding:8px 12px;border-radius:8px;transition:.2s}
+.d-item:hover{background:rgba(99,102,241,0.1);color:var(--pri)}
+.n-right{display:flex;align-items:center;gap:1.2rem}
+.made{font-size:.75rem;opacity:.8;font-weight:500;text-align:right}.made span{font-weight:800;background:linear-gradient(90deg,var(--pri),#ec4899);-webkit-background-clip:text;color:transparent}
+.t-btn{width:36px;height:36px;border-radius:50%;border:var(--bor);background:0 0;color:var(--txt);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s}
+.p-pic{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid transparent;background:linear-gradient(var(--glass),var(--glass)) padding-box,linear-gradient(45deg,var(--pri),var(--sec)) border-box;cursor:pointer}
+
+/* --- MAIN LAYOUT --- */
+#main{margin-top:var(--nav-h);padding:2rem 0;flex:1;width:100%;max-width:1300px;margin-left:auto;margin-right:auto}
+#nav.scr ~ #main{margin-top:calc(var(--nav-h) + 15px)}
+.card{background:var(--card);border:var(--bor);border-radius:1.2rem;backdrop-filter:blur(10px);box-shadow:var(--sh)}
+.prof-cover{height:300px;object-fit:cover;width:100%}
+.prof-av{width:160px;height:160px;border-radius:50%;border:5px solid var(--card);margin-top:-80px;position:relative;z-index:2;object-fit:cover}
+
+/* --- TABLE STYLING (Clean & Compact) --- */
+.att-tbl{width:100%;font-size:0.85rem;border-collapse:separate;border-spacing:0}
+.att-tbl th{background:rgba(0,0,0,0.03);position:sticky;top:0;padding:12px;text-align:center;font-weight:600;color:var(--txt-l)}
+.att-tbl td{padding:4px;text-align:center;border-bottom:1px solid rgba(0,0,0,0.05)}
+.inp-clean{border:none;background:transparent;text-align:center;width:100%;font-weight:500;color:var(--txt);font-size:0.9rem}
+.inp-clean:focus{outline:none;background:rgba(99,102,241,0.05);border-radius:4px}
+.st-btn{border:none;background:transparent;font-weight:600;font-size:0.85rem;width:100%;padding:4px;border-radius:6px;transition:.2s}
+.st-p{color:#10b981;background:rgba(16,185,129,0.1)} .st-a{color:#ef4444;background:rgba(239,68,68,0.1)} 
+.st-w{color:#3b82f6;background:rgba(59,130,246,0.1)} .st-h{color:#f59e0b;background:rgba(245,158,11,0.1)}
+
+/* --- GRADIENT CARDS (FIXED FOR DARK MODE) --- */
+.g-card{background-size:200%;transition:.3s;border:none} .g-card:hover{transform:translateY(-5px)}
+
+/* Light Mode Gradients */
+.g1{background:linear-gradient(to right,#d1e7dd,#cce3de,var(--card))}
+.g2{background:linear-gradient(to right,#cff4fc,#d6dffc,var(--card))}
+.g3{background:linear-gradient(to right,#fff3cd,#fde4e4,var(--card))}
+.g4{background:linear-gradient(to right,#f8d7da,#e2e3e5,var(--card))}
+
+/* Dark Mode Gradients (Subtle, Readable) */
+[data-bs-theme="dark"] .g1{background:linear-gradient(to right, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05), var(--card)); border: 1px solid rgba(16, 185, 129, 0.2);}
+[data-bs-theme="dark"] .g2{background:linear-gradient(to right, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05), var(--card)); border: 1px solid rgba(59, 130, 246, 0.2);}
+[data-bs-theme="dark"] .g3{background:linear-gradient(to right, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05), var(--card)); border: 1px solid rgba(245, 158, 11, 0.2);}
+[data-bs-theme="dark"] .g4{background:linear-gradient(to right, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05), var(--card)); border: 1px solid rgba(239, 68, 68, 0.2);}
+
+/* FOOTER */
+footer{background:var(--glass);backdrop-filter:blur(12px);border-top:var(--bor);padding:4rem 0 1.5rem;margin-top:auto}
+.f-head{font-size:1.1rem;font-weight:700;color:var(--txt);margin-bottom:1rem}
+.f-lnk{display:block;color:var(--txt-l);text-decoration:none;font-size:.9rem;margin-bottom:.6rem;transition:.2s}
+.f-lnk:hover{color:var(--pri);transform:translateX(5px)}
+.social a{width:36px;height:36px;border-radius:50%;background:rgba(99,102,241,0.1);color:var(--pri);display:inline-flex;align-items:center;justify-content:center;margin-right:10px}
+</style>
+</head>
+<body>
+
+<!-- BG -->
+<div id="bg-con">
+    <div class="bg-img bg-l b1 active"></div><div class="bg-img bg-l b2"></div>
+    <div class="bg-img bg-d b1 active"></div><div class="bg-img bg-d b2"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+    <div class="brand">Pranto's Workspace</div>
+    <div class="menu d-none d-lg-flex">
+        <a href="#" class="n-link active">Home</a>
+        <!--<a href="#att-sec" class="n-link">Attendance</a>-->
+        <div class="drop-box">
+            <span class="n-link">BCBS <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
+                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
+            </div>
+        </div>
+        <div class="drop-box">
+            <span class="n-link">Others <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="typing.html" class="d-item"><i class="bi bi-keyboard"></i> Typing</a>
+                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
+            </div>
+        </div>
+        <a href="#" class="n-link">Contact Us</a>
+    </div>
+    <div class="n-right">
+        <div class="made d-none d-md-block">MadeBy<br><span>PrantoRodrix</span></div>
+        <button id="t-tog" class="t-btn"><i class="bi bi-sun-fill"></i></button>
+        <div class="dropdown">
+            <img src="https://ui-avatars.com/api/?name=Pranto+Rodrix&background=6366f1&color=fff&bold=true" class="p-pic" data-bs-toggle="dropdown">
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item text-danger" href="index.html" onclick="localStorage.clear();location.reload()"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main" class="container-fluid px-4">
+    
+    <!-- Profile -->
+    <section id="prof-sec" class="fade-up mb-5">
+        <div class="card overflow-hidden border-0 shadow-sm">
+            <img id="cv-ph" src="https://placehold.co/1200x300/6366f1/fff?text=Cover+Photo" class="prof-cover">
+            <div class="card-body text-center position-relative pb-4">
+                <img id="p-ph" src="https://placehold.co/180/0d6efd/fff?text=PA" class="prof-av">
+                <div class="position-absolute top-0 end-0 p-3"><button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ed-mod"><i class="bi bi-pencil"></i> Edit</button></div>
+                <h2 id="u-nm" class="mt-3 mb-0">PrantoAnthony</h2>
+                <p id="u-ds" class="text-primary fs-5 mb-3">Junior Associate</p>
+                <div class="row justify-content-center border-top pt-4 g-4">
+                    <div class="col-auto px-4 border-end"><h6>Joined</h6><small id="j-dur" class="fw-bold">--</small></div>
+                    <div class="col-auto px-4 border-end"><h6>Team</h6><small id="u-tm" class="fw-bold">BCBS</small></div>
+                    <div class="col-auto px-4 border-end"><h6>ID</h6><small id="u-id" class="fw-bold">LnG2110R0218</small></div>
+                    <div class="col-auto px-4"><h6>Type</h6><small id="u-tp" class="fw-bold">Resource Pool</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance -->
+    <section id="perf-sec" class="fade-up mb-5">
+        <h4 class="mb-4">Monthly Performance</h4>
+        <div class="row g-4">
+            <div class="col-md-4"><div class="card p-4 h-100 text-center g-card g1"><h5 class="text-success-emphasis">Working Days</h5><div id="wd-cnt" class="display-4 fw-bold my-2 text-success">26</div></div></div>
+            <div class="col-md-4"><div class="card p-4 h-100 text-center g-card g2"><h5 class="text-primary-emphasis">COLA Eligible</h5><div id="cola-st" class="display-4 fw-bold my-2 text-primary">0 / 22</div><div class="progress" style="height:8px"><div id="cola-bar" class="progress-bar" style="width:0%"></div></div></div></div>
+            <div class="col-md-4"><div class="card p-4 h-100 text-center g-card g3"><h5 class="text-warning-emphasis">Category</h5><div id="cat-st" class="display-4 fw-bold my-2 text-warning">N/A</div><small id="cat-desc">Based on %</small></div></div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="db-sec" class="fade-up mb-5">
+        <h4 class="mb-4">Monthly Dashboard</h4>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card p-4 h-100 g-card g4">
+                    <label class="fw-bold mb-2">Select Month</label>
+                    <select id="m-sel" class="form-select mb-3 shadow-none"></select>
+                    <small class="text-muted d-block">From: <span id="d-fr" class="fw-bold">--</span></small>
+                    <small class="text-muted d-block">To: <span id="d-to" class="fw-bold">--</span></small>
+                </div>
+            </div>
+            <div class="col-md-3"><div class="card p-4 h-100 text-center g-card g2"><h6>Present %</h6><div id="pres-perc" class="display-5 fw-bold text-primary">0%</div></div></div>
+            <div class="col-md-3"><div class="card p-4 h-100 text-center g-card g3"><h6>Total Present</h6><div id="tot-pres" class="display-5 fw-bold text-success">0</div></div></div>
+            <div class="col-md-3"><div class="card p-4 h-100 text-center g-card g1"><h6>Calendar</h6><div id="cal-gr" class="d-grid mt-2" style="grid-template-columns:repeat(7,1fr);gap:2px;font-size:0.7rem"></div></div></div>
+        </div>
+    </section>
+
+    <!-- 10-Box Summary (Restored) -->
+    <section id="sum-sec" class="fade-up mb-5">
+        <h4 class="mb-4">Summary Stats</h4>
+        <div class="row g-3 row-cols-2 row-cols-md-5">
+            <div class="col"><div class="card p-3 text-center g-card g1"><small>Total Hours</small><h4 id="s-hr" class="text-primary mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g2"><small>Late Count</small><h4 id="s-lt" class="text-danger mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g3"><small>Absent Days</small><h4 id="s-ab" class="text-danger mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g4"><small>Weekends</small><h4 id="s-wk" class="text-info mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g1"><small>Holidays</small><h4 id="s-hl" class="text-warning mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g2"><small>Working Days</small><h4 id="s-wd" class="text-success mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g3"><small>Total Present</small><h4 id="s-pr" class="text-success mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g4"><small>Night Shift</small><h4 id="s-ns" class="text-secondary mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g1"><small>Day Shift</small><h4 id="s-ds" class="text-warning mb-0">0</h4></div></div>
+            <div class="col"><div class="card p-3 text-center g-card g2"><small>Grace Used</small><h4 id="s-gr" class="text-primary mb-0">0</h4></div></div>
+        </div>
+    </section>
+
+    <!-- Notes Summary (Restored) -->
+    <section class="fade-up mb-5">
+        <h4 class="mb-3">Notes Summary</h4>
+        <div id="cmt-box" class="card p-4" style="min-height:100px;max-height:300px;overflow-y:auto">
+            <p class="text-muted small text-center italic">No notes available for this month.</p>
+        </div>
+    </section>
+
+    <!-- Attendance Table (Cleaned) -->
+    <section id="att-sec" class="fade-up mb-5">
+        <h4 class="mb-4">Daily Attendance <span id="att-sub" class="fs-6 text-muted"></span></h4>
+        <div class="card p-0 overflow-hidden shadow-sm">
+            <div class="table-responsive" style="max-height:600px">
+                <table class="table mb-0 att-tbl align-middle">
+                    <thead>
+                        <tr>
+                            <th style="width:12%">Date</th><th style="width:8%">Day</th><th style="width:12%">Status</th>
+                            <th style="width:10%">Hour</th><th style="width:10%">Extra</th><th style="width:8%">Late</th>
+                            <th style="width:10%">Shift</th><th style="width:8%">Grace</th><th style="width:22%">Note</th>
+                        </tr>
+                    </thead>
+                    <tbody id="att-bd"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container px-4">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <h5 class="f-head">Pranto's <span class="text-primary">Workspace</span></h5>
+                    <p class="small text-muted">Your personal dashboard for tracking monthly performance and attendance.</p>
+                    <div class="social mt-3"><a href="#"><i class="bi bi-facebook"></i></a><a href="#"><i class="bi bi-linkedin"></i></a><a href="#"><i class="bi bi-github"></i></a></div>
+                </div>
+                <div class="col-lg-2 col-6"><h6>Navigation</h6><a href="#" class="f-lnk">Home</a><a href="#att-sec" class="f-lnk">Attendance</a><a href="#prof-sec" class="f-lnk">Profile</a></div>
+                <div class="col-lg-2 col-6"><h6>Tools</h6><a href="index.html" class="f-lnk">IDR</a><a href="nsa.html" class="f-lnk">NSA</a><a href="typing.html" class="f-lnk">Typing</a></div>
+                <div class="col-lg-4"><h6>Contact</h6><p class="small text-muted mb-2"><i class="bi bi-envelope me-2"></i>prantorodrix9@gmail.com</p><p class="small text-muted"><i class="bi bi-geo-alt me-2"></i>Dhaka, Bangladesh</p></div>
+            </div>
+            <hr class="my-4" style="opacity:0.1">
+            <div class="text-center small text-muted">&copy; 2025 All Rights Reserved. Designed by <span class="made"><span>PrantoRodrix</span></span></div>
+        </div>
+    </footer>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="ed-mod" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0"><h5 class="modal-title">Edit Profile</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="ed-form">
+                    <div class="mb-2"><label class="small">Name</label><input id="in-nm" class="form-control"></div>
+                    <div class="mb-2"><label class="small">Designation</label><input id="in-ds" class="form-control"></div>
+                    <div class="row g-2 mb-2">
+                        <div class="col"><label class="small">Team</label><input id="in-tm" class="form-control"></div>
+                        <div class="col"><label class="small">ID</label><input id="in-id" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label class="small">Join Date</label><input type="date" id="in-jd" class="form-control"></div>
+                    <div class="mb-2"><label class="small">Profile Photo</label><input type="file" id="in-ph" class="form-control" accept="image/*"></div>
+                    <div class="mb-3"><label class="small">Cover Photo</label><input type="file" id="in-cv" class="form-control" accept="image/*"></div>
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* LOGIC */
+let app={p:{n:'PrantoAnthony',d:'Junior Associate',t:'BCBS',i:'LnG2110R0218',j:'2021-10-03',ph:'',cv:''},d:[]};
+const mN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+document.addEventListener('DOMContentLoaded',()=>{
+    load(); obs(); bg();
+    const ms=document.getElementById('m-sel');
+    for(let i=-6;i<=6;i++){
+        const d=new Date(); d.setMonth(d.getMonth()+i);
+        const o=document.createElement('option'); o.value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        o.textContent=`${mN[d.getMonth()]} ${d.getFullYear()}`; if(i===0)o.selected=true; ms.appendChild(o);
+    }
+    ms.addEventListener('change',e=>upd(e.target.value));
+    upd(ms.value);
+
+    const pIn=document.getElementById('in-ph'), cIn=document.getElementById('in-cv');
+    pIn.addEventListener('change',e=>{const r=new FileReader(); r.onload=ev=>{app.p.ph=ev.target.result}; r.readAsDataURL(e.target.files[0]);});
+    cIn.addEventListener('change',e=>{const r=new FileReader(); r.onload=ev=>{app.p.cv=ev.target.result}; r.readAsDataURL(e.target.files[0]);});
+
+    document.getElementById('ed-form').addEventListener('submit',e=>{
+        e.preventDefault();
+        app.p.n=document.getElementById('in-nm').value; app.p.d=document.getElementById('in-ds').value;
+        app.p.t=document.getElementById('in-tm').value; app.p.i=document.getElementById('in-id').value;
+        app.p.j=document.getElementById('in-jd').value; 
+        save(); rProf(); bootstrap.Modal.getInstance(document.getElementById('ed-mod')).hide();
+    });
+    
+    document.getElementById('t-tog').addEventListener('click',()=>{
+        const h=document.documentElement, n=h.getAttribute('data-bs-theme')==='light'?'dark':'light';
+        h.setAttribute('data-bs-theme',n); bg();
+    });
+    // Scroll Nav Animation
+    window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scr',window.scrollY>50)});
+});
+
+function load(){
+    const s=localStorage.getItem('ws_data'); if(s){ const p=JSON.parse(s); app.p={...app.p,...p.p}; app.d=p.d||[]; }
+    rProf();
+    document.getElementById('in-nm').value=app.p.n; document.getElementById('in-ds').value=app.p.d;
+    document.getElementById('in-tm').value=app.p.t; document.getElementById('in-id').value=app.p.i;
+    document.getElementById('in-jd').value=app.p.j; 
+}
+function save(){ localStorage.setItem('ws_data',JSON.stringify(app)); }
+
+function rProf(){
+    document.getElementById('u-nm').textContent=app.p.n; document.getElementById('u-ds').textContent=app.p.d;
+    document.getElementById('u-tm').textContent=app.p.t; document.getElementById('u-id').textContent=app.p.i;
+    if(app.p.ph) document.getElementById('p-ph').src=app.p.ph;
+    if(app.p.cv) document.getElementById('cv-ph').src=app.p.cv;
+    const diff=new Date()-new Date(app.p.j), y=Math.floor(diff/31536000000), m=Math.floor((diff%31536000000)/2628000000), d=Math.floor((diff%2628000000)/86400000);
+    document.getElementById('j-dur').textContent=`${y}Y ${m}M ${d}D`;
+}
+
+function upd(my){
+    const [y,m]=my.split('-').map(Number), fr=new Date(y,m-2,26), to=new Date(y,m-1,25);
+    document.getElementById('d-fr').textContent=fr.toLocaleDateString(); document.getElementById('d-to').textContent=to.toLocaleDateString();
+    document.getElementById('att-sub').textContent=`(${fr.toLocaleDateString()} - ${to.toLocaleDateString()})`;
+    
+    let cur=new Date(fr), tWd=0, tP=0, tA=0, tH=0, tL=0, tNs=0, tDs=0, tGr=0, tWk=0, tHl=0, html='', calHtml='', cmtHtml='';
+    const fDom=new Date(y,m-1,1), dIm=new Date(y,m,0).getDate(), sDay=fDom.getDay();
+    for(let k=0;k<sDay;k++) calHtml+=`<span></span>`;
+
+    while(cur<=to){
+        const iso=cur.toISOString().split('T')[0], day=cur.toLocaleDateString('en',{weekday:'short'});
+        let r=app.d.find(d=>d.id===iso);
+        if(!r){ r={id:iso,date:cur.toLocaleDateString(),day,stat:'-',hr:'-',ex:'-',lt:'-',sh:'Day',gr:'-',nt:''}; app.d.push(r); }
+        
+        const isW=cur.getDay()===0; 
+        
+        html+=`<tr>
+            <td class="${isW?'text-danger fw-bold':''}">${r.date}</td><td>${r.day}</td>
+            <td><button class="st-btn ${btnCls(r.stat)}" onclick="cyc('${iso}')">${r.stat}</button></td>
+            <td><input class="inp-clean" value="${r.hr}" disabled></td>
+            <td><input class="inp-clean" value="${r.ex}" oninput="edt('${iso}','ex',this.value)" ${r.stat!=='Present'?'disabled':''}></td>
+            <td><input class="inp-clean" value="${r.lt}" oninput="edt('${iso}','lt',this.value)" ${r.stat!=='Present'?'disabled':''}></td>
+            <td><button class="st-btn bg-light text-dark border" onclick="tgl('${iso}','sh')" ${r.stat!=='Present'?'disabled':''}>${r.sh}</button></td>
+            <td><button class="st-btn bg-light text-dark border" onclick="tgl('${iso}','gr')" ${r.stat!=='Present'?'disabled':''}>${r.gr}</button></td>
+            <td><input class="inp-clean text-start" value="${r.nt}" oninput="edt('${iso}','nt',this.value)" ${r.stat!=='Present'?'disabled':''} placeholder="..."></td>
+        </tr>`;
+        
+        // Calcs
+        if(r.stat==='Present'){ tP++; tH+=(parseFloat(r.hr)||0)+(parseFloat(r.ex)||0); tL+=(parseFloat(r.lt)||0); if(r.sh==='Night')tNs++; else tDs++; if(r.gr==='Yes')tGr++; tWd++; }
+        else if(r.stat==='Absent'){ tA++; tWd++; } 
+        else if(r.stat==='Weekend') tWk++;
+        else if(r.stat==='Holiday') tHl++;
+        
+        // Comments
+        if(r.nt.trim()){ cmtHtml+=`<div class="border-bottom pb-1 mb-1"><span class="fw-bold text-primary">${r.date}:</span> ${r.nt}</div>`; }
+        cur.setDate(cur.getDate()+1);
+    }
+    document.getElementById('att-bd').innerHTML=html;
+    document.getElementById('cmt-box').innerHTML = cmtHtml || '<p class="text-muted small text-center italic">No notes available for this month.</p>';
+
+    // Calendar
+    for(let d=1;d<=dIm;d++){
+        const cDt=new Date(y,m-1,d), cIso=cDt.toISOString().split('T')[0];
+        const row=app.d.find(x=>x.id===cIso);
+        let bg='bg-light'; 
+        if(row){
+            if(row.stat==='Present') bg='bg-success text-white';
+            else if(row.stat==='Absent') bg='bg-danger text-white';
+            else if(row.stat==='Weekend') bg='bg-info text-white';
+            else if(row.stat==='Holiday') bg='bg-warning';
+        }
+        calHtml+=`<span class="p-1 rounded text-center ${bg}" style="font-size:0.7rem">${d}</span>`;
+    }
+    document.getElementById('cal-gr').innerHTML=calHtml;
+
+    // Stats
+    document.getElementById('wd-cnt').textContent=tWd;
+    document.getElementById('cola-st').textContent=`${tP} / 22`;
+    document.getElementById('cola-bar').style.width=`${(tP/22)*100}%`;
+    
+    // Present % Logic: (Total Present / Total Working Days) * 100
+    const presP = tWd>0 ? Math.round((tP/tWd)*100) : 0;
+    document.getElementById('pres-perc').textContent=`${presP}%`;
+    
+    // Category Logic
+    let cat='N/A';
+    if(tWd>0){
+        if(presP>=95) cat='A+'; else if(presP>=90) cat='A'; else if(presP>=85) cat='B'; else if(presP>=80) cat='C'; else cat='D';
+    }
+    document.getElementById('cat-st').textContent=cat;
+    document.getElementById('cat-desc').textContent=`(${presP}%) Based on Present`;
+
+    document.getElementById('tot-pres').textContent=tP;
+    
+    // 10-Box Summary
+    document.getElementById('s-hr').textContent=tH.toFixed(1);
+    document.getElementById('s-lt').textContent=tL;
+    document.getElementById('s-ab').textContent=tA;
+    document.getElementById('s-wk').textContent=tWk;
+    document.getElementById('s-hl').textContent=tHl;
+    document.getElementById('s-wd').textContent=tWd;
+    document.getElementById('s-pr').textContent=tP;
+    document.getElementById('s-ns').textContent=tNs;
+    document.getElementById('s-ds').textContent=tDs;
+    document.getElementById('s-gr').textContent=tGr;
+    
+    save();
+}
+
+/* ACTIONS */
+function cyc(id){
+    const r=app.d.find(d=>d.id===id), s=['-','Present','Absent','Weekend','Holiday'];
+    r.stat=s[(s.indexOf(r.stat)+1)%5];
+    if(r.stat==='Present'){r.hr=9;r.lt=0;r.ex=0;} else {r.hr='-';r.lt='-';r.ex='-';}
+    save(); upd(document.getElementById('m-sel').value);
+}
+function tgl(id,k){const r=app.d.find(d=>d.id===id); r[k]=(k==='sh'?(r[k]==='Day'?'Night':'Day'):(r[k]==='-'?'Yes':'-')); save(); upd(document.getElementById('m-sel').value);}
+function edt(id,k,v){
+    const r=app.d.find(d=>d.id===id); r[k]=v; 
+    if(k==='lt'){r.hr=9-(parseFloat(v)||0);} 
+    save(); 
+    upd(document.getElementById('m-sel').value); // Immediate update for Extra Hour
+}
+function btnCls(s){if(s==='Present')return 'st-p'; if(s==='Absent')return 'st-a'; if(s==='Weekend')return 'st-w'; if(s==='Holiday')return 'st-h'; return 'btn-light';}
+
+/* OBSERVER */
+function obs(){const o=new IntersectionObserver(e=>{e.forEach(i=>{if(i.isIntersecting)i.target.classList.add('vis')})},{threshold:0.1}); document.querySelectorAll('.fade-up').forEach(s=>o.observe(s));}
+function bg(){
+    const t=document.documentElement.getAttribute('data-bs-theme');
+    document.querySelectorAll('.bg-img').forEach(i=>i.classList.remove('active'));
+    document.querySelector(`.bg-${t==='light'?'l':'d'}.b1`).classList.add('active');
+}
+</script>
+</body>
+</html>
