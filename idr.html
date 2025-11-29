@@ -1,312 +1,485 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
+<!-- HEAD -->
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Pranto's Note Tool</title>
 <link rel="icon" type="image/png" href="note.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
-/* --- CORE VARIABLES --- */
+/* THEME VARIABLES - Soft & Premium */
 :root {
- --f:'Outfit',sans-serif; --mono:'Rajdhani',monospace; --nav-h:70px;
- --pri:#6366f1; --sec:#0ea5e9; --txt:#334155; --txt-l:#64748b;
- --bg-body: #f8fafc; 
- --bg-grad: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
- --glass: rgba(255, 255, 255, 0.9); --blur: 20px; 
- --bor: 1px solid rgba(255, 255, 255, 0.6); 
- --sh: 0 10px 30px rgba(0,0,0,0.04);
- --card-bg: #ffffff;
- --nav-bg: rgba(255, 255, 255, 0.95);
- --input-bg: #ffffff;
- --adj-bg: #f8fafc; --adj-txt: #334155;
+    --f: 'Outfit', sans-serif;
+    --f-mono: 'Rajdhani', monospace;
+    /* Light Mode: Softer, less harsh white */
+    --bg: #eef2f6; 
+    --txt: #334155;
+    --pri: #6366f1; /* Indigo */
+    --sec: #0ea5e9; /* Sky */
+    --card-bg: linear-gradient(145deg, #ffffff, #f8faff); /* Soft Gradient for Cards */
+    --sd: 260px;
+    --sh: 5px 5px 15px rgba(163, 177, 198, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.8); /* Neumorphic Soft Shadow */
+    --ins: inset 2px 2px 5px rgba(163, 177, 198, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+    --cd: #ffffff;
+    --bor: 1px solid rgba(0,0,0,0.05);
+    
+    /* Widget Colors */
+    --wid-bg: rgba(255, 255, 255, 0.85);
+    --wid-bor: rgba(255, 255, 255, 0.9);
 }
+
 [data-bs-theme="dark"] {
- --txt:#f1f5f9; --txt-l:#94a3b8; 
- --bg-body: #0f172a;
- --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
- --glass: rgba(30, 41, 59, 0.9); 
- --bor: 1px solid rgba(255, 255, 255, 0.1);
- --card-bg: rgba(30, 41, 59, 0.7);
- --nav-bg: rgba(15, 23, 42, 0.9);
- --input-bg: rgba(0, 0, 0, 0.2);
- --adj-bg: rgba(255,255,255,0.05); --adj-txt: #e2e8f0;
+    --bg: #0f172a;
+    --txt: #cbd5e1;
+    --pri: #818cf8;
+    --sec: #38bdf8;
+    --card-bg: linear-gradient(145deg, #1e293b, #0f172a);
+    --sh: 0 4px 6px rgba(0,0,0,0.3);
+    --ins: inset 0 0 0 1px rgba(255,255,255,0.05);
+    --cd: #1e293b;
+    --bor: 1px solid rgba(255,255,255,0.05);
+    
+    /* Widget Colors Dark */
+    --wid-bg: rgba(30, 41, 59, 0.8);
+    --wid-bor: rgba(255, 255, 255, 0.1);
 }
 
-body {
-    font-family: var(--f); background: var(--bg-grad);
-    margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; color: var(--txt);
-    transition: background 0.3s ease;
-}
-
-/* --- NAVBAR --- */
-#nav {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    width: 95%; max-width: 1250px; height: 65px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 1.5rem; z-index: 1100;
-    background: var(--nav-bg); backdrop-filter: blur(var(--blur));
-    border: var(--bor); border-radius: 50px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-}
-.brand { font-size: 1.3rem; font-weight: 700; background: linear-gradient(90deg, var(--pri), var(--sec)); -webkit-background-clip: text; color: transparent; white-space: nowrap; }
-.menu { display: flex; gap: 1.5rem; align-items: center; }
-.n-lnk { text-decoration: none; color: var(--txt); font-weight: 600; font-size: 0.9rem; opacity: 0.7; transition: .3s; position: relative; white-space: nowrap; }
-.n-lnk:hover, .n-lnk.active { opacity: 1; color: var(--pri); }
-.n-lnk.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--pri); border-radius: 2px; }
-.drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
-.drop-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px); background: var(--nav-bg); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px; opacity: 0; visibility: hidden; transition: .3s; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px; }
-.drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
-.d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-.d-item:hover { background: rgba(99, 102, 241, 0.1); color: var(--pri); }
-
-.n-rt { display: flex; align-items: center; gap: 10px; }
-.btn-nav-act { border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; color: white; transition: .2s; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-.btn-ext { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-.btn-clr { background: linear-gradient(135deg, #ef4444, #f43f5e); }
-.btn-nav-act:hover { transform: translateY(-1px); filter: brightness(110%); }
-.t-btn { width: 34px; height: 34px; border-radius: 50%; border: var(--bor); background: transparent; color: var(--txt); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: .3s; }
-.t-btn:hover { background: var(--pri); color: #fff; transform: rotate(20deg); }
-.p-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid transparent; background: linear-gradient(var(--nav-bg), var(--nav-bg)) padding-box, linear-gradient(45deg, var(--pri), var(--sec)) border-box; cursor: pointer; }
+body { font-family: var(--f); background: var(--bg); height: 100vh; overflow: hidden; transition: background .4s ease, color .4s ease; font-size: .85rem; color: var(--txt); letter-spacing: 0.01em; }
 
 /* LAYOUT */
-#wrap { display: flex; margin-top: 100px; height: calc(100vh - 100px); }
-#sb { width: 270px; background: var(--glass); border-right: var(--bor); backdrop-filter: blur(15px); display: flex; flex-direction: column; margin-left: 20px; border-radius: 20px 0 0 20px; margin-bottom: 20px; box-shadow: var(--sh); height: calc(100vh - 120px); }
-#sb-c { flex: 1; overflow-y: auto; padding: 1rem; height: 100%; }
-#main { flex: 1; padding: 0 2rem 2rem 1.5rem; overflow-y: auto; display: flex; flex-direction: column; }
+#top { 
+    position: fixed; top: 0; width: 100%; height: 60px; z-index: 1000; 
+    display: flex; align-items: center; justify-content: space-between; 
+    padding: 0 1.5rem; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+    backdrop-filter: blur(12px); border-bottom: var(--bor); 
+}
+#wrap { display: flex; margin-top: 60px; height: calc(100vh - 60px); }
+#sb { width: var(--sd); min-width: 250px; display: flex; flex-direction: column; background: var(--card-bg); border-right: var(--bor); transition: .3s; }
+#sb-c { flex: 1; overflow-y: auto; padding: 0.8rem; }
+#main { flex: 1; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; }
 
-/* COMPONENTS */
-.card { background: var(--card-bg); border: var(--bor); border-radius: 16px; box-shadow: var(--sh); margin-bottom: 1rem; border: none; }
-.form-control, .form-select { background: var(--input-bg); border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-size: .85rem; color: var(--txt); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02); transition: .2s; }
-[data-bs-theme="dark"] .form-control { border-color: rgba(255,255,255,0.1); }
-.form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px var(--pri); outline: 0; border-color: transparent; }
-.form-control.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important; } 
-textarea.form-control { resize: none; overflow: hidden; }
+/* NAVBAR CENTER */
+.nav-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: flex; gap: 1rem;
+}
 
-/* Click to Copy Style */
-textarea[readonly], input[readonly] { cursor: pointer; }
-textarea[readonly]:active, input[readonly]:active { transform: scale(0.99); }
+/* CARDS & INPUTS */
+.card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--sh); border: var(--bor); margin-bottom: 1rem; transition: transform 0.2s; }
+.form-control, .form-select { 
+    background: var(--bg); border: var(--bor); border-radius: 8px; font-size: .85rem; color: var(--txt); box-shadow: var(--ins); padding: 6px 12px; transition: all 0.2s ease; 
+}
+[data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { background: #020617; border-color: rgba(255,255,255,0.05); }
+.form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); outline: 0; border-color: var(--pri); }
+textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; line-height: 1.45; font-size: 0.9rem !important; }
 
-.btn-neu { display: flex; align-items: center; gap: 8px; border-radius: 25px; padding: 6px 20px; border: var(--bor); font-weight: 600; font-size: 13px; background: var(--card-bg); box-shadow: var(--sh); color: var(--pri); transition: .2s; cursor: pointer; }
-.btn-neu:hover { transform: translateY(-2px); }
-.nav-tabs-glass { border: none; padding: 0 .5rem; display: flex; gap: 10px; }
-.nav-tabs-glass .nav-link { border: none; background: transparent; color: var(--txt); font-weight: 600; border-radius: 10px; padding: 8px 15px; font-size: .85rem; opacity: .7; transition: .3s; }
+/* BUTTONS */
+.btn-neu { 
+    display: flex; align-items: center; gap: 6px; border-radius: 18px; padding: 6px 16px; border: var(--bor); 
+    font-weight: 600; font-size: 13px; background: var(--card-bg); box-shadow: var(--sh); color: var(--pri); transition: .2s; 
+}
+.btn-neu:hover { transform: translateY(-2px); filter: brightness(105%); }
+.btn-neu-danger { color: #ef4444; }
+.btn-neu-danger:hover { color: #dc2626; }
+
+/* TABS */
+.nav-tabs-glass { border-bottom: none; padding: 0 .5rem; display: flex; gap: 8px; }
+.nav-tabs-glass .nav-link { 
+    border: none; background: transparent; color: var(--txt); font-weight: 600; border-radius: 8px; 
+    padding: 8px 16px; font-size: .85rem; opacity: 0.6; transition: all 0.3s; 
+}
+.nav-tabs-glass .nav-link:hover { opacity: 0.9; background: rgba(0,0,0,0.03); }
 .nav-tabs-glass .nav-link.active { color: var(--pri); opacity: 1; background: var(--card-bg); box-shadow: var(--sh); }
 
-/* IDR ITEMS */
-.idr-item { display: flex; justify-content: space-between; font-size: .8rem; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-.idr-val { font-weight: 700; text-align: right; color: var(--pri); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.bg-match { background: rgba(16,185,129,.15); color: #059669; padding: 0 6px; border-radius: 4px; }
-.bg-mismatch { background: rgba(239,68,68,.15); color: #dc2626; padding: 0 6px; border-radius: 4px; }
-.bg-overpaid { background: rgba(245,158,11,.15); color: #d97706; padding: 0 6px; border-radius: 4px; }
-
-/* EOB BAR */
-#eob-bar { display: none; padding: .8rem 1.2rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); }
-#eob-bar.visible { display: flex; gap: 20px; align-items: center; }
-.ed-inp { padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: var(--input-bg); width: 80px; font-size: .8rem; color: var(--txt); font-weight: 600; }
-.wl-inp { width: 100px; font-weight: 700; text-align: right; }
-#cAdj { background-color: var(--adj-bg) !important; color: var(--adj-txt) !important; border: var(--bor) !important; }
+/* SIDEBAR ITEMS */
+.idr-card { padding: 10px; margin-bottom: 8px; font-size: 0.75rem; }
+.idr-item { display: flex; justify-content: space-between; padding: 2px 0; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.03); }
+[data-bs-theme="dark"] .idr-item { border-bottom: 1px solid rgba(255,255,255,0.03); }
+.idr-val { font-weight: 700; text-align: right; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--pri); }
 
 /* FOOTER */
-footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var(--bor); padding: 3rem 0 1.5rem; margin-top: auto; border-radius: 20px 20px 0 0; }
-.f-brand { font-size: 1.3rem; font-weight: 700; color: var(--txt); margin-bottom: 1rem; display: block; }
-.f-lnk { display: block; color: var(--txt-l); text-decoration: none; font-size: .85rem; margin-bottom: .6rem; transition: .2s; }
-.f-lnk:hover { color: var(--pri); transform: translateX(3px); }
-.s-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.1); color: var(--pri); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; transition: .2s; }
-.s-ico:hover { background: var(--pri); color: white; transform: translateY(-2px); }
+.main-footer {
+    margin-top: auto; padding-top: 1.5rem; padding-bottom: 1rem;
+    text-align: center; color: var(--txt); opacity: 0.6; font-size: 0.75rem;
+    border-top: var(--bor);
+}
+
+/* WIDGETS CONTAINER (Bottom Left) */
+.widgets-wrapper {
+    position: fixed; bottom: 20px; left: 20px; z-index: 1050;
+    display: flex; align-items: center; gap: 15px;
+}
+
+/* WATCH WIDGET */
+.watch-container { 
+    width: 110px; height: 110px; 
+    display: flex; justify-content: center; align-items: center; border-radius: 50%; 
+    background: var(--wid-bg); backdrop-filter: blur(12px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 1px solid var(--wid-bor); 
+    position: relative;
+}
+.watch-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.watch-circle-bg { fill: none; stroke: rgba(99, 102, 241, 0.1); stroke-width: 4; }
+.watch-circle-progress { fill: none; stroke: var(--pri); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 339; stroke-dashoffset: 339; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+.watch-time-box { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; color: var(--txt); z-index: 2; }
+.wt-hm { font-size: 1.8rem; font-weight: 700; font-family: var(--f-mono); letter-spacing: -1px; }
+.wt-sec-row { display: flex; align-items: baseline; gap: 4px; margin-top: -2px; }
+.wt-sec { font-size: 1rem; font-weight: 600; color: var(--sec); font-family: var(--f-mono); }
+.wt-ampm { font-size: 0.7rem; font-weight: 600; color: var(--txt); opacity: 0.6; }
+
+/* DATE WIDGET */
+.date-container {
+    width: 90px; height: 90px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    border-radius: 20px;
+    background: var(--wid-bg); backdrop-filter: blur(12px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid var(--wid-bor);
+    position: relative;
+    overflow: hidden;
+}
+/* Gradient Border Animation via pseudo */
+.date-container::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 20px; padding: 2px; 
+    background: linear-gradient(135deg, var(--pri), var(--sec), #ec4899);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0.5;
+}
+.dt-day { font-size: 0.8rem; font-weight: 600; color: var(--txt); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+.dt-num { font-size: 2.2rem; font-weight: 700; font-family: var(--f-mono); color: var(--pri); line-height: 1; margin: 2px 0; }
+.dt-mon { font-size: 0.85rem; font-weight: 600; color: var(--sec); text-transform: uppercase; }
+
+/* UTILS */
+.text-gradient { background: linear-gradient(135deg, var(--pri), var(--sec), #ec4899); -webkit-background-clip: text; color: transparent; font-weight: 800; font-size: 1.1rem; }
+.small-label { font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; display: block; color: var(--txt); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+.ed-inp { padding: 2px 6px; border-radius: 4px; border: var(--bor); background: var(--bg); width: 60px; font-size: .7rem; color: var(--txt); font-weight: 600; }
+.email-hint { font-size: 0.75rem; color: var(--sec); margin-top: 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+#eob-bar { display: none; padding: .5rem 1rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); border: var(--bor); font-size: 0.8rem; }
+#eob-bar.visible { display: flex; gap: 15px; align-items: center; }
 </style>
 </head>
 <body>
 
-<nav id="nav">
-    <div class="brand">Pranto's Workspace</div>
-    <div class="menu d-none d-lg-flex">
-        <a href="index.html" class="n-lnk">Home</a>
-        <div class="drop-box">
-            <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
-            <div class="drop-menu">
-                <a href="#" class="d-item"><i class="bi bi-file-text"></i> IDR Tool</a>
-                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
-                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
-            </div>
-        </div>
-        <div class="drop-box">
-            <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
-            <div class="drop-menu">
-                <a href="typing.html" class="d-item"><i class="bi bi-keyboard"></i> Typing</a>
-                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
-            </div>
-        </div>
-        <a href="#" class="n-lnk">Contact Us</a>
+<!-- TOP NAV -->
+<div id="top">
+    <div class="d-flex align-items-center gap-2">
+        <span class="text-muted small">Made by</span> <span class="text-gradient">Pranto Rodrix</span>
     </div>
-    
-    <div class="n-rt">
-        <button id="processBtn" class="btn-nav-act btn-ext"><i class="bi bi-magic"></i> Extract</button>
-        <button id="clearBtn" class="btn-nav-act btn-clr"><i class="bi bi-trash"></i> Clear</button>
-        <div style="width:1px; height:20px; background:var(--txt); opacity:0.2; margin:0 5px;"></div>
-        <button id="theme-toggle" class="t-btn"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
-        <div class="dropdown">
-            <img src="https://ui-avatars.com/api/?name=Pranto+Rodrix&background=6366f1&color=fff&bold=true" class="p-pic" data-bs-toggle="dropdown">
-            <ul class="dropdown-menu dropdown-menu-end border-0 shadow" style="background:var(--nav-bg); backdrop-filter:blur(10px)">
-                <li><a class="dropdown-item text-danger fw-bold" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
-            </ul>
-        </div>
+    <div class="nav-center d-none d-md-flex">
+        <a href="typing.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Typing</a>
+        <a href="nsa.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">NSA</a>
+        <a href="appeal.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Appeal</a>
+        <a href="index.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Main</a>
     </div>
-</nav>
+    <div class="d-flex gap-2">
+        <button id="processBtn" class="btn-neu"><i class="bi bi-magic"></i> Extract</button>
+        <button id="clearBtn" class="btn-neu btn-neu-danger"><i class="bi bi-trash"></i> Clear</button>
+        <button id="theme-toggle" class="btn-neu px-3"><i class="bi bi-sun-fill"></i></button>
+    </div>
+</div>
 
 <div id="wrap">
+    <!-- SIDEBAR -->
     <div id="sb">
-        <div class="p-4 border-bottom"><h6 class="m-0 fw-bold text-primary small"><i class="bi bi-list-columns-reverse me-2"></i>IDR Results</h6></div>
-        <div id="sb-c"><div class="text-center text-muted small mt-5">Paste IDR data & Extract</div></div>
+        <div class="p-3 border-bottom"><h6 class="m-0 fw-bold text-primary small"><i class="bi bi-list-columns-reverse me-2"></i>IDR RESULTS</h6></div>
+        <div id="sb-c"><div class="text-center text-muted small mt-5 opacity-75">Paste & Extract</div></div>
     </div>
 
+    <!-- MAIN -->
     <div id="main">
-        <div id="eob-bar"></div>
-        <div class="row g-4 mb-4">
-            <div class="col-lg-3"><div class="card h-100 p-4 d-flex flex-column"><label class="small fw-bold text-primary mb-3">Updated EOB</label><textarea class="form-control flex-grow-1" id="eobUp" placeholder="Paste Updated EOB text here..."></textarea></div></div>
-            <div class="col-lg-6"><div class="card p-4 h-100"><label class="small fw-bold text-primary mb-3">IDR Reports</label>
-                <div class="row g-2 mb-2"><div class="col-4"><textarea class="form-control" id="idr1" rows="3" placeholder="2024+ (1)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr2" rows="3" placeholder="2024+ (2)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr3" rows="3" placeholder="2024+ (3)"></textarea></div></div>
-                <div class="row g-2"><div class="col-4"><textarea class="form-control" id="idr4" rows="3" placeholder="22-23 (1)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr5" rows="3" placeholder="22-23 (2)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr6" rows="3" placeholder="22-23 (3)"></textarea></div></div>
-            </div></div>
-            <div class="col-lg-3"><div class="card h-100 p-4"><h6 class="fw-bold text-primary small mb-3 border-bottom pb-2">EOB Details</h6><div id="eob-det"><div class="text-muted small text-center mt-4">No Data</div></div></div></div>
-        </div>
-
-        <div class="card">
-            <div class="p-3 pb-0"><ul class="nav nav-tabs-glass" id="mT"><li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-cor">Correspondence</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-ref">Refund</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-inel">Ineligible</button></li></ul></div>
-            <div class="card-body p-4"><div class="tab-content">
-                <!-- CORRESPONDENCE -->
-                <div class="tab-pane fade show active" id="t-cor"><div class="row g-4">
-                    <div class="col-md-3">
-                        <button class="btn-neu w-100 justify-content-center text-primary mt-1 mb-4" onclick="genCor()">Generate Note</button>
-                        <div class="mb-3"><label class="small fw-bold ms-1 text-muted">Date</label><input type="date" class="form-control dt-inp" id="cDt"></div>
-                        <div class="mb-3"><label class="small fw-bold ms-1 text-muted">Name</label><input type="text" class="form-control nm-inp" id="cNm" placeholder="Name"></div>
-                        <div class="mb-3"><label class="small fw-bold ms-1 text-muted">Initial</label><input type="text" class="form-control mb-3 in-inp" id="cIni" placeholder="Auto/Manual"></div>
-                        <div id="cAdj" class="mt-2 d-none p-3 rounded border"><h6 class="small fw-bold text-primary">Adjustments</h6><div class="small d-flex justify-content-between"><span>With PT:</span><span id="adj1" class="fw-bold">--</span></div><div class="small d-flex justify-content-between"><span>Without PT:</span><span id="adj2" class="fw-bold">--</span></div></div><div id="cWarn" class="mt-2 text-danger small fw-bold d-none"></div>
+        <div class="container-fluid px-0">
+            <div id="eob-bar"></div>
+            <div class="row g-3 mb-3">
+                <div class="col-lg-3">
+                    <div class="card h-100 p-3 d-flex flex-column">
+                        <label class="small-label text-primary">Updated EOB</label>
+                        <textarea class="form-control flex-grow-1" id="eobUp" placeholder="Paste Updated EOB here..."></textarea>
                     </div>
-                    <div class="col-md-9"><textarea id="cOut" class="form-control h-100" style="min-height: 350px;" readonly placeholder="Note will appear here..."></textarea></div>
-                </div></div>
-                <!-- EMAIL -->
-                <div class="tab-pane fade" id="t-em"><div class="row g-3 mb-4">
-                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div><div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Name"></div><div class="col-md-1"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Init"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Scenario</label><select class="form-select" id="mSc" onchange="togEm()"><option value="ins">Standard</option><option value="pt">High PT</option></select></div>
-                    <div class="col-md-2"><label class="small fw-bold">Manual</label><input type="number" class="form-control" id="mMan" placeholder="Amt" disabled></div>
-                    <div class="col-md-2"><label class="small fw-bold">Type</label><select class="form-select" id="mTyp"><option value="1">1st Email</option><option value="2">2nd Email</option></select></div>
-                    <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genEm()"><i class="bi bi-send"></i></button></div>
-                </div><div class="row g-3 mb-4">
-                    <div class="col-md-4"><label class="small fw-bold">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div><div class="col-md-4"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="mSub" readonly></div><div class="col-md-4"><label class="small fw-bold">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
-                </div><div class="row g-4">
-                    <div class="col-md-6"><label class="small fw-bold text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 300px;" readonly></textarea></div><div class="col-md-6"><label class="small fw-bold text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 300px;" readonly></textarea></div>
-                </div></div>
-                <!-- IDR UPDATE -->
-                <div class="tab-pane fade" id="t-upd"><div class="row g-3 mb-4">
-                    <!-- Placeholder for IDR Update if needed, structured from idr.txt logic if available, else custom logic from previous -->
-                     <div class="col-12 text-center text-muted p-5">IDR Update Section (Not explicitly in idr.txt but kept from previous design)</div>
-                </div></div>
-                <!-- REFUND -->
-                <div class="tab-pane fade" id="t-ref"><div class="row g-4">
-                    <div class="col-md-3"><label class="small fw-bold text-muted mb-2">Date</label><input type="date" class="form-control mb-3 dt-inp" id="rDt"><input type="text" class="form-control mb-3 nm-inp" id="rNm" placeholder="Name"><input type="text" class="form-control mb-3" id="rAmt" placeholder="Amount"><input type="text" class="form-control mb-3" id="rRefDt" placeholder="Ref Date"><input type="text" class="form-control mb-4" id="rDis" placeholder="Dispute #"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genRef()">Generate</button></div>
-                    <div class="col-md-9"><textarea id="rOut" class="form-control h-100" style="min-height: 350px;" readonly></textarea></div>
-                </div></div>
-                <!-- INELIGIBLE -->
-                <div class="tab-pane fade" id="t-inel"><div class="row g-4">
-                    <div class="col-md-3"><label class="small fw-bold text-muted mb-2">Date</label><input type="date" class="form-control mb-3 dt-inp" id="iDt"><input type="text" class="form-control mb-3 nm-inp" id="iNm" placeholder="Name"><input type="text" class="form-control mb-4" id="iDis" placeholder="Dispute #"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genInel()">Generate</button></div>
-                    <div class="col-md-9"><textarea id="iOut" class="form-control h-100" style="min-height: 350px;" readonly></textarea></div>
-                </div></div>
-            </div></div>
-            <div id="copyMsg" class="text-success text-center fw-bold mt-2 small" style="opacity:0;transition:opacity 0.3s; position:fixed; bottom:80px; right:20px; background:white; padding:5px 10px; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:1200;">Copied!</div>
-        </div>
-
-        <footer>
-            <div class="container px-4">
-                <div class="row g-5">
-                    <div class="col-lg-4"><a href="#" class="f-brand text-decoration-none" style="font-size:1.4rem;font-weight:700;color:var(--txt)">Pranto's <span style="color:var(--pri)">Workspace</span></a><p class="small text-muted">Streamlining workflows with precision tools.</p><div class="mt-3"><a href="#" class="s-ico"><i class="bi bi-facebook"></i></a><a href="#" class="s-ico"><i class="bi bi-github"></i></a></div></div>
-                    <div class="col-lg-2 col-6"><h6>Tools</h6><a href="index.html" class="f-lnk">IDR</a><a href="nsa.html" class="f-lnk">NSA</a></div>
-                    <div class="col-lg-4"><h6>Contact</h6><p class="small text-muted mb-1"><i class="bi bi-envelope me-2"></i>prantorodrix9@gmail.com</p></div>
                 </div>
-                <div class="text-center mt-4 pt-3 border-top small text-muted">&copy; 2025 Designed by <span style="font-weight:700;background:linear-gradient(90deg,#6366f1,#ec4899);-webkit-background-clip:text;color:transparent">PrantoRodrix</span></div>
+                <div class="col-lg-6">
+                    <div class="card p-3 h-100">
+                        <label class="small-label text-primary">IDR Reports</label>
+                        <div class="row g-2 mb-2">
+                            <div class="col-4"><textarea class="form-control" id="idr1" rows="2" placeholder="2024+ (1)"></textarea></div>
+                            <div class="col-4"><textarea class="form-control" id="idr2" rows="2" placeholder="2024+ (2)"></textarea></div>
+                            <div class="col-4"><textarea class="form-control" id="idr3" rows="2" placeholder="2024+ (3)"></textarea></div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-4"><textarea class="form-control" id="idr4" rows="2" placeholder="22-23 (1)"></textarea></div>
+                            <div class="col-4"><textarea class="form-control" id="idr5" rows="2" placeholder="22-23 (2)"></textarea></div>
+                            <div class="col-4"><textarea class="form-control" id="idr6" rows="2" placeholder="22-23 (3)"></textarea></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card h-100 p-3">
+                        <h6 class="small-label text-primary border-bottom pb-2 mb-2">EOB Details</h6>
+                        <div id="eob-det"><div class="text-muted small text-center mt-4 opacity-50">No Data</div></div>
+                    </div>
+                </div>
             </div>
-        </footer>
+
+            <!-- TABS AREA -->
+            <div class="card">
+                <div class="p-3 pb-0">
+                    <ul class="nav nav-tabs-glass" id="mT">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-cor">Correspondence</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-ref">Refund</button></li>
+                    </ul>
+                </div>
+                <div class="card-body p-4">
+                    <div class="tab-content">
+                        <!-- CORRESPONDENCE -->
+                        <div class="tab-pane fade show active" id="t-cor">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <button class="btn-neu w-100 justify-content-center text-primary mt-1 mb-3 py-2" onclick="genCor()">
+                                        <i class="bi bi-pencil-square"></i> Generate Note
+                                    </button>
+                                    <div class="mb-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="cDt"></div>
+                                    <div class="mb-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="cNm" placeholder="Corres Name"></div>
+                                    <div class="mb-2"><label class="small-label">Initial</label><input type="text" class="form-control in-inp" id="cIni" placeholder="Corres Init"></div>
+                                    <div id="cAdj" class="mt-3 p-3 bg-light rounded d-none border">
+                                        <h6 class="small-label mb-2 text-primary">Adjustments</h6>
+                                        <div class="d-flex justify-content-between small mb-1"><span>With PT:</span><span id="adj1" class="fw-bold">--</span></div>
+                                        <div class="d-flex justify-content-between small"><span>Without PT:</span><span id="adj2" class="fw-bold">--</span></div>
+                                    </div>
+                                    <div id="cWarn" class="mt-3 text-danger small fw-bold d-none"></div>
+                                </div>
+                                <div class="col-md-9"><textarea id="cOut" class="form-control" style="height: 250px;" readonly placeholder="Generated note will appear here..."></textarea></div>
+                            </div>
+                        </div>
+                        <!-- EMAIL -->
+                        <div class="tab-pane fade" id="t-em">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div>
+                                <div class="col-md-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Email Name"></div>
+                                <div class="col-md-1"><label class="small-label">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Email Init"></div>
+                                <div class="col-md-2"><label class="small-label">Scenario</label><select class="form-select" id="mSc" onchange="togEm()"><option value="ins">Standard</option><option value="pt">High PT</option></select></div>
+                                <div class="col-md-2"><label class="small-label">Manual Addl</label><input type="number" class="form-control" id="mMan" placeholder="Amt" disabled></div>
+                                <div class="col-md-2"><label class="small-label">Type</label><select class="form-select" id="mTyp"><option value="1">1st Email</option><option value="2">2nd Email</option></select></div>
+                                <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genEm()"><i class="bi bi-send-fill"></i></button></div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4"><label class="small-label">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div>
+                                <div class="col-md-4"><label class="small-label">Subject</label><input type="text" class="form-control" id="mSub" readonly></div>
+                                <div class="col-md-4"><label class="small-label">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6"><label class="small-label text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 250px;" readonly></textarea></div>
+                            </div>
+                        </div>
+                        <!-- IDR UPDATE -->
+                        <div class="tab-pane fade" id="t-upd">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="uDt"></div>
+                                <div class="col-md-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="uNm" placeholder="Upd Name"></div>
+                                <div class="col-md-1"><label class="small-label">Init</label><input type="text" class="form-control in-inp" id="uIni" placeholder="Upd Init"></div>
+                                <div class="col-md-2"><label class="small-label">Dispute #</label><input type="text" class="form-control" id="uDis" placeholder="DISP-XXXX"></div>
+                                <div class="col-md-2">
+                                    <label class="small-label">Mediator</label>
+                                    <input type="text" class="form-control" id="uMed" placeholder="Mediator Name" oninput="chkMed()">
+                                    <div id="uMedSugg" class="email-hint d-none" onclick="cpyMed()" title="Click to Copy"><span></span><i class="bi bi-copy"></i></div>
+                                </div>
+                                <div class="col-md-2"><label class="small-label">Type</label><select class="form-select" id="uTyp"><option value="check">Check & Offer</option><option value="pay">Payment Det</option></select></div>
+                                <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genUpd()"><i class="bi bi-send-fill"></i></button></div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3 offset-md-9"><label class="small-label">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
+                                <div class="col-md-12"><label class="small-label">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6"><label class="small-label text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 250px;" readonly></textarea></div>
+                            </div>
+                        </div>
+                        <!-- REFUND -->
+                        <div class="tab-pane fade" id="t-ref">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="small-label">Date</label><input type="date" class="form-control mb-3 dt-inp" id="rDt">
+                                    <input type="text" class="form-control mb-3 nm-inp" id="rNm" placeholder="Name">
+                                    <input type="text" class="form-control mb-3" id="rAmt" placeholder="Amount">
+                                    <input type="text" class="form-control mb-3" id="rRefDt" placeholder="Ref Date">
+                                    <input type="text" class="form-control mb-4" id="rDis" placeholder="Dispute #">
+                                    <button class="btn-neu w-100 justify-content-center text-primary" onclick="genRef()">Generate</button>
+                                </div>
+                                <div class="col-md-9"><textarea id="rOut" class="form-control" style="height: 250px;" readonly></textarea></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="main-footer">
+                <p class="mb-0 fw-bold">Pranto's Note Tool &copy; 2025 | All Rights Reserved</p>
+                <div class="small opacity-75 mt-1">Designed for efficiency & precision</div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<!-- BOTTOM WIDGETS -->
+<div class="widgets-wrapper">
+    <!-- WATCH -->
+    <div class="watch-container">
+        <svg class="watch-svg" viewBox="0 0 120 120">
+            <circle class="watch-circle-bg" cx="60" cy="60" r="54"></circle>
+            <circle class="watch-circle-progress" id="wProg" cx="60" cy="60" r="54"></circle>
+        </svg>
+        <div class="watch-time-box">
+            <div class="wt-hm" id="bdTm">--:--</div>
+            <div class="wt-sec-row">
+                <div class="wt-sec" id="bdSec">00</div>
+                <div class="wt-ampm" id="bdAP">AM</div>
+            </div>
+        </div>
+    </div>
+    <!-- DATE -->
+    <div class="date-container">
+        <div class="dt-day" id="dDay">MON</div>
+        <div class="dt-num" id="dNum">01</div>
+        <div class="dt-mon" id="dMon">JAN</div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+/* DATA & STATE */
 let gD={e:null,i:[]};
-const MED_EMAILS = {"MET":"IDR@met-hcs.com","NATIONAL":"idre@nmrusa.com","NMR":"idre@nmrusa.com","FHAS":"IDRE@fhas.com","PROVIDER":"pri-idre@provider-resources.com","RESOURCE":"pri-idre@provider-resources.com","IMPROVE":"FederalIDRE@improve.health"};
+const MED_EMAILS = {
+    "MET": "IDR@met-hcs.com",
+    "NATIONAL": "idre@nmrusa.com", "NMR": "idre@nmrusa.com",
+    "FHAS": "IDRE@fhas.com",
+    "PROVIDER": "pri-idre@provider-resources.com", "RESOURCE": "pri-idre@provider-resources.com",
+    "IMPROVE": "FederalIDRE@improve.health"
+};
 
+/* PERSISTENCE FIELDS */
+const PERSIST_IDS = ['cNm','cIni','mNm','mIni','uNm','uIni','rNm'];
+
+/* INIT */
 document.addEventListener('DOMContentLoaded',()=>{
-    const st=localStorage.getItem('theme')||'light'; setTheme(st);
-    try{
-        let n=localStorage.getItem('myN'), i=localStorage.getItem('myI');
-        if(n) document.querySelectorAll('.nm-inp').forEach(e=>e.value=n);
-        if(i) document.querySelectorAll('.in-inp').forEach(e=>e.value=i);
-    }catch(e){}
-    iDts(); togEm(); syncF('dt-inp'); syncF('nm-inp'); syncF('in-inp');
-});
+    const sT=localStorage.getItem('theme')||'light';
+    document.documentElement.setAttribute('data-bs-theme',sT);
+    
+    // RESTORE SAVED VALUES
+    PERSIST_IDS.forEach(id => {
+        const val = localStorage.getItem('saved_' + id);
+        if(val) {
+            const el = document.getElementById(id);
+            if(el) el.value = val;
+        }
+    });
 
-document.getElementById('theme-toggle').addEventListener('click',()=>{
-    const t=document.documentElement.getAttribute('data-bs-theme')==='dark'?'light':'dark';
-    setTheme(t);
+    iDts(); lThm(); sWch(); togEm(); 
+    // Listen for inputs to save
+    document.querySelectorAll('.nm-inp, .in-inp').forEach(el => {
+        el.addEventListener('input', (e) => {
+            if(PERSIST_IDS.includes(e.target.id)) {
+                localStorage.setItem('saved_' + e.target.id, e.target.value);
+            }
+        });
+    });
 });
-
-function setTheme(t){
-    document.documentElement.setAttribute('data-bs-theme',t);
-    localStorage.setItem('theme',t);
-    document.getElementById('theme-icon').className = t==='dark'?'bi bi-moon-fill':'bi bi-sun-fill';
-}
 
 function iDts(){const d=new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}),n=new Date(d),s=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;document.querySelectorAll('.dt-inp').forEach(i=>{if(!i.value)i.value=s})}
-function syncF(c){document.querySelectorAll('.'+c).forEach(i=>i.addEventListener('input',e=>{document.querySelectorAll('.'+c).forEach(j=>{if(j!==e.target)j.value=e.target.value})}))}
+
+/* WATCH & DATE */
+function sWch(){
+    const u=()=>{
+        const d=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}));
+        let h=d.getHours(),m=d.getMinutes(),s=d.getSeconds();
+        const am=h>=12?'PM':'AM'; h=h%12||12;
+        
+        // Time
+        document.getElementById('bdTm').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+        document.getElementById('bdSec').textContent=String(s).padStart(2,'0');
+        document.getElementById('bdAP').textContent=am;
+        
+        // Progress Ring
+        const c=339; const off=c-((s+(d.getMilliseconds()/1000))/60)*c;
+        const p=document.getElementById('wProg'); if(p) p.style.strokeDashoffset=off;
+        const hue = (s*6); if(p) p.style.stroke = `hsl(${hue}, 75%, 65%)`;
+
+        // Date
+        const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+        const mons = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+        document.getElementById('dDay').textContent = days[d.getDay()];
+        document.getElementById('dNum').textContent = String(d.getDate()).padStart(2,'0');
+        document.getElementById('dMon').textContent = mons[d.getMonth()];
+    };
+    setInterval(u,100); u();
+}
 
 /* EVENTS */
-document.getElementById('processBtn').addEventListener('click',function(){const b=this,o=b.innerHTML;b.innerHTML='...';setTimeout(()=>{procAll();b.innerHTML=o},300)});
+document.getElementById('processBtn').addEventListener('click',function(){const b=this,o=b.innerHTML;b.innerHTML='<span class="spinner-border spinner-border-sm"></span>';setTimeout(()=>{procAll();b.innerHTML=o},300)});
 document.getElementById('clearBtn').addEventListener('click',()=>{
     document.querySelectorAll('textarea,input[type=number]').forEach(e=>e.value='');
     document.querySelectorAll('input[type=text]').forEach(e=>{
-        // Protect Initial inputs and Name inputs (nm-inp)
-        if(!e.classList.contains('in-inp') && !e.classList.contains('nm-inp') && !e.classList.contains('dt-inp') && e.id!=='mDet') e.value='';
-    });
-    document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5">Paste IDR data & Extract</div>';
-    document.getElementById('eob-bar').classList.remove('visible'); document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';
-    document.getElementById('cAdj').classList.add('d-none'); document.getElementById('cWarn').classList.add('d-none');
-    gD={e:null,i:[]};
-    document.querySelectorAll('.is-invalid').forEach(el=>el.classList.remove('is-invalid'));
-});
-
-// Click to Copy Logic
-function setupCopy(id) {
-     const el = document.getElementById(id);
-     if(!el) return;
-     el.addEventListener('click', function() {
-        if(this.value && !this.value.includes("Extract")) {
-            this.select(); document.execCommand('copy');
-            const m=document.getElementById('copyMsg'); m.style.opacity=1; setTimeout(()=>m.style.opacity=0,2000);
+        // PROTECT SAVED FIELDS & DATES
+        if(PERSIST_IDS.includes(e.id) || e.classList.contains('dt-inp') || e.id==='mDet') {
+            // Do nothing
+        } else {
+            e.value='';
         }
     });
-}
-['cOut','mBod','mNot','rOut','iOut'].forEach(id => setupCopy(id));
+    document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5 opacity-75">Paste & Extract</div>';
+    document.getElementById('eob-bar').classList.remove('visible');
+    document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4 opacity-50">No Data</div>';
+    document.getElementById('cAdj').classList.add('d-none'); document.getElementById('cWarn').classList.add('d-none');
+    document.getElementById('uMedSugg').classList.add('d-none');
+    gD={e:null,i:[]};
+});
 
-
-/* LOGIC */
+/* PARSING LOGIC */
 function procAll(){
-    gD.e=pEOB(document.getElementById('eobUp').value); dEOB(gD.e);
-    const i=[];for(let j=1;j<=6;j++)i.push(document.getElementById('idr'+j).value);
-    gD.i=pIDR(i); dIDR(gD.i); match();
-    if(gD.i.length>0){ if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt; if(gD.i[0].id&&gD.i[0].id!='--')document.getElementById('cNm').focus(); }
+    const eUp = document.getElementById('eobUp'); if(eUp) { gD.e=pEOB(eUp.value); dEOB(gD.e); }
+    const i=[];for(let j=1;j<=6;j++){ const el=document.getElementById('idr'+j); if(el) i.push(el.value); }
+    gD.i=pIDR(i);dIDR(gD.i);match();
+    if(gD.i.length>0){
+        if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt;
+        if(gD.i[0].md){ document.getElementById('uMed').value=gD.i[0].md; chkMed(); }
+        if(gD.i[0].dis && gD.i[0].dis!='--') document.getElementById('uDis').value=gD.i[0].dis; 
+    }
 }
 function pEOB(t){
-    if(!t)return null; const ex=r=>{const m=t.match(r);if(!m)return'$0.00';return t.substring(m.index+m[0].length).split('\n').find(l=>l.trim()&&!l.match(/^[a-zA-Z\s\.\/()-]+:/))?.trim()||'$0.00'},pc=s=>parseFloat(s.replace(/[$,\s]/g,''))||0,gv=r=>t.match(r)?.[2].trim()||'--';
-    let cn=pc(ex(/(Coinsurance Amount|Coinsurance)\s*:?/i)),dd=pc(ex(/(Deductible Amount|Deductible)\s*:?/i)),cp=pc(ex(/(Copay Amount|Copay)\s*:?/i)),pt=cn+dd+cp;if(pt===0)pt=pc(ex(/(Copay\/Deductible Amount|Responsibility)\s*:?/i));
+    if(!t)return null;
+    const ex=r=>{const m=t.match(r);if(!m)return'$0.00';return t.substring(m.index+m[0].length).split('\n').find(l=>l.trim()&&!l.match(/^[a-zA-Z\s\.\/()-]+:/))?.trim()||'$0.00'},pc=s=>parseFloat(s.replace(/[$,\s]/g,''))||0,gv=r=>t.match(r)?.[2].trim()||'--';
+    let cn=pc(ex(/(Coinsurance Amount|Coinsurance)\s*:?/i)),dd=pc(ex(/(Deductible Amount|Deductible)\s*:?/i)),cp=pc(ex(/(Copay Amount|Copay)\s*:?/i));
+    let pt=cn+dd+cp; if(pt===0)pt=pc(ex(/(Copay\/Deductible Amount|Responsibility)\s*:?/i));
     return{tic:gv(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i),clm:gv(/(Claim I?D|Claim No|Claim Number)\s*:?[\s\r\n]+([^\r\n]+)/i),prv:gv(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i),bil:pc(ex(/(Total Bill|Billed Amount)\s*:?/i)),pd:pc(ex(/(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i)),pt,adl:pc(ex(/(Insurance Current Paid Amount|Additional Paid)\s*:?/i)),cn,dd,cp};
 }
 function pIDR(inp){
-    let r=[];inp.forEach(t=>{if(!t.trim())return;const c=t.split(/\t|\s{2,}/);
-        let m=(c.length>18)?{id:1,cl:3,cp:4,in:7,md:8,dt:16,wl:17,ad:18,pm:19}:{id:5,cl:2,cp:3,in:7,md:8,dt:18,wl:19,ad:20,pm:21};
-        r.push({id:c[m.id]?.trim()||'--',cl:c[m.cl]?.trim()||'--',cp:c[m.cp]?.trim()||'--',in:parseFloat(c[m.in]?.replace(/[$,]/g,''))||0,md:c[m.md]?.trim()||'--',wl:c[m.wl]?.trim()||'--',dt:c[m.dt]?.trim(),ad:parseFloat(c[m.ad]?.replace(/[$,]/g,''))||0,pm:c[m.pm]?.trim()});
-    });return r;
+    let r=[];
+    inp.forEach(t=>{
+        if(!t.trim())return;
+        const c=t.split(/\t|\s{2,}/);
+        let idVal='--',ticVal='--',claim='--',cpt='--',initPay=0,med='--',w_l='--',dt='',addl=0,payMethod='';
+        if(c.length > 18) {
+            const c1 = c[1]||'', c5 = c[5]||'';
+            if(c1.includes('DISP')){idVal=c1;ticVal=c5;} else if(c5.includes('DISP')){idVal=c5;ticVal=c1;} else {idVal=c1;ticVal=c5;}
+            claim=c[3]; cpt=c[4]; initPay=parseFloat(c[7]?.replace(/[$,]/g,''))||0; med=c[8]; dt=c[16]; w_l=c[17]; addl=parseFloat(c[18]?.replace(/[$,]/g,''))||0; payMethod=c[19];
+        } else {
+            const c1 = c[1]||'', c5 = c[5]||'';
+            if(c5.includes('DISP')){idVal=c5;ticVal=c1;} else if(c1.includes('DISP')){idVal=c1;ticVal=c5;} else {idVal=c5;ticVal=c1;}
+            claim=c[2]; cpt=c[3]; initPay=parseFloat(c[7]?.replace(/[$,]/g,''))||0; med=c[8]; dt=c[18]; w_l=c[19]; addl=parseFloat(c[20]?.replace(/[$,]/g,''))||0; payMethod=c[21];
+        }
+        r.push({dis:idVal?.trim()||'--',tic:ticVal?.trim()||'--',cl:claim?.trim()||'--',cp:cpt?.trim()||'--',in:initPay,md:med?.trim()||'--',wl:w_l?.trim()||'--',dt:dt?.trim(),ad:addl,pm:payMethod?.trim()});
+    });
+    return r;
 }
+
+/* UI */
+const fmt=n=>'$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2});
 function dEOB(d){
-    if(!d){document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';return}
+    if(!d){document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4 opacity-50">No Data</div>';return}
     document.getElementById('eob-bar').innerHTML=`<span class="text-primary fw-bold">${d.tic}</span> <span class="opacity-50 mx-2">|</span> <span class="fw-bold">${d.clm}</span> <span class="opacity-50 mx-2">|</span> Bill: ${fmt(d.bil)} <span class="opacity-50 mx-2">|</span> Paid: ${fmt(d.pd)} <span class="opacity-50 mx-2">|</span> PT: ${fmt(d.pt)} <span class="opacity-50 mx-2">|</span> <span class="fw-bold" id="eob_a">${fmt(d.adl)}</span>`;
     document.getElementById('eob-bar').classList.add('visible');
     document.getElementById('eob-det').innerHTML=`<div class="idr-item"><span>Coins</span><span class="idr-val">${fmt(d.cn)}</span></div><div class="idr-item"><span>Ded</span><span class="idr-val">${fmt(d.dd)}</span></div><div class="idr-item"><span>Copay</span><span class="idr-val">${fmt(d.cp)}</span></div><div class="idr-item"><span>Addl</span><span class="idr-val" id="eob_da">${fmt(d.adl)}</span></div>`;
@@ -314,47 +487,75 @@ function dEOB(d){
 function dIDR(d){
     const s=document.getElementById('sb-c');s.innerHTML='';
     d.forEach((r,i)=>{
-        const w=r.wl.toLowerCase(),as=(r.pm&&r.pm.length>4)?`<span class="badge bg-success ms-1">Rec</span>`:`<span class="badge bg-secondary ms-1">Wait</span>`,
-        wlHtml=(r.wl==='--'||!r.wl)?`<input type="text" class="ed-inp wl-inp" placeholder="w/l/c" oninput="hWL(this,${i})">`:`<span class="idr-val fw-bold" data-wl="${w}">${r.wl}</span>`,
-        dis=(w.includes('lose')&&!w.includes('close'));
-        s.innerHTML+=`<div class="card shadow-sm border-0 idr-card"><div class="fw-bold text-primary border-bottom pb-1 mb-1 d-flex justify-content-between"><span>Result ${i+1}</span><span class="badge bg-light text-dark border">${r.id}</span></div><div class="idr-item"><span>Mediator</span><span class="idr-val text-truncate" title="${r.md}">${r.md}</span></div><div class="idr-item"><span>Claim</span><span class="idr-val">${r.cl}</span></div><div class="idr-item"><span>W/L</span>${wlHtml}</div><div class="idr-item"><span>Addl</span><span class="idr-val" data-val="${r.ad}">${fmt(r.ad)}${as}</span></div><div class="idr-item mt-1"><span>Refund</span><input type="text" class="ed-inp ref-inp" placeholder="${dis?'Disabled':'w/r'}" oninput="hRef(this,${i})" ${dis?'disabled':''} data-row="${i}"></div></div>`;
+        const w=r.wl.toLowerCase();
+        let as=(r.pm&&r.pm.length>4)?`<span class="badge bg-success ms-1">Received</span>`:`<span class="badge bg-secondary ms-1">Waiting</span>`;
+        let wlHtml=(r.wl==='--'||!r.wl)?`<input type="text" class="ed-inp wl-inp" placeholder="w/l/c" oninput="hWL(this,${i})">`:`<span class="idr-val fw-bold" data-wl="${w}">${r.wl}</span>`;
+        const disableRefund = (w.includes('lose') && !w.includes('close'));
+        s.innerHTML+=`<div class="card shadow-sm border-0 idr-card"><div class="fw-bold text-primary border-bottom pb-1 mb-1 d-flex justify-content-between align-items-center"><span>Result ${i+1}</span></div><div class="idr-item"><span>Ticket</span><span class="idr-val text-dark">${r.tic}</span></div><div class="idr-item"><span>Dispute</span><span class="idr-val badge bg-light text-dark border p-1">${r.dis}</span></div><div class="idr-item"><span>Mediator</span><span class="idr-val text-truncate" title="${r.md}">${r.md}</span></div><div class="idr-item"><span>Claim</span><span class="idr-val">${r.cl}</span></div><div class="idr-item"><span>W/L</span>${wlHtml}</div><div class="idr-item"><span>Addl</span><span class="idr-val" data-val="${r.ad}">${fmt(r.ad)}${as}</span></div><div class="idr-item mt-1"><span>Refund</span><input type="text" class="ed-inp ref-inp" placeholder="${disableRefund?'Disabled':'w/r'}" oninput="hRef(this,${i})" ${disableRefund?'disabled':''} data-row="${i}"></div></div>`;
         gD.i[i].refSt=''; if(!r.wl)gD.i[i].wl='';
     });
 }
-function match(){if(!gD.e)return; const ea=gD.e.adl,ir=gD.i;if(!ir.length)return;let tot=0;ir.forEach(r=>tot+=r.ad);const e1=document.getElementById('eob_a'),e2=document.getElementById('eob_da');[e1,e2].forEach(e=>{if(e){e.classList.remove('bg-match','bg-mismatch','bg-overpaid');if(ea>0||tot>0){if(Math.abs(ea-tot)<0.01)e.classList.add('bg-match');else if(ea>tot)e.classList.add('bg-overpaid');else e.classList.add('bg-mismatch');}}});}
-const fmt=n=>'$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2});
-const fDt=v=>{if(!v)return'MM/DD/YY';const[y,m,d]=v.split('-');return`${m}/${d}/${y.slice(-2)}`;}
-function ani(e,t){e.value='';const w=t.split(' ');let i=0;if(e.tm)clearInterval(e.tm);e.tm=setInterval(()=>{if(i<w.length){e.value+=(i>0?' ':'')+w[i];e.scrollTop=e.scrollHeight;i++}else clearInterval(e.tm)},5);}
+function match(){
+    if(!gD.e)return; const ea=gD.e.adl,ir=gD.i;if(!ir.length)return;
+    let tot=0;ir.forEach(r=>tot+=r.ad);const e1=document.getElementById('eob_a'),e2=document.getElementById('eob_da');
+    [e1,e2].forEach(e=>{if(e){e.classList.remove('bg-match','bg-mismatch','bg-overpaid');if(ea>0||tot>0){if(Math.abs(ea-tot)<0.01)e.classList.add('bg-match');else if(ea>tot)e.classList.add('bg-overpaid');else e.classList.add('bg-mismatch');}}});
+}
 function hRef(i,x){let v=i.value.toLowerCase();if(v==='w')v='Waiting';if(v==='r')v='Received';i.value=v;gD.i[x].refSt=v;}
-function hWL(i,x){let v=i.value.toLowerCase();if(v==='w')v='Win';if(v==='l')v='Lose';if(v==='c')v='Closed';i.value=v;gD.i[x].wl=v;const dis=(v.includes('lose')&&!v.includes('close')),ri=i.closest('.card').querySelector('.ref-inp');ri.disabled=dis;if(dis)ri.value='';}
-function rInp(){document.querySelectorAll('input').forEach(x=>x.addEventListener('input',e=>{if(e.target.classList.contains('in-inp'))localStorage.setItem('myI',e.target.value);if(e.target.classList.contains('nm-inp'))localStorage.setItem('myN',e.target.value)}))}
+function hWL(i,x){
+    let v=i.value.toLowerCase();
+    if(v==='w')v='Win';if(v==='l')v='Lose';if(v==='c')v='Closed';i.value=v;gD.i[x].wl=v;
+    const isClosed=v.includes('close'), isLose=v.includes('lose') && !isClosed;
+    const ri=i.closest('.card').querySelector('.ref-inp'); if(ri){ ri.disabled=isLose; if(isLose)ri.value=''; }
+}
+
+/* MEDIATOR EMAIL LOGIC */
+function chkMed(){
+    const v=document.getElementById('uMed').value.toUpperCase(), sugg=document.getElementById('uMedSugg'); let found=null;
+    for (const [key, email] of Object.entries(MED_EMAILS)) { if(v.includes(key)){ found = email; break; } }
+    if(found){ sugg.querySelector('span').innerText=found; sugg.classList.remove('d-none'); } else { sugg.classList.add('d-none'); }
+}
+function cpyMed(){
+    const t=document.getElementById('uMedSugg').querySelector('span').innerText;
+    navigator.clipboard.writeText(t);
+    const i=document.getElementById('uMedSugg').querySelector('i');
+    i.classList.remove('bi-copy'); i.classList.add('bi-check-lg');
+    setTimeout(()=>{ i.classList.remove('bi-check-lg'); i.classList.add('bi-copy'); }, 1000);
+}
 
 /* GENERATORS */
+const norm=s=>(s||'').toUpperCase().split('X')[0];
+function fDt(v){if(!v)return'MM/DD/YY';const[y,m,d]=v.split('-');return`${m}/${d}/${y.slice(-2)}`;}
+function ani(e,t){e.value='';const w=t.split(' ');let i=0;if(e.tm)clearInterval(e.tm);e.tm=setInterval(()=>{if(i<w.length){e.value+=(i>0?' ':'')+w[i];e.scrollTop=e.scrollHeight;i++}else clearInterval(e.tm)},5);}
+
 function genCor(){
-    const nm=document.getElementById('cNm').value.toUpperCase();if(!nm)return;
-    const d=gD,dt=fDt(document.getElementById('cDt').value),ini=document.getElementById('cIni').value.toUpperCase();
-    if(!d.i.length)return; const eb=d.e||{},ir=d.i[0]||{};
-    let adn=true; d.i.forEach(r=>{const w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';if(w.includes('win')){if(ad=='w'||rf=='w'||!rf)adn=false}else if(w.includes('close')){if(rf=='w')adn=false}else if(w.includes('lose')&&!w.includes('close')){if(ad=='w')adn=false}else adn=false});
-    let sIni=ini; if(!sIni){if(d.i.length>1)sIni=adn?'FINAL REVIEW':'IDR FOLLOW UP';else{const r=d.i[0],w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';if(w.includes('win')){sIni=(ad=='r'&&rf=='r')?'FINAL REVIEW':'IDR WIN'}else if(w.includes('close')){sIni=(rf=='w')?'IDR FOLLOW UP':'FINAL REVIEW'}else if(w.includes('lose')){sIni=(ad=='r')?'FINAL REVIEW':'IDR LOSE'}else sIni='IDR FOLLOW UP'}}
-    let n=`${dt}>${sIni}>${nm}>WORKING ON TRACKING SHEET. CLAIM: ${eb.clm||ir.cl||'--'}; TOTAL BILL ${fmt(eb.bil)}, INS PAID ${fmt(eb.pd)}, PT RESP ${fmt(eb.pt)}. NEGOTIATION AND IDR DONE. `;
-    d.i.forEach(r=>{const w=r.wl.toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';n+=`${r.id}: IDR SUBMITTED ON CPT ${r.cp}. STATUS IS ${r.wl}. `;if((w.includes('win')||w.includes('lose'))&&!w.includes('close')){n+=`ADDITIONAL ${fmt(r.ad)}. ${ad=='r'?'WE RECEIVED ADDITIONAL PAYMENT':'WE ARE WAITING FOR ADDITIONAL PAYMENT'}. `;}if((w.includes('win')||w.includes('close'))&&r.refSt)n+=`${r.refSt.toLowerCase()=='received'?'WE RECEIVED FEE REFUND':'WE ARE WAITING FOR FEE REFUND'}. `;});
-    if(sIni==='FINAL REVIEW'){n+="NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";if(eb.bil){document.getElementById('adj1').innerText=fmt(eb.bil-(eb.pd+eb.pt));document.getElementById('adj2').innerText=fmt(eb.bil-eb.pd);document.getElementById('cAdj').classList.remove('d-none')}}else n+="WAITING TO COMPLETE PROCESS.";
+    const e=document.getElementById('cNm');e.classList.remove('is-invalid');document.getElementById('cAdj').classList.add('d-none');document.getElementById('cWarn').classList.add('d-none');
+    const nm=e.value.toUpperCase();if(!nm){e.classList.add('is-invalid');return;}
+    const d=gD,dt=fDt(document.getElementById('cDt').value);let ini=document.getElementById('cIni').value.toUpperCase();
+    if(!d.i.length){document.getElementById('cOut').value="ERROR: No IDR Data";return;}const eb=d.e||{},ir=d.i[0]||{};
+    if(d.i.length>1){const c1=d.i[0].cl,c2=d.i[1].cl;if(norm(c1)!==norm(c2)||(d.e&&norm(d.e.clm)!==norm(c1))){const cw=document.getElementById('cWarn');if(cw){cw.innerText="Claim mismatch";cw.classList.remove('d-none');}}}
+    if(!ini){
+        let adn=true; d.i.forEach(r=>{const w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';
+        if(w.includes('win')){if(ad==='waiting'||rf==='waiting'||rf==='')adn=false}else if(w.includes('close')){if(rf==='waiting')adn=false}else if(w.includes('lose') && !w.includes('close')){if(ad==='waiting')adn=false}else adn=false});
+        if(d.i.length>1) ini=adn?'FINAL REVIEW':'IDR FOLLOW UP';
+        else{const r=d.i[0],w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';
+        if(w.includes('win')){if(rf===''){document.getElementById('cOut').value="Error: Refund Required for WIN";return}ini=(ad==='received'&&rf==='received')?'FINAL REVIEW':'IDR WIN'}
+        else if(w.includes('close')){ ini=(rf==='waiting')?'IDR FOLLOW UP':'FINAL REVIEW'; } else if(w.includes('lose')){ ini=(ad==='received')?'FINAL REVIEW':'IDR LOSE'; } else ini='IDR FOLLOW UP';}
+    }
+    let n=`${dt}>${ini}>${nm}>WORKING ON TRACKING SHEET. CLAIM: ${eb.clm||ir.cl||'--'}; TOTAL BILL ${fmt(eb.bil)}, INS PAID ${fmt(eb.pd)}, PT RESP ${fmt(eb.pt)}. NEGOTIATION AND IDR DONE. `;
+    d.i.forEach(r=>{const w=r.wl.toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';n+=`${r.dis} (${r.md}): IDR SUBMITTED ON CPT ${r.cp}. STATUS IS ${r.wl}. `;if((w.includes('win')||w.includes('lose'))&&!w.includes('close')){n+=`ADDITIONAL ${fmt(r.ad)}. ${ad==='received'?'WE RECEIVED ADDITIONAL PAYMENT':'WE ARE WAITING FOR ADDITIONAL PAYMENT'}. `;}if((w.includes('win')||w.includes('close'))&&r.refSt)n+=`${r.refSt.toLowerCase()==='received'?'WE RECEIVED FEE REFUND':'WE ARE WAITING FOR FEE REFUND'}. `;});
+    if(ini==='FINAL REVIEW'){n+="NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";if(eb.bil){document.getElementById('adj1').innerText=fmt(eb.bil-(eb.pd+eb.pt));document.getElementById('adj2').innerText=fmt(eb.bil-eb.pd);document.getElementById('cAdj').classList.remove('d-none')}}else n+="WAITING TO COMPLETE PROCESS.";
     ani(document.getElementById('cOut'),n);
 }
+
 function togEm(){const s=document.getElementById('mSc').value,m=document.getElementById('mMan');m.disabled=(s!=='pt');if(s!=='pt')m.value='';document.getElementById('mCC').value=(s==='pt')?'mislam@roundtmc.com, razo@leverngear.com, sufia@leverngear.com':'mislam@roundtmc.com, razo@leverngear.com';}
-function genEm(){
-    const v=['mNm','mIni','mTyp','mDet'];let ok=true;v.forEach(x=>{if(!document.getElementById(x).value.trim())ok=false});if(!ok)return;
-    const d=gD,dt=fDt(document.getElementById('mDt').value),nm=document.getElementById('mNm').value,ini=document.getElementById('mIni').value,sc=document.getElementById('mSc').value,mn=parseFloat(document.getElementById('mMan').value),det=document.getElementById('mDet').value;
-    if(!d.i.length){document.getElementById('mBod').value="ERROR: No IDR Data";return}
-    const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);
-    let sub,bod,nt=(document.getElementById('mTyp').value=='1')?'1ST':'2ND';
-    if(sc==='pt'){sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.id}]`;bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.id} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nThe Federal Manuals state verbatim:\n“NOTE: This determination of the OON rate does not change the participant’s, beneficiary’s, or enrollee’s cost sharing, which is based on the recognized amount, or, in the case of air ambulance services, the lower of the QPA or billed charges.”\n\nSources: Federal Independent Dispute Resolution (IDR) Process Guidance for Disputing Parties Manual March 2023, pg 27, October 2022, pg 29, April 2022, pg 27 and Federal Independent Dispute Resolution (IDR) Process Guidance for Certified IDR Entities Manual March 2023, pg 25, October 2022, pg 26, April 2022, pg 25\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;nt+=' HIGH PT EMAIL';}
-    else{sub=`Urgent Request for Claim Reprocessing as per IDR Determination - ${i.id} - Claim: ${clm}`+(nt=='2ND'?' (2nd Email)':'');bod=`Dear BCBS,\n\nWe are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).\nOn ${det}, ${i.md} —the certified IDR entity—issued a final, legally binding determination in favor of , ${e.prv||'PROVIDER'} regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of ${fmt(i.in+i.ad)} for service code ${i.cp||'--'}. as offered by ${e.prv||'PROVIDER'} as the appropriate rate for this claim.\nAccording to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.\n\nRequest for Payment:\nPlease remit the outstanding balance, calculated as follows:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\nThis request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance\nIf you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.\n\nAs per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.\n\nFor your reference we have attached the primary EOB and IDR determination.\n\n\nThank You\nRegards\n---------------\n${nm}`;nt+=' FOLLOW UP EMAIL';}
-    document.getElementById('mSub').value=sub; ani(document.getElementById('mBod'),bod);
-    ani(document.getElementById('mNot'),`${dt}>IDR FOLLOW UP>${ini}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${clm}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${fmt(i.ad)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${i.id}, BY ${i.md.toUpperCase()} DATED ${det}. FOR BCBS ATTENTION, WE SENT ${nt} TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`);
-}
+function genEm(){const v=['mNm','mIni','mTyp','mDet'];let ok=true;v.forEach(x=>{const e=document.getElementById(x);e.classList.remove('is-invalid');if(!e.value.trim()){e.classList.add('is-invalid');ok=false}});if(!ok)return;const d=gD,dt=fDt(document.getElementById('mDt').value),nm=document.getElementById('mNm').value,ini=document.getElementById('mIni').value,typ=document.getElementById('mTyp').value,sc=document.getElementById('mSc').value,mn=parseFloat(document.getElementById('mMan').value),det=document.getElementById('mDet').value;if(!d.i.length){document.getElementById('mBod').value="ERROR: No IDR Data";return}const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);let sub='',bod='',nt=(typ=='1')?'1ST':'2ND';if(sc==='pt'){if(isNaN(mn)){document.getElementById('mBod').value="Error: Manual Addl Req";return}sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.dis}]`;bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.dis} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nThe Federal Manuals state verbatim:\n“NOTE: This determination of the OON rate does not change the participant’s, beneficiary’s, or enrollee’s cost sharing, which is based on the recognized amount, or, in the case of air ambulance services, the lower of the QPA or billed charges.”\n\nSources: Federal Independent Dispute Resolution (IDR) Process Guidance for Disputing Parties Manual March 2023, pg 27, October 2022, pg 29, April 2022, pg 27 and Federal Independent Dispute Resolution (IDR) Process Guidance for Certified IDR Entities Manual March 2023, pg 25, October 2022, pg 26, April 2022, pg 25\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;nt+=' HIGH PT EMAIL';}else{sub=`Urgent Request for Claim Reprocessing as per IDR Determination - ${i.dis} - Claim: ${clm}`+(typ=='2'?' (2nd Email)':'');bod=`Dear BCBS,\n\nWe are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).\nOn ${det}, ${i.md} —the certified IDR entity—issued a final, legally binding determination in favor of , ${e.prv||'PROVIDER'} regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of ${fmt(i.in+i.ad)} for service code ${i.cp||'--'}. as offered by ${e.prv||'PROVIDER'} as the appropriate rate for this claim.\nAccording to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.\n\nRequest for Payment:\nPlease remit the outstanding balance, calculated as follows:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\nThis request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance\nIf you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.\n\nAs per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.\n\nFor your reference we have attached the primary EOB and IDR determination.\n\n\nThank You\nRegards\n---------------\n${nm}`;nt+=' FOLLOW UP EMAIL';}document.getElementById('mSub').value=sub;ani(document.getElementById('mBod'),bod);ani(document.getElementById('mNot'),`${dt}>IDR FOLLOW UP>${ini}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${clm}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${fmt(i.ad)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${i.dis}, BY ${i.md.toUpperCase()} DATED ${det}. FOR BCBS ATTENTION, WE SENT ${nt} TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`);}
+
+function genUpd(){const ids=['uNm','uIni','uDis','uMed'];let ok=true; ids.forEach(i=>{const e=document.getElementById(i); e.classList.remove('is-invalid'); if(!e.value.trim()){e.classList.add('is-invalid');ok=false}});if(!ok) return;const dt=fDt(document.getElementById('uDt').value),nm=document.getElementById('uNm').value,ini=document.getElementById('uIni').value.toUpperCase(),dis=document.getElementById('uDis').value,med=document.getElementById('uMed').value,typ=document.getElementById('uTyp').value,fol=document.getElementById('uFol').value;const is2nd=(fol==='2'); let sub, bod, not; const followUpText=is2nd?"2ND":"1ST"; const subFollowUp=is2nd?" (2nd follow up)":"";if(typ==='check') {sub=`Update on IDR dispute – ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request an update status of ${dis}. It has been 60 days since we have received confirmation from CMS that ${med} is the Mediator for this dispute.\nWe have not yet received any acknowledgement from ${med} regarding this matter.\n\nWe are kindly requesting that you provide a status update at your earliest convenience.\n\nThanks!.\n--------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN 60 DAYS SINCE WE HAVE RECEIVED CONFIRMATION THAT THE MEDIATOR IS SELECTED FROM CMS FOR THIS DISPUTE. WE HAVE NOT YET RECEIVED ANY ACKNOWLEDGEMENT FROM THE MEDIATOR REGARDING THIS MATTER. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE UPDATE IDR STATUS.`;} else {sub=`Request for Payment Determination ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request the final determination for ${dis}. It\nhas been over 60 days since we submitted our offer letter and\nmediation fee. Please kindly provide a written determination at your\nearliest convenience.\n\nThanks!\n-----------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN OVER 60 DAYS SINCE WE SUBMITTED OUR OFFER LETTER AND MEDIATION FEE. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE PAYMENT DETERMINATION.`;}document.getElementById('uSub').value=sub; ani(document.getElementById('uBod'),bod); ani(document.getElementById('uNot'),not);}
+
 function genRef(){const dt=fDt(document.getElementById('rDt').value),nm=document.getElementById('rNm').value.toUpperCase();ani(document.getElementById('rOut'),`${dt}>IDR WIN>${nm}>WORKING ON MEDIATION REFUND. RECEIVED REFUND OF ${document.getElementById('rAmt').value} DATED ${document.getElementById('rRefDt').value} FOR ${document.getElementById('rDis').value}. WAITING FOR ADDITIONAL PAYMENT.`)}
-function genInel(){const dt=fDt(document.getElementById('iDt').value),nm=document.getElementById('iNm').value.toUpperCase();ani(document.getElementById('iOut'),`${dt}>FINAL REVIEW>${nm}>WORKING ON TRACKING SHEET. ${document.getElementById('iDis').value}: STATUS IS CLOSED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.`)}
+
+function lThm(){document.getElementById('theme-toggle').addEventListener('click',()=>{const h=document.documentElement,c=h.getAttribute('data-bs-theme'),n=c==='light'?'dark':'light';h.setAttribute('data-bs-theme',n);localStorage.setItem('theme',n)})}
+document.querySelectorAll('textarea[readonly],input[readonly]').forEach(e=>e.addEventListener('click',function(){if(this.value)this.select(),document.execCommand('copy')}));
 </script>
 </body>
 </html>
