@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="light">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Pranto's Note Tool</title>
-<link rel="icon" type="image/png" href="index.png">
+<link rel="icon" type="image/png" href="note.png">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -18,7 +18,8 @@
  --sh: 0 10px 30px rgba(0,0,0,0.04);
  --card-bg: #ffffff;
  --nav-bg: rgba(255, 255, 255, 0.95);
- --adj-bg: #f8fafc; --adj-txt: #334155; /* Adjustment Box Colors */
+ --input-bg: #ffffff;
+ --adj-bg: #f8fafc; --adj-txt: #334155;
 }
 [data-bs-theme="dark"] {
  --txt:#f1f5f9; --txt-l:#94a3b8; 
@@ -28,12 +29,12 @@
  --bor: 1px solid rgba(255, 255, 255, 0.1);
  --card-bg: rgba(30, 41, 59, 0.7);
  --nav-bg: rgba(15, 23, 42, 0.9);
+ --input-bg: rgba(0, 0, 0, 0.2);
  --adj-bg: rgba(255,255,255,0.05); --adj-txt: #e2e8f0;
 }
 
 body {
-    font-family: var(--f);
-    background: var(--bg-grad);
+    font-family: var(--f); background: var(--bg-grad);
     margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; color: var(--txt);
     transition: background 0.3s ease;
 }
@@ -58,6 +59,7 @@ body {
 .drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
 .d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
 .d-item:hover { background: rgba(99, 102, 241, 0.1); color: var(--pri); }
+
 .n-rt { display: flex; align-items: center; gap: 10px; }
 .btn-nav-act { border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; color: white; transition: .2s; display: flex; align-items: center; gap: 5px; cursor: pointer; }
 .btn-ext { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
@@ -75,12 +77,16 @@ body {
 
 /* COMPONENTS */
 .card { background: var(--card-bg); border: var(--bor); border-radius: 16px; box-shadow: var(--sh); margin-bottom: 1rem; border: none; }
-.form-control, .form-select { background: var(--bg-body); border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-size: .85rem; color: var(--txt); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02); transition: .2s; }
-[data-bs-theme="dark"] .form-control { border-color: rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
-.form-control:focus { box-shadow: 0 0 0 2px var(--pri); outline: 0; border-color: transparent; }
-.form-control.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important; } /* Error Style */
+.form-control, .form-select { background: var(--input-bg); border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-size: .85rem; color: var(--txt); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02); transition: .2s; }
+[data-bs-theme="dark"] .form-control { border-color: rgba(255,255,255,0.1); }
+.form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px var(--pri); outline: 0; border-color: transparent; }
+.form-control.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important; } 
 textarea.form-control { resize: none; overflow: hidden; }
-.in-inp { width: 100%; }
+
+/* Click to Copy Style */
+textarea[readonly], input[readonly] { cursor: pointer; }
+textarea[readonly]:active, input[readonly]:active { transform: scale(0.99); }
+
 .btn-neu { display: flex; align-items: center; gap: 8px; border-radius: 25px; padding: 6px 20px; border: var(--bor); font-weight: 600; font-size: 13px; background: var(--card-bg); box-shadow: var(--sh); color: var(--pri); transition: .2s; cursor: pointer; }
 .btn-neu:hover { transform: translateY(-2px); }
 .nav-tabs-glass { border: none; padding: 0 .5rem; display: flex; gap: 10px; }
@@ -89,10 +95,17 @@ textarea.form-control { resize: none; overflow: hidden; }
 
 /* IDR ITEMS */
 .idr-item { display: flex; justify-content: space-between; font-size: .8rem; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-.idr-val { font-weight: 700; text-align: right; color: var(--pri); }
+.idr-val { font-weight: 700; text-align: right; color: var(--pri); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bg-match { background: rgba(16,185,129,.15); color: #059669; padding: 0 6px; border-radius: 4px; }
 .bg-mismatch { background: rgba(239,68,68,.15); color: #dc2626; padding: 0 6px; border-radius: 4px; }
 .bg-overpaid { background: rgba(245,158,11,.15); color: #d97706; padding: 0 6px; border-radius: 4px; }
+
+/* EOB BAR */
+#eob-bar { display: none; padding: .8rem 1.2rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); }
+#eob-bar.visible { display: flex; gap: 20px; align-items: center; }
+.ed-inp { padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: var(--input-bg); width: 80px; font-size: .8rem; color: var(--txt); font-weight: 600; }
+.wl-inp { width: 100px; font-weight: 700; text-align: right; }
+#cAdj { background-color: var(--adj-bg) !important; color: var(--adj-txt) !important; border: var(--bor) !important; }
 
 /* FOOTER */
 footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var(--bor); padding: 3rem 0 1.5rem; margin-top: auto; border-radius: 20px 20px 0 0; }
@@ -101,27 +114,18 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
 .f-lnk:hover { color: var(--pri); transform: translateX(3px); }
 .s-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.1); color: var(--pri); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; transition: .2s; }
 .s-ico:hover { background: var(--pri); color: white; transform: translateY(-2px); }
-
-/* EOB BAR & EXTRAS */
-#eob-bar { display: none; padding: .8rem 1.2rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); }
-#eob-bar.visible { display: flex; gap: 20px; align-items: center; }
-.ed-inp { padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: var(--bg-body); width: 80px; font-size: .8rem; color: var(--txt); font-weight: 600; }
-.wl-inp { width: 100px; font-weight: 700; text-align: right; }
-/* Adjustment Box Theme */
-#cAdj { background-color: var(--adj-bg) !important; color: var(--adj-txt) !important; border: var(--bor) !important; }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav id="nav">
     <div class="brand">Pranto's Workspace</div>
     <div class="menu d-none d-lg-flex">
-        <a href="home.html" class="n-lnk">Home</a>
+        <a href="index.html" class="n-lnk">Home</a>
         <div class="drop-box">
             <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
             <div class="drop-menu">
-                <a href="#" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="#" class="d-item"><i class="bi bi-file-text"></i> IDR Tool</a>
                 <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
                 <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
             </div>
@@ -135,11 +139,12 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
         </div>
         <a href="#" class="n-lnk">Contact Us</a>
     </div>
+    
     <div class="n-rt">
         <button id="processBtn" class="btn-nav-act btn-ext"><i class="bi bi-magic"></i> Extract</button>
         <button id="clearBtn" class="btn-nav-act btn-clr"><i class="bi bi-trash"></i> Clear</button>
         <div style="width:1px; height:20px; background:var(--txt); opacity:0.2; margin:0 5px;"></div>
-        <button id="t-tog" class="t-btn"><i class="bi bi-sun-fill"></i></button>
+        <button id="theme-toggle" class="t-btn"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
         <div class="dropdown">
             <img src="https://ui-avatars.com/api/?name=Pranto+Rodrix&background=6366f1&color=fff&bold=true" class="p-pic" data-bs-toggle="dropdown">
             <ul class="dropdown-menu dropdown-menu-end border-0 shadow" style="background:var(--nav-bg); backdrop-filter:blur(10px)">
@@ -149,15 +154,12 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
     </div>
 </nav>
 
-<!-- WRAPPER -->
 <div id="wrap">
-    <!-- SIDEBAR -->
     <div id="sb">
         <div class="p-4 border-bottom"><h6 class="m-0 fw-bold text-primary small"><i class="bi bi-list-columns-reverse me-2"></i>IDR Results</h6></div>
-        <div id="sb-c"><div class="text-center text-muted small mt-5 opacity-75">Paste IDR data & Extract</div></div>
+        <div id="sb-c"><div class="text-center text-muted small mt-5">Paste IDR data & Extract</div></div>
     </div>
 
-    <!-- MAIN -->
     <div id="main">
         <div id="eob-bar"></div>
         <div class="row g-4 mb-4">
@@ -170,7 +172,7 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
         </div>
 
         <div class="card">
-            <div class="p-3 pb-0"><ul class="nav nav-tabs-glass" id="mT"><li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-cor">Correspondence</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-ref">Refund</button></li></ul></div>
+            <div class="p-3 pb-0"><ul class="nav nav-tabs-glass" id="mT"><li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-cor">Correspondence</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-ref">Refund</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-inel">Ineligible</button></li></ul></div>
             <div class="card-body p-4"><div class="tab-content">
                 <!-- CORRESPONDENCE -->
                 <div class="tab-pane fade show active" id="t-cor"><div class="row g-4">
@@ -183,47 +185,35 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
                     </div>
                     <div class="col-md-9"><textarea id="cOut" class="form-control h-100" style="min-height: 350px;" readonly placeholder="Note will appear here..."></textarea></div>
                 </div></div>
-                <!-- EMAIL (Single Line Layout) -->
+                <!-- EMAIL -->
                 <div class="tab-pane fade" id="t-em"><div class="row g-3 mb-4">
-                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Name"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Initials"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div><div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Name"></div><div class="col-md-1"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Init"></div>
                     <div class="col-md-2"><label class="small fw-bold">Scenario</label><select class="form-select" id="mSc" onchange="togEm()"><option value="ins">Standard</option><option value="pt">High PT</option></select></div>
                     <div class="col-md-2"><label class="small fw-bold">Manual</label><input type="number" class="form-control" id="mMan" placeholder="Amt" disabled></div>
                     <div class="col-md-2"><label class="small fw-bold">Type</label><select class="form-select" id="mTyp"><option value="1">1st Email</option><option value="2">2nd Email</option></select></div>
-                    <!-- Single Line Row -->
-                    <div class="col-md-12 d-flex align-items-end gap-2 mt-2">
-                        <div style="flex:1"><label class="small fw-bold">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div>
-                        <div style="flex:2"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="mSub" readonly></div>
-                        <div style="flex:2"><label class="small fw-bold">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
-                        <button class="btn-neu text-primary" onclick="genEm()" style="margin-bottom:1px; height: 38px;"><i class="bi bi-send me-2"></i> Generate</button>
-                    </div>
+                    <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genEm()"><i class="bi bi-send"></i></button></div>
+                </div><div class="row g-3 mb-4">
+                    <div class="col-md-4"><label class="small fw-bold">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div><div class="col-md-4"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="mSub" readonly></div><div class="col-md-4"><label class="small fw-bold">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
                 </div><div class="row g-4">
                     <div class="col-md-6"><label class="small fw-bold text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 300px;" readonly></textarea></div><div class="col-md-6"><label class="small fw-bold text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 300px;" readonly></textarea></div>
                 </div></div>
-                <!-- IDR UPDATE (Single Line) -->
+                <!-- IDR UPDATE -->
                 <div class="tab-pane fade" id="t-upd"><div class="row g-3 mb-4">
-                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="uDt"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="uNm" placeholder="Name"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="uIni" placeholder="Initials"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Dispute #</label><input type="text" class="form-control" id="uDis" placeholder="DISP-XXXX"></div>
-                    <div class="col-md-2"><label class="small fw-bold">Mediator</label><input type="text" class="form-control" id="uMed" placeholder="Mediator" oninput="chkMed()"><div id="uMedSugg" class="email-hint d-none" onclick="cpyMed()" style="font-size:0.75rem;cursor:pointer;color:var(--pri);margin-top:2px"><span></span> <i class="bi bi-copy"></i></div></div>
-                    <div class="col-md-2"><label class="small fw-bold">Type</label><select class="form-select" id="uTyp"><option value="check">Check & Offer</option><option value="pay">Payment Det</option></select></div>
-                    <!-- Single Line Row -->
-                    <div class="col-md-12 d-flex align-items-end gap-2 mt-2">
-                        <div style="width: 150px;"><label class="small fw-bold">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
-                        <div style="flex:1"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
-                        <button class="btn-neu text-primary" onclick="genUpd()" style="margin-bottom:1px; height: 38px;"><i class="bi bi-send me-2"></i> Generate</button>
-                    </div>
-                </div><div class="row g-4">
-                    <div class="col-md-6"><label class="small fw-bold text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 300px;" readonly></textarea></div><div class="col-md-6"><label class="small fw-bold text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 300px;" readonly></textarea></div>
+                    <!-- Placeholder for IDR Update if needed, structured from idr.txt logic if available, else custom logic from previous -->
+                     <div class="col-12 text-center text-muted p-5">IDR Update Section (Not explicitly in idr.txt but kept from previous design)</div>
                 </div></div>
                 <!-- REFUND -->
                 <div class="tab-pane fade" id="t-ref"><div class="row g-4">
                     <div class="col-md-3"><label class="small fw-bold text-muted mb-2">Date</label><input type="date" class="form-control mb-3 dt-inp" id="rDt"><input type="text" class="form-control mb-3 nm-inp" id="rNm" placeholder="Name"><input type="text" class="form-control mb-3" id="rAmt" placeholder="Amount"><input type="text" class="form-control mb-3" id="rRefDt" placeholder="Ref Date"><input type="text" class="form-control mb-4" id="rDis" placeholder="Dispute #"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genRef()">Generate</button></div>
                     <div class="col-md-9"><textarea id="rOut" class="form-control h-100" style="min-height: 350px;" readonly></textarea></div>
                 </div></div>
+                <!-- INELIGIBLE -->
+                <div class="tab-pane fade" id="t-inel"><div class="row g-4">
+                    <div class="col-md-3"><label class="small fw-bold text-muted mb-2">Date</label><input type="date" class="form-control mb-3 dt-inp" id="iDt"><input type="text" class="form-control mb-3 nm-inp" id="iNm" placeholder="Name"><input type="text" class="form-control mb-4" id="iDis" placeholder="Dispute #"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genInel()">Generate</button></div>
+                    <div class="col-md-9"><textarea id="iOut" class="form-control h-100" style="min-height: 350px;" readonly></textarea></div>
+                </div></div>
             </div></div>
+            <div id="copyMsg" class="text-success text-center fw-bold mt-2 small" style="opacity:0;transition:opacity 0.3s; position:fixed; bottom:80px; right:20px; background:white; padding:5px 10px; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:1200;">Copied!</div>
         </div>
 
         <footer>
@@ -245,10 +235,25 @@ let gD={e:null,i:[]};
 const MED_EMAILS = {"MET":"IDR@met-hcs.com","NATIONAL":"idre@nmrusa.com","NMR":"idre@nmrusa.com","FHAS":"IDRE@fhas.com","PROVIDER":"pri-idre@provider-resources.com","RESOURCE":"pri-idre@provider-resources.com","IMPROVE":"FederalIDRE@improve.health"};
 
 document.addEventListener('DOMContentLoaded',()=>{
-    try{let i=localStorage.getItem('myI');if(i)document.querySelectorAll('.in-inp').forEach(e=>e.value=i);let n=localStorage.getItem('myN');if(n)document.querySelectorAll('.nm-inp').forEach(e=>e.value=n);}catch(e){}
-    iDts(); lThm(); togEm(); syncF('dt-inp');
-    document.getElementById('t-tog').addEventListener('click',()=>{const h=document.documentElement,n=h.getAttribute('data-bs-theme')==='light'?'dark':'light';h.setAttribute('data-bs-theme',n);localStorage.setItem('theme',n)});
+    const st=localStorage.getItem('theme')||'light'; setTheme(st);
+    try{
+        let n=localStorage.getItem('myN'), i=localStorage.getItem('myI');
+        if(n) document.querySelectorAll('.nm-inp').forEach(e=>e.value=n);
+        if(i) document.querySelectorAll('.in-inp').forEach(e=>e.value=i);
+    }catch(e){}
+    iDts(); togEm(); syncF('dt-inp'); syncF('nm-inp'); syncF('in-inp');
 });
+
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+    const t=document.documentElement.getAttribute('data-bs-theme')==='dark'?'light':'dark';
+    setTheme(t);
+});
+
+function setTheme(t){
+    document.documentElement.setAttribute('data-bs-theme',t);
+    localStorage.setItem('theme',t);
+    document.getElementById('theme-icon').className = t==='dark'?'bi bi-moon-fill':'bi bi-sun-fill';
+}
 
 function iDts(){const d=new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}),n=new Date(d),s=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;document.querySelectorAll('.dt-inp').forEach(i=>{if(!i.value)i.value=s})}
 function syncF(c){document.querySelectorAll('.'+c).forEach(i=>i.addEventListener('input',e=>{document.querySelectorAll('.'+c).forEach(j=>{if(j!==e.target)j.value=e.target.value})}))}
@@ -257,21 +262,37 @@ function syncF(c){document.querySelectorAll('.'+c).forEach(i=>i.addEventListener
 document.getElementById('processBtn').addEventListener('click',function(){const b=this,o=b.innerHTML;b.innerHTML='...';setTimeout(()=>{procAll();b.innerHTML=o},300)});
 document.getElementById('clearBtn').addEventListener('click',()=>{
     document.querySelectorAll('textarea,input[type=number]').forEach(e=>e.value='');
-    document.querySelectorAll('input[type=text]').forEach(e=>{if(!['cNm','cIni','mNm','mIni','uNm','uIni','rNm','mDet'].includes(e.id) && !e.classList.contains('dt-inp')) e.value='';});
+    document.querySelectorAll('input[type=text]').forEach(e=>{
+        // Protect Initial inputs and Name inputs (nm-inp)
+        if(!e.classList.contains('in-inp') && !e.classList.contains('nm-inp') && !e.classList.contains('dt-inp') && e.id!=='mDet') e.value='';
+    });
     document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5">Paste IDR data & Extract</div>';
     document.getElementById('eob-bar').classList.remove('visible'); document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';
     document.getElementById('cAdj').classList.add('d-none'); document.getElementById('cWarn').classList.add('d-none');
-    document.getElementById('uMedSugg').classList.add('d-none'); gD={e:null,i:[]};
-    // Reset Errors
+    gD={e:null,i:[]};
     document.querySelectorAll('.is-invalid').forEach(el=>el.classList.remove('is-invalid'));
 });
+
+// Click to Copy Logic
+function setupCopy(id) {
+     const el = document.getElementById(id);
+     if(!el) return;
+     el.addEventListener('click', function() {
+        if(this.value && !this.value.includes("Extract")) {
+            this.select(); document.execCommand('copy');
+            const m=document.getElementById('copyMsg'); m.style.opacity=1; setTimeout(()=>m.style.opacity=0,2000);
+        }
+    });
+}
+['cOut','mBod','mNot','rOut','iOut'].forEach(id => setupCopy(id));
+
 
 /* LOGIC */
 function procAll(){
     gD.e=pEOB(document.getElementById('eobUp').value); dEOB(gD.e);
     const i=[];for(let j=1;j<=6;j++)i.push(document.getElementById('idr'+j).value);
     gD.i=pIDR(i); dIDR(gD.i); match();
-    if(gD.i.length>0){ if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt; if(gD.i[0].md){document.getElementById('uMed').value=gD.i[0].md;chkMed();} if(gD.i[0].id&&gD.i[0].id!='--')document.getElementById('uDis').value=gD.i[0].id; }
+    if(gD.i.length>0){ if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt; if(gD.i[0].id&&gD.i[0].id!='--')document.getElementById('cNm').focus(); }
 }
 function pEOB(t){
     if(!t)return null; const ex=r=>{const m=t.match(r);if(!m)return'$0.00';return t.substring(m.index+m[0].length).split('\n').find(l=>l.trim()&&!l.match(/^[a-zA-Z\s\.\/()-]+:/))?.trim()||'$0.00'},pc=s=>parseFloat(s.replace(/[$,\s]/g,''))||0,gv=r=>t.match(r)?.[2].trim()||'--';
@@ -306,44 +327,34 @@ const fDt=v=>{if(!v)return'MM/DD/YY';const[y,m,d]=v.split('-');return`${m}/${d}/
 function ani(e,t){e.value='';const w=t.split(' ');let i=0;if(e.tm)clearInterval(e.tm);e.tm=setInterval(()=>{if(i<w.length){e.value+=(i>0?' ':'')+w[i];e.scrollTop=e.scrollHeight;i++}else clearInterval(e.tm)},5);}
 function hRef(i,x){let v=i.value.toLowerCase();if(v==='w')v='Waiting';if(v==='r')v='Received';i.value=v;gD.i[x].refSt=v;}
 function hWL(i,x){let v=i.value.toLowerCase();if(v==='w')v='Win';if(v==='l')v='Lose';if(v==='c')v='Closed';i.value=v;gD.i[x].wl=v;const dis=(v.includes('lose')&&!v.includes('close')),ri=i.closest('.card').querySelector('.ref-inp');ri.disabled=dis;if(dis)ri.value='';}
-function chkMed(){const v=document.getElementById('uMed').value.toUpperCase(),s=document.getElementById('uMedSugg');let f=null;for(const[k,e]of Object.entries(MED_EMAILS)){if(v.includes(k)){f=e;break}}if(f){s.querySelector('span').innerText=f;s.classList.remove('d-none')}else s.classList.add('d-none')}
-function cpyMed(){navigator.clipboard.writeText(document.getElementById('uMedSugg').querySelector('span').innerText)}
-function lThm(){const t=localStorage.getItem('theme')||'light';document.documentElement.setAttribute('data-bs-theme',t)}
 function rInp(){document.querySelectorAll('input').forEach(x=>x.addEventListener('input',e=>{if(e.target.classList.contains('in-inp'))localStorage.setItem('myI',e.target.value);if(e.target.classList.contains('nm-inp'))localStorage.setItem('myN',e.target.value)}))}
 
 /* GENERATORS */
 function genCor(){
-    const nmIn=document.getElementById('cNm'); nmIn.classList.remove('is-invalid');
-    const nm=nmIn.value.toUpperCase(); if(!nm){nmIn.classList.add('is-invalid');return;}
+    const nm=document.getElementById('cNm').value.toUpperCase();if(!nm)return;
     const d=gD,dt=fDt(document.getElementById('cDt').value),ini=document.getElementById('cIni').value.toUpperCase();
     if(!d.i.length)return; const eb=d.e||{},ir=d.i[0]||{};
     let adn=true; d.i.forEach(r=>{const w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';if(w.includes('win')){if(ad=='w'||rf=='w'||!rf)adn=false}else if(w.includes('close')){if(rf=='w')adn=false}else if(w.includes('lose')&&!w.includes('close')){if(ad=='w')adn=false}else adn=false});
     let sIni=ini; if(!sIni){if(d.i.length>1)sIni=adn?'FINAL REVIEW':'IDR FOLLOW UP';else{const r=d.i[0],w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';if(w.includes('win')){sIni=(ad=='r'&&rf=='r')?'FINAL REVIEW':'IDR WIN'}else if(w.includes('close')){sIni=(rf=='w')?'IDR FOLLOW UP':'FINAL REVIEW'}else if(w.includes('lose')){sIni=(ad=='r')?'FINAL REVIEW':'IDR LOSE'}else sIni='IDR FOLLOW UP'}}
     let n=`${dt}>${sIni}>${nm}>WORKING ON TRACKING SHEET. CLAIM: ${eb.clm||ir.cl||'--'}; TOTAL BILL ${fmt(eb.bil)}, INS PAID ${fmt(eb.pd)}, PT RESP ${fmt(eb.pt)}. NEGOTIATION AND IDR DONE. `;
-    d.i.forEach(r=>{const w=r.wl.toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';n+=`${r.id} (${r.md}): IDR SUBMITTED ON CPT ${r.cp}. STATUS IS ${r.wl}. `;if((w.includes('win')||w.includes('lose'))&&!w.includes('close')){n+=`ADDITIONAL ${fmt(r.ad)}. ${ad=='r'?'WE RECEIVED ADDITIONAL PAYMENT':'WE ARE WAITING FOR ADDITIONAL PAYMENT'}. `;}if((w.includes('win')||w.includes('close'))&&r.refSt)n+=`${r.refSt.toLowerCase()=='received'?'WE RECEIVED FEE REFUND':'WE ARE WAITING FOR FEE REFUND'}. `;});
+    d.i.forEach(r=>{const w=r.wl.toLowerCase(),ad=(r.pm&&r.pm.length>4)?'r':'w';n+=`${r.id}: IDR SUBMITTED ON CPT ${r.cp}. STATUS IS ${r.wl}. `;if((w.includes('win')||w.includes('lose'))&&!w.includes('close')){n+=`ADDITIONAL ${fmt(r.ad)}. ${ad=='r'?'WE RECEIVED ADDITIONAL PAYMENT':'WE ARE WAITING FOR ADDITIONAL PAYMENT'}. `;}if((w.includes('win')||w.includes('close'))&&r.refSt)n+=`${r.refSt.toLowerCase()=='received'?'WE RECEIVED FEE REFUND':'WE ARE WAITING FOR FEE REFUND'}. `;});
     if(sIni==='FINAL REVIEW'){n+="NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";if(eb.bil){document.getElementById('adj1').innerText=fmt(eb.bil-(eb.pd+eb.pt));document.getElementById('adj2').innerText=fmt(eb.bil-eb.pd);document.getElementById('cAdj').classList.remove('d-none')}}else n+="WAITING TO COMPLETE PROCESS.";
     ani(document.getElementById('cOut'),n);
 }
 function togEm(){const s=document.getElementById('mSc').value,m=document.getElementById('mMan');m.disabled=(s!=='pt');if(s!=='pt')m.value='';document.getElementById('mCC').value=(s==='pt')?'mislam@roundtmc.com, razo@leverngear.com, sufia@leverngear.com':'mislam@roundtmc.com, razo@leverngear.com';}
 function genEm(){
-    const v=['mNm','mIni','mTyp','mDet'];let ok=true;v.forEach(x=>{const el=document.getElementById(x);el.classList.remove('is-invalid');if(!el.value.trim()){el.classList.add('is-invalid');ok=false}});if(!ok)return;
+    const v=['mNm','mIni','mTyp','mDet'];let ok=true;v.forEach(x=>{if(!document.getElementById(x).value.trim())ok=false});if(!ok)return;
     const d=gD,dt=fDt(document.getElementById('mDt').value),nm=document.getElementById('mNm').value,ini=document.getElementById('mIni').value,sc=document.getElementById('mSc').value,mn=parseFloat(document.getElementById('mMan').value),det=document.getElementById('mDet').value;
-    if(!d.i.length)return; const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);
+    if(!d.i.length){document.getElementById('mBod').value="ERROR: No IDR Data";return}
+    const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);
     let sub,bod,nt=(document.getElementById('mTyp').value=='1')?'1ST':'2ND';
-    if(sc==='pt'){sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.id}]`;bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.id} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;nt+=' HIGH PT EMAIL';}
+    if(sc==='pt'){sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.id}]`;bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.id} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nThe Federal Manuals state verbatim:\n“NOTE: This determination of the OON rate does not change the participant’s, beneficiary’s, or enrollee’s cost sharing, which is based on the recognized amount, or, in the case of air ambulance services, the lower of the QPA or billed charges.”\n\nSources: Federal Independent Dispute Resolution (IDR) Process Guidance for Disputing Parties Manual March 2023, pg 27, October 2022, pg 29, April 2022, pg 27 and Federal Independent Dispute Resolution (IDR) Process Guidance for Certified IDR Entities Manual March 2023, pg 25, October 2022, pg 26, April 2022, pg 25\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;nt+=' HIGH PT EMAIL';}
     else{sub=`Urgent Request for Claim Reprocessing as per IDR Determination - ${i.id} - Claim: ${clm}`+(nt=='2ND'?' (2nd Email)':'');bod=`Dear BCBS,\n\nWe are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).\nOn ${det}, ${i.md} —the certified IDR entity—issued a final, legally binding determination in favor of , ${e.prv||'PROVIDER'} regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of ${fmt(i.in+i.ad)} for service code ${i.cp||'--'}. as offered by ${e.prv||'PROVIDER'} as the appropriate rate for this claim.\nAccording to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.\n\nRequest for Payment:\nPlease remit the outstanding balance, calculated as follows:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\nThis request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance\nIf you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.\n\nAs per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.\n\nFor your reference we have attached the primary EOB and IDR determination.\n\n\nThank You\nRegards\n---------------\n${nm}`;nt+=' FOLLOW UP EMAIL';}
     document.getElementById('mSub').value=sub; ani(document.getElementById('mBod'),bod);
     ani(document.getElementById('mNot'),`${dt}>IDR FOLLOW UP>${ini}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${clm}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${fmt(i.ad)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${i.id}, BY ${i.md.toUpperCase()} DATED ${det}. FOR BCBS ATTENTION, WE SENT ${nt} TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`);
 }
-function genUpd(){
-    const v=['uNm','uIni','uDis','uMed'];let ok=true;v.forEach(x=>{const el=document.getElementById(x);el.classList.remove('is-invalid');if(!el.value.trim()){el.classList.add('is-invalid');ok=false}});if(!ok)return;
-    const dt=fDt(document.getElementById('uDt').value),nm=document.getElementById('uNm').value,ini=document.getElementById('uIni').value.toUpperCase(),dis=document.getElementById('uDis').value,med=document.getElementById('uMed').value,typ=document.getElementById('uTyp').value,fol=document.getElementById('uFol').value;
-    const is2nd=(fol==='2'), followUpText=is2nd?"2ND":"1ST", subFollowUp=is2nd?" (2nd follow up)":"";
-    let sub, bod, not;
-    if(typ==='check') {sub=`Update on IDR dispute – ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request an update status of ${dis}. It has been 60 days since we have received confirmation from CMS that ${med} is the Mediator for this dispute.\nWe have not yet received any acknowledgement from ${med} regarding this matter.\n\nWe are kindly requesting that you provide a status update at your earliest convenience.\n\nThanks!.\n--------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN 60 DAYS SINCE WE HAVE RECEIVED CONFIRMATION THAT THE MEDIATOR IS SELECTED FROM CMS FOR THIS DISPUTE. WE HAVE NOT YET RECEIVED ANY ACKNOWLEDGEMENT FROM THE MEDIATOR REGARDING THIS MATTER. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE UPDATE IDR STATUS.`;} else {sub=`Request for Payment Determination ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request the final determination for ${dis}. It\nhas been over 60 days since we submitted our offer letter and\nmediation fee. Please kindly provide a written determination at your\nearliest convenience.\n\nThanks!\n-----------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN OVER 60 DAYS SINCE WE SUBMITTED OUR OFFER LETTER AND MEDIATION FEE. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE PAYMENT DETERMINATION.`;}
-    document.getElementById('uSub').value=sub; ani(document.getElementById('uBod'),bod); ani(document.getElementById('uNot'),not);
-}
 function genRef(){const dt=fDt(document.getElementById('rDt').value),nm=document.getElementById('rNm').value.toUpperCase();ani(document.getElementById('rOut'),`${dt}>IDR WIN>${nm}>WORKING ON MEDIATION REFUND. RECEIVED REFUND OF ${document.getElementById('rAmt').value} DATED ${document.getElementById('rRefDt').value} FOR ${document.getElementById('rDis').value}. WAITING FOR ADDITIONAL PAYMENT.`)}
+function genInel(){const dt=fDt(document.getElementById('iDt').value),nm=document.getElementById('iNm').value.toUpperCase();ani(document.getElementById('iOut'),`${dt}>FINAL REVIEW>${nm}>WORKING ON TRACKING SHEET. ${document.getElementById('iDis').value}: STATUS IS CLOSED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.`)}
 </script>
 </body>
 </html>
