@@ -1,591 +1,3086 @@
-
 <!DOCTYPE html>
+<!-- data-bs-theme="light" ডিফল্ট হিসেবে সেট করা হলো -->
 <html lang="en" data-bs-theme="light">
-<!-- HEAD -->
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Pranto's Note Tool</title>
-<link rel="icon" type="image/png" href="note.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<style>
-/* THEME VARIABLES - Soft & Premium */
-:root {
-    --f: 'Outfit', sans-serif;
-    --f-mono: 'Rajdhani', monospace;
-    /* Light Mode: Softer, less harsh white */
-    --bg: #eef2f6; 
-    --txt: #334155;
-    --pri: #6366f1; /* Indigo */
-    --sec: #0ea5e9; /* Sky */
-    --card-bg: linear-gradient(145deg, #ffffff, #f8faff); /* Soft Gradient for Cards */
-    --sd: 260px;
-    --sh: 5px 5px 15px rgba(163, 177, 198, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.8); /* Neumorphic Soft Shadow */
-    --ins: inset 2px 2px 5px rgba(163, 177, 198, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.8);
-    --cd: #ffffff;
-    --bor: 1px solid rgba(0,0,0,0.05);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranto's Note</title>
+    <link rel="icon" type="image/png" href="note.png"> 
     
-    /* Widget Colors */
-    --wid-bg: rgba(255, 255, 255, 0.85);
-    --wid-bor: rgba(255, 255, 255, 0.9);
-}
-
-[data-bs-theme="dark"] {
-    --bg: #0f172a;
-    --txt: #cbd5e1;
-    --pri: #818cf8;
-    --sec: #38bdf8;
-    --card-bg: linear-gradient(145deg, #1e293b, #0f172a);
-    --sh: 0 4px 6px rgba(0,0,0,0.3);
-    --ins: inset 0 0 0 1px rgba(255,255,255,0.05);
-    --cd: #1e293b;
-    --bor: 1px solid rgba(255,255,255,0.05);
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    /* Widget Colors Dark */
-    --wid-bg: rgba(30, 41, 59, 0.8);
-    --wid-bor: rgba(255, 255, 255, 0.1);
-}
-
-body { font-family: var(--f); background: var(--bg); height: 100vh; overflow: hidden; transition: background .4s ease, color .4s ease; font-size: .85rem; color: var(--txt); letter-spacing: 0.01em; }
-
-/* LAYOUT */
-#top { 
-    position: fixed; top: 2px; width: 100%; height: 60px; z-index: 1000; 
-    display: flex; align-items: center; justify-content: space-between; 
-    padding: 0 1.5rem; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-    backdrop-filter: blur(12px); border-bottom: var(--bor); border-radius: 50px;
-}
-#wrap { display: flex; margin-top: 60px; height: calc(100vh - 60px); }
-#sb { width: var(--sd); min-width: 250px; display: flex; flex-direction: column; background: var(--card-bg); border-right: var(--bor); transition: .3s; }
-#sb-c { flex: 1; overflow-y: auto; padding: 0.8rem; }
-#main { flex: 1; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; }
-
-/* NAVBAR CENTER */
-.nav-center {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    display: flex; gap: 1rem;
-}
-        /* Dropdowns */
-        .drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
-        .drop-menu {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
-            background: var(--nav-bg); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px;
-            opacity: 0; visibility: hidden; transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px;
-        }
-        .drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
-        .d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-        .d-item:hover { background: rgba(6, 182, 212, 0.1); color: var(--pri); }
-
-
-/* CARDS & INPUTS */
-.card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--sh); border: var(--bor);  transition: transform 0.2s; }
-.form-control, .form-select { 
-    background: var(--bg); border: var(--bor); border-radius: 8px; font-size: .85rem; color: var(--txt); box-shadow: var(--ins); padding: 6px 12px; transition: all 0.2s ease; 
-}
-.cursor{
-  cursor: pointer;
-}
-[data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { background: #020617; border-color: rgba(255,255,255,0.05); }
-.form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); outline: 0; border-color: var(--pri); }
-textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; line-height: 1.45; font-size: 0.9rem !important; }
-
-/* BUTTONS */
-.btn-neu { 
-    display: flex; align-items: center; gap: 6px; border-radius: 18px; padding: 6px 16px; border: var(--bor); 
-    font-weight: 600; font-size: 13px; background: var(--card-bg); box-shadow: var(--sh); color: var(--pri); transition: .2s; 
-}
-.btn-neu:hover { transform: translateY(-2px); filter: brightness(105%); }
-.btn-neu-danger { color: #ef4444; }
-.btn-neu-danger:hover { color: #dc2626; }
-
-/* TABS */
-.nav-tabs-glass { border-bottom: none; padding: 0 .5rem; display: flex; gap: 8px; }
-.nav-tabs-glass .nav-link { 
-    border: none; background: transparent; color: var(--txt); font-weight: 600; border-radius: 8px; 
-    padding: 8px 16px; font-size: .85rem; opacity: 0.6; transition: all 0.3s; 
-}
-.nav-tabs-glass .nav-link:hover { opacity: 0.9; background: rgba(0,0,0,0.03); }
-.nav-tabs-glass .nav-link.active { color: var(--pri); opacity: 1; background: var(--card-bg); box-shadow: var(--sh); }
-
-/* SIDEBAR ITEMS */
-.idr-card { padding: 10px; margin-bottom: 8px; font-size: 0.75rem; }
-.idr-item { display: flex; justify-content: space-between; padding: 2px 0; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.03); }
-[data-bs-theme="dark"] .idr-item { border-bottom: 1px solid rgba(255,255,255,0.03); }
-.idr-val { font-weight: 700; text-align: right; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--pri); }
-
-/* FOOTER */
-.main-footer {
-    margin-top: auto; padding-top: 1.5rem; padding-bottom: 1rem;
-    text-align: center; color: var(--txt); opacity: 0.6; font-size: 0.75rem;
-    border-top: var(--bor);
-}
-
-/* WIDGETS CONTAINER (Bottom Left) */
-.widgets-wrapper {
-    position: fixed; bottom: 20px; left: 20px; z-index: 1050;
-    display: flex; align-items: center; gap: 15px;
-}
-
-/* WATCH WIDGET */
-.watch-container { 
-    width: 110px; height: 110px; 
-    display: flex; justify-content: center; align-items: center; border-radius: 50%; 
-    background: var(--wid-bg); backdrop-filter: blur(12px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 1px solid var(--wid-bor); 
-    position: relative;
-}
-.watch-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-.watch-circle-bg { fill: none; stroke: rgba(99, 102, 241, 0.1); stroke-width: 4; }
-.watch-circle-progress { fill: none; stroke: var(--pri); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 339; stroke-dashoffset: 339; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
-.watch-time-box { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; color: var(--txt); z-index: 2; }
-.wt-hm { font-size: 1.8rem; font-weight: 700; font-family: var(--f-mono); letter-spacing: -1px; }
-.wt-sec-row { display: flex; align-items: baseline; gap: 4px; margin-top: -2px; }
-.wt-sec { font-size: 1rem; font-weight: 600; color: var(--sec); font-family: var(--f-mono); }
-.wt-ampm { font-size: 0.7rem; font-weight: 600; color: var(--txt); opacity: 0.6; }
-
-/* DATE WIDGET */
-.date-container {
-    width: 90px; height: 90px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    border-radius: 20px;
-    background: var(--wid-bg); backdrop-filter: blur(12px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border: 1px solid var(--wid-bor);
-    position: relative;
-    overflow: hidden;
-}
-/* Gradient Border Animation via pseudo */
-.date-container::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: 20px; padding: 2px; 
-    background: linear-gradient(135deg, var(--pri), var(--sec), #ec4899);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor; mask-composite: exclude;
-    opacity: 0.5;
-}
-.dt-day { font-size: 0.8rem; font-weight: 600; color: var(--txt); opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
-.dt-num { font-size: 2.2rem; font-weight: 700; font-family: var(--f-mono); color: var(--pri); line-height: 1; margin: 2px 0; }
-.dt-mon { font-size: 0.85rem; font-weight: 600; color: var(--sec); text-transform: uppercase; }
-
-/* UTILS */
-.text-gradient { background: linear-gradient(135deg, var(--pri), var(--sec), #ec4899); -webkit-background-clip: text; color: transparent; font-weight: 800; font-size: 1.1rem; }
-.small-label { font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; display: block; color: var(--txt); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
-.ed-inp { padding: 2px 6px; border-radius: 4px; border: var(--bor); background: var(--bg); width: 60px; font-size: .7rem; color: var(--txt); font-weight: 600; }
-.email-hint { font-size: 0.75rem; color: var(--sec); margin-top: 4px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-#eob-bar { display: none; padding: .5rem 1rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); border: var(--bor); font-size: 0.8rem; }
-#eob-bar.visible { display: flex; gap: 15px; align-items: center; }
-</style>
-</head>
-<body>
-
-<!-- TOP NAV -->
-<div id="top">
-    <div class="d-flex align-items-center gap-2">
-        <span class="text-muted small">Made by</span> <span class="text-gradient">Pranto Rodrix</span>
-    </div>
-    <div class="nav-center d-none d-md-flex">
-        <a href="typing.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Home</a>
-        <div class="drop-box">
-            <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
-            <div class="drop-menu">
-                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
-                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
-                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
-            </div>
-        </div>
-        <div class="drop-box">
-            <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
-            <div class="drop-menu">
-                <a href="typing.html" class="d-item"><i class="bi bi-keyboard-fill"></i> Typing</a>
-                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
-            </div>
-        </div>
-        <a href="index.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Contact Us</a>
-    </div>
-    <div class="d-flex gap-2">
-        <button id="processBtn" class="btn-neu"><i class="bi bi-magic"></i> Extract</button>
-        <button id="clearBtn" class="btn-neu btn-neu-danger"><i class="bi bi-trash"></i> Clear</button>
-        <button id="theme-toggle" class="btn-neu px-3"><i class="bi bi-sun-fill"></i></button>
-    </div>
-</div>
-
-<div id="wrap">
-    <!-- SIDEBAR -->
-    <div id="sb">
-        <div class="p-3 border-bottom"><h6 class="m-0 fw-bold text-primary small"><i class="bi bi-list-columns-reverse me-2"></i>IDR RESULTS</h6></div>
-        <div id="sb-c"><div class="text-center text-muted small mt-5 opacity-75">Paste & Extract</div></div>
-    </div>
-
-    <!-- MAIN -->
-    <div id="main">
-        <div class="container-fluid px-0">
-            <div id="eob-bar"></div>
-            <div class="row g-3 mb-3">
-                <div class="col-lg-3">
-                    <div class="card h-100 p-3 d-flex flex-column">
-                        <label class="small-label text-primary">Updated EOB</label>
-                        <textarea class="form-control flex-grow-1" id="eobUp" placeholder="Paste Updated EOB here..."></textarea>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card p- h-100">
-                        <label class="small-label text-primary">IDR Reports</label>
-                        <div class="row g-2 mb-2">
-                            <div class="col-4"><textarea class="form-control" id="idr1" rows="2" placeholder="2024+ (1)"></textarea></div>
-                            <div class="col-4"><textarea class="form-control" id="idr2" rows="2" placeholder="2024+ (2)"></textarea></div>
-                            <div class="col-4"><textarea class="form-control" id="idr3" rows="2" placeholder="2024+ (3)"></textarea></div>
-                        </div>
-                        <div class="row g-2">
-                            <div class="col-4"><textarea class="form-control" id="idr4" rows="2" placeholder="22-23 (1)"></textarea></div>
-                            <div class="col-4"><textarea class="form-control" id="idr5" rows="2" placeholder="22-23 (2)"></textarea></div>
-                            <div class="col-4"><textarea class="form-control" id="idr6" rows="2" placeholder="22-23 (3)"></textarea></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="card h-100 p-3">
-                        <h6 class="small-label text-primary border-bottom pb-2 mb-2">EOB Details</h6>
-                        <div id="eob-det"><div class="text-muted small text-center mt-4 opacity-50">No Data</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TABS AREA -->
-            <div class="card">
-                <div class="p-3 pb-0">
-                    <ul class="nav nav-tabs-glass" id="mT">
-                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-cor">Correspondence</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li>
-                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-ref">Refund</button></li>
-                    </ul>
-                </div>
-                <div class="card-body p-4">
-                    <div class="tab-content">
-                        <!-- CORRESPONDENCE -->
-                        <div class="tab-pane fade show active" id="t-cor">
-                            <div class="row g-3">
-                                <div class="col-md-3">
-                                    <button class="btn-neu w-100 justify-content-center text-primary mt-1 mb-3 py-2" onclick="genCor()">
-                                        <i class="bi bi-pencil-square"></i> Generate Note
-                                    </button>
-                                    <div class="mb-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="cDt"></div>
-                                    <div class="mb-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="cNm" placeholder="Corres Name"></div>
-                                    <div class="mb-2"><label class="small-label">Initial</label><input type="text" class="form-control in-inp" id="cIni" placeholder="Corres Init"></div>
-                                    <div id="cAdj" class="mt-3 p-3 bg-light rounded d-none border">
-                                        <h6 class="small-label mb-2 text-primary">Adjustments</h6>
-                                        <div class="d-flex justify-content-between small mb-1"><span>With PT:</span><span id="adj1" class="fw-bold">--</span></div>
-                                        <div class="d-flex justify-content-between small"><span>Without PT:</span><span id="adj2" class="fw-bold">--</span></div>
-                                    </div>
-                                    <div id="cWarn" class="mt-3 text-danger small fw-bold d-none"></div>
-                                </div>
-                                <div class="col-md-9"><textarea id="cOut" class="form-control cursor" style="height: 250px;" readonly placeholder="Generated note will appear here..."></textarea></div>
-                            </div>
-                        </div>
-                        <!-- EMAIL -->
-                        <div class="tab-pane fade" id="t-em">
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div>
-                                <div class="col-md-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Email Name"></div>
-                                <div class="col-md-1"><label class="small-label">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Email Init"></div>
-                                <div class="col-md-2"><label class="small-label">Scenario</label><select class="form-select" id="mSc" onchange="togEm()"><option value="ins">Standard</option><option value="pt">High PT</option></select></div>
-                                <div class="col-md-2"><label class="small-label">Manual Addl</label><input type="number" class="form-control" id="mMan" placeholder="Amt" disabled></div>
-                                <div class="col-md-2"><label class="small-label">Type</label><select class="form-select" id="mTyp"><option value="1">1st Email</option><option value="2">2nd Email</option></select></div>
-                                <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genEm()"><i class="bi bi-send-fill"></i></button></div>
-                            </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-4"><label class="small-label">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div>
-                                <div class="col-md-4"><label class="small-label">Subject</label><input type="text" class="form-control" id="mSub" readonly></div>
-                                <div class="col-md-4"><label class="small-label">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6"><label class="small-label cursor text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 250px;" readonly></textarea></div>
-                                <div class="col-md-6"><label class="small-label cursor text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 250px;" readonly></textarea></div>
-                            </div>
-                        </div>
-                        <!-- IDR UPDATE -->
-                        <div class="tab-pane fade" id="t-upd">
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-2"><label class="small-label">Date</label><input type="date" class="form-control dt-inp" id="uDt"></div>
-                                <div class="col-md-2"><label class="small-label">Name</label><input type="text" class="form-control nm-inp" id="uNm" placeholder="Upd Name"></div>
-                                <div class="col-md-1"><label class="small-label">Init</label><input type="text" class="form-control in-inp" id="uIni" placeholder="Upd Init"></div>
-                                <div class="col-md-2"><label class="small-label">Dispute #</label><input type="text" class="form-control" id="uDis" placeholder="DISP-XXXX"></div>
-                                <div class="col-md-2">
-                                    <label class="small-label">Mediator</label>
-                                    <input type="text" class="form-control" id="uMed" placeholder="Mediator Name" oninput="chkMed()">
-                                    <div id="uMedSugg" class="email-hint d-none" onclick="cpyMed()" title="Click to Copy"><span></span><i class="bi bi-copy"></i></div>
-                                </div>
-                                <div class="col-md-2"><label class="small-label">Type</label><select class="form-select" id="uTyp"><option value="check">Check & Offer</option><option value="pay">Payment Det</option></select></div>
-                                <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genUpd()"><i class="bi bi-send-fill"></i></button></div>
-                            </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-9"><label class="small-label">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
-                                <div class="col-md-3"><label class="small-label">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
-                                
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6"><label class="small-label cursor text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 250px;" readonly></textarea></div>
-                                <div class="col-md-6"><label class="small-label cursor text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 250px;" readonly></textarea></div>
-                            </div>
-                        </div>
-                        <!-- REFUND -->
-                        <div class="tab-pane fade" id="t-ref">
-                            <div class="row g-3">
-                                <div class="col-md-3">
-                                    <label class="small-label">Date</label><input type="date" class="form-control mb-3 dt-inp" id="rDt">
-                                    <input type="text" class="form-control mb-3 nm-inp" id="rNm" placeholder="Name">
-                                    <input type="text" class="form-control mb-3" id="rAmt" placeholder="Amount">
-                                    <input type="text" class="form-control mb-3" id="rRefDt" placeholder="Ref Date">
-                                    <input type="text" class="form-control mb-4" id="rDis" placeholder="Dispute #">
-                                    <button class="btn-neu w-100 justify-content-center text-primary" onclick="genRef()">Generate</button>
-                                </div>
-                                <div class="col-md-9"><textarea id="rOut" class="form-control" style="height: 250px;" readonly></textarea></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* --- Base & Typography --- */
+        :root {
+            --bs-body-font-family: 'Poppins', sans-serif;
+            --bs-heading-font-family: 'Poppins', sans-serif;
             
-            <footer class="main-footer">
-                <p class="mb-0 fw-bold">Pranto's Note Tool &copy; 2025 | All Rights Reserved</p>
-                <div class="small opacity-75 mt-1">Designed for efficiency & precision</div>
-            </footer>
-        </div>
-    </div>
-</div>
+            /* --- Light Mode --- */
+            --bs-body-bg-light: #f3e7ff; 
+            --bs-body-color-light: #212529;
+            --bs-tertiary-bg-light: rgba(255, 255, 255, 0.7); 
+            --bs-secondary-bg-light: #f8f9fa; 
+            --bs-border-color-light: rgba(0, 0, 0, 0.1); 
+            
+            --bs-glass-bg-light: rgba(255, 255, 255, 0.6); 
+            --bs-glass-border-light: var(--bs-border-color-light);
+            --bs-card-bg-light: var(--bs-tertiary-bg-light);
+            --bs-card-border-light: var(--bs-border-color-light);
 
-<!-- BOTTOM WIDGETS -->
-<div class="widgets-wrapper">
-    <!-- WATCH -->
-    <div class="watch-container">
-        <svg class="watch-svg" viewBox="0 0 120 120">
-            <circle class="watch-circle-bg" cx="60" cy="60" r="54"></circle>
-            <circle class="watch-circle-progress" id="wProg" cx="60" cy="60" r="54"></circle>
-        </svg>
-        <div class="watch-time-box">
-            <div class="wt-hm" id="bdTm">--:--</div>
-            <div class="wt-sec-row">
-                <div class="wt-sec" id="bdSec">00</div>
-                <div class="wt-ampm" id="bdAP">AM</div>
+            /* --- Dark Mode --- */
+            --bs-body-bg-dark: #0a0c10; 
+            --bs-body-color-dark: #e0e0e0;
+            --bs-tertiary-bg-dark: rgba(22, 27, 34, 0.7); 
+            --bs-secondary-bg-dark: #2a2a2a;
+            --bs-border-color-dark: rgba(255, 255, 255, 0.1); 
+            --bs-light-bg-subtle-dark: #161b22;
+
+            --bs-glass-bg-dark: rgba(10, 12, 16, 0.6); 
+            --bs-glass-border-dark: var(--bs-border-color-dark);
+            --bs-card-bg-dark: var(--bs-tertiary-bg-dark);
+            --bs-card-border-dark: var(--bs-border-color-dark);
+
+            --bs-primary-dark: #00f0b5;
+            --bs-primary-rgb-dark: 0, 240, 181;
+            
+            /* --- NEW: Sidebar Dimensions --- */
+            --sidebar-width: 340px;
+            --sidebar-min-width: 280px;
+            --sidebar-max-width: 600px;
+        }
+
+        [data-bs-theme="light"] {
+            --bs-body-bg: var(--bs-body-bg-light);
+            --bs-body-color: var(--bs-body-color-light);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-light);
+            --bs-secondary-bg: var(--bs-secondary-bg-light);
+            --bs-border-color: var(--bs-border-color-light);
+            --bs-light-bg-subtle: var(--bs-light-bg-subtle-light);
+            --bs-glass-bg: var(--bs-glass-bg-light);
+            --bs-glass-border: var(--bs-glass-border-light);
+            --bs-card-bg: var(--bs-card-bg-light);
+            --bs-card-border: var(--bs-card-border-light);
+            
+            #top-bar-container {
+                 background: rgba(243, 231, 255, 0.6);
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-light);
+            }
+        }
+
+        [data-bs-theme="dark"] {
+            --bs-body-bg: var(--bs-body-bg-dark);
+            --bs-body-color: var(--bs-body-color-dark);
+            --bs-tertiary-bg: var(--bs-tertiary-bg-dark);
+            --bs-secondary-bg: var(--bs-secondary-bg-dark);
+            --bs-border-color: var(--bs-border-color-dark);
+            --bs-light-bg-subtle: var(--bs-light-bg-subtle-dark);
+            --bs-glass-bg: var(--bs-glass-bg-dark);
+            --bs-glass-border: var(--bs-glass-border-dark);
+            --bs-card-bg: var(--bs-card-bg-dark);
+            --bs-card-border: var(--bs-border-color-dark);
+            --bs-primary: var(--bs-primary-dark);
+            --bs-primary-rgb: var(--bs-primary-rgb-dark);
+            --bs-link-color: var(--bs-primary-dark);
+            --bs-link-color-rgb: var(--bs-primary-rgb-dark);
+            --bs-link-hover-color: #33ffc7;
+            
+            #top-bar-container {
+                 background: rgba(10, 12, 16, 0.6);
+                 backdrop-filter:blur(10px);
+                 -webkit-backdrop-filter:blur(10px);
+                 border-bottom: 1px solid var(--bs-border-color-dark);
+            }
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background-color: transparent;
+            transition: background-color 0.3s ease;
+            overflow: hidden; /* Prevent body scrolling */
+        }
+        
+        /* --- Animated Background (STATIC) --- */
+        #animated-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -10; 
+            overflow: hidden;
+        }
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px); 
+            -webkit-filter: blur(10px);
+            opacity: 1;
+            transform: scale(1.1); 
+        }
+
+        [data-bs-theme="light"] .bg-image-light.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2024/11/02/05/13/winter-9168141_1280.jpg'); }
+        [data-bs-theme="dark"] .bg-image-dark.bg-1 { background-image: url('https://cdn.pixabay.com/photo/2021/01/10/18/01/milky-way-5905903_1280.jpg'); }
+        [data-bs-theme="light"] .bg-image-dark { display: none; }
+        [data-bs-theme="dark"] .bg-image-light { display: none; }
+        
+        h1, h2, h3, h4, h5, h6, .fw-bold {
+            font-family: var(--bs-heading-font-family);
+            font-weight: 600;
+        }
+
+        /* --- Glass Card Style (NEW GRADIENT) --- */
+        .card {
+            background: rgba(255, 255, 255, 0.24);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 0 6px 3px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent
+          );
+        }
+
+        .card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1px;
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.8),
+            transparent,
+            rgba(255, 255, 255, 0.3)
+          );
+        }
+        
+        [data-bs-theme="dark"] .card {
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 0 6px 3px rgba(255, 255, 255, 0.3);
+             border-radius: 20px;
+             background: rgba(22, 27, 34, 0.24);
+             border: 1px solid rgba(255, 255, 255, 0.2);
+             backdrop-filter: blur(7px);
+             -webkit-backdrop-filter: blur(7px);
+        }
+        
+        /* --- Page Layout --- */
+        #main-wrapper {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+            padding-top: 70px; /* Default, will be set by JS */
+        }
+        
+        #idr-sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-min-width);
+            max-width: var(--sidebar-max-width);
+            height: 100%;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease-in-out;
+            border-radius: 0; /* No radius for sidebar */
+            border-right: 1px solid var(--bs-border-color);
+        }
+        
+        #sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--bs-border-color);
+            flex-shrink: 0;
+        }
+        
+        #sidebar-header h5 {
+            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        
+        #toggle-sidebar-btn {
+            background: rgba(128,128,128,0.1);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        
+        #idr-sidebar-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        
+        #resizer {
+            width: 5px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+            z-index: 10; /* Above sidebar */
+            position: relative;
+            right: 2.5px;
+        }
+        #resizer:hover, .grabbing {
+            background: var(--bs-primary);
+            opacity: 0.5;
+        }
+        
+        #main-content {
+            flex-grow: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding-left: 0.5rem; /* Space from resizer */
+            padding-right: 0.5rem;
+        }
+        
+        /* Sidebar Collapsed State */
+        #idr-sidebar.collapsed {
+            width: 0;
+            min-width: 0;
+            padding: 0;
+            overflow: hidden;
+            border: none;
+        }
+        
+        #idr-sidebar.collapsed + #resizer {
+            display: none; /* Hide resizer when collapsed */
+        }
+        
+        #idr-sidebar.collapsed #toggle-sidebar-btn {
+             transform: rotate(180deg);
+        }
+        
+        #sidebar-toggle-wrapper {
+             position: fixed;
+             top: 80px; /* Below top bar */
+             left: 10px;
+             z-index: 1040; /* Above everything */
+             transition: left 0.3s ease-in-out;
+        }
+         #idr-sidebar.collapsed + #resizer + #main-content + #sidebar-toggle-wrapper {
+             left: 10px;
+         }
+         #idr-sidebar:not(.collapsed) + #resizer + #main-content + #sidebar-toggle-wrapper {
+             left: calc(var(--sidebar-width) + 10px);
+         }
+        
+        /* --- IDR Sidebar Result Styling --- */
+        .idr-result-group {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px !important;
+        }
+        .idr-group-header {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--bs-primary);
+            border-bottom: 1px solid var(--bs-border-color);
+            padding-bottom: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+        .idr-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+        }
+        .idr-result-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--bs-secondary-color);
+            margin-right: 5px;
+            white-space: nowrap;
+        }
+        .idr-result-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bs-body-color);
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+        .idr-result-value.currency {
+            color: #28a745;
+        }
+        
+        .idr-result-group .editable-input {
+            width: 100%;
+            font-size: 0.85rem;
+            padding: 2px 4px;
+        }
+        
+        /* --- Tool Styles (UI Kit) --- */
+        .form-control, .form-select {
+            background-color: var(--bs-tertiary-bg);
+            color: var(--bs-body-color);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 10px;
+            /*margin-top: 3px;*/
+            transition: all 0.2s ease-out;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bs-tertiary-bg);
+            color: var(--bs-body-color);
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.2);
+        }
+        
+        .form-control:not(:placeholder-shown) {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.15);
+        }
+        
+        .form-control::placeholder {
+            color: var(--bs-secondary-color);
+            opacity: 0.6;
+            font-weight: 500;
+            font-family: var(--bs-heading-font-family);
+            text-align: center;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .idr-textarea::placeholder {
+             font-size: 0.85rem;
+             line-height: 1.2;
+             font-weight: 400;
+        }
+        .form-control:focus::placeholder {
+            opacity: 0.3;
+        }
+
+        /* EOB Result - REMOVED */
+        .eob-result-container {
+           display: none;
+        }
+
+        /* Adjustment Note List */
+        .result-list {
+            font-size: 0.8rem; 
+        }
+        .result-list p {
+            margin-bottom: 0.4rem; 
+            /*border-bottom: 1px solid var(--bs-border-color);*/
+            /*padding-bottom: 0.5rem;*/
+            display: flex;
+            justify-content: space-between;
+            white-space: nowrap; 
+        }
+        
+        .Idr_Paste_Box{
+          border-radius: 12px;
+          padding: 0.5rem;
+        }
+         
+         .result-list p:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+         }
+        .result-list strong {
+            color: var(--bs-body-color);
+            margin-right: 10px;
+        }
+        .result-list .output-value {
+            font-weight: bold;
+            color: #28a745;
+            text-align: right;
+        }
+        .result-list .output-value.text-dark {
+             color: var(--bs-body-color) !important;
+        }
+
+
+        .result-table {
+           display: none; /* Hide old table */
+        }
+        
+        .truncate-mediator {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        textarea {
+            font-family: monospace;
+            min-height: 150px;
+        }
+        
+        /* EOB Input Textarea Height */
+        #eobUpdatedInput {
+            min-height: 80px; /* Adjusted height */
+            margin-bottom: 0.5rem; /* Space between */
+        }
+        #eobOldInput {
+            min-height: 80px; /* NEW */
+        }
+        
+        .idr-textarea {
+             height: 80px;
+             margin-top: 5px;
+        }
+
+        /* --- NEW: Remove scrollbar/resize from paste boxes --- */
+        #eob-input-row textarea {
+            resize: none;
+            overflow: hidden !important;
+        }
+        
+        /* Comparison BG Colors */
+        .bg-match { 
+            background-color: rgb(100 251 137 / 70%) !important;
+            color: #0f5132 !important;
+            border-radius: 5px;
+        }
+        .bg-mismatch { 
+            background-color: rgb(255 114 127 / 70%) !important;
+            color: #842029 !important;
+            border-radius: 5px;
+        }
+        .bg-overpaid { 
+            background-color: rgba(255, 243, 205, 0.7) !important;
+            color: #664d03 !important;
+            border-radius: 5px;
+        }
+        
+        [data-bs-theme="dark"] .bg-match { 
+            background-color: rgba(13, 26, 18, 0.8) !important;
+            color: #34c356 !important;
+        }
+        [data-bs-theme="dark"] .bg-mismatch { 
+            background-color: rgba(43, 17, 20, 0.8) !important;
+            color: #ea5462 !important;
+        }
+        [data-bs-theme="dark"] .bg-overpaid { 
+            background-color: rgba(36, 28, 10, 0.8) !important;
+            color: #ffca2c !important;
+        }
+
+        [data-bs-theme="light"] .form-control.bg-match.text-success {
+            background-color: #d1e7dd !important;
+            color: #0f5132 !important;
+        }
+        [data-bs-theme="dark"] .form-control.bg-match.text-success {
+            background-color: #0a2614 !important;
+            color: #34c356 !important;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .result-list .output-value.bg-match,
+        .result-list .output-value.bg-mismatch,
+        .result-list .output-value.bg-overpaid,
+        .eob-result-data.bg-match,
+        .eob-result-data.bg-mismatch,
+        .eob-result-data.bg-overpaid,
+        .idr-result-value.bg-match,
+        .idr-result-value.bg-mismatch {
+             padding: 2px 6px;
+        }
+
+        .editable-input {
+            width: 100px;
+            background-color: var(--bs-tertiary-bg);
+            color: var(--bs-body-color);
+            border: 1px solid var(--bs-border-color);
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+        }
+        .editable-input:disabled {
+            background-color: var(--bs-secondary-bg);
+            border-color: var(--bs-border-color);
+        }
+        
+        @keyframes shake-red {
+            0% { transform: translateX(0); box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0); }
+        }
+        .is-invalid {
+            border-color: #dc3545 !important; /* Important to override focus */
+        }
+        .form-control.is-invalid, .form-select.is-invalid {
+             border-color: #dc3545 !important;
+             animation: shake-red 0.5s ease-out;
+        }
+        
+        /* --- Footer (Detailed) --- */
+        #main-footer {
+            background-color: var(--bs-glass-bg);
+            border-top: 1px solid var(--bs-glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--bs-secondary-color);
+            padding: 3rem 1.5rem 1.5rem 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        #main-footer h5 {
+            font-weight: 600;
+            color: var(--bs-body-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        #main-footer .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        #main-footer .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        #main-footer .footer-links a {
+            color: var(--bs-secondary-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        #main-footer .footer-links a:hover {
+            color: var(--bs-primary);
+            text-decoration: underline;
+        }
+        #main-footer .social-links a {
+            font-size: 1.5rem;
+            color: var(--bs-secondary-color);
+            margin-right: 1rem;
+            transition: color 0.2s ease;
+        }
+        #main-footer .social-links a:hover {
+            color: var(--bs-primary);
+        }
+        #main-footer .footer-bottom {
+            border-top: 1px solid var(--bs-border-color);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        #main-footer .footer-bottom p {
+            margin-bottom: 0.25rem;
+        }
+        #main-footer .footer-bottom a {
+            color: var(--bs-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        #main-footer .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+
+        
+        /* Note Textareas */
+        #note_Text, #note_Mail_Text, #mail_Note_Text, #refund_Note_Text, #ineligible_Note_Text {
+            min-height: 200px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* --- Tab Navigation Styles --- */
+        .nav-tabs-glass {
+            border-bottom: 1px solid var(--bs-border-color);
+            display: flex;
+            margin-bottom: 0; /* Changed */
+            margin-top: 1rem;
+        }
+        .nav-tabs-glass .nav-link {
+            font-family: var(--bs-heading-font-family);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--bs-secondary-color);
+            border: none;
+            border-radius: 0.75rem 0.75rem 0 0;
+            padding: 0.75rem 1.5rem;
+            margin-right: 0.5rem;
+            transition: all 0.2s ease-out;
+            background-color: transparent;
+        }
+        
+        .nav-tabs-glass .nav-link:hover:not(.active) {
+            color: var(--bs-body-color);
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+
+        .nav-tabs-glass .nav-link.active {
+            color: var(--bs-body-color);
+            background-color: var(--bs-card-bg);
+            border: 1px solid var(--bs-card-border);
+            border-bottom: 1px solid var(--bs-card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            top: 1px;
+        }
+        
+        [data-bs-theme="dark"] .nav-tabs-glass .nav-link.active {
+             color: var(--bs-primary-dark);
+        }
+
+        .tab-content-glass {
+            border-top-left-radius: 0; 
+            padding: 1.5rem;
+        }
+        
+        /* --- NEW: Tab Animation --- */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .tab-pane.fade {
+            transition: none; /* Disable bootstrap's fade */
+        }
+        .tab-pane.active.show {
+            animation: fadeInSlideUp 0.3s ease-out forwards;
+        }
+        /* --- END: Tab Animation --- */
+
+
+        /* --- Copyable & Theme Toggle --- */
+        .form-control[readonly].copyable {
+            cursor: pointer;
+            background-color: var(--bs-secondary-bg);
+        }
+        [data-bs-theme="light"] .form-control[readonly].copyable:hover {
+            background-color: #e9ecef;
+        }
+        [data-bs-theme="dark"] .form-control[readonly].copyable:hover {
+            background-color: #3a3a3a;
+        }
+        
+        #theme-toggle-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1030;
+        }
+        .btn-theme-toggle {
+            background-color: var(--bs-glass-bg);
+            border: 1px solid var(--bs-glass-border);
+            color: var(--bs-secondary-color);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-radius: 13px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        [data-bs-theme="light"] .btn-theme-toggle {
+            color: #495057;
+        }
+        .btn-theme-toggle:hover {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+        }
+        [data-bs-theme="dark"] .btn-theme-toggle {
+            color: var(--bs-body-color-dark);
+        }
+        [data-bs-theme="dark"] .btn-theme-toggle:hover {
+            background-color: var(--bs-primary-dark);
+            border-color: var(--bs-primary-dark);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb-dark), 0.3);
+        }
+        
+        /* --- EOB Display Bar (Replaces Sticky Header) --- */
+        #idr-notes-section {
+            position: relative;
+        }
+
+        #top-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1035;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #eob-input-row {
+            padding-right: 0.5rem; /* Add padding for main content */
+        }
+
+        /* --- NEW: EOB Display Bar --- */
+        #eob-display-bar {
+            visibility: hidden; /* Hide until populated */
+            opacity: 0;
+            height: 0;
+            transition: all 0.3s ease-out;
+            
+            border: 1px solid var(--sticky-border);
+            border-radius: 1.5rem;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 0 1.5rem;
+            margin-top: 0;
+            
+            /* --- NEW: Light Mode Gradient --- */
+            background-image: linear-gradient(90deg, #e9d5ff, #c084fc);
+            color: #3b0764;
+            
+            margin-right: 0.5rem; /* Add padding for main content */
+            margin-bottom: 0.75rem; /* Space below it */
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        #eob-display-bar.visible {
+            visibility: visible;
+            opacity: 1;
+            height: auto;
+            padding: 0.75rem 1.5rem;
+        }
+
+        /* --- NEW: Dark Mode Override --- */
+        [data-bs-theme="dark"] #eob-display-bar {
+            background-image: linear-gradient(90deg, #00f0b5, #06b6d4);
+            color: #000000;
+        }
+        
+        #eob-display-bar .eob-display-label,
+        #eob-display-bar .eob-display-value {
+             /* --- NEW: Light Mode Text --- */
+            color: #3b0764;
+            text-shadow: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        [data-bs-theme="dark"] #eob-display-bar .eob-display-label,
+        [data-bs-theme="dark"] #eob-display-bar .eob-display-value {
+            color: #000;
+            text-shadow: none;
+        }
+        #eob-display-bar .eob-display-value.currency {
+            color: #3b0764;
+            font-weight: 700;
+        }
+        [data-bs-theme="dark"] #eob-display-bar .eob-display-value.currency {
+            color: #000;
+            font-weight: 700;
+        }
+        #eob-display-bar .eob-display-separator {
+            color: #3b0764;
+            opacity: 0.6;
+            margin: 0 0.5rem;
+        }
+        [data-bs-theme="dark"] #eob-display-bar .eob-display-separator {
+            color: #000;
+            opacity: 0.6;
+        }
+        /* --- END: EOB Display Bar --- */
+
+
+        #idr-table-container {
+           display: none;
+        }
+        
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes gradient-flow-dark {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Button Loader --- */
+        .btn.loading {
+            position: relative;
+            color: transparent !important;
+            pointer-events: none;
+        }
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -8px;
+            margin-left: -8px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-top-color: var(--bs-primary);
+            border-radius: 50%;
+            animation: btn-spin 0.6s linear infinite;
+        }
+        [data-bs-theme="dark"] .btn.loading::after {
+             border: 2px solid #333;
+             border-top-color: var(--bs-primary-dark);
+        }
+        @keyframes btn-spin {
+            to { transform: rotate(360deg); }
+        }
+         /* CSS ভেরিয়েবল সেটআপ: ডার্ক মোড (ডিফল্ট - ডার্ক ব্যাকগ্রাউন্ডের জন্য উপযুক্ত) */
+        :root {
+            --text-color: #FFFFFF; /* প্রধান ফন্টের রং: সাদা */
+            --bg-color: rgba(0, 0, 0, 0.4); /* স্বচ্ছ ব্যাকগ্রাউন্ড: কালো-স্বচ্ছ */
+            --hover-bg-color: rgba(0, 0, 0, 0.6);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --accent-color: #00BCD4; /* অ্যাকসেন্ট: সায়ান */
+            --secondary-text: rgba(255, 255, 255, 0.7);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        /* লাইট মোডের জন্য ওভাররাইড (হালকা ব্যাকগ্রাউন্ডের জন্য উপযুক্ত) */
+        /* এই ক্লাসটি যদি বডিতে যোগ করা হয়, তবে কালার পরিবর্তন হবে */
+        .light-mode {
+            --text-color: #1A1A1A; /* প্রধান ফন্টের রং: কালো */
+            --bg-color: rgba(255, 255, 255, 0.4); /* স্বচ্ছ ব্যাকগ্রাউন্ড: সাদা-স্বচ্ছ */
+            --hover-bg-color: rgba(255, 255, 255, 0.6);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent-color: #1976D2; /* অ্যাকসেন্ট: নীল */
+            --secondary-text: rgba(26, 26, 26, 0.7);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* CSS: স্থির অবস্থান, স্বচ্ছতা (গ্লাসমরফিজম) এবং স্টাইলিং */
+        .fixed-watch {
+            position: fixed;
+            bottom: 25px; /* নিচের দিক থেকে দূরত্ব */
+            left: 25px; /* বাম দিক থেকে দূরত্ব */
+            z-index: 1000;
+            
+            /* গ্লাসমরফিজম ব্যাকগ্রাউন্ড এবং অ্যাডাপ্টিভ কালার */
+            background: var(--bg-color); 
+            border: 1px solid var(--border-color); 
+            backdrop-filter: blur(8px); /* ব্লার এফেক্ট */
+            -webkit-backdrop-filter: blur(8px); 
+            
+            padding: 10px 15px; /* কম্প্যাক্ট বক্স সাইজ */
+            border-radius: 12px;
+            color: var(--text-color);
+            font-family: 'Rajdhani', sans-serif;
+            
+            box-shadow: var(--shadow); 
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* টেক্সট শ্যাডো পঠনযোগ্যতা বাড়াতে */
+            
+            opacity: 0.9;
+            transition: opacity 0.3s, background 0.3s, color 0.3s;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* মাউস নিয়ে গেলে স্বচ্ছতা বাড়বে */
+        .fixed-watch:hover {
+            opacity: 1;
+            background: var(--hover-bg-color);
+        }
+
+        .time-main {
+            font-size: 2.2rem; /* ছোট ফন্ট সাইজ */
+            font-weight: 700;
+            line-height: 1;
+            display: flex;
+            align-items: baseline;
+        }
+        
+        /* সেকেন্ড এরিয়া: স্ক্রলিং এফেক্টের জন্য */
+        .sec-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 8px; /* মার্জিন কমানো হলো */
+            padding-bottom: 0px; 
+        }
+        
+        .sec-wrapper {
+            height: 1rem; /* ছোট উচ্চতা */
+            width: 2rem; /* ছোট প্রস্থ */
+            overflow: hidden;
+            position: relative;
+            color: var(--accent-color); /* অ্যাকসেন্ট কালার ব্যবহার */
+            font-weight: 600;
+            font-size: 1rem; /* ছোট ফন্ট সাইজ */
+            line-height: 1rem;
+        }
+        
+        .sec-digit-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* স্ক্রলিং এর জন্য স্মুথ ট্রানজিশন */
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); 
+            text-align: center;
+        }
+        
+        .sec-digit-container > div {
+            height: 1rem;
+            line-height: 1rem;
+        }
+
+        .ampm-text {
+            font-size: 0.7rem; /* ছোট ফন্ট সাইজ */
+            color: var(--secondary-text); /* সেকেন্ডারি টেক্সট কালার ব্যবহার */
+            line-height: 1;
+            margin-top: 3px; 
+            font-weight: 400;
+        }
+        /* Ensuring the body has a nice soft background */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Neumorphic base color - light gray/off-white */
+            background-color: #e0e5ec;
+        }
+
+        /* --- NEUMORPHIC BUTTON BASE STYLE --- */
+        #processButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 25px;
+    padding: 5px 19px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    box-shadow: 2px 2px 4px #b8b8b8, -2px -2px 4px #ffffff;
+    background: var(--bs-card-bg);
+    transition: all 0.2s 
+ease-in-out;
+}
+        
+        /* --- NEUMORPHIC ACTIVE (PRESSED) STATE --- */
+        /* Simulate pressing the button by reversing the shadows (inset) */
+        #processButton:hover {
+          transition: all 0.2s 
+ease-in-out;
+            box-shadow: 
+                inset 4px 4px 8px #c8ced6, /* Inset darker */
+                inset -4px -4px 8px #ffffff; /* Inset lighter */
+            background: #e0e5ec;
+            color: #6b21a8; /* Change text color slightly on press */
+        }
+
+        /* --- CLEAR BUTTON STYLING --- */
+        #clearButton {
+            margin-left: 20px;
+            gap: 5px;
+    border-radius: 25px;
+    padding: 5px 19px;
+            border: none;
+            outline: none;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1)); /* Deep Violet text */
+            background-color: var(--bs-card-bg);
+            /* Neumorphic base background */
+            box-shadow: 
+                2px 2px 4px #b8b8b8, 
+                -2px -2px 4px #ffffff;
+            transition: all 0.3s ease-in-out; /* Slower transition for gradient effect */
+        }
+
+        /* --- CLEAR BUTTON HOVER EFFECT (RED GRADIENT) --- */
+        #clearButton:hover {
+            color: white; /* White text on hover for contrast */
+            background: linear-gradient(90deg, #dc2626 0%, #ea580c 100%); /* Red to Orange Gradient */
+            box-shadow: 
+                0 4px 10px rgba(220, 38, 38, 0.4), /* Subtle red glow shadow */
+                0 2px 4px rgba(0, 0, 0, 0.1); /* General dark shadow */
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+
+        #clearButton:active {
+            box-shadow: 
+                inset 3px 3px 6px #c8ced6, 
+                inset -3px -3px 6px #ffffff;
+            color: white; /* Keep white text when active */
+            background: linear-gradient(90deg, #b91c1c 0%, #c2410c 100%); /* Slightly darker gradient on active */
+            transform: translateY(0); /* Reset lift on active */
+        }
+    </style>
+</head>
+  <body>
+
+    <!-- --- Animated BG Container --- -->
+    <div id="animated-bg-container">
+        <div class="bg-image bg-image-light bg-1 active"></div>
+        <div class="bg-image bg-image-dark bg-1 active"></div>
+    </div>
+
+    <!-- --- Fixed Top Bar --- -->
+    <div id="top-bar-container" class="container-fluid">
+        <div id="top-bar" class="row" style="
+            font-family:'Poppins',sans-serif; font-weight:600;
+            padding: 8px 0px;
+            border-radius:10px;
+            display:flex; justify-content:space-between; align-items:center;
+            color: var(--bs-body-color);
+            font-size:14px;
+            z-index: 1030;
+            ">
+            
+            <div class="col-auto" style="flex-shrink: 0;">
+                Made by
+                <span style="
+                    background:linear-gradient(90deg,#06b6d4 0%, #a855f7 50%, #ec4899 100%);
+                    -webkit-background-clip:text; background-clip:text; color:transparent;
+                    text-shadow:0 0 6px rgba(168,85,247,0.4);
+                    font-weight:700;">
+                    Pranto Rodrix
+                </span>
+            </div>
+
+            <div class="col-auto d-flex align-itemsC-center gap-2">
+                <nav style="padding: 10px; display: flex; gap: 15px; margin-right:80px;">
+                  <a href="typing.html" style="text-decoration: none; font-size: 14px;">| Typing  |</a>
+                  <a href="nsa.html" style=" text-decoration: none; font-size: 14px;">NSA  |</a>
+                  <a href="appeal.html" style=" text-decoration: none; font-size: 14px;">Appeal  |</a>
+                  <a href="index.html" style=" text-decoration: none; font-size: 14px;">Main Page  |</a>
+                </nav>
+                <!-- THE NEUMORPHIC EXTRACT BUTTON -->
+                  <button type="button" id="processButton">
+                    <i class="bi bi-magic"></i> Extract
+                  </button>
+                <!-- THE CLEAR BUTTON WITH RED GRADIENT HOVER -->
+                  <button type="button" id="clearButton">
+                    <i class="bi bi-x-lg"></i> Clear
+                  </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="btn btn-theme-toggle d-flex align-items-center justify-content-center px-3 py-1" style="font-size: 13px; background: none; border: none; backdrop-filter: none;">
+                    <i id="theme-icon" class="bi bi-sun-fill me-2"></i>
+                    <span id="theme-text" class="fw-medium"></span>
+                </button>
             </div>
         </div>
     </div>
-    <!-- DATE -->
-    <div class="date-container">
-        <div class="dt-day" id="dDay">MON</div>
-        <div class="dt-num" id="dNum">01</div>
-        <div class="dt-mon" id="dMon">JAN</div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-/* DATA & STATE */
-let gD={e:null,i:[]};
-const MED_EMAILS = {
-    "MET": "IDR@met-hcs.com",
-    "NATIONAL": "idre@nmrusa.com", "NMR": "idre@nmrusa.com",
-    "FHAS": "IDRE@fhas.com",
-    "PROVIDER": "pri-idre@provider-resources.com", "RESOURCE": "pri-idre@provider-resources.com",
-    "IMPROVE": "FederalIDRE@improve.health"
-};
+    <!-- --- Main Page Wrapper --- -->
+    <div id="main-wrapper">
+        
+        <!-- --- Resizable Left Sidebar --- -->
+        <div id="idr-sidebar" class="card">
+            <div id="sidebar-header">
+                <h5 class="text-primary">IDR Results</h5>
+            </div>
+            <div id="idr-sidebar-content">
+                <!-- JS will populate this -->
+                <div id="idr-errors" class="error-message p-2"></div>
+            </div>
+        </div>
+        
+        <!-- --- Resizer Handle --- -->
+        <div id="resizer"></div>
+        
+        <!-- --- Main Content Area --- -->
+        <div id="main-content">
 
-/* PERSISTENCE FIELDS */
-const PERSIST_IDS = ['cNm','cIni','mNm','mIni','uNm','uIni','rNm'];
+            <!-- Main Tool Content -->
+            <div id="dashboard-page" class="container-fluid eob-content my-3 px-0">
+                
+                <!-- --- NEW: EOB Display Bar --- -->
+                <div id="eob-display-bar">
+                    <div id="eob-display-content"></div>
+                </div>
+                
+                <!-- EOB & IDR Input Row (NEW LAYOUT) -->
+                <div class="row g-3" id="eob-input-row">
+                    
+                    <!-- Column 1: EOB Input (NEW) -->
+                    <div class="col-lg-2">
+                        <div class="card p-2 h-100 d-flex flex-column">
+                            <div class="flex-grow-1 d-flex flex-column">
+                                <textarea class="form-control h-100" id="eobUpdatedInput" 
+                                          placeholder="Paste Updated EOB"></textarea>
+                                <textarea class="form-control h-100" id="eobOldInput" 
+                                          placeholder="Paste Old EOB (Optional)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Column 2: IDR Inputs (NEW) -->
+                    <div class="col-lg-7">
+                        <div class="card p-2">
+                             <div class="row g-2">
+                                <!-- 2024+ -->
+                                <div class="col-lg-6">
+                                     <div class="row g-2">
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idrTextInput1" rows="2" placeholder="2024+ 1"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idrTextInput2" rows="2" placeholder="2024+ 2"></textarea>
+                                        </div>
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idrTextInput3" rows="2" placeholder="2024+ 3"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idrTextInput4" rows="2" placeholder="2024+ 4"></textarea>
+                                        </div>
+                                     </div>
+                                </div>
+                                <!-- 2022-23 -->
+                                <div class="col-lg-6">
+                                     <div class="row g-2">
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 1"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput2" rows="2" placeholder="2022-23 2"></textarea>
+                                        </div>
+                                        <div class="col-6">
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput3" rows="2" placeholder="2022-23 3"></textarea>
+                                            <textarea class="form-control idr-textarea" id="idr2022TextInput4" rows="2" placeholder="2022-23 4"></textarea>
+                                        </div>
+                                     </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mt-3" style="padding-right: 0.5rem;">
+                      <div class="card d-none" id="eob-details-card">
+                        <div class="card-body">
+                           <div id="eob-details-list" class="result-list">
+                                <!-- JS will populate this -->
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                    
+                    <!-- EOB Output (Hidden) -->
+                    <div class="col-lg-3 d-none">
+                        <div class="card p-3 h-100 eob-results-card">
+                            <div class="card-body">
+                                <div id="eob-errors-1" class="error-message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hidden global results -->
+                <div class="d-none">
+                    <span id="eob_Ticket"></span>
+                    <span id="eob_AddlPaid"></span>
+                </div>
+                    
+                <!-- IDR Result Table (Hidden) -->
+                <div class="col-12" id="idr-table-container"></div>
+                
+                <!-- NEW: EOB Details Section -->
+                <div class="col-12 mt-3" style="padding-right: 0.5rem;">
+                    <div class="card d-none" id="eob-details-card">
+                        <div class="card-body">
+                             <h5 class="text-primary fw-bold mb-3">EOB Details (From Updated EOB)</h5>
+                             <div id="eob-details-list" class="result-list">
+                                <!-- JS will populate this -->
+                             </div>
+                        </div>
+                    </div>
+                </div>
 
-/* INIT */
-document.addEventListener('DOMContentLoaded',()=>{
-    const sT=localStorage.getItem('theme')||'light';
-    document.documentElement.setAttribute('data-bs-theme',sT);
+
+                <!-- Tab Navigation Section -->
+                <div class="col-12 mt-3" style="padding-right: 0.5rem;">
+                    <!-- Tab Headers -->
+                    <ul class="nav nav-tabs-glass" id="noteTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="correspondence-tab" data-bs-toggle="tab" data-bs-target="#correspondence-pane" type="button" role="tab" aria-controls="correspondence-pane" aria-selected="true">
+                                <i class="bi bi-pencil-square me-2"></i>Correspondence
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email-pane" type="button" role="tab" aria-controls="email-pane" aria-selected="false">
+                                <i class="bi bi-envelope-at me-2"></i>Email
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="refund-tab" data-bs-toggle="tab" data-bs-target="#refund-pane" type="button" role="tab" aria-controls="refund-pane" aria-selected="false">
+                                <i class="bi bi-cash-coin me-2"></i>Refund
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ineligible-tab" data-bs-toggle="tab" data-bs-target="#ineligible-pane" type="button" role="tab" aria-controls="ineligible-pane" aria-selected="false">
+                                <i class="bi bi-x-octagon me-2"></i>Ineligible
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="noteTabContent">
+                        <!-- Correspondence Pane -->
+                        <div class="tab-pane fade show active" id="correspondence-pane" role="tabpanel" aria-labelledby="correspondence-tab" tabindex="0">
+                            <div class="tab-content-glass card">
+                                <div class="row g-3">
+                                    <div class="col-3">
+                                        <label for="note_Name" class="form-label fw-bold">Name:</label>
+                                        <input type="text" class="form-control" id="note_Name" placeholder="Enter Name">
+                                        <label for="note_Initial" class="form-label fw-bold mt-2">Initial:</label>
+                                        <input type="text" class="form-control" id="note_Initial" placeholder="Auto/Manual Initial">
+                                        
+                                        <div id="finalReviewAdjustments" class="mt-2" style="display: none;">
+                                            <h6 class="text-decoration-underline" style="font-size: 0.9rem;">Adjustments:</h6>
+                                            <p class="mb-1 result-list" style="font-size: 0.85rem;"><strong>Adjust with PT:</strong> <span id="adjustWithPt" class="output-value">--</span></p>
+                                            <p class="mb-0 result-list" style="font-size: 0.85rem;"><strong>Adjust Without PT:</strong> <span id="adjustWithoutPt" class="output-value">--</span></p>
+                                        </div>
+                                        
+                                        <div id="note_Warning_NoEOB" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">No EOB Found.</div>
+                                        <div id="note_Warning_ClaimMismatch" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">IDR Claim numbers Didn't Match..</div>
+                                    </div>
+                                    <div class="col-7">
+                                        <label for="note_Text" class="form-label fw-bold">Correspondence Note: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Note')"></textarea>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column justify-content-end">
+                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="note_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate Note
+                                         </button>
+                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#noteTemplateModal">
+                                            <i class="bi bi-pencil"></i> Edit Note
+                                        </button>
+                                         <span id="copy_Confirmation_Note" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                         <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="note_ClearBtn">
+                                             <i class="bi bi-x-circle"></i> Clear Note
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Email Pane -->
+                        <div class="tab-pane fade" id="email-pane" role="tabpanel" aria-labelledby="email-tab" tabindex="0">
+                            <div class="tab-content-glass card">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-3">
+                                        <label for="note_Mail_Name" class="form-label fw-bold">My Name:</label>
+                                        <input type="text" class="form-control" id="note_Mail_Name" placeholder="Enter Your Name">
+                                        <label for="note_Mail_Initial" class="form-label fw-bold mt-2">My Initial:</label>
+                                        <input type="text" class="form-control" id="note_Mail_Initial" placeholder="Enter Your Initial">
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="note_Mail_To" class="form-label fw-bold">To: (Click to copy)</label>
+                                        <input type="email" class="form-control copyable" id="note_Mail_To" value="nsa.disputes@bcbstx.com" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')">
+                                        <label for="note_Mail_CC" class="form-label fw-bold mt-2">CC: (Click to copy)</label>
+                                        <input type="email" class="form-control copyable" id="note_Mail_CC" value="mislam@roundtmc.com, razo@leverngear.com" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')">
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="note_Mail_Subject" class="form-label fw-bold">Subject: (Click to Copy)</label>
+                                        <input type="text" class="form-control copyable" id="note_Mail_Subject" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')">
+                                        
+                                        <label for="note_Mail_Determ_Date" class="form-label fw-bold mt-2">Determination Date:</label>
+                                        <input type="text" class="form-control" id="note_Mail_Determ_Date" placeholder="Auto-fills from IDR Result 1">
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="note_Mail_Type" class="form-label fw-bold">Email Type:</label>
+                                        <select class="form-select" id="note_Mail_Type">
+                                            <option value="" selected>Select...</option>
+                                            <option value="1st Email">1st Email</option>
+                                            <option value="2nd Email">2nd Email</option>
+                                        </select>
+                                         <button class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#emailTemplateModal">
+                                            <i class="bi bi-pencil"></i> Edit Template
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label for="note_Mail_Text" class="form-label fw-bold">Mail Body: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="note_Mail_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')"></textarea>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="mail_Note_Text" class="form-label fw-bold">Note for Email: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="mail_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')"></textarea>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column justify-content-start">
+                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="note_Mail_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate
+                                         </button>
+                                         <span id="copy_Confirmation_Mail" class="text-success text-center fw-bold mt-1 mb-2" style="display: none;">Copied!</span>
+                                         <button class="btn btn-outline-secondary rounded-pill w-100" id="note_Mail_ClearBtn">
+                                             <i class="bi bi-x-circle"></i> Clear
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Refund Pane -->
+                        <div class="tab-pane fade" id="refund-pane" role="tabpanel" aria-labelledby="refund-tab" tabindex="0">
+                            <div class="tab-content-glass card">
+                                <div class="row g-3">
+                                    <div class="col-3">
+                                        <label for="refund_Name" class="form-label fw-bold">Name:</label>
+                                        <input type="text" class="form-control" id="refund_Name" placeholder="Enter Name">
+                                        <label for="refund_Amount" class="form-label fw-bold mt-2">Refund Amount:</label>
+                                        <input type="text" class="form-control" id="refund_Amount" placeholder="$0.00">
+                                        <label for="refund_Date" class="form-label fw-bold mt-2">Refund Date:</label>
+                                        <input type="text" class="form-control" id="refund_Date" placeholder="MM/DD/YYYY">
+                                        <label for="refund_Dispute" class="form-label fw-bold mt-2">Dispute:</label>
+                                        <input type="text" class="form-control" id="refund_Dispute" placeholder="DISP-****">
+                                    </div>
+                                    <div class="col-7">
+                                        <label for="refund_Note_Text" class="form-label fw-bold">Refund Note: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="refund_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Refund')"></textarea>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column justify-content-end">
+                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="refund_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate Note
+                                         </button>
+                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#refundNoteEditModal">
+                                            <i class="bi bi-pencil"></i> Edit Note
+                                        </button>
+                                         <span id="copy_Confirmation_Refund" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                         <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="refund_ClearBtn">
+                                             <i class="bi bi-x-circle"></i> Clear Note
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ineligible Pane -->
+                        <div class="tab-pane fade" id="ineligible-pane" role="tabpanel" aria-labelledby="ineligible-tab" tabindex="0">
+                            <div class="tab-content-glass card">
+                                <div class="row g-3">
+                                    <div class="col-3">
+                                        <label for="ineligible_Name" class="form-label fw-bold">Name:</label>
+                                        <input type="text" class="form-control" id="ineligible_Name" placeholder="Name">
+                                        <label for="ineligible_Initial" class="form-label fw-bold mt-2">Initial:</label>
+                                        <input type="text" class="form-control" id="ineligible_Initial" value="FINAL REVIEW" readonly>
+                                        <label for="ineligible_Dispute" class="form-label fw-bold mt-2">Dispute:</label>
+                                        <input type="text" class="form-control" id="ineligible_Dispute" placeholder="DISP-****">
+                                    </div>
+                                    <div class="col-7">
+                                        <label for="ineligible_Note_Text" class="form-label fw-bold">Ineligible Note: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="ineligible_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Ineligible')"></textarea>
+                                    </div>
+                                    <div class="col-2 d-flex flex-column justify-content-end">
+                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="ineligible_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate Note
+                                         </button>
+                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#ineligibleNoteEditModal">
+                                            <i class="bi bi-pencil"></i> Edit Note
+                                        </button>
+                                         <span id="copy_Confirmation_Ineligible" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                         <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="ineligible_ClearBtn">
+                                             <i class="bi bi-x-circle"></i> Clear Note
+                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer id="main-footer">
+                    <div class="container-fluid">
+                        <div class="row g-4">
+                            <div class="col-lg-4 col-md-6">
+                                <h5>About Pranto's Note Tool</h5>
+                                <p>This tool is designed to streamline the process of IDR note generation and email correspondence. It automates data extraction from EOBs and IDR reports to minimize errors and save time.</p>
+                            </div>
+                            <div class="col-lg-2 col-md-6">
+                                <h5>Quick Links</h5>
+                                <ul class="footer-links">
+                                    <li><a href="index.html">Main Page</a></li>
+                                    <li><a href="#">Features</a></li>
+                                    <li><a href="#">About Me</a></li>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <h5>Resources</h5>
+                                <ul class="footer-links">
+                                    <li><a href="#" target="_blank" rel="noopener noreferrer">IDR Process Guide</a></li>
+                                    <li><a href="#" target="_blank" rel="noopener noreferrer">NSA Guidelines</a></li>
+                                    <li><a href="#" target="_blank" rel="noopener noreferrer">Internal SOP</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <h5>Connect</h5>
+                                <p>Get in touch for feedback or support.</p>
+                                <div class="social-links">
+                                    <a href="https://www.facebook.com/pranto.anthony1/" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
+                                    <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                    <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-bottom">
+                            <p class="mb-0">Made by <a href="https://www.facebook.com/pranto.anthony1/" target="black" title="Facebook">@PrantoRodrix</a></p>
+                            <p class="mb-0">&copy; <span id="footer-year">2025</span> My Portfolio. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>
+                
+            </div> <!-- End #dashboard-page -->
+            
+        </div> <!-- End #main-content -->
+        
+        <!-- --- External Toggle Button Wrapper --- -->
+        <div id="sidebar-toggle-wrapper">
+             <button id="toggle-sidebar-btn-external" class="btn btn-sm btn-primary" style="border-radius: 50%; width: 40px; height: 40px; box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+        </div>
+
+    </div> <!-- End #main-wrapper -->
     
-    // RESTORE SAVED VALUES
-    PERSIST_IDS.forEach(id => {
-        const val = localStorage.getItem('saved_' + id);
-        if(val) {
-            const el = document.getElementById(id);
-            if(el) el.value = val;
-        }
-    });
+    <!-- --- Modals --- -->
 
-    iDts(); lThm(); sWch(); togEm(); 
-    // Listen for inputs to save
-    document.querySelectorAll('.nm-inp, .in-inp').forEach(el => {
-        el.addEventListener('input', (e) => {
-            if(PERSIST_IDS.includes(e.target.id)) {
-                localStorage.setItem('saved_' + e.target.id, e.target.value);
+    <!-- Email Edit Modal -->
+    <div class="modal fade" id="emailTemplateModal" tabindex="-1" aria-labelledby="emailTemplateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="emailTemplateModalLabel">Edit Email Template</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the template below. The placeholders like [CLAIM_NUMBER] will be filled automatically.</p>
+                    <textarea id="email_Template_Text" class="form-control" rows="20"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEmailTemplateBtn">Save Template</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Correspondence Note Edit Modal -->
+    <div class="modal fade" id="noteTemplateModal" tabindex="-1" aria-labelledby="noteTemplateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="noteTemplateModalLabel">Edit Correspondence Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated note below. The original note will be updated when you save.</p>
+                    <textarea id="note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteTemplateBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Refund Note Edit Modal -->
+    <div class="modal fade" id="refundNoteEditModal" tabindex="-1" aria-labelledby="refundNoteEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="refundNoteEditModalLabel">Edit Refund Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated refund note below.</p>
+                    <textarea id="refund_Note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedRefundNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveRefundNoteBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ineligible Note Edit Modal -->
+    <div class="modal fade" id="ineligibleNoteEditModal" tabindex="-1" aria-labelledby="ineligibleNoteEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--bs-glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--bs-glass-border);">
+                <div class="modal-header" style="border-bottom-color: var(--bs-border-color);">
+                    <h5 class="modal-title" id="ineligibleNoteEditModalLabel">Edit Ineligible Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Edit the generated ineligible note below.</p>
+                    <textarea id="ineligible_Note_Edit_Text" class="form-control" rows="15"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--bs-border-color);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="copyEditedIneligibleNoteBtn">Copy & Close</button>
+                    <button type="button" class="btn btn-primary" id="saveIneligibleNoteBtn">Save & Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- ঘড়ির কম্পোনেন্ট -->
+    <div class="fixed-watch">
+        <div class="time-main">
+            <span id="bdTime">--:--</span>
+            
+            <div class="sec-area">
+                <div class="sec-wrapper">
+                    <div id="scrollingSeconds" class="sec-digit-container">
+                        <!-- JS will inject 00 to 59 here -->
+                    </div>
+                </div>
+                <span id="bdAMPM" class="ampm-text">--</span>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Page Logic Script -->
+    <script>
+        // --- DOM Elements ---
+        const htmlEl = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+
+        // --- Persistent Storage Functions (localStorage) ---
+        function savePersistentValue(id, value) {
+            try {
+                localStorage.setItem(id, value);
+            } catch (e) {
+                console.warn("localStorage is not available. Values will not be saved.", e);
+            }
+        }
+
+        function loadPersistentValue(id, defaultValue) {
+            try {
+                const storedValue = localStorage.getItem(id);
+                return storedValue !== null ? storedValue : defaultValue;
+            } catch (e) {
+                console.warn("localStorage is not available. Loading default value.", e);
+                return defaultValue;
+            }
+        }
+
+        // --- Theme Toggle Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlEl.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+            
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
+            
+            setupPersistentFields();
+            setupNoteEditModal();
+            setupRefundNoteLogic();
+            setupIneligibleNoteLogic();
+            
+            // Adjust main content padding for fixed top bar
+            const topBarContainer = document.getElementById('top-bar-container');
+            const mainWrapper = document.getElementById('main-wrapper'); // Target main wrapper now
+            if (topBarContainer && mainWrapper) {
+                setTimeout(() => {
+                    const topBarHeight = topBarContainer.offsetHeight;
+                    mainWrapper.style.paddingTop = `${topBarHeight}px`;
+                    mainWrapper.style.height = `calc(100vh - ${topBarHeight}px)`; // Set wrapper height
+                    
+                    // Position external toggle button
+                    const toggleWrapper = document.getElementById('sidebar-toggle-wrapper');
+                    if (toggleWrapper) {
+                        toggleWrapper.style.top = `${topBarHeight + 10}px`;
+                    }
+                    
+                }, 100); 
+            }
+            
+            // Setup Sidebar Resize & Toggle
+            setupSidebarResize();
+            setupSidebarToggle();
+        });
+        
+        // --- Sidebar Resize Logic ---
+        function setupSidebarResize() {
+            const sidebar = document.getElementById('idr-sidebar');
+            const resizer = document.getElementById('resizer');
+            const mainContent = document.getElementById('main-content');
+            const toggleWrapper = document.getElementById('sidebar-toggle-wrapper');
+
+            let isResizing = false;
+            let startX, startWidth;
+
+            resizer.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = sidebar.offsetWidth;
+                resizer.classList.add('grabbing');
+                
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
+            });
+
+            function handleMouseMove(e) {
+                if (!isResizing) return;
+                
+                const dx = e.clientX - startX;
+                let newWidth = startWidth + dx;
+                
+                // Enforce min/max
+                const minWidth = parseInt(getComputedStyle(sidebar).minWidth);
+                const maxWidth = parseInt(getComputedStyle(sidebar).maxWidth);
+                
+                if (newWidth < minWidth) newWidth = minWidth;
+                if (newWidth > maxWidth) newWidth = maxWidth;
+
+                sidebar.style.width = `${newWidth}px`;
+                toggleWrapper.style.left = `${newWidth + 10}px`; // Move toggle button
+            }
+
+            function handleMouseUp() {
+                isResizing = false;
+                resizer.classList.remove('grabbing');
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            }
+        }
+        
+        // --- Sidebar Toggle Logic ---
+        function setupSidebarToggle() {
+            const sidebar = document.getElementById('idr-sidebar');
+            const toggleBtn = document.getElementById('toggle-sidebar-btn-external');
+            const toggleIcon = toggleBtn.querySelector('i');
+            const toggleWrapper = document.getElementById('sidebar-toggle-wrapper');
+            
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                
+                if (isCollapsed) {
+                    toggleIcon.classList.remove('bi-chevron-left');
+                    toggleIcon.classList.add('bi-chevron-right');
+                    toggleWrapper.style.left = '10px';
+                } else {
+                    toggleIcon.classList.remove('bi-chevron-right');
+                    toggleIcon.classList.add('bi-chevron-left');
+                    toggleWrapper.style.left = `${sidebar.offsetWidth + 10}px`;
+                }
+            });
+        }
+        
+        
+        // Setup Persistent Fields
+        function setupPersistentFields() {
+            const persistentInputs = [
+                { id: 'note_Name', defaultValue: '' },
+                { id: 'note_Initial', defaultValue: '' },
+                { id: 'note_Mail_Name', defaultValue: '' },
+                { id: 'note_Mail_Initial', defaultValue: '' },
+                { id: 'refund_Name', defaultValue: '' },
+                { id: 'ineligible_Name', defaultValue: '' },
+                { id: 'ineligible_Dispute', defaultValue: '' }
+            ];
+
+            persistentInputs.forEach(item => {
+                const inputEl = document.getElementById(item.id);
+                if (inputEl) {
+                    inputEl.value = loadPersistentValue(item.id, item.defaultValue);
+                    inputEl.addEventListener('input', () => {
+                        savePersistentValue(item.id, inputEl.value);
+                    });
+                }
+            });
+        }
+        
+        function setTheme(theme) {
+            htmlEl.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+                themeText.textContent = '';
+            } else {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+                themeText.textContent = '';
+            }
+        }
+
+        // --- Note Edit Modal Logic ---
+        function setupNoteEditModal() {
+            const noteTemplateModal = new bootstrap.Modal(document.getElementById('noteTemplateModal'));
+            const noteEditText = document.getElementById('note_Edit_Text');
+            const mainNoteText = document.getElementById('note_Text');
+            const saveNoteBtn = document.getElementById('saveNoteTemplateBtn');
+            const copyNoteBtn = document.getElementById('copyEditedNoteBtn');
+
+            document.getElementById('noteTemplateModal').addEventListener('show.bs.modal', () => {
+                noteEditText.value = mainNoteText.value;
+            });
+            
+            saveNoteBtn.addEventListener('click', () => {
+                mainNoteText.value = noteEditText.value;
+                noteTemplateModal.hide();
+            });
+            
+            copyNoteBtn.addEventListener('click', () => {
+                noteEditText.select();
+                document.execCommand('copy');
+                noteTemplateModal.hide();
+                
+                copyConfirmationNote.style.display = 'block';
+                setTimeout(() => { copyConfirmationNote.style.display = 'none'; }, 2000);
+            });
+        }
+        
+        // --- Refund Note Logic (with Validation) ---
+        function setupRefundNoteLogic() {
+            const refundGenerateBtn = document.getElementById('refund_GenerateBtn');
+            const refundClearBtn = document.getElementById('refund_ClearBtn');
+            const refundNoteText = document.getElementById('refund_Note_Text');
+            const refundName = document.getElementById('refund_Name');
+            const refundAmount = document.getElementById('refund_Amount');
+            const refundDate = document.getElementById('refund_Date');
+            const refundDispute = document.getElementById('refund_Dispute');
+            const copyConfirm = document.getElementById('copy_Confirmation_Refund');
+            
+            const refundEditModal = new bootstrap.Modal(document.getElementById('refundNoteEditModal'));
+            const refundEditText = document.getElementById('refund_Note_Edit_Text');
+            const saveRefundBtn = document.getElementById('saveRefundNoteBtn');
+            const copyRefundBtn = document.getElementById('copyEditedRefundNoteBtn');
+            
+            const inputsToValidate = [refundName, refundAmount, refundDate, refundDispute]; // ADDED Name
+
+            refundGenerateBtn.addEventListener('click', () => {
+                withButtonLoader('refund_GenerateBtn', () => {
+                    const name = refundName.value.trim();
+                    const amount = refundAmount.value.trim();
+                    const date = refundDate.value.trim();
+                    const dispute = refundDispute.value.trim();
+                    
+                    let isValid = true;
+                    inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
+                    refundNoteText.value = '';
+
+                    if (amount === '') {
+                        refundAmount.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (date === '') {
+                        refundDate.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (dispute === '') {
+                        refundDispute.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                    if (name === '') {
+                         refundName.classList.add('is-invalid');
+                        isValid = false;
+                    }
+
+                    if (!isValid) {
+                        refundNoteText.value = "ERROR: Please fill all Refund fields (Name, Amount, Date, Dispute).";
+                        return;
+                    }
+                    
+                    const today = getFormattedDate();
+                    let note = `${today}>IDR WIN>${name}>WORKING ON MEDIATION FEE REFUND'S WORKLIST. WE WERE SUCCESSFUL AND PREVAILED IN THE IDR DETERMINATION. WE RECEIVED MEDIATOR FEE REFUND OF ${amount} DATED ${date}. ${dispute}. WE ARE WAITING FOR ADDITIONAL PAYMENT. PLEASE DO NOT CLOSE THE TICKET BEFORE ALL PAYMENTS ARE RECEIVED.`;
+                    
+                    // NEW: Animate Text
+                    animateText(refundNoteText, note.trim().toUpperCase());
+                });
+            });
+            
+            refundClearBtn.addEventListener('click', () => {
+                refundNoteText.value = '';
+                refundAmount.value = '';
+                refundDate.value = '';
+                refundDispute.value = '';
+                inputsToValidate.forEach(el => el.classList.remove('is-invalid'));
+            });
+            
+            inputsToValidate.forEach(el => {
+                el.addEventListener('input', () => el.classList.remove('is-invalid'));
+            });
+            
+            document.getElementById('refundNoteEditModal').addEventListener('show.bs.modal', () => {
+                refundEditText.value = refundNoteText.value;
+            });
+            
+            saveRefundBtn.addEventListener('click', () => {
+                refundNoteText.value = refundEditText.value;
+                refundEditModal.hide();
+            });
+            
+            copyRefundBtn.addEventListener('click', () => {
+                refundEditText.select();
+                document.execCommand('copy');
+                refundEditModal.hide();
+                
+                copyConfirm.style.display = 'block';
+                setTimeout(() => { copyConfirm.style.display = 'none'; }, 2000);
+            });
+        }
+        
+        // --- Ineligible Note Logic (with Validation) ---
+        function setupIneligibleNoteLogic() {
+            const generateBtn = document.getElementById('ineligible_GenerateBtn');
+            const clearBtn = document.getElementById('ineligible_ClearBtn');
+            const noteText = document.getElementById('ineligible_Note_Text');
+            const nameEl = document.getElementById('ineligible_Name');
+            const disputeEl = document.getElementById('ineligible_Dispute');
+            const copyConfirm = document.getElementById('copy_Confirmation_Ineligible');
+            
+            const editModal = new bootstrap.Modal(document.getElementById('ineligibleNoteEditModal'));
+            const editText = document.getElementById('ineligible_Note_Edit_Text');
+            const saveBtn = document.getElementById('saveIneligibleNoteBtn');
+            const copyBtn = document.getElementById('copyEditedIneligibleNoteBtn');
+
+            generateBtn.addEventListener('click', () => {
+                withButtonLoader('ineligible_GenerateBtn', () => generateIneligibleNote(false));
+            });
+            
+            clearBtn.addEventListener('click', () => {
+                noteText.value = '';
+                disputeEl.value = ''; 
+                savePersistentValue(disputeEl.id, '');
+                disputeEl.classList.remove('is-invalid');
+                nameEl.classList.remove('is-invalid');
+            });
+            
+            [disputeEl, nameEl].forEach(el => {
+                 el.addEventListener('input', () => el.classList.remove('is-invalid'));
+            });
+            
+            document.getElementById('ineligibleNoteEditModal').addEventListener('show.bs.modal', () => {
+                editText.value = noteText.value;
+            });
+            
+            saveBtn.addEventListener('click', () => {
+                noteText.value = editText.value;
+                editModal.hide();
+            });
+            
+            copyBtn.addEventListener('click', () => {
+                editText.select();
+                document.execCommand('copy');
+                editModal.hide();
+                
+                copyConfirm.style.display = 'block';
+                setTimeout(() => { copyConfirm.style.display = 'none'; }, 2000);
+            });
+        }
+        
+        function generateIneligibleNote(isRetry) {
+            const today = getFormattedDate();
+            const nameEl = document.getElementById('ineligible_Name');
+            const name = nameEl.value.trim();
+            const initial = document.getElementById('ineligible_Initial').value;
+            const disputeEl = document.getElementById('ineligible_Dispute');
+            const dispute = disputeEl.value.trim();
+            const noteText = document.getElementById('ineligible_Note_Text');
+            
+            const eobData = globalEobData.updated;
+            
+            disputeEl.classList.remove('is-invalid');
+            nameEl.classList.remove('is-invalid');
+            noteText.value = '';
+            
+            if (!eobData && !isRetry) {
+                // EOB data is missing, try to extract it first
+                withButtonLoader('ineligible_GenerateBtn', () => {
+                    processAllData(true); // Run extraction silently
+                    // Wait a moment for data to process, then try again
+                    setTimeout(() => generateIneligibleNote(true), 500);
+                });
+                return;
+            }
+            
+            if (!eobData && isRetry) {
+                 noteText.value = "ERROR: EOB Data is missing. Please paste EOB data and click 'Extract' first.";
+                 return;
+            }
+            
+            let isValid = true;
+            if (dispute === '') {
+                disputeEl.classList.add('is-invalid');
+                isValid = false;
+            }
+            if (name === '') {
+                nameEl.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                noteText.value = "ERROR: Please fill all Ineligible fields (Name, Dispute).";
+                return;
+            }
+            
+            let note = `${today}>${initial}>${name}>WORKING ON TRACKING SHEET. `;
+            note += `CLAIM: ${eobData.claimNo}; TOTAL BILL ${formatCurrency(eobData.billedAmt)}, INS PAID ${formatCurrency(eobData.paidAmt)}, PT RESPONSIBLITY ${formatCurrency(eobData.ptRespSum)}. NEGOTIATION AND IDR DONE. `;
+            note += `${dispute}: STATUS IS CLOSED. NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.`;
+            
+            // NEW: Animate Text
+            animateText(noteText, note.trim().toUpperCase());
+        }
+
+        // --- Data Extraction Logic ---
+        
+        let globalEobAdditionalPayment = 0;
+        let globalEobTicket = 'Not Found';
+        let globalEobData = { updated: null, old: null }; // NEW: Added old
+        
+        // --- Utility Functions ---
+        
+        /**
+         * NEW: Animates text into a textarea
+         * @param {HTMLTextAreaElement} textareaElement - The textarea to animate
+         * @param {string} text - The full text to type out
+         */
+        function animateText(textareaElement, text) {
+            // NEW: Check for an animation on this specific element
+            if (textareaElement.animationInterval) {
+                clearInterval(textareaElement.animationInterval);
+            }
+            
+            const words = text.split(' ');
+            let index = 0;
+            textareaElement.value = ''; // Clear text
+            
+            if (words.length === 0) return;
+
+            // Calculate delay based on text length, aim for ~1s
+            const totalDuration = Math.min(Math.max(words.length * 20, 300), 1500); // 0.3s min, 1.5s max
+            const delayPerWord = totalDuration / words.length;
+
+            textareaElement.animationInterval = setInterval(() => { // NEW: Store on element
+                if (index < words.length) {
+                    textareaElement.value += words[index] + ' ';
+                    index++;
+                    // Optional: Scroll to bottom
+                    textareaElement.scrollTop = textareaElement.scrollHeight;
+                } else {
+                    clearInterval(textareaElement.animationInterval); // NEW: Clear from element
+                    textareaElement.animationInterval = null;
+                }
+            }, delayPerWord);
+        }
+
+        
+        function formatCurrency(num) {
+            if (isNaN(num)) {
+                num = 0;
+            }
+            return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function extractValueSkippingLines(text, labelRegex) {
+            const match = text.match(labelRegex);
+            if (!match) return null;
+
+            const labelEndIndex = match.index + match[0].length;
+            const subsequentText = text.substring(labelEndIndex);
+            const lines = subsequentText.split(/[\r\n]+/);
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                if (trimmedLine.length > 0) {
+                    if (trimmedLine.match(/^[a-zA-Z\s\.\/()-]+:/)) {
+                        continue; 
+                    }
+                    return trimmedLine; 
+                }
+            }
+            return null; 
+        }
+        
+        function parseCurrency(value) {
+            if (typeof value !== 'string') return 0;
+            const cleaned = value.replace(/[$,\s]/g, '');
+            return parseFloat(cleaned) || 0;
+        }
+        
+        function getColumnValue(columns, index) {
+            if (columns && columns.length > index && columns[index] !== "") {
+                return columns[index].trim();
+            }
+            return "--";
+        }
+        
+        function getFormattedDate() {
+            const now = new Date();
+            const bdTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+            const mm = String(bdTime.getMonth() + 1).padStart(2, '0');
+            const dd = String(bdTime.getDate()).padStart(2, '0');
+            const yy = String(bdTime.getFullYear()).slice(-2);
+            return `${mm}/${dd}/${yy}`;
+        }
+        
+        function copyToClipboard(input, confirmationId) {
+            input.select();
+            document.execCommand('copy');
+            
+            const confirmationEl = document.getElementById(confirmationId);
+            if (confirmationEl) {
+                confirmationEl.style.display = 'block';
+                setTimeout(() => { confirmationEl.style.display = 'none'; }, 2000);
+            }
+        }
+        
+        function withButtonLoader(buttonId, actionFn) {
+            const btn = document.getElementById(buttonId);
+            if (!btn) return;
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            setTimeout(() => {
+                try {
+                    actionFn();
+                } catch (e) {
+                    console.error("Error during button action:", e);
+                }
+                
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }, 300); // 300ms delay for visual feedback
+        }
+
+        // --- Get DOM Elements ---
+        const eobUpdatedInput = document.getElementById('eobUpdatedInput');
+        const eobOldInput = document.getElementById('eobOldInput'); // NEW
+        const eobErrors1 = document.getElementById('eob-errors-1');
+        const idrErrors = document.getElementById('idr-errors');
+        const eobDisplayBar = document.getElementById('eob-display-bar'); 
+        const eobDisplayContent = document.getElementById('eob-display-content'); 
+        
+        // NEW EOB Details Table Elements
+        const eobDetailsCard = document.getElementById('eob-details-card');
+        const eobDetailsList = document.getElementById('eob-details-list');
+
+        const noteNameInput = document.getElementById('note_Name');
+        const noteInitialInput = document.getElementById('note_Initial');
+        const noteTextInput = document.getElementById('note_Text');
+        const noteGenerateBtn = document.getElementById('note_GenerateBtn'); 
+        const noteClearBtn = document.getElementById('note_ClearBtn');
+        const copyConfirmationNote = document.getElementById('copy_Confirmation_Note'); 
+        const finalReviewAdjustments = document.getElementById('finalReviewAdjustments'); 
+        const adjustWithPt = document.getElementById('adjustWithPt');
+        const adjustWithoutPt = document.getElementById('adjustWithoutPt');
+        const noteWarningNoEOB = document.getElementById('note_Warning_NoEOB'); 
+        const noteWarningClaimMismatch = document.getElementById('note_Warning_ClaimMismatch'); 
+        
+        const mailNameInput = document.getElementById('note_Mail_Name');
+        const mailInitialInput = document.getElementById('note_Mail_Initial'); 
+        const mailToInput = document.getElementById('note_Mail_To');
+        const mailCcInput = document.getElementById('note_Mail_CC');
+        const mailTypeInput = document.getElementById('note_Mail_Type');
+        const mailSubjectInput = document.getElementById('note_Mail_Subject');
+        const mailDetermDateInput = document.getElementById('note_Mail_Determ_Date'); 
+        const mailGenerateBtn = document.getElementById('note_Mail_GenerateBtn');
+        const mailClearBtn = document.getElementById('note_Mail_ClearBtn');
+        const mailTextInput = document.getElementById('note_Mail_Text');
+        const mailNoteTextInput = document.getElementById('mail_Note_Text'); 
+        const copyConfirmationMail = document.getElementById('copy_Confirmation_Mail'); 
+        const emailTemplateText = document.getElementById('email_Template_Text');
+        const saveEmailTemplateBtn = document.getElementById('saveEmailTemplateBtn');
+
+        // --- Default Email Template ---
+        let currentEmailTemplate = `Dear BCBS,
+
+We are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surpresas Act (NSA).
+On [DETERMINATION_DATE], [MEDIATOR_NAME] —the certified IDR entity—issued a final, legally binding determination in favor of , [PROVIDER_NAME] regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of [OON_RATE] for service code [CPT_CODE]. as offered by [PROVIDER_NAME] as the appropriate rate for this claim.
+According to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.
+
+Request for Payment:
+Please remit the outstanding balance, calculated as follows:
+Claim Number: [CLAIM_NUMBER]
+IDR-Determined OON Rate: [OON_RATE]
+Less Initial Payment: [INITIAL_PAYMENT]
+------------------------
+Total Outstanding Balance: [OUTSTANDING_BALANCE]
+
+This request is made pursuant to the No Surpresas Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance
+If you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.
+
+As per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.
+
+For your reference we have attached the primary EOB and IDR determination.
+
+
+Thank You
+Regards
+---------------
+[MY_NAME]`;
+        
+        emailTemplateText.value = currentEmailTemplate;
+        
+        saveEmailTemplateBtn.addEventListener('click', () => {
+            currentEmailTemplate = emailTemplateText.value;
+        });
+
+        // --- Clear Functions ---
+        function clearEobResults() {
+             eobDisplayBar.classList.remove('visible'); // Hide bar
+             eobDisplayContent.innerHTML = '';
+             eobErrors1.textContent = '';
+             idrErrors.textContent = '';
+             eobDetailsCard.classList.add('d-none'); // NEW: Hide details table
+             eobDetailsList.innerHTML = ''; // NEW: Clear details table
+             globalEobAdditionalPayment = 0;
+             globalEobTicket = 'Not Found';
+             globalEobData = { updated: null, old: null }; // NEW: Clear old
+        }
+
+        function clearComparisonStyles() {
+            document.querySelectorAll('.eob-display-value, .idr-result-value, .eob-details-list .output-value').forEach(el => {
+                el.classList.remove('bg-match', 'bg-mismatch', 'bg-overpaid');
+            });
+            
+            const idrInputs = document.querySelectorAll('#idr-sidebar-content .editable-input');
+            idrInputs.forEach(input => {
+                input.classList.remove('is-invalid');
+                input.closest('.idr-result-item').classList.remove('bg-mismatch'); 
+            });
+        }
+        
+        document.getElementById('clearButton').addEventListener('click', function() {
+            eobUpdatedInput.value = '';
+            eobOldInput.value = ''; // NEW
+            document.getElementById('idrTextInput1').value = '';
+            document.getElementById('idrTextInput2').value = '';
+            document.getElementById('idrTextInput3').value = '';
+            document.getElementById('idrTextInput4').value = ''; 
+            document.getElementById('idr2022TextInput1').value = '';
+            document.getElementById('idr2022TextInput2').value = '';
+            document.getElementById('idr2022TextInput3').value = '';
+            document.getElementById('idr2022TextInput4').value = ''; 
+
+            clearEobResults();
+            document.getElementById('idr-sidebar-content').innerHTML = '';
+            
+            noteClearBtn.click();
+            clearComparisonStyles();
+            mailClearBtn.click();
+            
+            document.getElementById('refund_ClearBtn').click(); // UPDATED
+            document.getElementById('ineligible_ClearBtn').click();
+        });
+        
+        noteClearBtn.addEventListener('click', function() {
+             noteInitialInput.value = '';
+             noteTextInput.value = '';
+             finalReviewAdjustments.style.display = 'none'; 
+             noteWarningNoEOB.style.display = 'none'; 
+             noteWarningClaimMismatch.style.display = 'none';
+             noteNameInput.classList.remove('is-invalid'); // Clear error
+             noteInitialInput.classList.remove('is-invalid'); // Clear error
+        });
+        
+        mailClearBtn.addEventListener('click', function() {
+            mailSubjectInput.value = '';
+            mailTextInput.value = '';
+            mailNoteTextInput.value = ''; 
+            mailCcInput.value = 'mislam@roundtmc.com, razo@leverngear.com';
+            mailToInput.value = 'nsa.disputes@bcbstx.com';
+            mailTypeInput.value = '';
+            mailDetermDateInput.value = ''; 
+            mailTypeInput.classList.remove('is-invalid');
+            mailDetermDateInput.classList.remove('is-invalid');
+            mailNameInput.classList.remove('is-invalid');
+            mailInitialInput.classList.remove('is-invalid');
+            mailTextInput.classList.remove('bg-match', 'text-success');
+        });
+
+        // --- Event Listeners (Using Loader) ---
+        noteTextInput.addEventListener('click', () => copyToClipboard(noteTextInput, 'copy_Confirmation_Note'));
+        mailNoteTextInput.addEventListener('click', () => copyToClipboard(mailNoteTextInput, 'copy_Confirmation_Mail'));
+        mailTextInput.addEventListener('click', () => copyToClipboard(mailTextInput, 'copy_Confirmation_Mail'));
+        mailSubjectInput.addEventListener('click', () => copyToClipboard(mailSubjectInput, 'copy_Confirmation_Mail'));
+
+        document.getElementById('processButton').addEventListener('click', () => {
+            withButtonLoader('processButton', () => processAllData(false));
+        });
+        noteGenerateBtn.addEventListener('click', () => {
+            withButtonLoader('note_GenerateBtn', () => validateAndGenerateNote(false));
+        });
+        mailGenerateBtn.addEventListener('click', () => {
+            withButtonLoader('note_Mail_GenerateBtn', generateMail);
+        });
+        
+        // Add listeners to remove error validation on input
+        [noteNameInput, noteInitialInput, mailNameInput, mailInitialInput].forEach(el => {
+            el.addEventListener('input', () => el.classList.remove('is-invalid'));
+        });
+
+        // --- EOB Parsing (CRITICAL UPDATE) ---
+        function parseEOB(eobText) {
+            if (!eobText || eobText.trim() === "") {
+                return null;
+            }
+            
+            // Standard Fields
+            const ticketNoMatch = eobText.match(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i); 
+            const claimNoMatch = eobText.match(/(Claim I?D|Claim No|Claim Number|Control Number)\s*:?[\s\r\n]+([^\r\n]+)/i); 
+            const billingProviderMatch = eobText.match(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i);
+            
+            // --- NEW Regex based on user request ---
+            const billedStr = extractValueSkippingLines(eobText, /(Total Bill|Billed Amount)\s*:?/i) || '$0.00';
+            
+            // === FIX: Expanded regex to find more 'Paid' labels ===
+            // === FIX 2: Added (^|[\r\n]) to anchor labels to the start of a line, preventing partial matches ===
+            const paidStr = extractValueSkippingLines(eobText, /(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i) || '$0.00';
+            
+            const coinsuranceStr = extractValueSkippingLines(eobText, /(Coinsurance Amount|Coinsurance)\s*:?/i) || '$0.00';
+            const copayStr = extractValueSkippingLines(eobText, /(Copay Amount|Copay)\s*:?/i) || '$0.00';
+            const deductibleStr = extractValueSkippingLines(eobText, /(Deductible Amount|Deductible)\s*:?/i) || '$0.00';
+            
+            // Legacy PT Resp for fallback (if sum is 0)
+            const ptRespStr = extractValueSkippingLines(eobText, /(Copay\/Deductible Amount|Responsibility)\s*:?/i) || '$0.00';
+            
+            const addlPaidStr = extractValueSkippingLines(eobText, /(Insurance Current Paid Amount|Additional Paid)\s*:?/i) || '$0.00';
+
+            // --- NEW Calculations ---
+            const coinsuranceAmt = parseCurrency(coinsuranceStr);
+            const copayAmt = parseCurrency(copayStr);
+            const deductibleAmt = parseCurrency(deductibleStr);
+            const legacyPtRespAmt = parseCurrency(ptRespStr);
+
+            let ptRespSum = coinsuranceAmt + copayAmt + deductibleAmt;
+            if (ptRespSum === 0 && legacyPtRespAmt > 0) {
+                ptRespSum = legacyPtRespAmt; // Fallback
+            }
+
+            return {
+                ticketNo: ticketNoMatch ? ticketNoMatch[2].trim() : 'Not Found',
+                claimNo: claimNoMatch ? claimNoMatch[2].trim() : 'Not Found',
+                provider: billingProviderMatch ? billingProviderMatch[2].trim() : 'Not Found',
+                billedAmt: parseCurrency(billedStr),
+                paidAmt: parseCurrency(paidStr),
+                ptRespSum: ptRespSum,
+                // Store individual components for new table
+                coinsuranceAmt: coinsuranceAmt,
+                copayAmt: copayAmt,
+                deductibleAmt: deductibleAmt,
+                addlPaidAmt: parseCurrency(addlPaidStr) // This is the new "Additional Payment"
+            };
+        }
+
+        // --- EOB Display (Top Bar) (UPDATED) ---
+        function displayEOBResults(updated) {
+            eobDisplayContent.innerHTML = '';
+            eobDisplayBar.classList.remove('visible');
+            eobErrors1.textContent = ''; // Use main error display
+            globalEobAdditionalPayment = 0;
+            globalEobTicket = 'Not Found';
+
+            if (!updated) {
+                eobErrors1.textContent = 'Updated EOB not found.';
+                return;
+            }
+
+            // --- NEW LOGIC: Additional Payment comes directly from the field ---
+            let addlPayResult = updated.addlPaidAmt || 0;
+            
+            globalEobAdditionalPayment = addlPayResult;
+            globalEobTicket = updated?.ticketNo || 'Not Found';
+
+            const data = updated;
+            
+            // T32738 | 3266489928x01 | Bill: $921.00 | Paid: $100.00 | PT: $0.00 | Addl: $50.00 | Round Table Physician.
+            const s = `<span class="eob-display-separator">|</span>`; // Separator
+            
+            let html_bar = `
+                <span class="eob-display-value" id="eob_bar_Ticket">${data.ticketNo}</span> ${s}
+                <span class="eob-display-value" id="eob_bar_Claim">${data.claimNo}</span> ${s}
+                <span class="eob-display-label">Bill:</span> <span class="eob-display-value currency" id="eob_bar_Billed">${formatCurrency(data.billedAmt)}</span> ${s}
+                <span class="eob-display-label">Paid:</span> <span class="eob-display-value currency" id="eob_bar_Paid">${formatCurrency(data.paidAmt)}</span> ${s}
+                <span class="eob-display-label">PT:</span> <span class="eob-display-value currency" id="eob_bar_PtResp">${formatCurrency(data.ptRespSum)}</span> ${s}
+                <span class="eob-display-label">Addl:</span> <span class="eob-display-value currency" id="eob_bar_Addl">${formatCurrency(data.addlPaidAmt)}</span> ${s}
+                <span class="eob-display-value" id="eob_bar_Facility" title="${data.provider}">${data.provider}</span>
+            `;
+            
+            eobDisplayContent.innerHTML = html_bar;
+            eobDisplayBar.classList.add('visible');
+        }
+
+        // --- NEW: EOB Details Table Display ---
+        function displayEOBDetailsTable(updated) {
+            eobDetailsList.innerHTML = ''; // Clear previous
+            if (!updated) {
+                eobDetailsCard.classList.add('d-none');
+                return;
+            }
+            
+            let html = `
+                <p><strong>Billed:</strong> <span class="output-value" id="eob_detail_Billed">${formatCurrency(updated.billedAmt)}</span></p>
+                <p><strong>Paid:</strong> <span class="output-value" id="eob_detail_Paid">${formatCurrency(updated.paidAmt)}</span></p>
+                <p><strong>Coins:</strong> <span class="output-value" id="eob_detail_Coinsurance">${formatCurrency(updated.coinsuranceAmt)}</span></p>
+                <p><strong>Copay</strong> <span class="output-value" id="eob_detail_Copay">${formatCurrency(updated.copayAmt)}</span></p>
+                <p><strong>Deductible</strong> <span class="output-value" id="eob_detail_Deductible">${formatCurrency(updated.deductibleAmt)}</span></p>
+                <p><strong>Additional:</strong> <span class="output-value" id="eob_detail_Addl">${formatCurrency(updated.addlPaidAmt)}</span></p>
+            `;
+            
+            eobDetailsList.innerHTML = html;
+            eobDetailsCard.classList.remove('d-none'); // Show the card
+        }
+
+
+        // --- IDR Sidebar Helper Functions ---
+        function createSidebarItem(label, value, dataField, isCurrency = false) {
+            const currencyClass = isCurrency ? 'currency' : '';
+            const displayValue = isCurrency ? formatCurrency(parseCurrency(value)) : (value || '--');
+            return `
+                <div class="idr-result-item">
+                    <span class="idr-result-label">${label}</span>
+                    <span class="idr-result-value ${currencyClass}" data-field="${dataField}" title="${displayValue}">${displayValue}</span>
+                </div>
+            `;
+        }
+        
+        function createSidebarInput(label, value, index, type) {
+            let inputHtml = '';
+            if (type === 'W/L (Manual)') {
+                if (value === "--" || value === "Not Found" || value === "") {
+                    inputHtml = `<input type="text" class="form-control form-control-sm editable-input win-lose-input" data-row-index="${index}" data-field="W/L (Manual)">`;
+                } else {
+                    inputHtml = `<span class="idr-result-value" data-field="W/L (Manual)">${value}</span>`;
+                }
+            } else if (type === 'Refund') {
+                const winLoseValue = value.winLose; // We need to pass this
+                let isDisabled = (winLoseValue === 'lose'); 
+                let isInvalid = (winLoseValue === 'win'); 
+                if (winLoseValue === 'close' || winLoseValue === 'closed') {
+                    isDisabled = false;
+                    isInvalid = false;
+                }
+                
+                inputHtml = `<input type="text" 
+                                   class="form-control form-control-sm editable-input refund-input ${isInvalid ? 'is-invalid' : ''}" 
+                                   data-row-index="${index}" 
+                                   data-field="Refund"
+                                   oninput="autocompleteRefund(this)" 
+                                   ${isDisabled ? 'disabled' : ''}>`;
+            }
+            
+            return `
+                <div class="idr-result-item">
+                    <span class="idr-result-label">${label}</span>
+                    <div style="flex-grow: 1; max-width: 120px;">${inputHtml}</div>
+                </div>
+            `;
+        }
+
+        // --- IDR Parsing ---
+        function parseAndDisplayIDR() {
+            const idrTextInputs = [
+                { year: '2024+', text: document.getElementById('idrTextInput1').value, map: '2024+' },
+                { year: '2024+', text: document.getElementById('idrTextInput2').value, map: '2024+' },
+                { year: '2024+', text: document.getElementById('idrTextInput3').value, map: '2024+' },
+                { year: '2024+', text: document.getElementById('idrTextInput4').value, map: '2024+' },
+                { year: '2022-23', text: document.getElementById('idr2022TextInput1').value, map: '2022-23' },
+                { year: '2022-23', text: document.getElementById('idr2022TextInput2').value, map: '2022-23' },
+                { year: '2022-23', text: document.getElementById('idr2022TextInput3').value, map: '2022-23' },
+                { year: '2022-23', text: document.getElementById('idr2022TextInput4').value, map: '2022-23' }
+            ];
+            
+            const idrFields = [
+                "Ticket #", "IDR #", "Claim #", "CPT", "Initial Pmt", "Mediator", 
+                "Determ. Date", "Determ. W/L", "Addl. Pmt", "Pmt Date", 
+                "Fee Refund", "Fee Refund Date"
+            ];
+            
+            const idrFieldIndexMap_2024 = {
+                "Ticket #": 2, "IDR #": 1, "Claim #": 3, "CPT": 4, "Initial Pmt": 7, "Mediator": 8,
+                "Determ. Date": 16, "Determ. W/L": 17, "Addl. Pmt": 18, "Pmt Date": 19,
+                "Fee Refund": 20, "Fee Refund Date": 21
+            };
+            
+            const idrFieldIndexMap_2022 = {
+                "Ticket #": 1, "IDR #": 5, "Claim #": 2, "CPT": 3, "Initial Pmt": 7, "Mediator": 8,
+                "Determ. Date": 18, "Determ. W/L": 19, "Addl. Pmt": 20, "Pmt Date": 21,
+                "Fee Refund": 22, "Fee Refund Date": 23
+            };
+            
+            const mapDictionary = {
+                '2024+': idrFieldIndexMap_2024,
+                '2022-23': idrFieldIndexMap_2022
+            };
+
+            const sidebarContent = document.getElementById('idr-sidebar-content');
+            sidebarContent.innerHTML = '';
+            
+            let resultCounter = 1;
+            let firstIdrDetermDate = null; 
+
+            idrTextInputs.forEach((input, index) => {
+                if (input.text.trim() === "") {
+                    return; 
+                }
+                
+                const currentMap = mapDictionary[input.map];
+                const columns = input.text.split(/\t|\s{2,}/);
+                let rowResult = {}; 
+
+                idrFields.forEach(field => {
+                    if (currentMap[field] !== null) {
+                        rowResult[field] = getColumnValue(columns, currentMap[field]);
+                    }
+                });
+                
+                if (resultCounter === 1) {
+                    firstIdrDetermDate = rowResult["Determ. Date"];
+                }
+                
+                let groupHtml = `<div class="idr-result-group card" data-group-index="${index}">`;
+                groupHtml += `<h6 class="idr-group-header">Result ${resultCounter} (${input.year})</h6>`;
+
+                groupHtml += createSidebarItem('Ticket #', rowResult["Ticket #"], "Ticket #");
+                groupHtml += createSidebarItem('IDR #', rowResult["IDR #"], "IDR #");
+                groupHtml += createSidebarItem('Claim #', rowResult["Claim #"], "Claim #");
+                groupHtml += createSidebarItem('CPT', rowResult["CPT"], "CPT");
+                groupHtml += createSidebarItem('Initial Pmt', rowResult["Initial Pmt"], "Initial Pmt", true);
+                groupHtml += createSidebarItem('Mediator', rowResult["Mediator"], "Mediator");
+                groupHtml += createSidebarItem('Determ. Date', rowResult["Determ. Date"], "Determ. Date");
+                groupHtml += createSidebarItem('Determ. W/L', rowResult["Determ. W/L"], "Determ. W/L");
+                groupHtml += createSidebarItem('Addl. Pmt', rowResult["Addl. Pmt"], "Addl. Pmt", true);
+                groupHtml += createSidebarItem('Pmt Date', rowResult["Pmt Date"], "Pmt Date");
+                groupHtml += createSidebarItem('Fee Refund', rowResult["Fee Refund"], "Fee Refund", true);
+                groupHtml += createSidebarItem('Fee Refund Date', rowResult["Fee Refund Date"], "Fee Refund Date");
+
+                const paymentDate = rowResult["Pmt Date"];
+                const additionalStatus = (paymentDate !== "--" && paymentDate !== "Not Found") ? "Received" : "Waiting";
+                groupHtml += createSidebarItem('Additional', additionalStatus, "Additional");
+                
+                groupHtml += createSidebarInput('W/L (Manual)', rowResult["Determ. W/L"], index, 'W/L (Manual)');
+                groupHtml += createSidebarInput('Refund', { winLose: rowResult["Determ. W/L"]?.toLowerCase() }, index, 'Refund');
+                
+                groupHtml += '</div>';
+                sidebarContent.innerHTML += groupHtml;
+                
+                resultCounter++; 
+            });
+            
+            sidebarContent.innerHTML += `<div id="idr-errors" class="error-message p-2">${idrErrors.textContent}</div>`;
+            
+            if (firstIdrDetermDate) {
+                mailDetermDateInput.value = firstIdrDetermDate;
+            }
+        }
+        
+        // --- Matching Logic (UPDATED) ---
+        function performMatching() {
+            // 1. Ticket Number Matching
+            const allIdrTicketCells = document.querySelectorAll('#idr-sidebar-content .idr-result-value[data-field="Ticket #"]');
+            let eobTicketMatched = false;
+            
+            if (globalEobTicket !== 'Not Found' && allIdrTicketCells.length > 0) {
+                allIdrTicketCells.forEach(cell => {
+                    if (cell.textContent !== '--') {
+                         if (globalEobTicket === cell.textContent) {
+                            cell.classList.add('bg-match');
+                            eobTicketMatched = true;
+                        } else {
+                            cell.classList.add('bg-mismatch');
+                        }
+                    }
+                });
+            }
+            
+            const eobTicketEl = document.getElementById('eob_bar_Ticket');
+            if (eobTicketEl) {
+                if(allIdrTicketCells.length > 0) { 
+                   eobTicketEl.classList.add(eobTicketMatched ? 'bg-match' : 'bg-mismatch');
+                }
+            } else if (globalEobTicket === 'Not Found' && allIdrTicketCells.length > 0) {
+                eobErrors1.textContent = 'EOB Ticket # not found for comparison.';
+            }
+
+            // 2. Additional Payment Matching
+            const allIdrAddlPmtCells = document.querySelectorAll('#idr-sidebar-content .idr-result-value[data-field="Addl. Pmt"]');
+            if (allIdrAddlPmtCells.length === 0) {
+                return;
+            }
+
+            const idrAmounts = Array.from(allIdrAddlPmtCells).map(cell => ({
+                amount: parseCurrency(cell.textContent),
+                cell: cell
+            }));
+
+            const idrErrorsSidebar = document.getElementById('idr-errors');
+            const eobAddlPayEl_Bar = document.getElementById('eob_bar_Addl'); // Top Bar
+            const eobAddlPayEl_Detail = document.getElementById('eob_detail_Addl'); // Detail Table
+            
+            // globalEobAdditionalPayment is now set from "Insurance Current Paid Amount"
+            if (globalEobAdditionalPayment === 0) {
+                 idrErrorsSidebar.textContent = 'EOB Additional Payment is $0.00. No match performed.';
+                 idrErrorsSidebar.classList.add('text-success'); // Not an error, just info
+                 idrErrorsSidebar.classList.remove('text-danger');
+                 return; // Don't match if $0.00
+            }
+
+            let bestMatch = findMatchingSubset(globalEobAdditionalPayment, idrAmounts);
+
+            if (bestMatch.indices.length > 0) {
+                // Match Found
+                idrAmounts.forEach((item, index) => {
+                    if (bestMatch.indices.includes(index)) {
+                        item.cell.classList.add('bg-match');
+                    } else {
+                        item.cell.classList.add('bg-mismatch');
+                    }
+                });
+                if (eobAddlPayEl_Bar) eobAddlPayEl_Bar.classList.add('bg-match');
+                if (eobAddlPayEl_Detail) eobAddlPayEl_Detail.closest('p').querySelector('.output-value').classList.add('bg-match');
+                
+                idrErrorsSidebar.textContent = `Match found: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} = IDR Sum ${formatCurrency(bestMatch.sum)}`;
+                idrErrorsSidebar.classList.add('text-success');
+                idrErrorsSidebar.classList.remove('text-danger');
+            } else {
+                // No Match
+                idrAmounts.forEach(item => item.cell.classList.add('bg-mismatch'));
+                if (eobAddlPayEl_Bar) eobAddlPayEl_Bar.classList.add('bg-mismatch');
+                if (eobAddlPayEl_Detail) eobAddlPayEl_Detail.closest('p').querySelector('.output-value').classList.add('bg-mismatch');
+
+                idrErrorsSidebar.textContent = `Additional mismatch: EOB Addl. ${formatCurrency(globalEobAdditionalPayment)} does not match any combination of IDR payments.`;
+                idrErrorsSidebar.classList.add('text-danger');
+                idrErrorsSidebar.classList.remove('text-success');
+            }
+        }
+
+        function findMatchingSubset(target, items) {
+            let n = items.length;
+            let bestMatch = { indices: [], sum: 0 };
+            
+            for (let i = 0; i < (1 << n); i++) {
+                let currentSum = 0;
+                let currentIndices = [];
+                
+                for (let j = 0; j < n; j++) {
+                    if ((i >> j) & 1) {
+                        currentSum += items[j].amount;
+                        currentIndices.push(j);
+                    }
+                }
+                
+                if (Math.abs(currentSum - target) < 0.001) { 
+                    return { indices: currentIndices, sum: currentSum };
+                }
+            }
+            return bestMatch;
+        }
+
+        // --- Main Process Function (UPDATED) ---
+        function processAllData(isSilent = false) {
+            clearComparisonStyles();
+            if (!isSilent) {
+                noteClearBtn.click(); 
+                mailClearBtn.click();
+                document.getElementById('ineligible_ClearBtn').click();
+            }
+            
+            eobErrors1.textContent = '';
+            
+            const eobUpdatedText = eobUpdatedInput.value;
+            const eobOldText = eobOldInput.value; // Get old EOB text
+            
+            globalEobData.updated = parseEOB(eobUpdatedText);
+            globalEobData.old = parseEOB(eobOldText); // Parse old EOB
+            
+            // --- NEW: All logic now flows from 'updated' EOB only ---
+            displayEOBResults(globalEobData.updated);
+            displayEOBDetailsTable(globalEobData.updated); // NEW
+            
+            parseAndDisplayIDR();
+            performMatching();
+        }
+
+        
+        // --- Note Generation Function (with Validation) ---
+        function validateAndGenerateNote(isRetry) {
+            let validationPassed = true;
+            let activeIdrRows = [];
+            finalReviewAdjustments.style.display = 'none'; 
+            noteWarningNoEOB.style.display = 'none';
+            noteWarningClaimMismatch.style.display = 'none';
+            
+            // NEW: Validate Name ONLY
+            noteNameInput.classList.remove('is-invalid');
+            noteInitialInput.classList.remove('is-invalid'); // Clear initial error
+            if (noteNameInput.value.trim() === '') {
+                noteNameInput.classList.add('is-invalid');
+                validationPassed = false;
+            }
+
+            const idrGroups = document.querySelectorAll('#idr-sidebar-content .idr-result-group');
+            let idrClaimNumbers = []; 
+            
+            const getData = (group, field) => group.querySelector(`[data-field="${field}"]`)?.textContent || group.querySelector(`[data-field="${field}"]`)?.value || '--';
+
+            idrGroups.forEach((group, index) => {
+                const winLoseInput = group.querySelector('.win-lose-input');
+                const refundInput = group.querySelector('.refund-input');
+                
+                let rowData = {
+                    idrNum: getData(group, "IDR #"),
+                    claimNum: getData(group, "Claim #"),
+                    cpt: getData(group, "CPT"),
+                    mediator: getData(group, "Mediator"),
+                    addlPmt: getData(group, "Addl. Pmt"),
+                    additionalStatus: getData(group, "Additional"), 
+                    winLoseStatus: '',
+                    refundStatus: ''
+                };
+                
+                if(rowData.claimNum !== '--' && rowData.claimNum !== 'Not Found') {
+                    idrClaimNumbers.push(rowData.claimNum);
+                }
+                
+                let currentWLStatus = '';
+                if (winLoseInput) {
+                    if (winLoseInput.value.trim() === '') {
+                        validationPassed = false;
+                        winLoseInput.classList.add('is-invalid');
+                    }
+                    currentWLStatus = winLoseInput.value.toLowerCase();
+                } else {
+                    currentWLStatus = getData(group, "W/L (Manual)").toLowerCase(); 
+                }
+                rowData.winLoseStatus = currentWLStatus;
+
+                if (refundInput) {
+                    rowData.refundStatus = refundInput.value;
+                    if (currentWLStatus === 'win' && refundInput.value.trim() === '') {
+                        validationPassed = false;
+                        refundInput.classList.add('is-invalid');
+                        refundInput.closest('.idr-result-item').classList.add('bg-mismatch');
+                    }
+                }
+                
+                activeIdrRows.push(rowData);
+            });
+            
+            const eobExists = globalEobData.updated;
+            if (!eobExists && !isRetry) {
+                // EOB data is missing, try to extract it first
+                processAllData(true); // Run extraction silently
+                // Wait a moment for data to process, then try again
+                setTimeout(() => validateAndGenerateNote(true), 500);
+                return;
+            }
+            if (!eobExists && isRetry) {
+                 noteTextInput.value = "ERROR: EOB Data is missing. Please paste EOB data and click 'Extract' first.";
+                 return;
+            }
+
+            if (!validationPassed) {
+                noteTextInput.value = "ERROR: PLEASE FILL ALL REQUIRED FIELDS (NAME, AND W/L, REFUND IN SIDEBAR).";
+                return;
+            }
+            
+            const allSame = idrClaimNumbers.every(c => c === idrClaimNumbers[0]);
+            if (!allSame && idrClaimNumbers.length > 0) {
+                noteWarningClaimMismatch.style.display = 'block';
+            }
+            
+            let initial = "IDR FOLLOW UP";
+            let allTasksDone = activeIdrRows.length > 0;
+            let closedAndEmptyRefund = false;
+
+            activeIdrRows.forEach(row => {
+                const wl = row.winLoseStatus;
+                const ad = row.additionalStatus.toLowerCase();
+                const rf = row.refundStatus.toLowerCase();
+
+                if (wl === 'win') {
+                    if (ad !== 'received' || rf !== 'received') allTasksDone = false;
+                } else if (wl === 'lose') {
+                    if (ad !== 'received') allTasksDone = false; 
+                } else if (wl === 'closed' || wl === 'close') {
+                    if (rf === 'waiting') allTasksDone = false;
+                    if (rf === '') closedAndEmptyRefund = true;
+                } else {
+                    allTasksDone = false;
+                }
+            });
+
+            if (allTasksDone) {
+                initial = "FINAL REVIEW";
+            }
+            
+            if (activeIdrRows.length === 1 && initial !== "FINAL REVIEW") {
+                const status = activeIdrRows[0].winLoseStatus;
+                if (status === 'win') initial = 'IDR WIN';
+                else if (status === 'lose') initial = 'IDR LOSE';
+                else if (status === 'closed' || status === 'close') {
+                    if (activeIdrRows[0].refundStatus.toLowerCase() === 'waiting') {
+                        initial = 'IDR FOLLOW UP';
+                    } else {
+                        initial = 'FINAL REVIEW';
+                    }
+                }
+            }
+            
+            // --- NEW: Initial Logic ---
+            let finalInitial = noteInitialInput.value.trim();
+            if (finalInitial === '') {
+                noteInitialInput.value = initial; // Auto-fill
+                finalInitial = initial; // Use auto-filled value
+            }
+            // If user typed something, finalInitial is already set
+            
+            const eobData = globalEobData.updated;
+            
+            const eobClaimNo = eobData?.claimNo || 'N/A';
+            const eobBilled = eobData?.billedAmt || 0;
+            const eobPaid = eobData?.paidAmt || 0;
+            const ptRespSum = eobData?.ptRespSum || 0; 
+
+            const today = getFormattedDate(); 
+            const name = noteNameInput.value;
+            
+            let note = `${today}>${finalInitial}>${name}>WORKING ON TRACKING SHEET. `;
+            
+            if (eobExists) {
+                note += `CLAIM: ${eobClaimNo}; TOTAL BILL ${formatCurrency(eobBilled)}, INS PAID ${formatCurrency(eobPaid)}, PT RESPONSIBLITY ${formatCurrency(ptRespSum)}. NEGOTIATION AND IDR DONE. `;
+            } else {
+                noteWarningNoEOB.style.display = 'block';
+                let claimForNote = (activeIdrRows.length > 0) ? activeIdrRows[0].claimNum : 'N/A';
+                note += `CLAIM: ${claimForNote}. NEGOTIATION AND IDR DONE. `;
+            }
+
+            activeIdrRows.forEach(row => {
+                let wlStatus = (row.winLoseStatus === '--' || row.winLoseStatus === 'not found' || row.winLoseStatus === '') ? 'N/A' : row.winLoseStatus.toUpperCase();
+                
+                if (wlStatus === 'CLOSED' || wlStatus === 'CLOSE') {
+                    note += `${row.idrNum}: STATUS IS ${wlStatus}. `;
+                    if (row.refundStatus.toLowerCase() === 'received') {
+                        note += "WE RECEIVED FEE REFUND. ";
+                    } else if (row.refundStatus.toLowerCase() === 'waiting') {
+                        note += "WE ARE WAITING FOR FEE REFUND. ";
+                    }
+                } else {
+                    note += `${row.idrNum}: IDR SUBMITTED ON CPT ${row.cpt} TO MEDIATOR ${row.mediator}. STATUS IS ${wlStatus} WITH ADDITIONAL ${row.addlPmt}. `;
+                    
+                    if (row.additionalStatus.toLowerCase() === 'received') {
+                        note += "WE RECEIVED ADDITIONAL PAYMENT. ";
+                    } else {
+                        note += "WE ARE WAITING FOR ADDITIONAL PAYMENT. ";
+                    }
+                    
+                    if (row.winLoseStatus === 'win') {
+                        if (row.refundStatus.toLowerCase() === 'received') {
+                            note += "WE RECEIVED FEE REFUND. ";
+                        } else {
+                            note += "WE ARE WAITING FOR FEE REFUND. ";
+                        }
+                    }
+                }
+            });
+            
+            if (finalInitial === 'FINAL REVIEW') {
+                note += "NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";
+                
+                if(eobExists) {
+                    const adjustWithPtVal = eobBilled - (eobPaid + ptRespSum);
+                    const adjustWithoutPtVal = eobBilled - eobPaid;
+                    adjustWithPt.textContent = formatCurrency(adjustWithPtVal);
+                    adjustWithoutPt.textContent = formatCurrency(adjustWithoutPtVal);
+                    finalReviewAdjustments.style.display = 'block';
+                }
+            } else {
+                note += "WAITING TO COMPLETE THE IDR PROCESS BEFORE ADJUSTMENT.";
+                finalReviewAdjustments.style.display = 'none';
+            }
+            
+            // NEW: Animate Text
+            animateText(noteTextInput, note.trim().toUpperCase());
+        }
+        
+        // --- Mail Generation Function (with Validation) ---
+        function generateMail(isRetry) {
+            // Clear previous errors
+            mailTypeInput.classList.remove('is-invalid');
+            mailDetermDateInput.classList.remove('is-invalid');
+            mailNameInput.classList.remove('is-invalid');
+            mailInitialInput.classList.remove('is-invalid');
+            mailTextInput.value = ''; 
+            mailNoteTextInput.value = ''; 
+            mailTextInput.classList.remove('bg-match', 'text-success', 'is-invalid');
+
+            const eobExists = globalEobData.updated;
+            const idrGroups = document.querySelectorAll('#idr-sidebar-content .idr-result-group');
+            
+            if (!eobExists && !isRetry) {
+                // EOB data is missing, try to extract it first
+                processAllData(true); // Run extraction silently
+                // Wait a moment for data to process, then try again
+                setTimeout(() => generateMail(true), 500);
+                return;
+            }
+            if (!eobExists && isRetry) {
+                 mailTextInput.value = "ERROR: EOB Data is missing. Please paste EOB data and click 'Extract' first.";
+                 mailTextInput.classList.add('is-invalid');
+                 return;
+            }
+            
+            if (idrGroups.length === 0) {
+                mailTextInput.value = "ERROR: No IDR results found. Please extract IDR data first.";
+                mailTextInput.classList.add('is-invalid');
+                return;
+            }
+            if (idrGroups.length > 1) {
+                mailTextInput.value = "ERROR: Mail Generation only works for a single IDR result. Please process only one IDR entry.";
+                mailTextInput.classList.add('is-invalid');
+                return;
+            }
+            
+            let validationPassed = true;
+            if (mailNameInput.value.trim() === '') {
+                mailNameInput.classList.add('is-invalid');
+                validationPassed = false;
+            }
+            if (mailInitialInput.value.trim() === '') {
+                mailInitialInput.classList.add('is-invalid');
+                validationPassed = false;
+            }
+
+            const emailType = mailTypeInput.value;
+            if (emailType === "") {
+                mailTypeInput.classList.add('is-invalid');
+                validationPassed = false;
+            }
+            
+            const determDate = mailDetermDateInput.value.trim();
+            const dateRegex = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
+            if (determDate === "" || determDate === "--" || !dateRegex.test(determDate)) {
+                mailDetermDateInput.classList.add('is-invalid');
+                validationPassed = false;
+            }
+            
+            if (!validationPassed) {
+                 mailTextInput.value = "ERROR: Please fill all required fields (Name, Initial, Type, Date).";
+                return;
+            }
+            
+            const idrGroup = idrGroups[0];
+            const getData = (field) => idrGroup.querySelector(`.idr-result-value[data-field="${field}"]`)?.textContent || '--';
+            
+            const additionalStatus = getData("Additional"); 
+
+            if (additionalStatus.toLowerCase() === 'received') {
+                mailTextInput.value = "WARNING: Additional Payment is already marked as 'Received'. Email is not required.";
+                mailTextInput.classList.add('bg-match', 'text-success');
+                return;
+            }
+            
+            const provider = globalEobData.updated?.provider || 'Not Found';
+            let eobClaim = globalEobData.updated?.claimNo || 'Not Found';
+            
+            const idrNum = getData("IDR #");
+            const idrClaim = getData("Claim #");
+            const cpt = getData("CPT");
+            const initialPmt = getData("Initial Pmt");
+            const mediator = getData("Mediator");
+            const addlPmt = getData("Addl. Pmt");
+            
+            let finalClaim = (eobClaim !== '--' && eobClaim !== 'Not Found') ? eobClaim : idrClaim;
+            
+            const myName = mailNameInput.value;
+            const myInitial = mailInitialInput.value;
+
+            const initialPmtNum = parseCurrency(initialPmt);
+            const addlPmtNum = parseCurrency(addlPmt);
+            const oonRateNum = initialPmtNum + addlPmtNum; 
+
+            let subject = `Urgent Request for Claim Reprocessing as per IDR Determination - ${idrNum} and Claim Number: ${finalClaim}`;
+            if (emailType === '2nd Email') {
+                subject += " (2nd Email)";
+            }
+            mailSubjectInput.value = subject;
+            
+            let mailBody = currentEmailTemplate;
+            
+            mailBody = mailBody.replace(/No Surpresas Act/g, 'No Surprises Act');
+            mailBody = mailBody.replace(/\[DETERMINATION_DATE\]/g, determDate); 
+            mailBody = mailBody.replace(/\[MEDIATOR_NAME\]/g, mediator);
+            mailBody = mailBody.replace(/\[PROVIDER_NAME\]/g, provider);
+            mailBody = mailBody.replace(/\[OON_RATE\]/g, formatCurrency(oonRateNum));
+            mailBody = mailBody.replace(/\[CPT_CODE\]/g, cpt);
+            mailBody = mailBody.replace(/\[CLAIM_NUMBER\]/g, finalClaim);
+            mailBody = mailBody.replace(/\[INITIAL_PAYMENT\]/g, formatCurrency(initialPmtNum));
+            mailBody = mailBody.replace(/\[OUTSTANDING_BALANCE\]/g, formatCurrency(addlPmtNum));
+            mailBody = mailBody.replace(/\[MY_NAME\]/g, myName);
+            
+            // NEW: Animate Text
+            animateText(mailTextInput, mailBody.trim());
+
+            const today = getFormattedDate(); 
+            let noteType = (emailType === '1st Email') ? "1st FOLLOW UP" : "2nd FOLLOW UP";
+            
+            let emailNote = `${today}>IDR FOLLOW UP>${myInitial}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${finalClaim}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${formatCurrency(addlPmtNum)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${idrNum}, BY ${mediator} DATED ${determDate}. FOR BCBS ATTENTION, WE SENT ${noteType} EMAIL TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`;
+            
+            // NEW: Animate Text
+            animateText(mailNoteTextInput, emailNote.trim().toUpperCase());
+        }
+
+        // --- Table Input Autocomplete ---
+        function autocompleteRefund(input) {
+            const value = input.value.toLowerCase();
+            if (value === 'r') input.value = 'Received';
+            if (value === 'w') input.value = 'Waiting';
+            
+            if (input.value !== '') {
+                input.classList.remove('is-invalid');
+                input.closest('.idr-result-item').classList.remove('bg-mismatch');
+            }
+        }
+        window.autocompleteRefund = autocompleteRefund;
+        
+        document.getElementById('idr-sidebar-content').addEventListener('input', function(e) {
+            const target = e.target;
+            
+            if (target.classList.contains('refund-input')) {
+                autocompleteRefund(target);
+            }
+            
+            if (target.classList.contains('win-lose-input')) {
+                const value = target.value.toLowerCase();
+                if (value === 'w') target.value = 'Win';
+                if (value === 'l') target.value = 'Lose';
+                if (value === 'c') target.value = 'Closed';
+                
+                const group = target.closest('.idr-result-group');
+                const refundInput = group.querySelector('.refund-input');
+                const refundItem = refundInput.closest('.idr-result-item');
+                const newStatus = target.value.toLowerCase();
+                
+                if (newStatus === 'win') {
+                    refundInput.disabled = false;
+                    if (refundInput.value === '') {
+                        refundItem.classList.add('bg-mismatch');
+                        refundInput.classList.add('is-invalid');
+                    } else {
+                         refundItem.classList.remove('bg-mismatch');
+                         refundInput.classList.remove('is-invalid');
+                    }
+                } else if (newStatus === 'lose') {
+                    refundInput.disabled = true;
+                    refundInput.value = '';
+                    refundItem.classList.remove('bg-mismatch');
+                    refundInput.classList.remove('is-invalid');
+                } else if (newStatus === 'closed' || newStatus === 'close') {
+                    refundInput.disabled = false; 
+                    refundItem.classList.remove('bg-mismatch'); 
+                    refundInput.classList.remove('is-invalid');
+                } else {
+                    refundInput.disabled = false;
+                    refundItem.classList.remove('bg-mismatch');
+                    refundInput.classList.remove('is-invalid');
+                }
             }
         });
-    });
-});
 
-function iDts(){const d=new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}),n=new Date(d),s=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;document.querySelectorAll('.dt-inp').forEach(i=>{if(!i.value)i.value=s})}
-
-/* WATCH & DATE */
-function sWch(){
-    const u=()=>{
-        const d=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}));
-        let h=d.getHours(),m=d.getMinutes(),s=d.getSeconds();
-        const am=h>=12?'PM':'AM'; h=h%12||12;
+    </script>
+     <script>
+        const SEC_HEIGHT = 1.0; // CSS এর .sec-wrapper.height অনুযায়ী (rem-এ)
         
-        // Time
-        document.getElementById('bdTm').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-        document.getElementById('bdSec').textContent=String(s).padStart(2,'0');
-        document.getElementById('bdAP').textContent=am;
+        // সেকেন্ড নম্বর তৈরি করা (00 থেকে 59)
+        function initializeSeconds() {
+            const container = document.getElementById('scrollingSeconds');
+            if (!container) return;
+            
+            let html = '';
+            // 00 থেকে 59 পর্যন্ত ইনসার্ট করা হচ্ছে
+            for (let i = 0; i <= 59; i++) {
+                html += `<div>${i.toString().padStart(2, '0')}</div>`;
+            }
+            container.innerHTML = html;
+        }
         
-        // Progress Ring
-        const c=339; const off=c-((s+(d.getMilliseconds()/1000))/60)*c;
-        const p=document.getElementById('wProg'); if(p) p.style.strokeDashoffset=off;
-        const hue = (s*6); if(p) p.style.stroke = `hsl(${hue}, 75%, 65%)`;
+        // স্ক্রলিং এফেক্ট সহ ঘড়ি আপডেট করা
+        function updateFixedWatch() {
+            // বাংলাদেশ সময় (Asia/Dhaka) অনুযায়ী বর্তমান সময় তৈরি
+            const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
 
-        // Date
-        const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-        const mons = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-        document.getElementById('dDay').textContent = days[d.getDay()];
-        document.getElementById('dNum').textContent = String(d.getDate()).padStart(2,'0');
-        document.getElementById('dMon').textContent = mons[d.getMonth()];
-    };
-    setInterval(u,100); u();
-}
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            
+            let h_12 = h % 12;
+            if (h_12 === 0) h_12 = 12;
 
-/* EVENTS */
-document.getElementById('processBtn').addEventListener('click',function(){const b=this,o=b.innerHTML;b.innerHTML='<span class="spinner-border spinner-border-sm"></span>';setTimeout(()=>{procAll();b.innerHTML=o},300)});
-document.getElementById('clearBtn').addEventListener('click',()=>{
-    document.querySelectorAll('textarea,input[type=number]').forEach(e=>e.value='');
-    document.querySelectorAll('input[type=text]').forEach(e=>{
-        // PROTECT SAVED FIELDS & DATES
-        if(PERSIST_IDS.includes(e.id) || e.classList.contains('dt-inp') || e.id==='mDet') {
-            // Do nothing
-        } else {
-            e.value='';
+            // সময় (HH:MM) ফরম্যাটিং
+            const timeHourMin = `${h_12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            
+            // HTML আপডেট করা (HH:MM, AMPM)
+            document.getElementById('bdTime').textContent = timeHourMin;
+            document.getElementById('bdAMPM').textContent = ampm;
+            
+            // স্ক্রলিং সেকেন্ড আপডেট করা
+            const secContainer = document.getElementById('scrollingSeconds');
+            if (secContainer) {
+                // বর্তমান সেকেন্ড অনুযায়ী কতটুকু উপরে সরাতে হবে (rem-এ)
+                const offset = s * SEC_HEIGHT; 
+                secContainer.style.transform = `translateY(-${offset}rem)`;
+            }
         }
-    });
-    document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5 opacity-75">Paste & Extract</div>';
-    document.getElementById('eob-bar').classList.remove('visible');
-    document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4 opacity-50">No Data</div>';
-    document.getElementById('cAdj').classList.add('d-none'); document.getElementById('cWarn').classList.add('d-none');
-    document.getElementById('uMedSugg').classList.add('d-none');
-    gD={e:null,i:[]};
-});
 
-/* PARSING LOGIC */
-function procAll(){
-    const eUp = document.getElementById('eobUp'); if(eUp) { gD.e=pEOB(eUp.value); dEOB(gD.e); }
-    const i=[];for(let j=1;j<=6;j++){ const el=document.getElementById('idr'+j); if(el) i.push(el.value); }
-    gD.i=pIDR(i);dIDR(gD.i);match();
-    if(gD.i.length>0){
-        if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt;
-        if(gD.i[0].md){ document.getElementById('uMed').value=gD.i[0].md; chkMed(); }
-        if(gD.i[0].dis && gD.i[0].dis!='--') document.getElementById('uDis').value=gD.i[0].dis; 
-    }
-}
-function pEOB(t){
-    if(!t)return null;
-    const ex=r=>{const m=t.match(r);if(!m)return'$0.00';return t.substring(m.index+m[0].length).split('\n').find(l=>l.trim()&&!l.match(/^[a-zA-Z\s\.\/()-]+:/))?.trim()||'$0.00'},pc=s=>parseFloat(s.replace(/[$,\s]/g,''))||0,gv=r=>t.match(r)?.[2].trim()||'--';
-    let cn=pc(ex(/(Coinsurance Amount|Coinsurance)\s*:?/i)),dd=pc(ex(/(Deductible Amount|Deductible)\s*:?/i)),cp=pc(ex(/(Copay Amount|Copay)\s*:?/i));
-    let pt=cn+dd+cp; if(pt===0)pt=pc(ex(/(Copay\/Deductible Amount|Responsibility)\s*:?/i));
-    return{tic:gv(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i),clm:gv(/(Claim I?D|Claim No|Claim Number)\s*:?[\s\r\n]+([^\r\n]+)/i),prv:gv(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i),bil:pc(ex(/(Total Bill|Billed Amount)\s*:?/i)),pd:pc(ex(/(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i)),pt,adl:pc(ex(/(Insurance Current Paid Amount|Additional Paid)\s*:?/i)),cn,dd,cp};
-}
-function pIDR(inp){
-    let r=[];
-    inp.forEach(t=>{
-        if(!t.trim())return;
-        const c=t.split(/\t|\s{2,}/);
-        let idVal='--',ticVal='--',claim='--',cpt='--',initPay=0,med='--',w_l='--',dt='',addl=0,payMethod='';
-        if(c.length > 18) {
-            const c1 = c[1]||'', c5 = c[5]||'';
-            if(c1.includes('DISP')){idVal=c1;ticVal=c5;} else if(c5.includes('DISP')){idVal=c5;ticVal=c1;} else {idVal=c1;ticVal=c5;}
-            claim=c[3]; cpt=c[4]; initPay=parseFloat(c[7]?.replace(/[$,]/g,''))||0; med=c[8]; dt=c[16]; w_l=c[17]; addl=parseFloat(c[18]?.replace(/[$,]/g,''))||0; payMethod=c[19];
-        } else {
-            const c1 = c[1]||'', c5 = c[5]||'';
-            if(c5.includes('DISP')){idVal=c5;ticVal=c1;} else if(c1.includes('DISP')){idVal=c1;ticVal=c5;} else {idVal=c5;ticVal=c1;}
-            claim=c[2]; cpt=c[3]; initPay=parseFloat(c[7]?.replace(/[$,]/g,''))||0; med=c[8]; dt=c[18]; w_l=c[19]; addl=parseFloat(c[20]?.replace(/[$,]/g,''))||0; payMethod=c[21];
-        }
-        r.push({dis:idVal?.trim()||'--',tic:ticVal?.trim()||'--',cl:claim?.trim()||'--',cp:cpt?.trim()||'--',in:initPay,md:med?.trim()||'--',wl:w_l?.trim()||'--',dt:dt?.trim(),ad:addl,pm:payMethod?.trim()});
-    });
-    return r;
-}
-
-/* UI */
-const fmt=n=>'$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2});
-function dEOB(d){
-    if(!d){document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4 opacity-50">No Data</div>';return}
-    document.getElementById('eob-bar').innerHTML=`<span class="text-primary fw-bold">${d.tic}</span> <span class="opacity-50 mx-2">|</span> <span class="fw-bold">${d.clm}</span> <span class="opacity-50 mx-2">|</span> Bill: ${fmt(d.bil)} <span class="opacity-50 mx-2">|</span> Paid: ${fmt(d.pd)} <span class="opacity-50 mx-2">|</span> PT: ${fmt(d.pt)} <span class="opacity-50 mx-2">|</span> <span class="fw-bold" id="eob_a">${fmt(d.adl)}</span>`;
-    document.getElementById('eob-bar').classList.add('visible');
-    document.getElementById('eob-det').innerHTML=`<div class="idr-item"><span>Coins</span><span class="idr-val">${fmt(d.cn)}</span></div><div class="idr-item"><span>Ded</span><span class="idr-val">${fmt(d.dd)}</span></div><div class="idr-item"><span>Copay</span><span class="idr-val">${fmt(d.cp)}</span></div><div class="idr-item"><span>Addl</span><span class="idr-val" id="eob_da">${fmt(d.adl)}</span></div>`;
-}
-function dIDR(d){
-    const s=document.getElementById('sb-c');s.innerHTML='';
-    d.forEach((r,i)=>{
-        const w=r.wl.toLowerCase();
-        let as=(r.pm&&r.pm.length>4)?`<span class="badge bg-success ms-1">Received</span>`:`<span class="badge bg-secondary ms-1">Waiting</span>`;
-        let wlHtml=(r.wl==='--'||!r.wl)?`<input type="text" class="ed-inp wl-inp" placeholder="w/l/c" oninput="hWL(this,${i})">`:`<span class="idr-val fw-bold" data-wl="${w}">${r.wl}</span>`;
-        const disableRefund = (w.includes('lose') && !w.includes('close'));
-        s.innerHTML+=`<div class="card shadow-sm border-0 idr-card"><div class="fw-bold text-primary border-bottom pb-1 mb-1 d-flex justify-content-between align-items-center"><span>Result ${i+1}</span></div><div class="idr-item"><span>Ticket</span><span class="idr-val text-dark">${r.tic}</span></div><div class="idr-item"><span>Dispute</span><span class="idr-val badge bg-light text-dark border p-1">${r.dis}</span></div><div class="idr-item"><span>Mediator</span><span class="idr-val text-truncate" title="${r.md}">${r.md}</span></div><div class="idr-item"><span>Claim</span><span class="idr-val">${r.cl}</span></div><div class="idr-item"><span>W/L</span>${wlHtml}</div><div class="idr-item"><span>Addl</span><span class="idr-val" data-val="${r.ad}">${fmt(r.ad)}${as}</span></div><div class="idr-item mt-1"><span>Refund</span><input type="text" class="ed-inp ref-inp" placeholder="${disableRefund?'Disabled':'w/r'}" oninput="hRef(this,${i})" ${disableRefund?'disabled':''} data-row="${i}"></div></div>`;
-        gD.i[i].refSt=''; if(!r.wl)gD.i[i].wl='';
-    });
-}
-function match(){
-    if(!gD.e)return; const ea=gD.e.adl,ir=gD.i;if(!ir.length)return;
-    let tot=0;ir.forEach(r=>tot+=r.ad);const e1=document.getElementById('eob_a'),e2=document.getElementById('eob_da');
-    [e1,e2].forEach(e=>{if(e){e.classList.remove('bg-match','bg-mismatch','bg-overpaid');if(ea>0||tot>0){if(Math.abs(ea-tot)<0.01)e.classList.add('bg-match');else if(ea>tot)e.classList.add('bg-overpaid');else e.classList.add('bg-mismatch');}}});
-}
-function hRef(i,x){let v=i.value.toLowerCase();if(v==='w')v='Waiting';if(v==='r')v='Received';i.value=v;gD.i[x].refSt=v;}
-function hWL(i,x){
-    let v=i.value.toLowerCase();
-    if(v==='w')v='Win';if(v==='l')v='Lose';if(v==='c')v='Closed';i.value=v;gD.i[x].wl=v;
-    const isClosed=v.includes('close'), isLose=v.includes('lose') && !isClosed;
-    const ri=i.closest('.card').querySelector('.ref-inp'); if(ri){ ri.disabled=isLose; if(isLose)ri.value=''; }
-}
-
-/* MEDIATOR EMAIL LOGIC */
-function chkMed(){
-    const v=document.getElementById('uMed').value.toUpperCase(), sugg=document.getElementById('uMedSugg'); let found=null;
-    for (const [key, email] of Object.entries(MED_EMAILS)) { if(v.includes(key)){ found = email; break; } }
-    if(found){ sugg.querySelector('span').innerText=found; sugg.classList.remove('d-none'); } else { sugg.classList.add('d-none'); }
-}
-function cpyMed(){
-    const t=document.getElementById('uMedSugg').querySelector('span').innerText;
-    navigator.clipboard.writeText(t);
-    const i=document.getElementById('uMedSugg').querySelector('i');
-    i.classList.remove('bi-copy'); i.classList.add('bi-check-lg');
-    setTimeout(()=>{ i.classList.remove('bi-check-lg'); i.classList.add('bi-copy'); }, 1000);
-}
-
-/* GENERATORS */
-const norm=s=>(s||'').toUpperCase().split('X')[0];
-function fDt(v){if(!v)return'MM/DD/YY';const[y,m,d]=v.split('-');return`${m}/${d}/${y.slice(-2)}`;}
-function ani(e,t){e.value='';const w=t.split(' ');let i=0;if(e.tm)clearInterval(e.tm);e.tm=setInterval(()=>{if(i<w.length){e.value+=(i>0?' ':'')+w[i];e.scrollTop=e.scrollHeight;i++}else clearInterval(e.tm)},5);}
-
-function genCor(){
-    const e=document.getElementById('cNm');e.classList.remove('is-invalid');document.getElementById('cAdj').classList.add('d-none');document.getElementById('cWarn').classList.add('d-none');
-    const nm=e.value.toUpperCase();if(!nm){e.classList.add('is-invalid');return;}
-    const d=gD,dt=fDt(document.getElementById('cDt').value);let ini=document.getElementById('cIni').value.toUpperCase();
-    if(!d.i.length){document.getElementById('cOut').value="ERROR: No IDR Data";return;}const eb=d.e||{},ir=d.i[0]||{};
-    if(d.i.length>1){const c1=d.i[0].cl,c2=d.i[1].cl;if(norm(c1)!==norm(c2)||(d.e&&norm(d.e.clm)!==norm(c1))){const cw=document.getElementById('cWarn');if(cw){cw.innerText="Claim mismatch";cw.classList.remove('d-none');}}}
-    if(!ini){
-        let adn=true; d.i.forEach(r=>{const w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';
-        if(w.includes('win')){if(ad==='waiting'||rf==='waiting'||rf==='')adn=false}else if(w.includes('close')){if(rf==='waiting')adn=false}else if(w.includes('lose') && !w.includes('close')){if(ad==='waiting')adn=false}else adn=false});
-        if(d.i.length>1) ini=adn?'FINAL REVIEW':'IDR FOLLOW UP';
-        else{const r=d.i[0],w=(r.wl||'').toLowerCase(),rf=(r.refSt||'').toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';
-        if(w.includes('win')){if(rf===''){document.getElementById('cOut').value="Error: Refund Required for WIN";return}ini=(ad==='received'&&rf==='received')?'FINAL REVIEW':'IDR WIN'}
-        else if(w.includes('close')){ ini=(rf==='waiting')?'IDR FOLLOW UP':'FINAL REVIEW'; } else if(w.includes('lose')){ ini=(ad==='received')?'FINAL REVIEW':'IDR LOSE'; } else ini='IDR FOLLOW UP';}
-    }
-    let n=`${dt}>${ini}>${nm}>WORKING ON TRACKING SHEET. CLAIM: ${eb.clm||ir.cl||'--'}; TOTAL BILL ${fmt(eb.bil)}, INS PAID ${fmt(eb.pd)}, PT RESP ${fmt(eb.pt)}. NEGOTIATION AND IDR DONE. `;
-    d.i.forEach(r=>{const w=r.wl.toLowerCase(),ad=(r.pm&&r.pm.length>4)?'received':'waiting';n+=`${r.dis} (${r.md}): IDR SUBMITTED ON CPT ${r.cp}. STATUS IS ${r.wl}. `;if((w.includes('win')||w.includes('lose'))&&!w.includes('close')){n+=`ADDITIONAL ${fmt(r.ad)}. ${ad==='received'?'WE RECEIVED ADDITIONAL PAYMENT':'WE ARE WAITING FOR ADDITIONAL PAYMENT'}. `;}if((w.includes('win')||w.includes('close'))&&r.refSt)n+=`${r.refSt.toLowerCase()==='received'?'WE RECEIVED FEE REFUND':'WE ARE WAITING FOR FEE REFUND'}. `;});
-    if(ini==='FINAL REVIEW'){n+="NO FURTHER ACTION NEEDED. BALANCE TO BE ADJUSTED.";if(eb.bil){document.getElementById('adj1').innerText=fmt(eb.bil-(eb.pd+eb.pt));document.getElementById('adj2').innerText=fmt(eb.bil-eb.pd);document.getElementById('cAdj').classList.remove('d-none')}}else n+="WAITING TO COMPLETE PROCESS.";
-    ani(document.getElementById('cOut'),n);
-}
-
-function togEm(){const s=document.getElementById('mSc').value,m=document.getElementById('mMan');m.disabled=(s!=='pt');if(s!=='pt')m.value='';document.getElementById('mCC').value=(s==='pt')?'mislam@roundtmc.com, razo@leverngear.com, sufia@leverngear.com':'mislam@roundtmc.com, razo@leverngear.com';}
-function genEm(){const v=['mNm','mIni','mTyp','mDet'];let ok=true;v.forEach(x=>{const e=document.getElementById(x);e.classList.remove('is-invalid');if(!e.value.trim()){e.classList.add('is-invalid');ok=false}});if(!ok)return;const d=gD,dt=fDt(document.getElementById('mDt').value),nm=document.getElementById('mNm').value,ini=document.getElementById('mIni').value,typ=document.getElementById('mTyp').value,sc=document.getElementById('mSc').value,mn=parseFloat(document.getElementById('mMan').value),det=document.getElementById('mDet').value;if(!d.i.length){document.getElementById('mBod').value="ERROR: No IDR Data";return}const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);let sub='',bod='',nt=(typ=='1')?'1ST':'2ND';if(sc==='pt'){if(isNaN(mn)){document.getElementById('mBod').value="Error: Manual Addl Req";return}sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.dis}]`;bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.dis} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nThe Federal Manuals state verbatim:\n“NOTE: This determination of the OON rate does not change the participant’s, beneficiary’s, or enrollee’s cost sharing, which is based on the recognized amount, or, in the case of air ambulance services, the lower of the QPA or billed charges.”\n\nSources: Federal Independent Dispute Resolution (IDR) Process Guidance for Disputing Parties Manual March 2023, pg 27, October 2022, pg 29, April 2022, pg 27 and Federal Independent Dispute Resolution (IDR) Process Guidance for Certified IDR Entities Manual March 2023, pg 25, October 2022, pg 26, April 2022, pg 25\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;nt+=' HIGH PT EMAIL';}else{sub=`Urgent Request for Claim Reprocessing as per IDR Determination - ${i.dis} - Claim: ${clm}`+(typ=='2'?' (2nd Email)':'');bod=`Dear BCBS,\n\nWe are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).\nOn ${det}, ${i.md} —the certified IDR entity—issued a final, legally binding determination in favor of , ${e.prv||'PROVIDER'} regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of ${fmt(i.in+i.ad)} for service code ${i.cp||'--'}. as offered by ${e.prv||'PROVIDER'} as the appropriate rate for this claim.\nAccording to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.\n\nRequest for Payment:\nPlease remit the outstanding balance, calculated as follows:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\nThis request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance\nIf you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.\n\nAs per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.\n\nFor your reference we have attached the primary EOB and IDR determination.\n\n\nThank You\nRegards\n---------------\n${nm}`;nt+=' FOLLOW UP EMAIL';}document.getElementById('mSub').value=sub;ani(document.getElementById('mBod'),bod);ani(document.getElementById('mNot'),`${dt}>IDR FOLLOW UP>${ini}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${clm}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${fmt(i.ad)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${i.dis}, BY ${i.md.toUpperCase()} DATED ${det}. FOR BCBS ATTENTION, WE SENT ${nt} TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`);}
-
-function genUpd(){const ids=['uNm','uIni','uDis','uMed'];let ok=true; ids.forEach(i=>{const e=document.getElementById(i); e.classList.remove('is-invalid'); if(!e.value.trim()){e.classList.add('is-invalid');ok=false}});if(!ok) return;const dt=fDt(document.getElementById('uDt').value),nm=document.getElementById('uNm').value,ini=document.getElementById('uIni').value.toUpperCase(),dis=document.getElementById('uDis').value,med=document.getElementById('uMed').value,typ=document.getElementById('uTyp').value,fol=document.getElementById('uFol').value;const is2nd=(fol==='2'); let sub, bod, not; const followUpText=is2nd?"2ND":"1ST"; const subFollowUp=is2nd?" (2nd follow up)":"";if(typ==='check') {sub=`Update on IDR dispute – ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request an update status of ${dis}. It has been 60 days since we have received confirmation from CMS that ${med} is the Mediator for this dispute.\nWe have not yet received any acknowledgement from ${med} regarding this matter.\n\nWe are kindly requesting that you provide a status update at your earliest convenience.\n\nThanks!.\n--------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN 60 DAYS SINCE WE HAVE RECEIVED CONFIRMATION THAT THE MEDIATOR IS SELECTED FROM CMS FOR THIS DISPUTE. WE HAVE NOT YET RECEIVED ANY ACKNOWLEDGEMENT FROM THE MEDIATOR REGARDING THIS MATTER. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE UPDATE IDR STATUS.`;} else {sub=`Request for Payment Determination ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request the final determination for ${dis}. It\nhas been over 60 days since we submitted our offer letter and\nmediation fee. Please kindly provide a written determination at your\nearliest convenience.\n\nThanks!\n-----------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN OVER 60 DAYS SINCE WE SUBMITTED OUR OFFER LETTER AND MEDIATION FEE. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE PAYMENT DETERMINATION.`;}document.getElementById('uSub').value=sub; ani(document.getElementById('uBod'),bod); ani(document.getElementById('uNot'),not);}
-
-function genRef(){const dt=fDt(document.getElementById('rDt').value),nm=document.getElementById('rNm').value.toUpperCase();ani(document.getElementById('rOut'),`${dt}>IDR WIN>${nm}>WORKING ON MEDIATION REFUND. RECEIVED REFUND OF ${document.getElementById('rAmt').value} DATED ${document.getElementById('rRefDt').value} FOR ${document.getElementById('rDis').value}. WAITING FOR ADDITIONAL PAYMENT.`)}
-
-function lThm(){document.getElementById('theme-toggle').addEventListener('click',()=>{const h=document.documentElement,c=h.getAttribute('data-bs-theme'),n=c==='light'?'dark':'light';h.setAttribute('data-bs-theme',n);localStorage.setItem('theme',n)})}
-document.querySelectorAll('textarea[readonly],input[readonly]').forEach(e=>e.addEventListener('click',function(){if(this.value)this.select(),document.execCommand('copy')}));
-</script>
-</body>
+        // প্রথমবার কল করা
+        initializeSeconds();
+        updateFixedWatch();
+        
+        // প্রতি সেকেন্ডে আপডেট করা
+        setInterval(updateFixedWatch, 1000); 
+    </script>
+  </body>
 </html>
