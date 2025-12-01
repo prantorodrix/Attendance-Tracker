@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <!-- HEAD -->
@@ -50,10 +51,10 @@ body { font-family: var(--f); background: var(--bg); height: 100vh; overflow: hi
 
 /* LAYOUT */
 #top { 
-    position: fixed; top: 0; width: 100%; height: 60px; z-index: 1000; 
+    position: fixed; top: 2px; width: 100%; height: 60px; z-index: 1000; 
     display: flex; align-items: center; justify-content: space-between; 
     padding: 0 1.5rem; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-    backdrop-filter: blur(12px); border-bottom: var(--bor); 
+    backdrop-filter: blur(12px); border-bottom: var(--bor); border-radius: 50px;
 }
 #wrap { display: flex; margin-top: 60px; height: calc(100vh - 60px); }
 #sb { width: var(--sd); min-width: 250px; display: flex; flex-direction: column; background: var(--card-bg); border-right: var(--bor); transition: .3s; }
@@ -65,11 +66,26 @@ body { font-family: var(--f); background: var(--bg); height: 100vh; overflow: hi
     position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
     display: flex; gap: 1rem;
 }
+        /* Dropdowns */
+        .drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .drop-menu {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
+            background: var(--nav-bg); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px;
+            opacity: 0; visibility: hidden; transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px;
+        }
+        .drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
+        .d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .d-item:hover { background: rgba(6, 182, 212, 0.1); color: var(--pri); }
+
 
 /* CARDS & INPUTS */
-.card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--sh); border: var(--bor); margin-bottom: 1rem; transition: transform 0.2s; }
+.card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--sh); border: var(--bor);  transition: transform 0.2s; }
 .form-control, .form-select { 
     background: var(--bg); border: var(--bor); border-radius: 8px; font-size: .85rem; color: var(--txt); box-shadow: var(--ins); padding: 6px 12px; transition: all 0.2s ease; 
+}
+.cursor{
+  cursor: pointer;
 }
 [data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { background: #020617; border-color: rgba(255,255,255,0.05); }
 .form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); outline: 0; border-color: var(--pri); }
@@ -169,10 +185,23 @@ textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; l
         <span class="text-muted small">Made by</span> <span class="text-gradient">Pranto Rodrix</span>
     </div>
     <div class="nav-center d-none d-md-flex">
-        <a href="typing.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Typing</a>
-        <a href="nsa.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">NSA</a>
-        <a href="appeal.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Appeal</a>
-        <a href="index.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Main</a>
+        <a href="typing.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Home</a>
+        <div class="drop-box">
+            <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
+                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
+            </div>
+        </div>
+        <div class="drop-box">
+            <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="typing.html" class="d-item"><i class="bi bi-keyboard-fill"></i> Typing</a>
+                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
+            </div>
+        </div>
+        <a href="index.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Contact Us</a>
     </div>
     <div class="d-flex gap-2">
         <button id="processBtn" class="btn-neu"><i class="bi bi-magic"></i> Extract</button>
@@ -200,7 +229,7 @@ textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; l
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="card p-3 h-100">
+                    <div class="card p- h-100">
                         <label class="small-label text-primary">IDR Reports</label>
                         <div class="row g-2 mb-2">
                             <div class="col-4"><textarea class="form-control" id="idr1" rows="2" placeholder="2024+ (1)"></textarea></div>
@@ -251,7 +280,7 @@ textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; l
                                     </div>
                                     <div id="cWarn" class="mt-3 text-danger small fw-bold d-none"></div>
                                 </div>
-                                <div class="col-md-9"><textarea id="cOut" class="form-control" style="height: 250px;" readonly placeholder="Generated note will appear here..."></textarea></div>
+                                <div class="col-md-9"><textarea id="cOut" class="form-control cursor" style="height: 250px;" readonly placeholder="Generated note will appear here..."></textarea></div>
                             </div>
                         </div>
                         <!-- EMAIL -->
@@ -271,8 +300,8 @@ textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; l
                                 <div class="col-md-4"><label class="small-label">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
                             </div>
                             <div class="row g-3">
-                                <div class="col-md-6"><label class="small-label text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 250px;" readonly></textarea></div>
-                                <div class="col-md-6"><label class="small-label text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label cursor text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label cursor text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 250px;" readonly></textarea></div>
                             </div>
                         </div>
                         <!-- IDR UPDATE -->
@@ -291,12 +320,13 @@ textarea { resize: none; font-family: 'Consolas', monospace; overflow: hidden; l
                                 <div class="col-md-1 d-flex align-items-end"><button class="btn-neu w-100 justify-content-center text-primary" onclick="genUpd()"><i class="bi bi-send-fill"></i></button></div>
                             </div>
                             <div class="row g-3 mb-3">
-                                <div class="col-md-3 offset-md-9"><label class="small-label">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
-                                <div class="col-md-12"><label class="small-label">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
+                                <div class="col-md-9"><label class="small-label">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
+                                <div class="col-md-3"><label class="small-label">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
+                                
                             </div>
                             <div class="row g-3">
-                                <div class="col-md-6"><label class="small-label text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 250px;" readonly></textarea></div>
-                                <div class="col-md-6"><label class="small-label text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label cursor text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 250px;" readonly></textarea></div>
+                                <div class="col-md-6"><label class="small-label cursor text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 250px;" readonly></textarea></div>
                             </div>
                         </div>
                         <!-- REFUND -->
