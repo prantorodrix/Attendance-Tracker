@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- data-bs-theme="light" ডিফল্ট হিসেবে সেট করা হলো -->
 <html lang="en" data-bs-theme="light">
@@ -426,7 +427,7 @@
         }
         .result-list .output-value {
             font-weight: bold;
-            color: #28a745;
+            color: var(--bs-primary);
             text-align: right;
         }
         .result-list .output-value.text-dark {
@@ -750,6 +751,7 @@
             padding: 0.75rem 1.5rem;
             transition: background-color 0.3s ease, border-color 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 50px;
         }
 
         #eob-input-row {
@@ -987,13 +989,16 @@
         }
 
         /* --- NEUMORPHIC BUTTON BASE STYLE --- */
-        #processButton {
+        .generatebutton{
+          margin-bottom: 15px;
+        }
+        #processButton, .generatebutton {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
     border-radius: 25px;
-    padding: 5px 19px;
+    padding: 8px 19px;
     cursor: pointer;
     border: none;
     outline: none;
@@ -1055,6 +1060,25 @@ ease-in-out;
             background: linear-gradient(90deg, #b91c1c 0%, #c2410c 100%); /* Slightly darker gradient on active */
             transform: translateY(0); /* Reset lift on active */
         }
+        .nav-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: flex; gap: 1rem;
+}
+        /* Dropdowns */
+        .drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .drop-menu {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
+            background: var(--bs-body-bg); color:var(--bs-primary); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px;
+            opacity: 0; visibility: hidden; transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px;
+        }
+        .drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
+        .d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .d-item:hover { background: rgba(6, 182, 212, 0.1); color: var(--pri); }
+.form_2022{
+  background-color: var(--bs-info-border-subtle);
+    border-radius: 10px;
+}
     </style>
 </head>
   <body>
@@ -1089,12 +1113,25 @@ ease-in-out;
             </div>
 
             <div class="col-auto d-flex align-itemsC-center gap-2">
-                <nav style="padding: 10px; display: flex; gap: 15px; margin-right:80px;">
-                  <a href="typing.html" style="text-decoration: none; font-size: 14px;">| Typing  |</a>
-                  <a href="nsa.html" style=" text-decoration: none; font-size: 14px;">NSA  |</a>
-                  <a href="appeal.html" style=" text-decoration: none; font-size: 14px;">Appeal  |</a>
-                  <a href="index.html" style=" text-decoration: none; font-size: 14px;">Main Page  |</a>
-                </nav>
+                <div class="nav-center d-none d-md-flex">
+        <a href="typing.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Home</a>
+        <div class="drop-box">
+            <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
+                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
+            </div>
+        </div>
+        <div class="drop-box">
+            <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="typing.html" class="d-item"><i class="bi bi-keyboard-fill"></i> Typing</a>
+                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
+            </div>
+        </div>
+        <a href="index.html" class="btn btn-sm btn-link text-reset text-decoration-none fw-bold opacity-75">Contact Us</a>
+    </div>
                 <!-- THE NEUMORPHIC EXTRACT BUTTON -->
                   <button type="button" id="processButton">
                     <i class="bi bi-magic"></i> Extract
@@ -1174,7 +1211,7 @@ ease-in-out;
                                      </div>
                                 </div>
                                 <!-- 2022-23 -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 form_2022">
                                      <div class="row g-2">
                                         <div class="col-6">
                                             <textarea class="form-control idr-textarea" id="idr2022TextInput1" rows="2" placeholder="2022-23 1"></textarea>
@@ -1263,11 +1300,30 @@ ease-in-out;
                         <div class="tab-pane fade show active" id="correspondence-pane" role="tabpanel" aria-labelledby="correspondence-tab" tabindex="0">
                             <div class="tab-content-glass card">
                                 <div class="row g-3">
-                                    <div class="col-3">
-                                        <label for="note_Name" class="form-label fw-bold">Name:</label>
-                                        <input type="text" class="form-control" id="note_Name" placeholder="Enter Name">
-                                        <label for="note_Initial" class="form-label fw-bold mt-2">Initial:</label>
-                                        <input type="text" class="form-control" id="note_Initial" placeholder="Auto/Manual Initial">
+                                    <div class="col-2">
+                                      <div class="d-flex flex-column justify-content-start">
+                                         <button class="btn generatebutton" id="note_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate
+                                         </button>
+                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#noteTemplateModal">
+                                            <i class="bi bi-pencil"></i> Edit Note
+                                        </button>
+                                         <span id="copy_Confirmation_Note" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
+                                         <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="note_ClearBtn">
+                                             <i class="bi bi-x-circle"></i> Clear Note
+                                         </button>
+                                    </div>
+                                  </div>
+                                    
+                                    <div class="col-8">
+                                        <label for="note_Text" class="form-label fw-bold">Correspondence Note: (Click to Copy)</label>
+                                        <textarea class="form-control copyable" id="note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Note')"></textarea>
+                                    </div>
+                                    <div class="col-2">
+                                     <!--<label for="note_Name" class="form-label fw-bold">Name:</label>-->
+                                        <input type="text" class="form-control" id="note_Name" placeholder="Enter Name" style="margin-bottom:5px;">
+                                        <!--<label for="note_Initial" class="form-label fw-bold mt-2">Initial:</label>-->
+                                        <input type="text" class="form-control" id="note_Initial" placeholder=" Initial Auto/Manual" style="margin-bottom:5px;">
                                         
                                         <div id="finalReviewAdjustments" class="mt-2" style="display: none;">
                                             <h6 class="text-decoration-underline" style="font-size: 0.9rem;">Adjustments:</h6>
@@ -1277,22 +1333,6 @@ ease-in-out;
                                         
                                         <div id="note_Warning_NoEOB" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">No EOB Found.</div>
                                         <div id="note_Warning_ClaimMismatch" class="text-danger fw-bold mt-2" style="font-size: 0.9rem; display: none;">IDR Claim numbers Didn't Match..</div>
-                                    </div>
-                                    <div class="col-7">
-                                        <label for="note_Text" class="form-label fw-bold">Correspondence Note: (Click to Copy)</label>
-                                        <textarea class="form-control copyable" id="note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Note')"></textarea>
-                                    </div>
-                                    <div class="col-2 d-flex flex-column justify-content-end">
-                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="note_GenerateBtn">
-                                             <i class="bi bi-pencil-square"></i> Generate Note
-                                         </button>
-                                         <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#noteTemplateModal">
-                                            <i class="bi bi-pencil"></i> Edit Note
-                                        </button>
-                                         <span id="copy_Confirmation_Note" class="text-success text-center fw-bold mt-1" style="display: none;">Copied!</span>
-                                         <button class="btn btn-outline-secondary rounded-pill w-100 mt-2" id="note_ClearBtn">
-                                             <i class="bi bi-x-circle"></i> Clear Note
-                                         </button>
                                     </div>
                                 </div>
                             </div>
@@ -1343,7 +1383,7 @@ ease-in-out;
                                         <textarea class="form-control copyable" id="mail_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Mail')"></textarea>
                                     </div>
                                     <div class="col-2 d-flex flex-column justify-content-start">
-                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="note_Mail_GenerateBtn">
+                                         <button class="btn generatebutton" id="note_Mail_GenerateBtn">
                                              <i class="bi bi-pencil-square"></i> Generate
                                          </button>
                                          <span id="copy_Confirmation_Mail" class="text-success text-center fw-bold mt-1 mb-2" style="display: none;">Copied!</span>
@@ -1373,8 +1413,8 @@ ease-in-out;
                                         <textarea class="form-control copyable" id="refund_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Refund')"></textarea>
                                     </div>
                                     <div class="col-2 d-flex flex-column justify-content-end">
-                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="refund_GenerateBtn">
-                                             <i class="bi bi-pencil-square"></i> Generate Note
+                                         <button class="btn generatebutton" id="refund_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate
                                          </button>
                                          <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#refundNoteEditModal">
                                             <i class="bi bi-pencil"></i> Edit Note
@@ -1404,8 +1444,8 @@ ease-in-out;
                                         <textarea class="form-control copyable" id="ineligible_Note_Text" rows="10" readonly onclick="copyToClipboard(this, 'copy_Confirmation_Ineligible')"></textarea>
                                     </div>
                                     <div class="col-2 d-flex flex-column justify-content-end">
-                                         <button class="btn btn-info rounded-pill w-100 mb-2" id="ineligible_GenerateBtn">
-                                             <i class="bi bi-pencil-square"></i> Generate Note
+                                         <button class="btn generatebutton" id="ineligible_GenerateBtn">
+                                             <i class="bi bi-pencil-square"></i> Generate
                                          </button>
                                          <button class="btn btn-secondary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#ineligibleNoteEditModal">
                                             <i class="bi bi-pencil"></i> Edit Note
