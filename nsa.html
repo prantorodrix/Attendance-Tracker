@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -439,8 +440,8 @@ document.getElementById('note_Output_NSA').addEventListener('click', function() 
         else s.value="In Review Plan";
     }
     
-    function formatCurrency(n){return '$'+(parseFloat(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
-    function initDate(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"})); document.getElementById('note_Date').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function formatCurrency(n){return '$'+(parseFloat(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+    function initDate(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); document.getElementById('note_Date').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
     
     function startWatches(){
         const upd=(p,tz)=>{
