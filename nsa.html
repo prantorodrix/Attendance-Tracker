@@ -117,7 +117,7 @@
 
         /* Premium Watch Card */
         .time-card { 
-            background: var(--bs-focus-ring-color); border-radius: 16px; padding: 15px; 
+            background: var(--w-bg); border-radius: 16px; padding: 15px; 
             display: flex; align-items: center; justify-content: space-between; 
             box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: var(--bor); 
             margin-bottom: 10px; transition: .3s; backdrop-filter: blur(10px);
@@ -128,7 +128,7 @@
         .time-disp { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--txt); line-height: 1; }
         .time-disp span { font-size: 0.4em; margin-left: 2px; color: var(--txt-l); }
         .timer-svg { width: 60px; height: 60px; transform: rotate(-90deg); }
-        .c-bg { stroke: rgba(0,0,0,0.05); stroke-width: 33px; fill: none; } [data-bs-theme="dark"] .c-bg { stroke: rgba(255,255,255,0.1); }
+        .c-bg { stroke: rgba(0,0,0,0.05); stroke-width: 4; fill: none; } [data-bs-theme="dark"] .c-bg { stroke: rgba(255,255,255,0.1); }
         .c-prog { stroke: var(--pri); stroke-width: 4; fill: none; stroke-linecap: round; transition: 0.1s linear; stroke-dasharray: 157; } /* 2*pi*25 */
 
         /* Footer */
@@ -326,23 +326,22 @@
     ['note_Status_NSA','note_Date','note_Name'].forEach(id=>document.getElementById(id).addEventListener(id==='note_Name'?'input':'change',()=>{if(globalData){generateCurrentNote();updateExcelBox()}}));
 
     // ----------------------------------------------------
-    // UPDATED EXCEL LOGIC BEGINS HERE
+    // UPDATED EXCEL LOGIC
     // ----------------------------------------------------
-
-    // Logic to update the text inside the input
     function updateExcelBox(){
         if(!globalData)return;
         const dVal=document.getElementById('note_Date').value.split('-');
-        const dt=`${dVal[1]}/${dVal[2]}/${dVal[0].slice(-2)}`;
+        // UPDATE: Changed year logic to use full year (dVal[0]) instead of last 2 digits
+        // Format: mm/dd/yyyy
+        const dt=`${dVal[1]}/${dVal[2]}/${dVal[0]}`;
         
         let status = document.getElementById('note_Status_NSA').value;
         let lastDate = dt;
 
-        // Custom Logic: If status is 'In Review Plan', keep it normal and remove last date
         if(status === "In Review Plan") {
-            lastDate = ""; // Last date missing
+            lastDate = ""; 
         } else {
-            status = status.toUpperCase(); // Otherwise All CAPS
+            status = status.toUpperCase(); 
         }
 
         const counterText = globalVals.counter > 0 ? formatCurrency(globalVals.counter) : "";
@@ -352,33 +351,27 @@
     // Logic to Copy without visual selection + Animation
     function copyExcelData(){
         const input = document.getElementById('excel_Copy_Input');
-        // Basic check to ensure we have data
         if(!input.value.includes('\t') && !globalData) return;
 
-        // 1. Select and Copy
         input.select();
         input.setSelectionRange(0, 99999); // For mobile
         document.execCommand('copy');
         
-        // 2. Remove Selection Immediately (User requested no selection visible)
         window.getSelection().removeAllRanges();
         input.blur();
 
-        // 3. Animation Feedback
         const box = document.getElementById('excelBoxContainer');
         const icon = document.getElementById('excelCopyIcon');
         
-        // Flash animation class
         box.classList.add('copied-anim');
         setTimeout(() => box.classList.remove('copied-anim'), 300);
 
-        // Icon change
         const oldClass = icon.className;
         icon.className = 'bi bi-check-lg text-success ms-2';
         setTimeout(() => icon.className = oldClass, 1500);
     }
     // ----------------------------------------------------
-    // UPDATED EXCEL LOGIC ENDS HERE
+    // END EXCEL LOGIC
     // ----------------------------------------------------
 
     function processData(){
@@ -444,7 +437,7 @@
         const fmt=n=>'$'+(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','), gV=k=>fmt(globalVals[k]);
         
         let n="";
-        // Note logic remains unchanged as per request, just status
+        // Note uses 2 digit year (yy) as per legacy code, only excel updated to yyyy
         if(st==="In Review Plan") n=`${dt}>NSA NEG>${nm}>WORKING ON NSA PROJECT. CLAIM # ${globalData.claimNo}, BILLED AMOUNT ${gV('billed')}, ALLOWED AMOUNT ${gV('allowed')}, WITH MENTION THAT CLAIM PROCESSED PER NSA. SENT NSA NEGOTIATION OFFER OF ${gV('offer')}, PER FAIR HEALTH AMOUNT, THROUGH AVAILITY. Dispute ID: ${globalData.disputeId}.`;
         else if(st==="System Rejected") n=`${dt}>NSA NEG>${nm}>WORKING ON NSA PROJECT. CLAIM # ${globalData.claimNo}, BILLED AMOUNT ${gV('billed')}, ALLOWED AMOUNT ${gV('allowed')}, WITH MENTION THAT CLAIM PROCESSED PER NSA. SENT NSA NEGOTIATION OFFER OF ${gV('offer')}, AS PER FAIR HEALTH AMOUNT, THROUGH AVAILITY. OFFER IMMEDIATELY REJECTED BY BCBS. PUTTING TICKET ON NSA NEGO TRACKING GOOGLE SHEET TO START IDR PROCESS. Dispute ID: ${globalData.disputeId}.`;
         else if(st==="Offer Rejected") n=`${dt}>NSA NEG>${nm}>WORKING ON NSA PROJECT. CLAIM # ${globalData.claimNo}, BILLED AMOUNT ${gV('billed')}, ALLOWED AMOUNT ${gV('allowed')}, WITH MENTION THAT CLAIM PROCESSED PER NSA. SENT NSA NEGOTIATION OFFER OF ${gV('offer')}, BCBS MADE COUNTER OFFER OF ${gV('counter')}. THROUGH AVAILITY. OFFER REJECTED AS IT IS BELOW FAIR HEALTH AMOUNT. WILL FOLLOW UP TO SEE IF ANOTHER COUNTER NEGOTIATION OFFER WILL BE MADE OR NEED TO START IDR PROCESS. Dispute ID: ${globalData.disputeId}.`;
@@ -467,7 +460,10 @@
     }
     
     function formatCurrency(n){return '$'+(parseFloat(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
-    function initDate(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"})); document.getElementById('note_Date').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+    
+    // UPDATE: Timezone changed to 'America/Chicago' (CST)
+    // This ensures that until 12 PM BD time (which is midnight CST), the date remains the previous day.
+    function initDate(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Chicago"})); document.getElementById('note_Date').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
     
     function startWatches(){
         const upd=(p,tz)=>{
