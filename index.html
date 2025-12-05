@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -381,7 +382,13 @@ function upd(my){
             else if(row.stat==='Weekend') bg='bg-info text-white';
             else if(row.stat==='Holiday') bg='bg-warning';
         }
-        calHtml+=`<span class="p-1 rounded text-center ${bg}" style="font-size:0.7rem">${d}</span>`;
+        // --- নতুন ভ্যারিয়েবল দুটি যোগ করুন ---
+const textColor = 'var(--bs-card-color)'; // এখানে আপনার পছন্দের টেক্সট কালার (যেমন: 'white', 'red', '#333')
+const bgColor = 'var(--bs-body-bg)'; // এখানে আপনার পছন্দের ব্যাকগ্রাউন্ড কালার (যেমন: 'blue', 'green', '#FF0000')
+// ----------------------------------------
+
+// আপনার ক্যালেন্ডার HTML তৈরি করার সময় এই ভ্যারিয়েবলগুলো ব্যবহার করুন:
+calHtml+=`<span class="p-1 rounded text-center" style="font-size:0.7rem; color:${textColor}; background-color:${bgColor}">${d}</span>`;
     }
     document.getElementById('cal-gr').innerHTML=calHtml;
 
