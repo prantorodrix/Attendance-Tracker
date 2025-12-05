@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Pranto's Note Tool</title>
+<link rel="icon" type="image/png" href="note.png">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+/* --- CORE VARIABLES --- */
+:root {
+ --f:'Outfit',sans-serif; --mono:'Rajdhani',monospace; --nav-h:70px;
+ --pri:#6366f1; --sec:#0ea5e9; --txt:#334155; --txt-l:#64748b;
+ --bg-body: #f8fafc; 
+ --bg-grad: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+ --glass: rgba(255, 255, 255, 0.9); --blur: 20px; 
+ --bor: 1px solid rgba(255, 255, 255, 0.6); 
+ --sh: 0 10px 30px rgba(0,0,0,0.04);
+ --card-bg: #ffffff;
+ --nav-bg: rgba(255, 255, 255, 0.95);
+ --input-bg: #ffffff;
+ --adj-bg: #f1f5f9; --adj-txt: #334155;
+}
+[data-bs-theme="dark"] {
+ --txt:#f1f5f9; --txt-l:#94a3b8; 
+ --bg-body: #0f172a;
+ --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+ --glass: rgba(30, 41, 59, 0.9); 
+ --bor: 1px solid rgba(255, 255, 255, 0.1);
+ --card-bg: rgba(30, 41, 59, 0.7);
+ --nav-bg: rgba(15, 23, 42, 0.9);
+ --input-bg: rgba(0, 0, 0, 0.2);
+ --adj-bg: rgba(255,255,255,0.05); --adj-txt: #e2e8f0;
+}
+
+body {
+    font-family: var(--f); background: var(--bg-grad);
+    margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; color: var(--txt);
+    transition: background 0.3s ease;
+}
+
+/* --- NAVBAR --- */
+#nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    width: 95%; max-width: 1250px; height: 65px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.5rem; z-index: 1100;
+    background: var(--nav-bg); backdrop-filter: blur(var(--blur));
+    border: var(--bor); border-radius: 50px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+.brand { font-size: 1.3rem; font-weight: 700; background: linear-gradient(90deg, var(--pri), var(--sec)); -webkit-background-clip: text; color: transparent; white-space: nowrap; }
+.menu { display: flex; gap: 1.5rem; align-items: center; }
+.n-lnk { text-decoration: none; color: var(--txt); font-weight: 600; font-size: 0.9rem; opacity: 0.7; transition: .3s; position: relative; white-space: nowrap; }
+.n-lnk:hover, .n-lnk.active { opacity: 1; color: var(--pri); }
+.n-lnk.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--pri); border-radius: 2px; }
+.drop-box { position: relative; cursor: pointer; display: flex; align-items: center; }
+.drop-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px); background: var(--nav-bg); border: var(--bor); border-radius: 16px; padding: 8px; min-width: 170px; opacity: 0; visibility: hidden; transition: .3s; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; flex-direction: column; gap: 4px; }
+.drop-box:hover .drop-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(5px); }
+.d-item { text-decoration: none; color: var(--txt); font-size: 0.85rem; padding: 8px 12px; border-radius: 10px; transition: .2s; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.d-item:hover { background: rgba(99, 102, 241, 0.1); color: var(--pri); }
+
+.n-rt { display: flex; align-items: center; gap: 10px; }
+.btn-nav-act { border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; color: white; transition: .2s; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+.btn-ext { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.btn-clr { background: linear-gradient(135deg, #ef4444, #f43f5e); }
+.btn-nav-act:hover { transform: translateY(-1px); filter: brightness(110%); }
+.t-btn { width: 34px; height: 34px; border-radius: 50%; border: var(--bor); background: transparent; color: var(--txt); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: .3s; }
+.t-btn:hover { background: var(--pri); color: #fff; transform: rotate(20deg); }
+.p-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid transparent; background: linear-gradient(var(--nav-bg), var(--nav-bg)) padding-box, linear-gradient(45deg, var(--pri), var(--sec)) border-box; cursor: pointer; }
+
+/* LAYOUT */
+#wrap { display: flex; margin-top: 100px; height: calc(100vh - 100px); }
+#sb { width: 270px; background: var(--glass); border-right: var(--bor); backdrop-filter: blur(15px); display: flex; flex-direction: column; margin-left: 20px; border-radius: 20px 0 0 20px; margin-bottom: 20px; box-shadow: var(--sh); height: calc(100vh - 120px); }
+#sb-c { flex: 1; overflow-y: auto; padding: 1rem; height: 100%; }
+#main { flex: 1; padding: 0 2rem 2rem 1.5rem; overflow-y: auto; display: flex; flex-direction: column; }
+
+/* COMPONENTS */
+.card { background: var(--card-bg); border: var(--bor); border-radius: 16px; box-shadow: var(--sh); margin-bottom: 1rem; border: none; }
+.form-control, .form-select { background: var(--input-bg); border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-size: 0.9rem; color: var(--txt); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02); transition: .2s; }
+[data-bs-theme="dark"] .form-control { border-color: rgba(255,255,255,0.1); }
+.form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px var(--pri); outline: 0; border-color: transparent; }
+.form-control.is-invalid { border-color: #dc3545 !important; box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25) !important; }
+textarea.form-control { resize: none; overflow: hidden; }
+
+/* Click to Copy Style */
+textarea[readonly], input[readonly] { cursor: pointer; }
+textarea[readonly]:active, input[readonly]:active { transform: scale(0.99); }
+
+.btn-neu { display: flex; align-items: center; gap: 8px; border-radius: 25px; padding: 6px 20px; border: var(--bor); font-weight: 600; font-size: 13px; background: var(--card-bg); box-shadow: var(--sh); color: var(--pri); transition: .2s; cursor: pointer; }
+.btn-neu:hover { transform: translateY(-2px); }
+.nav-tabs-glass { border: none; padding: 0 .5rem; display: flex; gap: 10px; }
+.nav-tabs-glass .nav-link { border: none; background: transparent; color: var(--txt); font-weight: 600; border-radius: 10px; padding: 8px 15px; font-size: .85rem; opacity: .7; transition: .3s; }
+.nav-tabs-glass .nav-link.active { color: var(--pri); opacity: 1; background: var(--card-bg); box-shadow: var(--sh); }
+
+/* IDR ITEMS */
+.idr-item { display: flex; justify-content: space-between; font-size: .8rem; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.idr-val { font-weight: 700; text-align: right; color: var(--pri); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bg-match { background: rgba(16,185,129,.15); color: #059669; padding: 0 6px; border-radius: 4px; }
+.bg-mismatch { background: rgba(239,68,68,.15); color: #dc2626; padding: 0 6px; border-radius: 4px; }
+.bg-overpaid { background: rgba(245,158,11,.15); color: #d97706; padding: 0 6px; border-radius: 4px; }
+
+/* EOB BAR */
+#eob-bar { display: none; padding: .8rem 1.2rem; margin-bottom: 1rem; background: var(--card-bg); box-shadow: var(--sh); border-radius: 12px; font-weight: 600; white-space: nowrap; overflow-x: auto; color: var(--pri); }
+#eob-bar.visible { display: flex; gap: 20px; align-items: center; }
+.ed-inp { padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: var(--input-bg); width: 80px; font-size: .8rem; color: var(--txt); font-weight: 600; }
+.wl-inp { width: 100px; font-weight: 700; text-align: right; }
+#cAdj { background-color: var(--adj-bg) !important; color: var(--adj-txt) !important; border: var(--bor) !important; }
+
+/* FOOTER */
+footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var(--bor); padding: 3rem 0 1.5rem; margin-top: auto; border-radius: 20px 20px 0 0; }
+.f-brand { font-size: 1.3rem; font-weight: 700; color: var(--txt); margin-bottom: 1rem; display: block; }
+.f-lnk { display: block; color: var(--txt-l); text-decoration: none; font-size: .85rem; margin-bottom: .6rem; transition: .2s; }
+.f-lnk:hover { color: var(--pri); transform: translateX(3px); }
+.s-ico { width: 32px; height: 32px; border-radius: 50%; background: rgba(99,102,241,0.1); color: var(--pri); display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; transition: .2s; }
+.s-ico:hover { background: var(--pri); color: white; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+    <div class="brand">Pranto's Workspace</div>
+    <div class="menu d-none d-lg-flex">
+        <a href="index.html" class="n-lnk">Home</a>
+        <div class="drop-box">
+            <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
+                <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
+                <a href="#" class="d-item"><i class="bi bi-envelope-check-fill"></i> Email</a>
+            </div>
+        </div>
+        <div class="drop-box">
+            <span class="n-lnk">Others <i class="bi bi-chevron-down small"></i></span>
+            <div class="drop-menu">
+                <a href="typing.html" class="d-item"><i class="bi bi-keyboard"></i> Typing</a>
+                <a href="#" class="d-item"><i class="bi bi-stars"></i> New</a>
+            </div>
+        </div>
+        <a href="#" class="n-lnk">Contact Us</a>
+    </div>
+    <div class="n-rt">
+        <button id="processBtn" class="btn-nav-act btn-ext"><i class="bi bi-magic"></i> Extract</button>
+        <button id="clearBtn" class="btn-nav-act btn-clr"><i class="bi bi-trash"></i> Clear</button>
+        <div style="width:1px; height:20px; background:var(--txt); opacity:0.2; margin:0 5px;"></div>
+        <button id="theme-toggle" class="t-btn"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
+        <div class="dropdown">
+            <img src="https://ui-avatars.com/api/?name=Pranto+Rodrix&background=6366f1&color=fff&bold=true" class="p-pic" data-bs-toggle="dropdown">
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow" style="background:var(--nav-bg); backdrop-filter:blur(10px)">
+                <li><a class="dropdown-item text-danger fw-bold" href="index.html"><i class="bi bi-box-arrow-right me-2"></i>Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="wrap">
+    <div id="sb">
+        <div class="p-4 border-bottom"><h6 class="m-0 fw-bold text-primary small"><i class="bi bi-list-columns-reverse me-2"></i>IDR Results</h6></div>
+        <div id="sb-c"><div class="text-center text-muted small mt-5">Paste IDR data & Extract</div></div>
+    </div>
+
+    <div id="main">
+        <div id="eob-bar"></div>
+        <div class="row g-4 mb-4">
+            <div class="col-lg-3"><div class="card h-100 p-4 d-flex flex-column"><label class="small fw-bold text-primary mb-3">Updated EOB</label><textarea class="form-control flex-grow-1" id="eobUp" placeholder="Paste Updated EOB"></textarea></div></div>
+            <div class="col-lg-6"><div class="card p-4 h-100"><label class="small fw-bold text-primary mb-3">IDR Reports</label>
+                <div class="row g-2 mb-2"><div class="col-4"><textarea class="form-control" id="idr1" rows="3" placeholder="2024+ (1)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr2" rows="3" placeholder="2024+ (2)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr3" rows="3" placeholder="2024+ (3)"></textarea></div></div>
+                <div class="row g-2"><div class="col-4"><textarea class="form-control" id="idr4" rows="3" placeholder="22-23 (1)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr5" rows="3" placeholder="22-23 (2)"></textarea></div><div class="col-4"><textarea class="form-control" id="idr6" rows="3" placeholder="22-23 (3)"></textarea></div></div>
+            </div></div>
+            <div class="col-lg-3"><div class="card h-100 p-4"><h6 class="fw-bold text-primary small mb-3 border-bottom pb-2">EOB Details</h6><div id="eob-det"><div class="text-muted small text-center mt-4">No Data</div></div></div></div>
+        </div>
+
+        <div class="card">
+            <div class="p-3 pb-0">
+                <ul class="nav nav-tabs-glass" id="mT">
+                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#t-em">Email</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#t-upd">IDR Update</button></li>
+                </ul>
+            </div>
+            <div class="card-body p-4"><div class="tab-content">
+                <!-- EMAIL (Single Line) -->
+                <div class="tab-pane fade show active" id="t-em"><div class="row g-3 mb-4">
+                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="mDt"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="mNm" placeholder="Name"></div>
+                    <div class="col-md-1"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="mIni" placeholder="Init"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Scenario</label><select class="form-select" id="mSc" onchange="togEm()"><option value="ins">Standard (Insurance)</option><option value="pt">High PT (Patient)</option></select></div>
+                    <div class="col-md-2"><label class="small fw-bold">Manual</label><input type="number" class="form-control" id="mMan" placeholder="Amt" disabled></div>
+                    <div class="col-md-2"><label class="small fw-bold">Type</label><select class="form-select" id="mTyp"><option value="1">1st Email</option><option value="2">2nd Email</option></select></div>
+                    <!-- Single Line Row -->
+                    <div class="col-md-12 d-flex align-items-end gap-2 mt-2">
+                        <div style="flex:1"><label class="small fw-bold">Det Date</label><input type="text" class="form-control" id="mDet" placeholder="MM/DD/YYYY"></div>
+                        <div style="flex:2"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="mSub" readonly></div>
+                        <div style="flex:2"><label class="small fw-bold">CC</label><input type="text" class="form-control" id="mCC" value="mislam@roundtmc.com, razo@leverngear.com" readonly></div>
+                        <button class="btn-neu text-primary" onclick="genEm()" style="margin-bottom:1px; height: 38px;"><i class="bi bi-send me-2"></i> Generate</button>
+                    </div>
+                </div><div class="row g-4">
+                    <div class="col-md-6"><label class="small fw-bold text-primary">Email Body</label><textarea id="mBod" class="form-control" style="height: 300px;" readonly></textarea></div><div class="col-md-6"><label class="small fw-bold text-primary">Tracking Note</label><textarea id="mNot" class="form-control" style="height: 300px;" readonly></textarea></div>
+                </div></div>
+                <!-- IDR UPDATE (Single Line) -->
+                <div class="tab-pane fade" id="t-upd"><div class="row g-3 mb-4">
+                    <div class="col-md-2"><label class="small fw-bold">Date</label><input type="date" class="form-control dt-inp" id="uDt"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Name</label><input type="text" class="form-control nm-inp" id="uNm" placeholder="Name"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Init</label><input type="text" class="form-control in-inp" id="uIni" placeholder="Initials"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Dispute #</label><input type="text" class="form-control" id="uDis" placeholder="DISP-XXXX"></div>
+                    <div class="col-md-2"><label class="small fw-bold">Mediator</label><input type="text" class="form-control" id="uMed" placeholder="Mediator" oninput="chkMed()"><div id="uMedSugg" class="email-hint d-none" onclick="cpyMed()" style="font-size:0.75rem;cursor:pointer;color:var(--pri);margin-top:2px"><span></span> <i class="bi bi-copy"></i></div></div>
+                    <div class="col-md-2"><label class="small fw-bold">Type</label><select class="form-select" id="uTyp"><option value="check">Check & Offer</option><option value="pay">Payment Det</option></select></div>
+                    <!-- Single Line Row -->
+                    <div class="col-md-12 d-flex align-items-end gap-2 mt-2">
+                        <div style="width: 150px;"><label class="small fw-bold">Follow Up</label><select class="form-select" id="uFol"><option value="1">1st Follow Up</option><option value="2">2nd Follow Up</option></select></div>
+                        <div style="flex:1"><label class="small fw-bold">Subject</label><input type="text" class="form-control" id="uSub" readonly></div>
+                        <button class="btn-neu text-primary" onclick="genUpd()" style="margin-bottom:1px; height: 38px;"><i class="bi bi-send me-2"></i> Generate</button>
+                    </div>
+                </div><div class="row g-4">
+                    <div class="col-md-6"><label class="small fw-bold text-primary">Email Body</label><textarea id="uBod" class="form-control" style="height: 300px;" readonly></textarea></div><div class="col-md-6"><label class="small fw-bold text-primary">Tracking Note</label><textarea id="uNot" class="form-control" style="height: 300px;" readonly></textarea></div>
+                </div></div>
+            </div></div>
+            <div id="copyMsg" class="text-success text-center fw-bold mt-2 small" style="opacity:0;transition:opacity 0.3s; position:fixed; bottom:80px; right:20px; background:white; padding:5px 10px; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:1200;">Copied!</div>
+        </div>
+
+        <footer>
+            <div class="container px-4">
+                <div class="row g-5">
+                    <div class="col-lg-4"><a href="#" class="f-brand text-decoration-none" style="font-size:1.4rem;font-weight:700;color:var(--txt)">Pranto's <span style="color:var(--pri)">Workspace</span></a><p class="small text-muted">Streamlining workflows with precision tools.</p><div class="mt-3"><a href="#" class="s-ico"><i class="bi bi-facebook"></i></a><a href="#" class="s-ico"><i class="bi bi-github"></i></a></div></div>
+                    <div class="col-lg-2 col-6"><h6>Tools</h6><a href="index.html" class="f-lnk">IDR</a><a href="nsa.html" class="f-lnk">NSA</a></div>
+                    <div class="col-lg-4"><h6>Contact</h6><p class="small text-muted mb-1"><i class="bi bi-envelope me-2"></i>prantorodrix9@gmail.com</p></div>
+                </div>
+                <div class="text-center mt-4 pt-3 border-top small text-muted">&copy; 2025 Designed by <span style="font-weight:700;background:linear-gradient(90deg,#6366f1,#ec4899);-webkit-background-clip:text;color:transparent">PrantoRodrix</span></div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let gD={e:null,i:[]};
+const MED_EMAILS = {"MET":"IDR@met-hcs.com","NATIONAL":"idre@nmrusa.com","NMR":"idre@nmrusa.com","FHAS":"IDRE@fhas.com","PROVIDER":"pri-idre@provider-resources.com","RESOURCE":"pri-idre@provider-resources.com","IMPROVE":"FederalIDRE@improve.health"};
+
+/* INIT */
+document.addEventListener('DOMContentLoaded',()=>{
+    const st=localStorage.getItem('theme')||'light'; setTheme(st);
+    try{
+        let n=localStorage.getItem('myN'), i=localStorage.getItem('myI');
+        if(n) document.querySelectorAll('.nm-inp').forEach(e=>e.value=n);
+        if(i) document.querySelectorAll('.in-inp').forEach(e=>e.value=i);
+    }catch(e){}
+    iDts(); togEm(); syncF('dt-inp'); syncF('nm-inp'); syncF('in-inp');
+});
+
+document.getElementById('theme-toggle').addEventListener('click',()=>{
+    const t=document.documentElement.getAttribute('data-bs-theme')==='dark'?'light':'dark';
+    setTheme(t);
+});
+
+function setTheme(t){
+    document.documentElement.setAttribute('data-bs-theme',t);
+    localStorage.setItem('theme',t);
+    document.getElementById('theme-icon').className = t==='dark'?'bi bi-moon-fill':'bi bi-sun-fill';
+}
+
+function iDts(){const d=new Date().toLocaleString("en-US",{timeZone:"Asia/Dhaka"}),n=new Date(d),s=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;document.querySelectorAll('.dt-inp').forEach(i=>{if(!i.value)i.value=s})}
+function syncF(c){document.querySelectorAll('.'+c).forEach(i=>i.addEventListener('input',e=>{document.querySelectorAll('.'+c).forEach(j=>{if(j!==e.target)j.value=e.target.value})}))}
+
+/* EVENTS */
+document.getElementById('processBtn').addEventListener('click',function(){const b=this,o=b.innerHTML;b.innerHTML='...';setTimeout(()=>{procAll();b.innerHTML=o},300)});
+document.getElementById('clearBtn').addEventListener('click',()=>{
+    document.querySelectorAll('textarea,input[type=number]').forEach(e=>e.value='');
+    document.querySelectorAll('input[type=text]').forEach(e=>{
+        // PROTECT INITIAL INPUT FROM CLEAR
+        if(!['cNm','cIni','mNm','mIni','uNm','uIni','rNm','mDet'].includes(e.id) && !e.classList.contains('dt-inp') && !e.classList.contains('in-inp')) e.value='';
+    });
+    document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5">Paste IDR data & Extract</div>';
+    document.getElementById('eob-bar').classList.remove('visible'); document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';
+    gD={e:null,i:[]};
+    document.querySelectorAll('.is-invalid').forEach(el=>el.classList.remove('is-invalid'));
+});
+
+// CLICK TO COPY
+function setupCopy(id) {
+     const el = document.getElementById(id);
+     if(!el) return;
+     el.addEventListener('click', function() {
+        if(this.value && !this.value.includes("Extract") && !this.value.includes("Paste") && !this.value.includes("ERROR")) {
+            this.select(); document.execCommand('copy');
+            const m=document.getElementById('copyMsg'); m.style.opacity=1; setTimeout(()=>m.style.opacity=0,2000);
+        }
+    });
+}
+['mBod','mNot','uBod','uNot'].forEach(id => setupCopy(id));
+
+
+/* LOGIC */
+function procAll(){
+    gD.e=pEOB(document.getElementById('eobUp').value); dEOB(gD.e);
+    const i=[];for(let j=1;j<=6;j++)i.push(document.getElementById('idr'+j).value);
+    gD.i=pIDR(i); dIDR(gD.i); match();
+    if(gD.i.length>0){ 
+        if(gD.i[0].dt)document.getElementById('mDet').value=gD.i[0].dt; 
+        if(gD.i[0].id&&gD.i[0].id!='--')document.getElementById('uDis').value=gD.i[0].id;
+        if(gD.i[0].md)document.getElementById('uMed').value=gD.i[0].md;
+    }
+}
+function pEOB(t){
+    if(!t)return null; const ex=r=>{const m=t.match(r);if(!m)return'$0.00';return t.substring(m.index+m[0].length).split('\n').find(l=>l.trim()&&!l.match(/^[a-zA-Z\s\.\/()-]+:/))?.trim()||'$0.00'},pc=s=>parseFloat(s.replace(/[$,\s]/g,''))||0,gv=r=>t.match(r)?.[2].trim()||'--';
+    let cn=pc(ex(/(Coinsurance Amount|Coinsurance)\s*:?/i)),dd=pc(ex(/(Deductible Amount|Deductible)\s*:?/i)),cp=pc(ex(/(Copay Amount|Copay)\s*:?/i)),pt=cn+dd+cp;if(pt===0)pt=pc(ex(/(Copay\/Deductible Amount|Responsibility)\s*:?/i));
+    return{tic:gv(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i),clm:gv(/(Claim I?D|Claim No|Claim Number)\s*:?[\s\r\n]+([^\r\n]+)/i),prv:gv(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i),bil:pc(ex(/(Total Bill|Billed Amount)\s*:?/i)),pd:pc(ex(/(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i)),pt,adl:pc(ex(/(Insurance Current Paid Amount|Additional Paid)\s*:?/i)),cn,dd,cp};
+}
+function pIDR(inp){
+    let r=[];inp.forEach(t=>{if(!t.trim())return;const c=t.split(/\t|\s{2,}/);
+        let m=(c.length>18)?{id:1,cl:3,cp:4,in:7,md:8,dt:16,wl:17,ad:18,pm:19}:{id:5,cl:2,cp:3,in:7,md:8,dt:18,wl:19,ad:20,pm:21};
+        r.push({id:c[m.id]?.trim()||'--',cl:c[m.cl]?.trim()||'--',cp:c[m.cp]?.trim()||'--',in:parseFloat(c[m.in]?.replace(/[$,]/g,''))||0,md:c[m.md]?.trim()||'--',wl:c[m.wl]?.trim()||'--',dt:c[m.dt]?.trim(),ad:parseFloat(c[m.ad]?.replace(/[$,]/g,''))||0,pm:c[m.pm]?.trim()});
+    });return r;
+}
+function dEOB(d){
+    if(!d){document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';return}
+    document.getElementById('eob-bar').innerHTML=`<span class="text-primary fw-bold">${d.tic}</span> <span class="opacity-50 mx-2">|</span> <span class="fw-bold">${d.clm}</span> <span class="opacity-50 mx-2">|</span> Bill: ${fmt(d.bil)} <span class="opacity-50 mx-2">|</span> Paid: ${fmt(d.pd)} <span class="opacity-50 mx-2">|</span> PT: ${fmt(d.pt)} <span class="opacity-50 mx-2">|</span> <span class="fw-bold" id="eob_a">${fmt(d.adl)}</span>`;
+    document.getElementById('eob-bar').classList.add('visible');
+    document.getElementById('eob-det').innerHTML=`<div class="eob-d-item"><span>Coins</span><span class="eob-v">${fmt(d.cn)}</span></div><div class="eob-d-item"><span>Ded</span><span class="eob-v">${fmt(d.dd)}</span></div><div class="eob-d-item"><span>Copay</span><span class="eob-v">${fmt(d.cp)}</span></div><div class="eob-d-item"><span>Addl</span><span class="eob-v" id="eob_da">${fmt(d.adl)}</span></div>`;
+}
+function dIDR(d){
+    const s=document.getElementById('sb-c');s.innerHTML='';
+    d.forEach((r,i)=>{
+        const w=r.wl.toLowerCase(),as=(r.pm&&r.pm.length>4)?`<span class="badge bg-success ms-1">Rec</span>`:`<span class="badge bg-secondary ms-1">Wait</span>`,
+        wlHtml=(r.wl==='--'||!r.wl)?`<input type="text" class="ed-inp wl-inp" placeholder="w/l/c" oninput="hWL(this,${i})">`:`<span class="idr-val fw-bold" data-wl="${w}">${r.wl}</span>`,
+        dis=(w.includes('lose')&&!w.includes('close'));
+        s.innerHTML+=`<div class="card sidebar-card shadow-sm border-0"><div class="fw-bold text-primary border-bottom pb-1 mb-1 d-flex justify-content-between"><span>Result ${i+1}</span><span class="badge bg-light text-dark border">${r.id}</span></div><div class="idr-item"><span>Mediator</span><span class="idr-val text-truncate" title="${r.md}">${r.md}</span></div><div class="idr-item"><span>Claim</span><span class="idr-val">${r.cl}</span></div><div class="idr-item"><span>W/L</span>${wlHtml}</div><div class="idr-item"><span>Addl</span><span class="idr-val" data-val="${r.ad}">${fmt(r.ad)}${as}</span></div></div>`;
+        if(!r.wl)gD.i[i].wl='';
+    });
+}
+function match(){if(!gD.e)return; const ea=gD.e.adl,ir=gD.i;if(!ir.length)return;let tot=0;ir.forEach(r=>tot+=r.ad);const e1=document.getElementById('eob_a'),e2=document.getElementById('eob_da');[e1,e2].forEach(e=>{if(e){e.classList.remove('bg-match','bg-mismatch','bg-overpaid');if(ea>0||tot>0){if(Math.abs(ea-tot)<0.01)e.classList.add('bg-match');else if(ea>tot)e.classList.add('bg-overpaid');else e.classList.add('bg-mismatch');}}});}
+const fmt=n=>'$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2});
+const fDt=v=>{if(!v)return'MM/DD/YY';const[y,m,d]=v.split('-');return`${m}/${d}/${y.slice(-2)}`;}
+function ani(e,t){e.value='';const w=t.split(' ');let i=0;if(e.tm)clearInterval(e.tm);e.tm=setInterval(()=>{if(i<w.length){e.value+=(i>0?' ':'')+w[i];e.scrollTop=e.scrollHeight;i++}else clearInterval(e.tm)},5);}
+function hWL(i,x){let v=i.value.toLowerCase();if(v==='w')v='Win';if(v==='l')v='Lose';if(v==='c')v='Closed';i.value=v;gD.i[x].wl=v;}
+function chkMed(){const v=document.getElementById('uMed').value.toUpperCase(),s=document.getElementById('uMedSugg');let f=null;for(const[k,e]of Object.entries(MED_EMAILS)){if(v.includes(k)){f=e;break}}if(f){s.querySelector('span').innerText=f;s.classList.remove('d-none')}else s.classList.add('d-none')}
+function cpyMed(){navigator.clipboard.writeText(document.getElementById('uMedSugg').querySelector('span').innerText)}
+function rInp(){
+    document.querySelectorAll('input').forEach(x=>x.addEventListener('input',e=>{
+        if(e.target.classList.contains('nm-inp'))localStorage.setItem('myN',e.target.value);
+        if(e.target.classList.contains('in-inp'))localStorage.setItem('myI',e.target.value);
+    }));
+}
+document.querySelectorAll('textarea[readonly],input[readonly]').forEach(e=>e.addEventListener('click',function(){if(this.value)this.select(),document.execCommand('copy')}));
+
+/* EMAIL GENERATOR */
+function togEm(){const s=document.getElementById('mSc').value,m=document.getElementById('mMan');m.disabled=(s!=='pt');if(s!=='pt')m.value='';document.getElementById('mCC').value=(s==='pt')?'mislam@roundtmc.com, razo@leverngear.com, sufia@leverngear.com':'mislam@roundtmc.com, razo@leverngear.com';}
+function genEm(){
+    // VALIDATION & RED ALERT
+    const v=['mNm','mIni','mTyp','mDet'];let ok=true;
+    v.forEach(x=>{
+        const e=document.getElementById(x);
+        e.classList.remove('is-invalid');
+        if(!e.value.trim()){
+            e.classList.add('is-invalid');
+            ok=false
+        }
+    });
+    if(!ok)return;
+
+    const d=gD,dt=fDt(document.getElementById('mDt').value),nm=document.getElementById('mNm').value,ini=document.getElementById('mIni').value,typ=document.getElementById('mTyp').value,sc=document.getElementById('mSc').value,mn=parseFloat(document.getElementById('mMan').value),det=document.getElementById('mDet').value;
+    if(!d.i.length){document.getElementById('mBod').value="ERROR: No IDR Data";return}
+    const i=d.i[0],e=d.e||{},clm=e.clm||i.cl||'--',eAd=(!isNaN(mn))?mn:(e.adl||0),out=Math.max(0,i.ad-eAd);
+    let sub='',bod='',nt=(typ=='1')?'1ST':'2ND';
+    if(sc==='pt'){
+        if(isNaN(mn)){document.getElementById('mBod').value="Error: Manual Addl Req";return}
+        sub=`Urgent Request for Claim Reprocessing with additionally (High PT)- Dispute Number [${i.id}]`;
+        bod=`Dear BCBS Representative,\n\nWe are emailing regarding the recently processed IDR case, ${i.id} that was finalized and paid. The newly processed EOB under claim number ${clm} shows an additional payment to the patient’s responsibility (copay, coinsurance, and/or deductible). This is in violation of the Federal Guidelines for the IDR Process. Per the Federal Guidelines, if the Mediator finds in favor of the Facility/Physician, the payment is to be made to the Facility/Physician and not to the patient’s responsibility. This newly processed EOB with the addition to the patient responsibility is in violation of the Guidelines and needs to be reprocessed with the payment to be made directly to our Facility/Physician Group.\n\nI am writing to bring your attention to the following details:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\n(Note: In Update EOB, Additional: ${fmt(eAd)}. A total of ${fmt(out)} is less than our expected additional payment that has been added to the patient's responsibility.)\n\nThe Federal Manuals state verbatim:\n“NOTE: This determination of the OON rate does not change the participant’s, beneficiary’s, or enrollee’s cost sharing, which is based on the recognized amount, or, in the case of air ambulance services, the lower of the QPA or billed charges.”\n\nSources: Federal Independent Dispute Resolution (IDR) Process Guidance for Disputing Parties Manual March 2023, pg 27, October 2022, pg 29, April 2022, pg 27 and Federal Independent Dispute Resolution (IDR) Process Guidance for Certified IDR Entities Manual March 2023, pg 25, October 2022, pg 26, April 2022, pg 25\n\nPlease reprocess and pay this claim by the Federal Guidelines or we will have to escalate this issue to the CMS Complaint website.\n\nThank You.\n--------------------------------\n${nm}`;
+        nt+=' HIGH PT EMAIL';
+    }else{
+        sub=`Urgent Request for Claim Reprocessing as per IDR Determination - ${i.id} - Claim: ${clm}`+(typ=='2'?' (2nd Email)':'');
+        bod=`Dear BCBS,\n\nWe are writing to formally request the prompt payment of the additional reimbursement as required by the final determination in the Federal Independent Dispute Resolution (IDR) process under the No Surprises Act (NSA).\nOn ${det}, ${i.md} —the certified IDR entity—issued a final, legally binding determination in favor of , ${e.prv||'PROVIDER'} regarding the above-referenced claim. The IDR entity selected the out-of-network payment amount of ${fmt(i.in+i.ad)} for service code ${i.cp||'--'}. as offered by ${e.prv||'PROVIDER'} as the appropriate rate for this claim.\nAccording to the NSA and its implementing regulations (including 45 CFR 149.510(c)(4)(vii)), the plan or issuer must pay the balance of the total plan or coverage amount selected by the certified IDR entity, less any initial payment already made and any applicable patient cost-sharing, within 30 calendar days of the determination notification. As of today, this payment is outstanding.\n\nRequest for Payment:\nPlease remit the outstanding balance, calculated as follows:\nClaim Number: ${clm}\nIDR-Determined OON Rate: ${fmt(i.in+i.ad)}\nLess Initial Payment: ${fmt(i.in)}\n------------------------\nTotal Outstanding Balance: ${fmt(i.ad)}\n\nThis request is made pursuant to the No Surprises Act and its regulations, which require payment of the IDR-determined amount within 30 calendar days of the decision. Failure to remit payment in a timely manner may be reported to the appropriate regulatory authorities for noncompliance\nIf you have any questions or require additional documentation to process this payment, please contact us at bcbs_nsaandidr@roundtmc.com.\n\nAs per Federal guidelines additional payment amounts must be made within 30 days of the determination. If we do not receive the additional payment amount a CMS complaint may be filed. We appreciate your prompt attention to this matter.\n\nFor your reference we have attached the primary EOB and IDR determination.\n\n\nThank You\nRegards\n---------------\n${nm}`;
+        nt+=' FOLLOW UP EMAIL';
+    }
+    document.getElementById('mSub').value=sub; ani(document.getElementById('mBod'),bod);
+    ani(document.getElementById('mNot'),`${dt}>IDR FOLLOW UP>${ini}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. ACCORDING TO OUR RECORDS, FOR ${clm}; WE HAVE NOT RECEIVED THE ADDITIONAL PAYMENT AMOUNT OF ${fmt(i.ad)} AND THE UPDATED EOB, AS PER THE DETERMINATION OF ${i.id}, BY ${i.md.toUpperCase()} DATED ${det}. FOR BCBS ATTENTION, WE SENT ${nt} TO BCBS FOR THE IDR ADDITIONAL PAYMENT.`);
+}
+
+/* IDR UPDATE GENERATOR */
+function genUpd(){
+    // VALIDATION & RED ALERT
+    const v=['uNm','uIni','uDis','uMed'];let ok=true;
+    v.forEach(x=>{
+        const el=document.getElementById(x);
+        el.classList.remove('is-invalid');
+        if(!el.value.trim()){
+            el.classList.add('is-invalid');
+            ok=false
+        }
+    });
+    if(!ok)return;
+
+    const dt=fDt(document.getElementById('uDt').value),nm=document.getElementById('uNm').value,ini=document.getElementById('uIni').value.toUpperCase(),dis=document.getElementById('uDis').value,med=document.getElementById('uMed').value,typ=document.getElementById('uTyp').value,fol=document.getElementById('uFol').value;
+    const is2nd=(fol==='2'), followUpText=is2nd?"2ND":"1ST", subFollowUp=is2nd?" (2nd follow up)":"";
+    let sub, bod, not;
+    if(typ==='check') {sub=`Update on IDR dispute – ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request an update status of ${dis}. It has been 60 days since we have received confirmation from CMS that ${med} is the Mediator for this dispute.\nWe have not yet received any acknowledgement from ${med} regarding this matter.\n\nWe are kindly requesting that you provide a status update at your earliest convenience.\n\nThanks!.\n--------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN 60 DAYS SINCE WE HAVE RECEIVED CONFIRMATION THAT THE MEDIATOR IS SELECTED FROM CMS FOR THIS DISPUTE. WE HAVE NOT YET RECEIVED ANY ACKNOWLEDGEMENT FROM THE MEDIATOR REGARDING THIS MATTER. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE UPDATE IDR STATUS.`;} else {sub=`Request for Payment Determination ${dis}${subFollowUp}`;bod=`Dear ${med},\n\nI am writing to request the final determination for ${dis}. It\nhas been over 60 days since we submitted our offer letter and\nmediation fee. Please kindly provide a written determination at your\nearliest convenience.\n\nThanks!\n-----------------\n${nm}`;not=`${dt}>IDR FOLLOW UP>${ini}>${nm.toUpperCase()}>WORKING ON IDR TRACKING SHEET. NEGOTIATION AND IDR DONE. DISPUTE NUMBER ${dis}, IT HAS BEEN OVER 60 DAYS SINCE WE SUBMITTED OUR OFFER LETTER AND MEDIATION FEE. FOR BCBS ATTENTION, WE SENT ${followUpText} FOLLOW UP EMAIL TO BCBS FOR THE PAYMENT DETERMINATION.`;}
+    document.getElementById('uSub').value=sub; ani(document.getElementById('uBod'),bod); ani(document.getElementById('uNot'),not);
+}
+
+function lThm(){document.getElementById('theme-toggle').addEventListener('click',()=>{const h=document.documentElement,c=h.getAttribute('data-bs-theme');h.setAttribute('data-bs-theme',c==='light'?'dark':'light')})}
+function rInp(){
+    document.querySelectorAll('input').forEach(x=>x.addEventListener('input',e=>{
+        if(e.target.classList.contains('nm-inp'))localStorage.setItem('myN',e.target.value);
+        if(e.target.classList.contains('in-inp'))localStorage.setItem('myI',e.target.value);
+    }));
+}
+document.querySelectorAll('textarea[readonly],input[readonly]').forEach(e=>e.addEventListener('click',function(){if(this.value)this.select(),document.execCommand('copy')}));
+</script>
+</body>
+</html>
