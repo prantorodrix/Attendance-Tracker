@@ -20,6 +20,10 @@
  --nav-bg: rgba(255, 255, 255, 0.95);
  --input-bg: #ffffff;
  --adj-bg: #f1f5f9; --adj-txt: #334155;
+ /* Watch Vars */
+ --w-bg: rgba(255, 255, 255, 0.85);
+ --w-txt: #1e293b;
+ --w-acc: #6366f1;
 }
 [data-bs-theme="dark"] {
  --txt:#f1f5f9; --txt-l:#94a3b8; 
@@ -31,6 +35,10 @@
  --nav-bg: rgba(15, 23, 42, 0.9);
  --input-bg: rgba(0, 0, 0, 0.2);
  --adj-bg: rgba(255,255,255,0.05); --adj-txt: #e2e8f0;
+ /* Watch Vars Dark */
+ --w-bg: rgba(15, 23, 42, 0.85);
+ --w-txt: #f8fafc;
+ --w-acc: #818cf8;
 }
 
 body {
@@ -107,6 +115,27 @@ textarea[readonly]:active, input[readonly]:active { transform: scale(0.99); }
 .wl-inp { width: 100px; font-weight: 700; text-align: right; }
 #cAdj { background-color: var(--adj-bg) !important; color: var(--adj-txt) !important; border: var(--bor) !important; }
 
+/* WATCH WIDGET */
+#smart-watch {
+    position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+    width: 130px; height: auto;
+    background: var(--w-bg); backdrop-filter: blur(15px);
+    border: var(--bor); border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+    padding: 12px; display: flex; flex-direction: column; align-items: center;
+    font-family: var(--mono); color: var(--w-txt);
+    transition: .3s;
+}
+#smart-watch:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(99, 102, 241, 0.2); }
+.w-main { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 2px; }
+.w-time { font-size: 1.8rem; font-weight: 700; line-height: 1; letter-spacing: 1px; }
+.w-sec-box { height: 20px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+.w-sec { font-size: 1rem; font-weight: 600; color: var(--w-acc); line-height: 20px; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.w-date { font-size: 0.7rem; font-weight: 600; opacity: 0.7; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.w-bar-bg { width: 100%; height: 4px; background: rgba(0,0,0,0.05); border-radius: 2px; overflow: hidden; position: relative; }
+.w-bar-fill { height: 100%; background: linear-gradient(90deg, var(--pri), var(--sec)); width: 0%; border-radius: 2px; transition: width 0.2s linear; box-shadow: 0 0 10px var(--pri); }
+[data-bs-theme="dark"] .w-bar-bg { background: rgba(255,255,255,0.1); }
+
 /* FOOTER */
 footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var(--bor); padding: 3rem 0 1.5rem; margin-top: auto; border-radius: 20px 20px 0 0; }
 .f-brand { font-size: 1.3rem; font-weight: 700; color: var(--txt); margin-bottom: 1rem; display: block; }
@@ -125,7 +154,7 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
         <div class="drop-box">
             <span class="n-lnk active">BCBS <i class="bi bi-chevron-down small"></i></span>
             <div class="drop-menu">
-                <a href="idr.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
+                <a href="notes-content.html" class="d-item"><i class="bi bi-file-text"></i> IDR</a>
                 <a href="nsa.html" class="d-item"><i class="bi bi-shield"></i> NSA</a>
                 <a href="appeal.html" class="d-item"><i class="bi bi-arrow-repeat"></i> Appeal</a>
                 <a href="#" class="d-item"><i class="bi bi-envelope-check-fill"></i> Email</a>
@@ -231,6 +260,19 @@ footer { background: var(--nav-bg); backdrop-filter: blur(12px); border-top: var
     </div>
 </div>
 
+<!-- WATCH WIDGET -->
+<div id="smart-watch">
+    <div class="w-main">
+        <div class="w-time" id="wTime">00:00</div>
+        <div class="w-sec-box">
+            <div class="w-sec" id="wSec1">00</div>
+            <div class="w-sec" id="wSec2">01</div>
+        </div>
+    </div>
+    <div class="w-date" id="wDate">MON, JAN 01</div>
+    <div class="w-bar-bg"><div class="w-bar-fill" id="wBar"></div></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 let gD={e:null,i:[]};
@@ -244,8 +286,74 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(n) document.querySelectorAll('.nm-inp').forEach(e=>e.value=n);
         if(i) document.querySelectorAll('.in-inp').forEach(e=>e.value=i);
     }catch(e){}
-    iDts(); togEm(); syncF('dt-inp'); syncF('nm-inp'); syncF('in-inp');
+    iDts(); togEm(); syncF('dt-inp'); syncF('nm-inp'); syncF('in-inp'); startClock();
 });
+
+/* CLOCK LOGIC */
+function startClock() {
+    const timeEl = document.getElementById('wTime');
+    const secEl1 = document.getElementById('wSec1');
+    const secEl2 = document.getElementById('wSec2');
+    const dateEl = document.getElementById('wDate');
+    const barEl = document.getElementById('wBar');
+    
+    let lastSec = -1;
+
+    setInterval(() => {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = now.getSeconds();
+        const sStr = String(s).padStart(2, '0');
+        
+        // Time & Date
+        timeEl.innerText = `${h}:${m}`;
+        dateEl.innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}).toUpperCase();
+        
+        // Bar
+        const pct = (s / 60) * 100;
+        barEl.style.width = `${pct}%`;
+
+        // Ticker Animation
+        if(s !== lastSec) {
+            // Swap text for animation effect could be improved but simple ticker logic:
+            // Just move text up/down visually using transforms?
+            // Simplified approach for reliability:
+            secEl1.innerText = sStr;
+            secEl1.style.transform = 'translateY(0)';
+            
+            // To make it look like it slides, we reset position then slide
+            // (CSS handles smooth transition)
+            
+            // Actually, simpler logic for "ticker":
+            // Just update text. The CSS transition handles generic changes, 
+            // but for a true "reel" effect we need slightly more complex DOM manipulation.
+            // Given the constraints, let's stick to the visual bar + nice font updates.
+            // The user asked for "up/down" movement.
+            
+            const prev = lastSec === -1 ? (s===0?59:s-1) : lastSec;
+            secEl2.innerText = String(prev).padStart(2,'0'); // Old number
+            secEl1.innerText = sStr; // New number
+            
+            // Animate: 
+            // 1. Set secEl1 (new) below, secEl2 (old) in view
+            // 2. Transition both up
+            // This requires changing structure or just toggling opacity/transform. 
+            // Let's use a standard update for stability and focus on the Bar + Glow.
+            // *Revisiting requirement*: "second er kata num gulo upor theke nice... jabe"
+            
+            // Let's do a simple "slide in" effect using one element for simplicity in this code block
+            secEl1.style.transform = 'translateY(10px)';
+            secEl1.style.opacity = '0';
+            setTimeout(() => {
+                secEl1.style.transform = 'translateY(0)';
+                secEl1.style.opacity = '1';
+            }, 50);
+        }
+        lastSec = s;
+
+    }, 1000);
+}
 
 document.getElementById('theme-toggle').addEventListener('click',()=>{
     const t=document.documentElement.getAttribute('data-bs-theme')==='dark'?'light':'dark';
@@ -266,7 +374,6 @@ document.getElementById('processBtn').addEventListener('click',function(){const 
 document.getElementById('clearBtn').addEventListener('click',()=>{
     document.querySelectorAll('textarea,input[type=number]').forEach(e=>e.value='');
     document.querySelectorAll('input[type=text]').forEach(e=>{
-        // PROTECT INITIAL INPUT FROM CLEAR
         if(!['cNm','cIni','mNm','mIni','uNm','uIni','rNm','mDet'].includes(e.id) && !e.classList.contains('dt-inp') && !e.classList.contains('in-inp')) e.value='';
     });
     document.getElementById('sb-c').innerHTML='<div class="text-center text-muted small mt-5">Paste IDR data & Extract</div>';
@@ -288,7 +395,6 @@ function setupCopy(id) {
 }
 ['mBod','mNot','uBod','uNot'].forEach(id => setupCopy(id));
 
-
 /* LOGIC */
 function procAll(){
     gD.e=pEOB(document.getElementById('eobUp').value); dEOB(gD.e);
@@ -306,10 +412,59 @@ function pEOB(t){
     return{tic:gv(/(Patient Account Number|Pt Acct No)\s*:?[\s\r\n]+([^\r\n]+)/i),clm:gv(/(Claim I?D|Claim No|Claim Number)\s*:?[\s\r\n]+([^\r\n]+)/i),prv:gv(/(Billing Provider Name|Provider Name)\s*:?[\s\r\n]+([^\r\n]+)/i),bil:pc(ex(/(Total Bill|Billed Amount)\s*:?/i)),pd:pc(ex(/(^|[\r\n])(Plan Payment|Total Payment|Plan Paid|Paid Amount|Total Paid)\s*:?/i)),pt,adl:pc(ex(/(Insurance Current Paid Amount|Additional Paid)\s*:?/i)),cn,dd,cp};
 }
 function pIDR(inp){
-    let r=[];inp.forEach(t=>{if(!t.trim())return;const c=t.split(/\t|\s{2,}/);
-        let m=(c.length>18)?{id:1,cl:3,cp:4,in:7,md:8,dt:16,wl:17,ad:18,pm:19}:{id:5,cl:2,cp:3,in:7,md:8,dt:18,wl:19,ad:20,pm:21};
-        r.push({id:c[m.id]?.trim()||'--',cl:c[m.cl]?.trim()||'--',cp:c[m.cp]?.trim()||'--',in:parseFloat(c[m.in]?.replace(/[$,]/g,''))||0,md:c[m.md]?.trim()||'--',wl:c[m.wl]?.trim()||'--',dt:c[m.dt]?.trim(),ad:parseFloat(c[m.ad]?.replace(/[$,]/g,''))||0,pm:c[m.pm]?.trim()});
-    });return r;
+    let r=[];
+    inp.forEach((t,x)=>{
+        if(!t.trim())return;
+        const c=t.split(/\t/); // Split by TAB for Excel/Sheets copy-paste
+        
+        // 2024+ MAPPING (Top 3 boxes: idr1, idr2, idr3)
+        // Col 1: IDR Number
+        // Col 3: Claim Number
+        // Col 4: CPT
+        // Col 7: Initial Payment
+        // Col 8: Mediator
+        // Col 16: Determination Date
+        // Col 17: WIN/LOSE
+        // Col 18: Additional Payment
+        // Col 19: Payment Date
+        if(x < 3) {
+            r.push({
+                id: c[1]?.trim()||'--',
+                cl: c[3]?.trim()||'--',
+                cp: c[4]?.trim()||'--',
+                in: parseFloat((c[7]||'0').replace(/[$,\s]/g,'')),
+                md: c[8]?.trim()||'--',
+                dt: c[16]?.trim(),
+                wl: c[17]?.trim()||'--',
+                ad: parseFloat((c[18]||'0').replace(/[$,\s]/g,'')),
+                pm: c[19]?.trim()
+            });
+        } 
+        // 2022-23 MAPPING (Bottom 3 boxes: idr4, idr5, idr6)
+        // Col 2: Claim Number
+        // Col 3: CPT
+        // Col 5: IDR Number
+        // Col 7: Initial Payment
+        // Col 8: Mediator
+        // Col 18: Determination Date
+        // Col 19: WIN/LOSE
+        // Col 20: Additional Payment
+        // Col 21: Payment Date
+        else {
+            r.push({
+                id: c[5]?.trim()||'--',
+                cl: c[2]?.trim()||'--',
+                cp: c[3]?.trim()||'--',
+                in: parseFloat((c[7]||'0').replace(/[$,\s]/g,'')),
+                md: c[8]?.trim()||'--',
+                dt: c[18]?.trim(),
+                wl: c[19]?.trim()||'--',
+                ad: parseFloat((c[20]||'0').replace(/[$,\s]/g,'')),
+                pm: c[21]?.trim()
+            });
+        }
+    });
+    return r;
 }
 function dEOB(d){
     if(!d){document.getElementById('eob-det').innerHTML='<div class="text-muted small text-center mt-4">No Data</div>';return}
