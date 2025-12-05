@@ -306,10 +306,9 @@ function startClock() {
         const s = now.getSeconds();
         const sStr = String(s).padStart(2, '0');
         
-        // Time & Date
-        timeEl.innerText = `${h}:${m}`;
-        dateEl.innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}).toUpperCase();
-        
+       // Time & Date
+timeEl.innerText = now.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Dhaka'});
+dateEl.innerText = now.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', timeZone: 'Asia/Dhaka'}).toUpperCase(); 
         // Bar
         const pct = (s / 60) * 100;
         barEl.style.width = `${pct}%`;
