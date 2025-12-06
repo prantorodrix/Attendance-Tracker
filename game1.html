@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Zone</title>
+    <link rel="icon" type="image/png" href="note.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --f: 'Outfit', sans-serif;
+            --mono: 'Rajdhani', monospace;
+            --pri: #6366f1;
+            --sec: #0ea5e9;
+            --txt: #334155;
+            --txt-l: #64748b;
+            --bg-body: #f8fafc;
+            --bg-grad: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --glass: rgba(255, 255, 255, 0.9);
+            --blur: 20px;
+            --bor: 1px solid rgba(255, 255, 255, 0.6);
+            --sh: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --w-bg: rgba(255, 255, 255, 0.85);
+            --w-txt: #1e293b;
+            --w-acc: #6366f1;
+        }
+
+        [data-bs-theme="dark"] {
+            --txt: #f1f5f9;
+            --txt-l: #94a3b8;
+            --bg-body: #0f172a;
+            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --glass: rgba(30, 41, 59, 0.9);
+            --bor: 1px solid rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --w-bg: rgba(15, 23, 42, 0.85);
+            --w-txt: #f8fafc;
+            --w-acc: #818cf8;
+        }
+
+        body {
+            font-family: var(--f);
+            background: var(--bg-grad);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            color: var(--txt);
+            transition: background .3s ease;
+            user-select: none;
+        }
+
+        /* --- NAVBAR --- */
+        #nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 1250px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 1100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(var(--blur));
+            border: var(--bor);
+            border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--pri), var(--sec));
+            -webkit-background-clip: text;
+            color: transparent;
+            white-space: nowrap;
+        }
+
+        .menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .n-lnk {
+            text-decoration: none;
+            color: var(--txt);
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: .3s;
+            position: relative;
+        }
+
+        .n-lnk:hover,
+        .n-lnk.active {
+            opacity: 1;
+            color: var(--pri);
+        }
+
+        .n-rt {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .t-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: var(--bor);
+            background: transparent;
+            color: var(--txt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .t-btn:hover {
+            background: var(--pri);
+            color: #fff;
+            transform: rotate(20deg);
+        }
+
+        .p-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            background: linear-gradient(var(--nav-bg), var(--nav-bg)) padding-box, linear-gradient(45deg, var(--pri), var(--sec)) border-box;
+            cursor: pointer;
+        }
+
+        /* --- GAME CONTAINER --- */
+        #game-wrap {
+            flex: 1;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            position: relative;
+            width: 95%;
+            max-width: 1250px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            border: var(--bor);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+        }
+
+        #score-board {
+            font-family: var(--mono);
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 20px var(--pri);
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        #high-score-display {
+            font-family: var(--mono);
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #game-msg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: auto;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem 3.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+        }
+
+        #game-msg h1 {
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        #game-msg p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hs-final {
+            color: var(--sec);
+            font-weight: 700;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            font-family: var(--mono);
+            letter-spacing: 1px;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, var(--pri), var(--sec));
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: .3s;
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.6);
+        }
+
+        .controls-hint {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-family: var(--mono);
+            text-align: right;
+            pointer-events: none;
+        }
+
+        .k-key {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            margin: 0 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- WATCH WIDGET --- */
+        #smart-watch {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: 130px;
+            height: auto;
+            background: var(--w-bg);
+            backdrop-filter: blur(15px);
+            border: var(--bor);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: var(--mono);
+            color: var(--w-txt);
+            transition: .3s;
+        }
+
+        #smart-watch:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.2);
+        }
+
+        .w-main {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin-bottom: 2px;
+        }
+
+        .w-time {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+
+        .w-sec-box {
+            height: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .w-sec {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--w-acc);
+            line-height: 20px;
+            transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .w-date {
+            font-size: 0.7rem;
+            font-weight: 600;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .w-bar-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .w-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--pri), var(--sec));
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.2s linear;
+            box-shadow: 0 0 10px var(--pri);
+        }
+
+        [data-bs-theme="dark"] .w-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        footer {
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-top: var(--bor);
+            padding: 1rem 0;
+            margin-top: auto;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--txt-l);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="brand">Game Zone</div>
+        <div class="menu d-none d-lg-flex">
+            <a href="index.html" class="n-lnk">Home</a>
+            <a href="#" class="n-lnk active">3D Runner</a>
+        </div>
+        <div class="n-rt">
+            <button id="theme-toggle" class="t-btn"><i id="theme-icon" class="bi bi-sun-fill"></i></button>
+        </div>
+    </nav>
+
+    <div id="game-wrap">
+        <div id="ui-overlay">
+            <div>
+                <div id="score-board">0</div>
+                <div id="high-score-display">HIGH SCORE: 0</div>
+            </div>
+            <div class="controls-hint">MOVE: <span class="k-key">←</span> <span class="k-key">→</span> or <span class="k-key">A</span> <span class="k-key">D</span></div>
+        </div>
+        <div id="game-msg">
+            <h1 id="msg-title">NEON RUNNER</h1>
+            <p id="msg-sub">Avoid red blocks. Speed increases gradually.</p>
+            <div id="final-hs" class="hs-final" style="display:none"></div>
+            <button class="btn-start" onclick="startGame()">START GAME</button>
+        </div>
+    </div>
+
+    <!-- SMART WATCH -->
+    <div id="smart-watch">
+        <div class="w-main">
+            <div class="w-time" id="wTime">00:00</div>
+            <div class="w-sec-box">
+                <div class="w-sec" id="wSec1">00</div>
+                <div class="w-sec" id="wSec2">01</div>
+            </div>
+        </div>
+        <div class="w-date" id="wDate">MON, JAN 01</div>
+        <div class="w-bar-bg">
+            <div class="w-bar-fill" id="wBar"></div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Pranto's Workspace &bull; High Performance Mode
+    </footer>
+
+    <script>
+        // --- GLOBAL & THEME ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const s = localStorage.getItem('theme') || 'light';
+            setTheme(s);
+            startClock();
+            initGame();
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const t = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            setTheme(t);
+        });
+
+        function setTheme(t) {
+            document.documentElement.setAttribute('data-bs-theme', t);
+            localStorage.setItem('theme', t);
+            document.getElementById('theme-icon').className = t === 'dark' ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+        }
+
+        // --- WATCH LOGIC ---
+        function startClock() {
+            const t = document.getElementById('wTime'),
+                s1 = document.getElementById('wSec1'),
+                s2 = document.getElementById('wSec2'),
+                d = document.getElementById('wDate'),
+                b = document.getElementById('wBar');
+            let l = -1;
+
+            setInterval(() => {
+                const n = new Date(),
+                    h = String(n.getHours()).padStart(2, '0'),
+                    m = String(n.getMinutes()).padStart(2, '0'),
+                    s = n.getSeconds();
+                t.innerText = `${h}:${m}`;
+                d.innerText = n.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                }).toUpperCase();
+                b.style.width = `${(s/60)*100}%`;
+
+                if (s !== l) {
+                    const p = l === -1 ? (s === 0 ? 59 : s - 1) : l;
+                    s2.innerText = String(p).padStart(2, '0');
+                    s1.innerText = String(s).padStart(2, '0');
+                    s1.style.transform = 'translateY(10px)';
+                    s1.style.opacity = '0';
+                    setTimeout(() => {
+                        s1.style.transform = 'translateY(0)';
+                        s1.style.opacity = '1';
+                    }, 50);
+                }
+                l = s;
+            }, 1000);
+        }
+
+        // --- GAME VARIABLES ---
+        let scene, camera, renderer, player, ground;
+        let obstacles = [];
+        let gameSpeed = 0.2; // START SPEED (Slower)
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('neonRunnerHS')) || 0;
+        let isRunning = false;
+        let animId;
+        let playerPos = 0; // -1, 0, 1
+        const LANE_WIDTH = 2.5;
+
+        // --- GAME INIT ---
+        function initGame() {
+            const container = document.getElementById('game-wrap');
+            document.getElementById('high-score-display').innerText = `HIGH SCORE: ${highScore}`;
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0f172a);
+            scene.fog = new THREE.FogExp2(0x0f172a, 0.08);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 3, 6);
+            camera.lookAt(0, 0, -5);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Lights
+            const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambient);
+            const directional = new THREE.DirectionalLight(0x6366f1, 0.8);
+            directional.position.set(5, 10, 0);
+            directional.castShadow = true;
+            scene.add(directional);
+
+            // --- PLAYER (SPACESHIP) ---
+            player = new THREE.Group();
+
+            // Main Body
+            const bodyGeo = new THREE.ConeGeometry(0.5, 2, 4);
+            const bodyMat = new THREE.MeshPhongMaterial({
+                color: 0x0ea5e9,
+                emissive: 0x0ea5e9,
+                emissiveIntensity: 0.5,
+                flatShading: true
+            });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.rotation.x = Math.PI / 2;
+            body.castShadow = true;
+            player.add(body);
+
+            // Wings
+            const wingGeo = new THREE.BufferGeometry();
+            const wingVertices = new Float32Array([
+                0, 0, 0.5, 1, 0, -0.5, 0, 0, -0.5,
+                0, 0, 0.5, -1, 0, -0.5, 0, 0, -0.5
+            ]);
+            wingGeo.setAttribute('position', new THREE.BufferAttribute(wingVertices, 3));
+            const wingMat = new THREE.MeshBasicMaterial({
+                color: 0x38bdf8,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.6
+            });
+            const wings = new THREE.Mesh(wingGeo, wingMat);
+            player.add(wings);
+
+            // Engine
+            const engGeo = new THREE.ConeGeometry(0.2, 0.5, 8);
+            const engMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+            const engine = new THREE.Mesh(engGeo, engMat);
+            engine.rotation.x = Math.PI / 2;
+            engine.position.z = 1;
+            player.add(engine);
+
+            player.position.y = 0.5;
+            scene.add(player);
+
+            // --- GROUND ---
+            const gridHelper = new THREE.GridHelper(100, 40, 0x6366f1, 0x1e293b);
+            gridHelper.position.z = -20;
+            scene.add(gridHelper);
+            ground = gridHelper;
+
+            // --- PARTICLES ---
+            const pGeo = new THREE.BufferGeometry();
+            const pCount = 500;
+            const pPos = new Float32Array(pCount * 3);
+            for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 50;
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+            const pMat = new THREE.PointsMaterial({ size: 0.1, color: 0xffffff });
+            scene.add(new THREE.Points(pGeo, pMat));
+
+            // Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            // Input
+            document.addEventListener('keydown', handleInput);
+            
+            // Initial render
+            renderer.render(scene, camera);
+        }
+
+        function handleInput(e) {
+            if (!isRunning) return;
+            if (e.key === 'ArrowLeft' || e.key === 'a') movePlayer(-1);
+            if (e.key === 'ArrowRight' || e.key === 'd') movePlayer(1);
+        }
+
+        function movePlayer(dir) {
+            playerPos += dir;
+            if (playerPos < -1) playerPos = -1;
+            if (playerPos > 1) playerPos = 1;
+        }
+
+        function createObstacle() {
+            const geo = new THREE.OctahedronGeometry(0.6);
+            const mat = new THREE.MeshPhongMaterial({
+                color: 0xef4444,
+                emissive: 0xef4444,
+                emissiveIntensity: 0.8,
+                flatShading: true
+            });
+            const obs = new THREE.Mesh(geo, mat);
+
+            // Random Lane
+            const lane = Math.floor(Math.random() * 3) - 1;
+            obs.position.set(lane * LANE_WIDTH, 0.6, -50);
+            obs.castShadow = true;
+
+            // Glow Effect
+            const glowGeo = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: 0xff0000,
+                transparent: true,
+                opacity: 0.2,
+                wireframe: true
+            });
+            const glow = new THREE.Mesh(glowGeo, glowMat);
+            obs.add(glow);
+
+            scene.add(obs);
+            obstacles.push(obs);
+        }
+
+        function updateGame() {
+            if (!isRunning) return;
+
+            // Move Ground
+            ground.position.z += gameSpeed;
+            if (ground.position.z > 0) ground.position.z = -20;
+
+            // Move Player
+            player.position.x += (playerPos * LANE_WIDTH - player.position.x) * 0.1;
+            player.rotation.z = -player.position.x * 0.5; // Bank Effect
+            player.rotation.y = -player.position.x * 0.2;
+
+            // Spawn Obstacles (Probability adjusted by score/speed)
+            if (Math.random() < 0.02 + (score * 0.0001)) {
+                createObstacle();
+            }
+
+            // Move Obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.position.z += gameSpeed;
+                obs.rotation.x += 0.05;
+                obs.rotation.y += 0.05;
+
+                // Collision
+                if (obs.position.z > -1 && obs.position.z < 1) {
+                    if (Math.abs(obs.position.x - player.position.x) < 0.8) {
+                        gameOver();
+                    }
+                }
+
+                // Clean up & Score
+                if (obs.position.z > 5) {
+                    scene.remove(obs);
+                    obstacles.splice(i, 1);
+                    score += 10;
+                    document.getElementById('score-board').innerText = score;
+
+                    // INCREASE SPEED GRADUALLY (Easier progression)
+                    gameSpeed += 0.0001; 
+                }
+            }
+
+            renderer.render(scene, camera);
+            animId = requestAnimationFrame(updateGame);
+        }
+
+        function startGame() {
+            document.getElementById('game-msg').style.display = 'none';
+            document.getElementById('final-hs').style.display = 'none';
+
+            // Reset Game State
+            obstacles.forEach(o => scene.remove(o));
+            obstacles = [];
+            score = 0;
+            gameSpeed = 0.2; // Reset Speed to slow start
+            playerPos = 0;
+            document.getElementById('score-board').innerText = '0';
+            
+            isRunning = true;
+            updateGame();
+        }
+
+        function gameOver() {
+            isRunning = false;
+            cancelAnimationFrame(animId);
+
+            // Check High Score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('neonRunnerHS', highScore);
+                document.getElementById('msg-title').innerText = "NEW HIGH SCORE!";
+                document.getElementById('high-score-display').innerText = `HIGH SCORE: ${highScore}`;
+            } else {
+                document.getElementById('msg-title').innerText = "CRASHED!";
+            }
+
+            document.getElementById('msg-sub').innerText = `Your Score: ${score}`;
+            
+            const hsEl = document.getElementById('final-hs');
+            hsEl.innerText = `All Time Best: ${highScore}`;
+            hsEl.style.display = 'block';
+
+            document.getElementById('game-msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
