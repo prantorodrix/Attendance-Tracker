@@ -389,7 +389,7 @@ function extractData(){
         if(dateMatch) {
             const dObj = new Date(dateMatch[0]);
             if(!isNaN(dObj.getTime())){
-                accDate = dObj.toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'numeric' });
+                accDate = dObj.toLocaleDateString('en-US', { month:'2-digit', day:'2-digit', year:'2-digit' });
             }
         }
         
